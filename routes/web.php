@@ -50,6 +50,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/wallet/withdraw', [\App\Modules\Wallet\Controllers\WalletController::class, 'withdraw'])->name('wallet.withdraw');
     });
 
+    // 🤝 P2P Loan Marketplace Routes
+    Route::get('/marketplace', [\App\Modules\Loan\Controllers\MarketplaceController::class, 'index'])->name('marketplace.index');
+    Route::get('/marketplace/{loan}', [\App\Modules\Loan\Controllers\MarketplaceController::class, 'show'])->name('marketplace.show');
+    Route::post('/marketplace/{loan}/fund', [\App\Modules\Loan\Controllers\MarketplaceController::class, 'fund'])
+        ->middleware('kyc')
+        ->name('marketplace.fund');
+
+    // 📝 Borrower Loan Applications & Installment Routes
+    Route::middleware('kyc')->group(function () {
+        Route::get('/loans', [\App\Modules\Loan\Controllers\LoanRequestController::class, 'index'])->name('loans.index');
+        Route::get('/loans/create', [\App\Modules\Loan\Controllers\LoanRequestController::class, 'create'])->name('loans.create');
+        Route::post('/loans', [\App\Modules\Loan\Controllers\LoanRequestController::class, 'store'])->name('loans.store');
+        Route::get('/loans/{loan}/installments', [\App\Modules\Loan\Controllers\LoanRequestController::class, 'installments'])->name('loans.installments');
+        
+        // Repayments
+        Route::post('/repayments/{installment}/pay', [\App\Modules\Loan\Controllers\RepaymentController::class, 'pay'])->name('repayments.pay');
+    });
+
     // 👑 Admin-Only Panel Routes
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/kyc', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'index'])->name('kyc.index');
@@ -59,5 +77,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         // Secured streaming endpoint for private documents
         Route::get('/kyc/document/{document}', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'streamDocument'])->name('kyc.document');
+
+        // Admin Loan Review & Disbursement
+        Route::get('/loans', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'index'])->name('loans.index');
+        Route::get('/loans/{loan}', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'show'])->name('loans.show');
+        Route::post('/loans/{loan}/approve', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'approve'])->name('loans.approve');
+        Route::post('/loans/{loan}/disburse', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'disburse'])->name('loans.disburse');
     });
 });

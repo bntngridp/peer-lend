@@ -20,10 +20,13 @@ Schedule::command(UpdateCryptoLtvCommand::class)
     ->appendOutputTo(storage_path('logs/ltv-update.log'));
 
 // Calculate daily penalties and flag overdue installments — runs every day
-Schedule::command(CalculatePenaltiesCommand::class)
+Schedule::command('peer-lend:calculate-penalties')
     ->daily()
     ->withoutOverlapping()
-    ->runInBackground()
     ->appendOutputTo(storage_path('logs/calculate-penalties.log'));
 
-
+// 🤖 Auto-Invest Engine (Every Hour matching & auto-funding)
+Schedule::command('peer-lend:run-auto-invest')
+    ->hourly()
+    ->withoutOverlapping()
+    ->appendOutputTo(storage_path('logs/auto-invest.log'));

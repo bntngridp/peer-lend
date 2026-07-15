@@ -75,6 +75,11 @@ Route::middleware(['auth', 'verified', 'two_factor'])->group(function () {
         ->middleware('kyc')
         ->name('marketplace.fund');
 
+    // 🤖 Auto-Invest settings update
+    Route::post('/loans/auto-invest', [\App\Modules\Loan\Controllers\AutoInvestRuleController::class, 'update'])
+        ->middleware('kyc')
+        ->name('loans.auto-invest.update');
+
     // 📝 Borrower Loan Applications & Installment Routes
     Route::middleware('kyc')->group(function () {
         Route::get('/loans', [\App\Modules\Loan\Controllers\LoanRequestController::class, 'index'])->name('loans.index');
@@ -91,6 +96,15 @@ Route::middleware(['auth', 'verified', 'two_factor'])->group(function () {
 
         // 📄 Contract Agreement PDF/Print Page
         Route::get('/loans/{loan}/agreement', [\App\Modules\Loan\Controllers\AgreementDownloadController::class, 'download'])->name('loans.agreement');
+
+        // 🔌 REST API Endpoints (Prefix /api/v1)
+        Route::prefix('api/v1')->name('api.v1.')->group(function () {
+            Route::get('/marketplace', [\App\Modules\Loan\Controllers\LoanApiController::class, 'index'])->name('marketplace.index');
+            Route::get('/marketplace/{loan}', [\App\Modules\Loan\Controllers\LoanApiController::class, 'show'])->name('marketplace.show');
+            Route::post('/loans/apply', [\App\Modules\Loan\Controllers\LoanApiController::class, 'apply'])
+                ->middleware('kyc')
+                ->name('loans.apply');
+        });
     });
 
     // 👑 Admin-Only Panel Routes

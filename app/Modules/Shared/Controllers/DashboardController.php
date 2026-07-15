@@ -95,6 +95,14 @@ class DashboardController extends Controller
             ->orderBy('due_date')
             ->first();
 
+        // Calculate charts data: paid installments vs unpaid installments
+        $totalInstallmentsCount = LoanInstallment::whereHas('loan', fn ($q) =>
+            $q->where('borrower_id', $user->id)
+        )->count();
+        $paidInstallmentsCount = LoanInstallment::whereHas('loan', fn ($q) =>
+            $q->where('borrower_id', $user->id)
+        )->where('status', 'paid')->count();
+
         $stats = [
             'wallet_balance'       => $wallet?->balance ?? '0.00',
             'active_loans_count'   => $activeLoans->count(),
@@ -108,6 +116,8 @@ class DashboardController extends Controller
                 ->latest()
                 ->limit(5)
                 ->get(),
+            'chart_paid_count'     => $paidInstallmentsCount,
+            'chart_unpaid_count'   => max(0, $totalInstallmentsCount - $paidInstallmentsCount),
         ];
 
         return view('dashboard', ['role' => 'borrower', 'stats' => $stats]);
@@ -133,6 +143,29 @@ class DashboardController extends Controller
             ->where('type', 'repayment_principal')
             ->sum('amount');
 
+        // Fetch or create Lender Auto-Invest Rule config
+        $autoInvestRule = \App\Models\AutoInvestRule::firstOrCreate(
+            ['lender_id' => $user->id],
+            [
+                'is_active' => false,
+                'min_grade' => 'D',
+                'max_grade' => 'A',
+                'max_allocation_per_loan' => 1000000.00,
+                'max_ltv' => 80.00
+            ]
+        );
+
+        // Calculate distribution of funded loans by risk grade
+        $gradeDistribution = [
+            'A' => 0, 'B' => 0, 'C' => 0, 'D' => 0
+        ];
+        foreach ($fundings as $f) {
+            $g = $f->loan?->risk_grade;
+            if ($g && isset($gradeDistribution[$g])) {
+                $gradeDistribution[$g] += (float) $f->amount;
+            }
+        }
+
         $stats = [
             'wallet_balance'          => $wallet?->balance ?? '0.00',
             'kyc_status'              => $user->kyc?->status ?? 'not_submitted',
@@ -151,6 +184,8 @@ class DashboardController extends Controller
                 ->latest()
                 ->limit(5)
                 ->get(),
+            'auto_invest_rule'        => $autoInvestRule,
+            'grade_chart_data'        => array_values($gradeDistribution),
         ];
 
         return view('dashboard', ['role' => 'lender', 'stats' => $stats]);

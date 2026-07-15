@@ -3,6 +3,9 @@
 @section('title', 'Dashboard')
 
 @section('content')
+<!-- Include Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
 
     {{-- ═══════════════════════════════════════════════════════════════════ --}}
@@ -188,48 +191,66 @@
     </div>
     @endif
 
-    {{-- Stats Cards --}}
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-8">
-        <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <p class="text-sm font-medium text-gray-500">Wallet Balance</p>
-            <p class="mt-1 text-2xl font-bold text-gray-900">Rp {{ number_format($stats['wallet_balance'], 0, ',', '.') }}</p>
-            <a href="{{ route('wallet.index') }}" class="mt-2 inline-block text-xs font-medium text-indigo-600 hover:text-indigo-800">Manage wallet →</a>
-        </div>
-        <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <p class="text-sm font-medium text-gray-500">Active Loans</p>
-            <p class="mt-1 text-2xl font-bold text-blue-700">{{ $stats['active_loans_count'] }}</p>
-            <a href="{{ route('loans.index') }}" class="mt-2 inline-block text-xs font-medium text-indigo-600 hover:text-indigo-800">View all loans →</a>
-        </div>
-        <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <p class="text-sm font-medium text-gray-500">Total Borrowed</p>
-            <p class="mt-1 text-2xl font-bold text-gray-900">Rp {{ number_format($stats['total_borrowed'], 0, ',', '.') }}</p>
-        </div>
-    </div>
-
-    {{-- Next Installment Due --}}
-    @if($stats['next_installment'])
-    @php $inst = $stats['next_installment']; $overdue = now()->gt($inst->due_date); @endphp
-    <div class="mb-8 rounded-2xl border {{ $overdue ? 'border-red-200 bg-red-50' : 'border-indigo-200 bg-indigo-50' }} p-5">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-sm font-medium {{ $overdue ? 'text-red-700' : 'text-indigo-700' }}">
-                    {{ $overdue ? '🚨 Overdue Installment' : '⏰ Next Installment Due' }}
-                </p>
-                <p class="mt-1 text-2xl font-bold {{ $overdue ? 'text-red-900' : 'text-indigo-900' }}">
-                    Rp {{ number_format($inst->total_amount, 0, ',', '.') }}
-                </p>
-                <p class="text-sm {{ $overdue ? 'text-red-600' : 'text-indigo-600' }}">
-                    Due {{ \Carbon\Carbon::parse($inst->due_date)->format('d M Y') }}
-                    ({{ \Carbon\Carbon::parse($inst->due_date)->diffForHumans() }})
-                </p>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Stats Cards & Left Panel (Col-span 2) -->
+        <div class="lg:col-span-2 space-y-6">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+                    <p class="text-sm font-medium text-gray-500">Wallet Balance</p>
+                    <p class="mt-1 text-2xl font-bold text-gray-900">Rp {{ number_format($stats['wallet_balance'], 0, ',', '.') }}</p>
+                    <a href="{{ route('wallet.index') }}" class="mt-2 inline-block text-xs font-medium text-indigo-600 hover:text-indigo-800">Manage wallet →</a>
+                </div>
+                <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+                    <p class="text-sm font-medium text-gray-500">Active Loans</p>
+                    <p class="mt-1 text-2xl font-bold text-blue-700">{{ $stats['active_loans_count'] }}</p>
+                    <a href="{{ route('loans.index') }}" class="mt-2 inline-block text-xs font-medium text-indigo-600 hover:text-indigo-800">View all loans →</a>
+                </div>
+                <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+                    <p class="text-sm font-medium text-gray-500">Total Borrowed</p>
+                    <p class="mt-1 text-2xl font-bold text-gray-900">Rp {{ number_format($stats['total_borrowed'], 0, ',', '.') }}</p>
+                </div>
             </div>
-            <a href="{{ route('loans.installments', $inst->loan_id) }}"
-               class="rounded-xl {{ $overdue ? 'bg-red-600 hover:bg-red-700' : 'bg-indigo-600 hover:bg-indigo-700' }} px-5 py-2.5 text-sm font-semibold text-white transition-colors shadow-md">
-                Pay Now
-            </a>
+
+            {{-- Next Installment Due --}}
+            @if($stats['next_installment'])
+            @php $inst = $stats['next_installment']; $overdue = now()->gt($inst->due_date); @endphp
+            <div class="rounded-2xl border {{ $overdue ? 'border-red-200 bg-red-50' : 'border-indigo-200 bg-indigo-50' }} p-5">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium {{ $overdue ? 'text-red-700' : 'text-indigo-700' }}">
+                            {{ $overdue ? '🚨 Overdue Installment' : '⏰ Next Installment Due' }}
+                        </p>
+                        <p class="mt-1 text-2xl font-bold {{ $overdue ? 'text-red-900' : 'text-indigo-900' }}">
+                            Rp {{ number_format($inst->total_amount, 0, ',', '.') }}
+                        </p>
+                        <p class="text-sm {{ $overdue ? 'text-red-600' : 'text-indigo-600' }}">
+                            Due {{ \Carbon\Carbon::parse($inst->due_date)->format('d M Y') }}
+                            ({{ \Carbon\Carbon::parse($inst->due_date)->diffForHumans() }})
+                        </p>
+                    </div>
+                    <a href="{{ route('loans.installments', $inst->loan_id) }}"
+                       class="rounded-xl {{ $overdue ? 'bg-red-600 hover:bg-red-700' : 'bg-indigo-600 hover:bg-indigo-700' }} px-5 py-2.5 text-sm font-semibold text-white transition-colors shadow-md">
+                        Pay Now
+                    </a>
+                </div>
+            </div>
+            @endif
+        </div>
+
+        <!-- Right Side: Amortization repayment chart -->
+        <div class="lg:col-span-1">
+            <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm flex flex-col justify-between h-full">
+                <h3 class="text-sm font-bold text-gray-900 mb-2">Amortization Payoff Ratio</h3>
+                <div class="relative w-full max-w-[200px] mx-auto py-2">
+                    <canvas id="borrowerPayoffChart"></canvas>
+                </div>
+                <div class="flex justify-around text-xs mt-3">
+                    <span class="text-emerald-600 font-semibold">🟢 Paid: {{ $stats['chart_paid_count'] }}</span>
+                    <span class="text-gray-400 font-semibold">⚪ Unpaid: {{ $stats['chart_unpaid_count'] }}</span>
+                </div>
+            </div>
         </div>
     </div>
-    @endif
 
     {{-- Active Loans Table --}}
     <div class="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden mb-6">
@@ -284,25 +305,106 @@
         <p class="mt-1 text-sm text-gray-500">Track your P2P lending investments and returns.</p>
     </div>
 
-    {{-- Stats Cards --}}
-    <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 mb-8">
-        <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <p class="text-sm font-medium text-gray-500">Wallet Balance</p>
-            <p class="mt-1 text-xl font-bold text-gray-900">Rp {{ number_format($stats['wallet_balance'], 0, ',', '.') }}</p>
-            <a href="{{ route('wallet.index') }}" class="mt-1 inline-block text-xs font-medium text-indigo-600 hover:text-indigo-800">Manage →</a>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        
+        <!-- Left Side: Stats and Asset Allocation (Col-span 2) -->
+        <div class="lg:col-span-2 space-y-6">
+            <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+                    <p class="text-sm font-medium text-gray-500">Wallet Balance</p>
+                    <p class="mt-1 text-xl font-bold text-gray-900">Rp {{ number_format($stats['wallet_balance'], 0, ',', '.') }}</p>
+                    <a href="{{ route('wallet.index') }}" class="mt-1 inline-block text-xs font-medium text-indigo-600 hover:text-indigo-800">Manage →</a>
+                </div>
+                <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+                    <p class="text-sm font-medium text-gray-500">Total Invested</p>
+                    <p class="mt-1 text-xl font-bold text-blue-700">Rp {{ number_format($stats['total_invested'], 0, ',', '.') }}</p>
+                </div>
+                <div class="rounded-2xl border border-gray-200 bg-gradient-to-br from-emerald-50 to-white p-5 shadow-sm">
+                    <p class="text-sm font-medium text-gray-500">Interest Earned</p>
+                    <p class="mt-1 text-xl font-bold text-emerald-700">Rp {{ number_format($stats['total_interest_earned'], 0, ',', '.') }}</p>
+                </div>
+                <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+                    <p class="text-sm font-medium text-gray-500">Active Investments</p>
+                    <p class="mt-1 text-xl font-bold text-purple-700">{{ $stats['active_investments'] }}</p>
+                </div>
+            </div>
+
+            <!-- Grade Allocation Chart -->
+            <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                <h3 class="text-sm font-bold text-gray-900 mb-4">Investment Distribution by Risk Grade</h3>
+                <div class="h-[250px]">
+                    <canvas id="gradeDistributionChart"></canvas>
+                </div>
+            </div>
         </div>
-        <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <p class="text-sm font-medium text-gray-500">Total Invested</p>
-            <p class="mt-1 text-xl font-bold text-blue-700">Rp {{ number_format($stats['total_invested'], 0, ',', '.') }}</p>
-        </div>
-        <div class="rounded-2xl border border-gray-200 bg-gradient-to-br from-emerald-50 to-white p-5 shadow-sm">
-            <p class="text-sm font-medium text-gray-500">Interest Earned</p>
-            <p class="mt-1 text-xl font-bold text-emerald-700">Rp {{ number_format($stats['total_interest_earned'], 0, ',', '.') }}</p>
-        </div>
-        <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <p class="text-sm font-medium text-gray-500">Active Investments</p>
-            <p class="mt-1 text-xl font-bold text-purple-700">{{ $stats['active_investments'] }}</p>
-            <p class="text-xs text-gray-400">{{ $stats['completed_investments'] }} completed</p>
+
+        <!-- Right Side: Auto-Invest Settings Panel -->
+        <div class="lg:col-span-1">
+            <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-md flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-sm font-bold text-gray-900">🤖 Auto-Invest Config</h3>
+                        <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold 
+                            {{ $stats['auto_invest_rule']->is_active ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-800' }}">
+                            {{ $stats['auto_invest_rule']->is_active ? 'ACTIVE' : 'INACTIVE' }}
+                        </span>
+                    </div>
+
+                    <form action="{{ route('loans.auto-invest.update') }}" method="POST" class="space-y-4">
+                        @csrf
+                        
+                        <!-- Toggle Switch -->
+                        <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                            <span class="text-xs font-semibold text-gray-700 uppercase">Enable Auto-Funding</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" name="is_active" value="1" class="sr-only peer"
+                                    {{ $stats['auto_invest_rule']->is_active ? 'checked' : '' }}>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                            </label>
+                        </div>
+
+                        <!-- Min Grade -->
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Minimum Risk Grade</label>
+                            <select name="min_grade" class="w-full rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-700 outline-none focus:border-indigo-500">
+                                @foreach(['A', 'B', 'C', 'D'] as $g)
+                                    <option value="{{ $g }}" {{ $stats['auto_invest_rule']->min_grade === $g ? 'selected' : '' }}>Grade {{ $g }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Max Grade -->
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Maximum Risk Grade</label>
+                            <select name="max_grade" class="w-full rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-700 outline-none focus:border-indigo-500">
+                                @foreach(['A', 'B', 'C', 'D'] as $g)
+                                    <option value="{{ $g }}" {{ $stats['auto_invest_rule']->max_grade === $g ? 'selected' : '' }}>Grade {{ $g }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Max Allocation -->
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Max Allocation / Loan (IDR)</label>
+                            <input type="number" name="max_allocation_per_loan" min="100000" step="50000"
+                                value="{{ (int)$stats['auto_invest_rule']->max_allocation_per_loan }}"
+                                class="w-full rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-700 outline-none focus:border-indigo-500">
+                        </div>
+
+                        <!-- Max LTV -->
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Maximum LTV Limit (%)</label>
+                            <input type="number" name="max_ltv" min="10" max="100"
+                                value="{{ (int)$stats['auto_invest_rule']->max_ltv }}"
+                                class="w-full rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-700 outline-none focus:border-indigo-500">
+                        </div>
+
+                        <button type="submit" class="w-full rounded-xl bg-indigo-600 py-3 text-xs font-bold text-white shadow hover:bg-indigo-700 transition-colors">
+                            Simpan Aturan
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -382,4 +484,72 @@
     @endif
 
 </div>
+
+<!-- ── Visual Charts Script ────────────────────────────────────────────────── -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // ── Borrower Payoff Doughnut Chart ──
+    @if($role === 'borrower')
+    const payoffCtx = document.getElementById('borrowerPayoffChart');
+    if (payoffCtx) {
+        new Chart(payoffCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Paid', 'Unpaid'],
+                datasets: [{
+                    data: [{{ $stats['chart_paid_count'] }}, {{ $stats['chart_unpaid_count'] }}],
+                    backgroundColor: ['#10b981', '#f3f4f6'],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                cutout: '75%'
+            }
+        });
+    }
+    @endif
+
+    // ── Lender Grade Distribution Bar Chart ──
+    @if($role === 'lender')
+    const gradeCtx = document.getElementById('gradeDistributionChart');
+    if (gradeCtx) {
+        new Chart(gradeCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Grade A', 'Grade B', 'Grade C', 'Grade D'],
+                datasets: [{
+                    label: 'Investasi Terdistribusi (IDR)',
+                    data: {!! json_encode($stats['grade_chart_data']) !!},
+                    backgroundColor: ['#10b981', '#f59e0b', '#f97316', '#ef4444'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return 'Rp ' + value.toLocaleString('id-ID');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    @endif
+});
+</script>
 @endsection

@@ -37,7 +37,7 @@ Route::middleware('guest')->group(function () {
 });
 
 // ─── Authenticated Routes ─────────────────────────────────────────────────────
-Route::middleware(['auth', 'verified', 'two_factor'])->group(function () {
+Route::middleware(['auth', 'two_factor'])->group(function () {
     // Logout
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 

@@ -84,6 +84,13 @@ Route::middleware(['auth', 'verified', 'two_factor'])->group(function () {
         
         // Repayments
         Route::post('/repayments/{installment}/pay', [\App\Modules\Loan\Controllers\RepaymentController::class, 'pay'])->name('repayments.pay');
+
+        // 💬 Internal Loan Chat System
+        Route::get('/loans/{loan}/messages', [\App\Modules\Loan\Controllers\LoanMessageController::class, 'fetchMessages'])->name('loans.messages.fetch');
+        Route::post('/loans/{loan}/messages', [\App\Modules\Loan\Controllers\LoanMessageController::class, 'sendMessage'])->name('loans.messages.send');
+
+        // 📄 Contract Agreement PDF/Print Page
+        Route::get('/loans/{loan}/agreement', [\App\Modules\Loan\Controllers\AgreementDownloadController::class, 'download'])->name('loans.agreement');
     });
 
     // 👑 Admin-Only Panel Routes

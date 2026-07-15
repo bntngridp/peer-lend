@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 
 // ─── Public Landing Page ──────────────────────────────────────────────────────
 Route::get('/', fn () => view('welcome'))->name('home');
+Route::post('/api/payment/webhook', [\App\Modules\Wallet\Controllers\PaymentController::class, 'webhook'])->name('payment.webhook');
+Route::get('/api/docs', fn () => view('docs.swagger'))->name('api.docs');
 
 // ─── 🧮 Loan Calculator (Public — No Auth Required) ──────────────────────────
 Route::get('/calculator', [\App\Modules\Loan\Controllers\LoanCalculatorController::class, 'index'])->name('calculator.index');
@@ -65,6 +67,7 @@ Route::middleware(['auth', 'verified', 'two_factor'])->group(function () {
     Route::get('/wallet', [\App\Modules\Wallet\Controllers\WalletController::class, 'index'])->name('wallet.index');
     Route::middleware('kyc')->group(function () {
         Route::post('/wallet/deposit', [\App\Modules\Wallet\Controllers\WalletController::class, 'deposit'])->name('wallet.deposit');
+        Route::post('/wallet/deposit/initiate', [\App\Modules\Wallet\Controllers\PaymentController::class, 'initiateDeposit'])->name('wallet.deposit.initiate');
         Route::post('/wallet/withdraw', [\App\Modules\Wallet\Controllers\WalletController::class, 'withdraw'])->name('wallet.withdraw');
     });
 

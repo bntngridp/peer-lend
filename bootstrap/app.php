@@ -17,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'kyc'        => \App\Http\Middleware\CheckKYCApproved::class,
             'two_factor' => \App\Http\Middleware\Require2FA::class,
         ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'api/payment/webhook',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

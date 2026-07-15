@@ -1,0 +1,295 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Peer-Lend REST API Documentation",
+    "description": "Dokumentasi resmi REST API untuk integrasi eksternal platform P2P Lending Peer-Lend. Semua endpoint API dilindungi oleh autentikasi Bearer Token (Session-based atau API Token).",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/api/v1",
+      "description": "API Gateway v1"
+    }
+  ],
+  "paths": {
+    "/marketplace": {
+      "get": {
+        "summary": "Mendapatkan Daftar Pinjaman Aktif di Marketplace",
+        "description": "Mengembalikan daftar pengajuan pinjaman yang saat ini berstatus `open_funding` dengan metadata paginasi lengkap.",
+        "parameters": [
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "Jumlah item per halaman (maksimum 50)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Nomor halaman saat ini",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Daftar pinjaman berhasil dimuat.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Marketplace loans retrieved successfully"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LoanShort"
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "current_page": { "type": "integer", "example": 1 },
+                        "per_page": { "type": "integer", "example": 10 },
+                        "total": { "type": "integer", "example": 2 },
+                        "total_pages": { "type": "integer", "example": 1 }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/marketplace/{id}": {
+      "get": {
+        "summary": "Mendapatkan Detail Pinjaman Tertentu",
+        "description": "Mengembalikan data lengkap suatu pengajuan pinjaman berdasarkan ID pinjaman.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "UUID Pinjaman",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detail pinjaman berhasil dimuat.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Loan details retrieved successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/LoanDetail"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Pinjaman tidak ditemukan."
+          }
+        }
+      }
+    },
+    "/loans/apply": {
+      "post": {
+        "summary": "Mengajukan Pinjaman Baru (Borrower)",
+        "description": "Mengajukan pinjaman baru melalui API. Peminjam harus memiliki status KYC disetujui (Approved) terlebih dahulu.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["category_id", "amount", "duration", "purpose"],
+                "properties": {
+                  "category_id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "ID kategori pinjaman",
+                    "example": "00000000-0000-0000-0000-000000000001"
+                  },
+                  "amount": {
+                    "type": "number",
+                    "minimum": 1000000,
+                    "maximum": 500000000,
+                    "description": "Jumlah pinjaman dalam IDR",
+                    "example": 5000000
+                  },
+                  "duration": {
+                    "type": "integer",
+                    "enum": [3, 6, 12, 24],
+                    "description": "Tenor pinjaman (dalam bulan)",
+                    "example": 12
+                  },
+                  "purpose": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "description": "Tujuan peminjaman",
+                    "example": "Modal Kerja Usaha"
+                  },
+                  "collateral_currency_id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "ID aset kripto untuk jaminan (Opsional)",
+                    "example": "00000000-0000-0000-0000-000000000002"
+                  },
+                  "description": {
+                    "type": "string",
+                    "maxLength": 5000,
+                    "description": "Deskripsi lengkap pinjaman (Opsional)",
+                    "example": "Butuh dana tambahan untuk membeli stok bahan baku akhir tahun."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Pengajuan pinjaman berhasil dibuat dan menunggu tinjauan admin.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "message": { "type": "string", "example": "Loan application submitted successfully. Awaiting admin review." },
+                    "data": {
+                      "$ref": "#/components/schemas/LoanCreated"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Akses ditolak karena KYC belum disetujui."
+          },
+          "422": {
+            "description": "Validasi input gagal.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "error" },
+                    "message": { "type": "string", "example": "Validation failed." },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "field": { "type": "string", "example": "amount" },
+                          "message": { "type": "string", "example": "The amount field is required." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LoanShort": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "example": "9b123456-abcd-ef01-2345-6789abcdef01" },
+          "amount": { "type": "string", "example": "5000000.00" },
+          "interest_rate": { "type": "string", "example": "12.00" },
+          "duration": { "type": "integer", "example": 12 },
+          "purpose": { "type": "string", "example": "SPP Sekolah" },
+          "risk_grade": { "type": "string", "example": "B" },
+          "status": { "type": "string", "example": "open_funding" },
+          "funded_percentage": { "type": "string", "example": "0.00" }
+        }
+      },
+      "LoanDetail": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "example": "9b123456-abcd-ef01-2345-6789abcdef01" },
+          "amount": { "type": "number", "example": 5000000 },
+          "interest_rate": { "type": "number", "example": 12 },
+          "duration": { "type": "integer", "example": 12 },
+          "purpose": { "type": "string", "example": "SPP Sekolah" },
+          "risk_grade": { "type": "string", "example": "B" },
+          "status": { "type": "string", "example": "open_funding" },
+          "funded_percentage": { "type": "number", "example": 40 },
+          "collateral_amount": { "type": "number", "example": 0 },
+          "borrower": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string", "example": "John Doe" },
+              "email": { "type": "string", "example": "borrower@example.com" }
+            }
+          },
+          "category": { "type": "string", "example": "Education" },
+          "currency": { "type": "string", "example": "IDR" },
+          "fundings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "lender_name": { "type": "string", "example": "Lender Automatik" },
+                "amount": { "type": "number", "example": 2000000 },
+                "funded_at": { "type": "string", "format": "date-time", "example": "2026-07-15T06:50:22Z" }
+              }
+            }
+          }
+        }
+      },
+      "LoanCreated": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "example": "9b123456-abcd-ef01-2345-6789abcdef01" },
+          "amount": { "type": "number", "example": 3000000 },
+          "duration": { "type": "integer", "example": 12 },
+          "interest_rate": { "type": "number", "example": 10.50 },
+          "risk_grade": { "type": "string", "example": "A" },
+          "status": { "type": "string", "example": "pending" },
+          "purpose": { "type": "string", "example": "Biaya Pendidikan S2" },
+          "category": { "type": "string", "example": "Education" },
+          "currency": { "type": "string", "example": "IDR" },
+          "created_at": { "type": "string", "format": "date-time", "example": "2026-07-15T06:57:01Z" }
+        }
+      }
+    }
+  }
+}

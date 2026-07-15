@@ -66,13 +66,16 @@
 
                 <!-- Deposit Form -->
                 <div x-show="tab === 'deposit'">
-                    <form action="{{ route('wallet.deposit') }}" method="POST" class="space-y-4">
+                    <!-- Load Midtrans Snap.js Sandbox -->
+                    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+
+                    <form id="deposit-form" action="{{ route('wallet.deposit') }}" method="POST" class="space-y-4">
                         @csrf
                         <div>
                             <label for="dep_currency_id" class="block text-xs font-semibold uppercase tracking-wider text-gray-600">Select Currency</label>
                             <select name="currency_id" id="dep_currency_id" class="mt-1.5 block w-full rounded-xl border-gray-300 px-3 py-2.5 text-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 @foreach($currencies as $curr)
-                                    <option value="{{ $curr->id }}">{{ $curr->code }} - {{ $curr->name }}</option>
+                                    <option value="{{ $curr->id }}" data-code="{{ $curr->code }}">{{ $curr->code }} - {{ $curr->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -82,12 +85,83 @@
                                    class="mt-1.5 block w-full rounded-xl border-gray-300 px-3 py-2.5 text-sm focus:border-indigo-500 focus:ring-indigo-500"
                                    placeholder="e.g. 100000">
                         </div>
-                        <button type="submit"
+                        <button type="submit" id="submit-deposit-btn"
                                 class="w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-md shadow-indigo-600/10 hover:bg-indigo-700 transition-all">
                             Submit Deposit
                         </button>
                     </form>
                 </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const form = document.getElementById('deposit-form');
+                        const submitBtn = document.getElementById('submit-deposit-btn');
+
+                        if (form) {
+                            form.addEventListener('submit', async (e) => {
+                                const selectEl = document.getElementById('dep_currency_id');
+                                const selectedOption = selectEl.options[selectEl.selectedIndex];
+                                const currencyCode = selectedOption.getAttribute('data-code');
+
+                                // Only process IDR with Midtrans
+                                if (currencyCode === 'IDR') {
+                                    e.preventDefault();
+                                    
+                                    // Disable button
+                                    submitBtn.disabled = true;
+                                    submitBtn.innerText = 'Initiating payment...';
+
+                                    const amount = document.getElementById('dep_amount').value;
+
+                                    try {
+                                        const response = await fetch('{{ route("wallet.deposit.initiate") }}', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                'Accept': 'application/json'
+                                            },
+                                            body: JSON.stringify({ amount: amount })
+                                        });
+
+                                        const resData = await response.json();
+
+                                        if (resData.status === 'success') {
+                                            const snapToken = resData.data.snap_token;
+                                            
+                                            // Trigger Snap Popup
+                                            window.snap.pay(snapToken, {
+                                                onSuccess: function(result) {
+                                                    window.location.href = '{{ route("wallet.index") }}?status=success&msg=Payment settled!';
+                                                },
+                                                onPending: function(result) {
+                                                    window.location.href = '{{ route("wallet.index") }}?status=pending&msg=Payment pending.';
+                                                },
+                                                onError: function(result) {
+                                                    window.location.href = '{{ route("wallet.index") }}?status=error&msg=Payment failed.';
+                                                },
+                                                onClose: function() {
+                                                    submitBtn.disabled = false;
+                                                    submitBtn.innerText = 'Submit Deposit';
+                                                }
+                                            });
+                                        } else {
+                                            alert('Error: ' + resData.message);
+                                            submitBtn.disabled = false;
+                                            submitBtn.innerText = 'Submit Deposit';
+                                        }
+                                    } catch (err) {
+                                        console.error(err);
+                                        alert('An unexpected error occurred. Please try again.');
+                                        submitBtn.disabled = false;
+                                        submitBtn.innerText = 'Submit Deposit';
+                                    }
+                                }
+                            });
+                        }
+                    });
+                </script>
+
 
                 <!-- Withdraw Form -->
                 <div x-show="tab === 'withdraw'" style="display: none;">

@@ -3,6 +3,8 @@
 use App\Modules\Auth\Controllers\LoginController;
 use App\Modules\Auth\Controllers\PasswordResetController;
 use App\Modules\Auth\Controllers\RegisterController;
+use App\Modules\Shared\Controllers\DashboardController;
+use App\Modules\Shared\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 // ─── Public Landing Page ──────────────────────────────────────────────────────
@@ -32,8 +34,13 @@ Route::middleware(['auth', 'verified', 'two_factor'])->group(function () {
     // Logout
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-    // Dashboard (placeholder — will be implemented per-role later)
-    Route::get('/dashboard', fn () => view('dashboard'))->name('dashboard');
+    // Dashboard — role-based (admin / borrower / lender)
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // 🔔 Notification Routes
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
 
     // 🔐 2-Factor Authentication (2FA) Routes
     Route::get('/2fa/setup', [\App\Modules\Auth\Controllers\TwoFactorController::class, 'showSetup'])->name('2fa.setup');

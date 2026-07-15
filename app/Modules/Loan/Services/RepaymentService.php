@@ -9,6 +9,8 @@ use App\Models\LoanRepayment;
 use App\Models\LoanRequest;
 use App\Models\User;
 use App\Models\Wallet;
+use App\Modules\Shared\Services\AuditLogService;
+use App\Modules\Shared\Services\NotificationService;
 use App\Modules\Wallet\Services\WalletService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -16,7 +18,8 @@ use Illuminate\Validation\ValidationException;
 class RepaymentService
 {
     public function __construct(
-        private readonly WalletService $walletService
+        private readonly WalletService       $walletService,
+        private readonly NotificationService $notificationService,
     ) {}
 
     /**
@@ -112,7 +115,7 @@ class RepaymentService
 
             $agreement->update(['status' => 'active', 'signed_at' => now()]);
 
-            app(\App\Modules\Shared\Services\AuditLogService::class)->log(
+            app(AuditLogService::class)->log(
                 'loan_disburse',
                 LoanRequest::class,
                 $lockedLoan->id,
@@ -123,6 +126,24 @@ class RepaymentService
                     'net_disbursement' => $netDisbursement,
                 ]
             );
+
+            // Notify borrower that their funds have arrived
+            $this->notificationService->notifyLoanDisbursed(
+                $borrower,
+                $lockedLoan->id,
+                $netDisbursement
+            );
+
+            // Notify each lender that the loan they funded has been disbursed
+            foreach ($lockedLoan->fundings as $funding) {
+                if ($funding->lender) {
+                    $this->notificationService->notifyLenderDisbursed(
+                        $funding->lender,
+                        $lockedLoan->id,
+                        (string)$funding->amount
+                    );
+                }
+            }
 
             return $lockedLoan;
         });
@@ -210,6 +231,18 @@ class RepaymentService
                     'balance_after'  => $lAfter,
                     'description'    => "Repayment share received for loan #{$loan->id} (installment #{$lockedInstallment->installment_number})",
                 ]);
+
+                // Notify lender about installment payment received
+                $principalShare = bcmul($lockedInstallment->principal_amount, $lenderShareRate, 2);
+                $interestShare  = bcmul($lockedInstallment->interest_amount, $lenderShareRate, 2);
+                if ($funding->lender) {
+                    $this->notificationService->notifyInstallmentPaid(
+                        $funding->lender,
+                        $loan->id,
+                        $principalShare,
+                        $interestShare
+                    );
+                }
             }
 
             // 3. Update installment status
@@ -238,13 +271,23 @@ class RepaymentService
             if (! $hasUnpaid) {
                 $loan->update(['status' => LoanRequest::STATUS_COMPLETED]);
 
-                app(\App\Modules\Shared\Services\AuditLogService::class)->log(
+                app(AuditLogService::class)->log(
                     'loan_completed',
                     LoanRequest::class,
                     $loan->id,
                     null,
                     ['amount' => $loan->amount]
                 );
+
+                // Notify borrower loan is done
+                $this->notificationService->notifyLoanCompleted($borrower, $loan->id);
+
+                // Notify each lender that the loan they funded is fully repaid
+                foreach ($loan->fundings as $funding) {
+                    if ($funding->lender) {
+                        $this->notificationService->notifyLoanCompleted($funding->lender, $loan->id);
+                    }
+                }
             }
         });
     }

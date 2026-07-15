@@ -60,15 +60,23 @@
                         <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-700 hover:text-indigo-600 transition-colors">Sign in</a>
                         <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-indigo-600/10 hover:bg-indigo-700 hover:scale-[1.02] active:scale-[0.98] transition-all">Get started</a>
                     @else
-                        <!-- In-App Notification Bell -->
-                        <button class="relative rounded-xl p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+                        <!-- 🔔 In-App Notification Bell -->
+                        @php
+                            $unreadNotifCount = \App\Models\Notification::where('user_id', Auth::id())
+                                ->whereNull('read_at')
+                                ->count();
+                        @endphp
+                        <a href="{{ route('notifications.index') }}" class="relative rounded-xl p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors" title="Notifications">
                             <span class="sr-only">View notifications</span>
                             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
                             </svg>
-                            <!-- Notification Badge (dummy dot) -->
-                            <span class="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white"></span>
-                        </button>
+                            @if($unreadNotifCount > 0)
+                                <span class="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-rose-500 text-xs font-bold text-white ring-2 ring-white">
+                                    {{ $unreadNotifCount > 99 ? '99+' : $unreadNotifCount }}
+                                </span>
+                            @endif
+                        </a>
 
                         <!-- User Profile Dropdown -->
                         <div class="relative" x-data="{ open: false }" @click.away="open = false">

@@ -5,11 +5,17 @@ namespace App\Modules\Loan\Services;
 use App\Models\Currency;
 use App\Models\LoanRequest;
 use App\Models\User;
+use App\Modules\Shared\Services\AuditLogService;
+use App\Modules\Shared\Services\NotificationService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class LoanRequestService
 {
+    public function __construct(
+        private readonly NotificationService $notificationService,
+    ) {}
+
     /**
      * Create a new loan request application.
      */
@@ -96,12 +102,19 @@ class LoanRequestService
             'approved_at' => now(),
         ]);
 
-        app(\App\Modules\Shared\Services\AuditLogService::class)->log(
+        app(AuditLogService::class)->log(
             'loan_approve',
             LoanRequest::class,
             $loan->id,
             $admin,
             ['status' => $loan->status]
+        );
+
+        // Notify borrower that their loan is now open for funding in the marketplace
+        $this->notificationService->notifyLoanOpenFunding(
+            $loan->borrower,
+            $loan->id,
+            (string)$loan->amount
         );
 
         return $loan;

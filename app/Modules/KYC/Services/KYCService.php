@@ -5,6 +5,8 @@ namespace App\Modules\KYC\Services;
 use App\Models\KYC;
 use App\Models\KYCDocument;
 use App\Models\User;
+use App\Modules\Shared\Services\AuditLogService;
+use App\Modules\Shared\Services\NotificationService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -14,7 +16,8 @@ use Illuminate\Validation\ValidationException;
 class KYCService
 {
     public function __construct(
-        private readonly OCRService $ocrService
+        private readonly OCRService          $ocrService,
+        private readonly NotificationService $notificationService,
     ) {}
 
     /**
@@ -112,12 +115,14 @@ class KYCService
             'reviewed_at' => now(),
         ]);
 
-        app(\App\Modules\Shared\Services\AuditLogService::class)->log(
+        app(AuditLogService::class)->log(
             'kyc_approve',
             KYC::class,
             $kyc->id,
             $admin
         );
+
+        $this->notificationService->notifyKycApproved($kyc->user);
 
         return $kyc;
     }
@@ -140,13 +145,15 @@ class KYCService
             'reviewed_at'     => now(),
         ]);
 
-        app(\App\Modules\Shared\Services\AuditLogService::class)->log(
+        app(AuditLogService::class)->log(
             'kyc_reject',
             KYC::class,
             $kyc->id,
             $admin,
             ['reason' => $reason]
         );
+
+        $this->notificationService->notifyKycRejected($kyc->user, $reason);
 
         return $kyc;
     }

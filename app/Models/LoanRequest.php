@@ -64,6 +64,7 @@ class LoanRequest extends Model
     const STATUS_COMPLETED    = 'completed';
     const STATUS_DEFAULT      = 'default';
     const STATUS_CANCELLED    = 'cancelled';
+    const STATUS_LIQUIDATED   = 'liquidated';
 
     // ─── Scopes ───────────────────────────────────────────────────────
 

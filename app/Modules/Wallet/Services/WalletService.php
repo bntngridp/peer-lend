@@ -58,11 +58,42 @@ class WalletService
     }
 
     /**
+     * Credit an amount directly to the user's IDR wallet.
+     * Used by LiquidationService to return recovered collateral funds to lenders.
+     */
+    public function credit(User $user, string $amount, string $type, string $description): WalletTransaction
+    {
+        return DB::transaction(function () use ($user, $amount, $type, $description) {
+            $idrCurrencyId = \App\Models\Currency::where('code', 'IDR')->value('id');
+
+            $wallet = Wallet::lockForUpdate()->firstOrCreate(
+                ['user_id' => $user->id, 'currency_id' => $idrCurrencyId],
+                ['available_balance' => '0', 'hold_balance' => '0']
+            );
+
+            $before = $wallet->available_balance;
+            $after  = bcadd($before, $amount, 8);
+
+            $wallet->update(['available_balance' => $after]);
+
+            return \App\Models\WalletTransaction::create([
+                'wallet_id'      => $wallet->id,
+                'type'           => $type,
+                'amount'         => $amount,
+                'balance_before' => $before,
+                'balance_after'  => $after,
+                'description'    => $description,
+            ]);
+        });
+    }
+
+    /**
      * Withdraw funds from a user's wallet.
      *
      * @throws ValidationException when wallet balance is insufficient.
      */
     public function withdraw(User $user, int $currencyId, string $amount, ?string $description = null): WalletTransaction
+
     {
         return DB::transaction(function () use ($user, $currencyId, $amount, $description) {
             $currency = Currency::findOrFail($currencyId);

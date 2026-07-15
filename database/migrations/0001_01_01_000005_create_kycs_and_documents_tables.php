@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('kycs', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->unique();
+            $table->string('nik', 20)->nullable();
             $table->string('status')->default('pending'); // pending, approved, rejected
             $table->text('rejected_reason')->nullable();
             $table->uuid('reviewed_by')->nullable();

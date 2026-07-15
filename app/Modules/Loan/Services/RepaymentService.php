@@ -112,6 +112,18 @@ class RepaymentService
 
             $agreement->update(['status' => 'active', 'signed_at' => now()]);
 
+            app(\App\Modules\Shared\Services\AuditLogService::class)->log(
+                'loan_disburse',
+                LoanRequest::class,
+                $lockedLoan->id,
+                null,
+                [
+                    'amount'           => $lockedLoan->amount,
+                    'origination_fee'  => $originationFee,
+                    'net_disbursement' => $netDisbursement,
+                ]
+            );
+
             return $lockedLoan;
         });
     }
@@ -206,6 +218,18 @@ class RepaymentService
                 'paid_at' => now(),
             ]);
 
+            app(\App\Modules\Shared\Services\AuditLogService::class)->log(
+                'loan_repayment',
+                LoanInstallment::class,
+                $lockedInstallment->id,
+                $borrower,
+                [
+                    'amount_paid'        => $totalDue,
+                    'installment_number' => $lockedInstallment->installment_number,
+                    'loan_id'            => $loan->id,
+                ]
+            );
+
             // 4. Auto-complete Loan if all installments are fully settled
             $hasUnpaid = LoanInstallment::where('loan_id', $loan->id)
                 ->where('status', '!=', LoanInstallment::STATUS_PAID)
@@ -213,6 +237,14 @@ class RepaymentService
 
             if (! $hasUnpaid) {
                 $loan->update(['status' => LoanRequest::STATUS_COMPLETED]);
+
+                app(\App\Modules\Shared\Services\AuditLogService::class)->log(
+                    'loan_completed',
+                    LoanRequest::class,
+                    $loan->id,
+                    null,
+                    ['amount' => $loan->amount]
+                );
             }
         });
     }

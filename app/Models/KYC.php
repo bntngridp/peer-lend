@@ -15,6 +15,7 @@ class KYC extends Model
 
     protected $fillable = [
         'user_id',
+        'nik',
         'status',
         'rejected_reason',
         'reviewed_by',

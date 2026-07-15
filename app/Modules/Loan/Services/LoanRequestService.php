@@ -46,7 +46,7 @@ class LoanRequestService
                 $liquidationPrice = bcdiv($maxLoanValueForLiquidation, $collateralAmount, 8);
             }
 
-            return LoanRequest::create([
+            $loan = LoanRequest::create([
                 'borrower_id'            => $borrower->id,
                 'category_id'            => $data['category_id'],
                 'amount'                 => $data['amount'],
@@ -66,6 +66,16 @@ class LoanRequestService
                 'status'                 => LoanRequest::STATUS_PENDING,
                 'funded_percentage'      => 0.00,
             ]);
+
+            app(\App\Modules\Shared\Services\AuditLogService::class)->log(
+                'loan_apply',
+                LoanRequest::class,
+                $loan->id,
+                $borrower,
+                ['amount' => $loan->amount]
+            );
+
+            return $loan;
         });
     }
 
@@ -85,6 +95,14 @@ class LoanRequestService
             'approved_by' => $admin->id,
             'approved_at' => now(),
         ]);
+
+        app(\App\Modules\Shared\Services\AuditLogService::class)->log(
+            'loan_approve',
+            LoanRequest::class,
+            $loan->id,
+            $admin,
+            ['status' => $loan->status]
+        );
 
         return $loan;
     }

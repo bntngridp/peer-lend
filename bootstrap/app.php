@@ -13,8 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'role' => \App\Http\Middleware\EnsureRoleMiddleware::class,
-            'kyc'  => \App\Http\Middleware\CheckKYCApproved::class,
+            'role'       => \App\Http\Middleware\EnsureRoleMiddleware::class,
+            'kyc'        => \App\Http\Middleware\CheckKYCApproved::class,
+            'two_factor' => \App\Http\Middleware\Require2FA::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

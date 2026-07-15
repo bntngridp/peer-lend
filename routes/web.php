@@ -28,12 +28,18 @@ Route::middleware('guest')->group(function () {
 });
 
 // ─── Authenticated Routes ─────────────────────────────────────────────────────
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'two_factor'])->group(function () {
     // Logout
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     // Dashboard (placeholder — will be implemented per-role later)
     Route::get('/dashboard', fn () => view('dashboard'))->name('dashboard');
+
+    // 🔐 2-Factor Authentication (2FA) Routes
+    Route::get('/2fa/setup', [\App\Modules\Auth\Controllers\TwoFactorController::class, 'showSetup'])->name('2fa.setup');
+    Route::post('/2fa/enable', [\App\Modules\Auth\Controllers\TwoFactorController::class, 'enable'])->name('2fa.enable');
+    Route::get('/2fa/verify', [\App\Modules\Auth\Controllers\TwoFactorController::class, 'showVerifyForm'])->name('2fa.verify');
+    Route::post('/2fa/verify', [\App\Modules\Auth\Controllers\TwoFactorController::class, 'verify'])->name('2fa.verify.post');
 
     // 👤 User Profile Routes
     Route::get('/profile', [\App\Modules\User\Controllers\ProfileController::class, 'edit'])->name('profile.edit');

@@ -36,7 +36,7 @@ class WalletService
                 'available_balance' => $after,
             ]);
 
-            return WalletTransaction::create([
+            $tx = WalletTransaction::create([
                 'wallet_id'      => $wallet->id,
                 'type'           => 'deposit',
                 'amount'         => $amount,
@@ -44,6 +44,16 @@ class WalletService
                 'balance_after'  => $after,
                 'description'    => $description ?? "Deposit of {$amount} {$currency->code}",
             ]);
+
+            app(\App\Modules\Shared\Services\AuditLogService::class)->log(
+                'wallet_deposit',
+                Wallet::class,
+                $wallet->id,
+                $user,
+                ['amount' => $amount, 'transaction_id' => $tx->id]
+            );
+
+            return $tx;
         });
     }
 
@@ -75,7 +85,7 @@ class WalletService
                 'available_balance' => $after,
             ]);
 
-            return WalletTransaction::create([
+            $tx = WalletTransaction::create([
                 'wallet_id'      => $wallet->id,
                 'type'           => 'withdraw',
                 'amount'         => $amount,
@@ -83,6 +93,16 @@ class WalletService
                 'balance_after'  => $after,
                 'description'    => $description ?? "Withdrawal of {$amount} {$currency->code}",
             ]);
+
+            app(\App\Modules\Shared\Services\AuditLogService::class)->log(
+                'wallet_withdraw',
+                Wallet::class,
+                $wallet->id,
+                $user,
+                ['amount' => $amount, 'transaction_id' => $tx->id]
+            );
+
+            return $tx;
         });
     }
 
@@ -103,6 +123,14 @@ class WalletService
                 'available_balance' => bcsub($lockedWallet->available_balance, $amount, 8),
                 'hold_balance'      => bcadd($lockedWallet->hold_balance, $amount, 8),
             ]);
+
+            app(\App\Modules\Shared\Services\AuditLogService::class)->log(
+                'wallet_hold',
+                Wallet::class,
+                $lockedWallet->id,
+                $lockedWallet->user,
+                ['amount' => $amount]
+            );
         });
     }
 
@@ -122,6 +150,14 @@ class WalletService
                 'available_balance' => bcadd($lockedWallet->available_balance, $amount, 8),
                 'hold_balance'      => bcsub($lockedWallet->hold_balance, $amount, 8),
             ]);
+
+            app(\App\Modules\Shared\Services\AuditLogService::class)->log(
+                'wallet_release_hold',
+                Wallet::class,
+                $lockedWallet->id,
+                $lockedWallet->user,
+                ['amount' => $amount]
+            );
         });
     }
 
@@ -140,6 +176,14 @@ class WalletService
             $lockedWallet->update([
                 'hold_balance' => bcsub($lockedWallet->hold_balance, $amount, 8),
             ]);
+
+            app(\App\Modules\Shared\Services\AuditLogService::class)->log(
+                'wallet_use_hold',
+                Wallet::class,
+                $lockedWallet->id,
+                $lockedWallet->user,
+                ['amount' => $amount]
+            );
         });
     }
 }

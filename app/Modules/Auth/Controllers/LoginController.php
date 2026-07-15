@@ -40,6 +40,13 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
+        if ($user->google2fa_enabled) {
+            session()->forget('google2fa_verified');
+            return redirect()->route('2fa.verify');
+        }
+
+        session(['google2fa_verified' => true]);
+
         return redirect()->intended(route('dashboard'))
             ->with('success', 'Welcome back!');
     }

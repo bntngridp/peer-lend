@@ -15,6 +15,7 @@ class NotificationService
     const TYPE_LOAN_FULLY_FUNDED      = 'loan_fully_funded';
     const TYPE_LOAN_DISBURSED         = 'loan_disbursed';
     const TYPE_INSTALLMENT_DUE        = 'installment_due';
+    const TYPE_INSTALLMENT_OVERDUE    = 'installment_overdue';
     const TYPE_INSTALLMENT_PAID       = 'installment_paid';
     const TYPE_LOAN_COMPLETED         = 'loan_completed';
     const TYPE_LOAN_LIQUIDATED        = 'loan_liquidated';
@@ -125,6 +126,17 @@ class NotificationService
             self::TYPE_INSTALLMENT_DUE,
             'Cicilan Jatuh Tempo dalam 3 Hari ⏰',
             "Cicilan sebesar Rp " . number_format((float)$amount, 0, ',', '.') . " akan jatuh tempo pada {$dueDate}. Pastikan saldo wallet kamu mencukupi.",
+            ['installment_id' => $installmentId, 'route' => 'loans.installments']
+        );
+    }
+
+    public function notifyInstallmentOverdue(User $borrower, string $installmentId, string $totalDue, int $daysOverdue): void
+    {
+        $this->send(
+            $borrower,
+            self::TYPE_INSTALLMENT_OVERDUE,
+            'Cicilan Telah Menunggak! 🚨',
+            "Cicilan kamu telah terlambat selama {$daysOverdue} hari. Total yang harus dibayar saat ini (termasuk denda harian): Rp " . number_format((float)$totalDue, 0, ',', '.') . ". Harap segera lakukan pembayaran.",
             ['installment_id' => $installmentId, 'route' => 'loans.installments']
         );
     }

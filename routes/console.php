@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\CalculatePenaltiesCommand;
 use App\Console\Commands\UpdateCryptoLtvCommand;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -17,4 +18,12 @@ Schedule::command(UpdateCryptoLtvCommand::class)
     ->withoutOverlapping()
     ->runInBackground()
     ->appendOutputTo(storage_path('logs/ltv-update.log'));
+
+// Calculate daily penalties and flag overdue installments — runs every day
+Schedule::command(CalculatePenaltiesCommand::class)
+    ->daily()
+    ->withoutOverlapping()
+    ->runInBackground()
+    ->appendOutputTo(storage_path('logs/calculate-penalties.log'));
+
 

@@ -66,17 +66,18 @@
                 @php
                     $isUnread = !$notification->isRead();
                     $icon = match($notification->type) {
-                        'kyc_approved'       => ['bg' => 'bg-emerald-100', 'text' => 'text-emerald-600', 'emoji' => '✅'],
-                        'kyc_rejected'       => ['bg' => 'bg-red-100',     'text' => 'text-red-600',     'emoji' => '❌'],
-                        'loan_open_funding'  => ['bg' => 'bg-blue-100',    'text' => 'text-blue-600',    'emoji' => '📋'],
-                        'loan_fully_funded'  => ['bg' => 'bg-purple-100',  'text' => 'text-purple-600',  'emoji' => '🎊'],
-                        'loan_disbursed'     => ['bg' => 'bg-green-100',   'text' => 'text-green-600',   'emoji' => '💰'],
-                        'installment_due'    => ['bg' => 'bg-amber-100',   'text' => 'text-amber-600',   'emoji' => '⏰'],
-                        'installment_paid'   => ['bg' => 'bg-teal-100',    'text' => 'text-teal-600',    'emoji' => '💸'],
-                        'loan_completed'     => ['bg' => 'bg-indigo-100',  'text' => 'text-indigo-600',  'emoji' => '🏆'],
-                        'loan_liquidated'    => ['bg' => 'bg-red-100',     'text' => 'text-red-600',     'emoji' => '🔴'],
-                        'ltv_warning'        => ['bg' => 'bg-orange-100',  'text' => 'text-orange-600',  'emoji' => '⚠️'],
-                        default              => ['bg' => 'bg-gray-100',    'text' => 'text-gray-600',    'emoji' => '🔔'],
+                        'kyc_approved'        => ['bg' => 'bg-emerald-100', 'text' => 'text-emerald-600', 'emoji' => '✅'],
+                        'kyc_rejected'        => ['bg' => 'bg-red-100',     'text' => 'text-red-600',     'emoji' => '❌'],
+                        'loan_open_funding'   => ['bg' => 'bg-blue-100',    'text' => 'text-blue-600',    'emoji' => '📋'],
+                        'loan_fully_funded'   => ['bg' => 'bg-purple-100',  'text' => 'text-purple-600',  'emoji' => '🎊'],
+                        'loan_disbursed'      => ['bg' => 'bg-green-100',   'text' => 'text-green-600',   'emoji' => '💰'],
+                        'installment_due'     => ['bg' => 'bg-amber-100',   'text' => 'text-amber-600',   'emoji' => '⏰'],
+                        'installment_overdue' => ['bg' => 'bg-rose-100',    'text' => 'text-rose-600',    'emoji' => '🚨'],
+                        'installment_paid'    => ['bg' => 'bg-teal-100',    'text' => 'text-teal-600',    'emoji' => '💸'],
+                        'loan_completed'      => ['bg' => 'bg-indigo-100',  'text' => 'text-indigo-600',  'emoji' => '🏆'],
+                        'loan_liquidated'     => ['bg' => 'bg-red-100',     'text' => 'text-red-600',     'emoji' => '🔴'],
+                        'ltv_warning'         => ['bg' => 'bg-orange-100',  'text' => 'text-orange-600',  'emoji' => '⚠️'],
+                        default               => ['bg' => 'bg-gray-100',    'text' => 'text-gray-600',    'emoji' => '🔔'],
                     };
                 @endphp
                 <form method="POST" action="{{ route('notifications.read', $notification) }}">

@@ -40,6 +40,58 @@ class LiquidationService
         };
     }
 
+    /**
+     * Fetch current crypto price from CoinGecko API with a robust fallback to Mock Oracle.
+     * Caches responses for 2 minutes to prevent rate limiting (429).
+     */
+    public function getCryptoPrice(string $currencyCode): string
+    {
+        $symbol = strtoupper($currencyCode);
+
+        // Map symbols to CoinGecko IDs
+        $coingeckoMap = [
+            'BTC'  => 'bitcoin',
+            'ETH'  => 'ethereum',
+            'USDT' => 'tether',
+            'USDC' => 'usd-coin',
+            'BNB'  => 'binancecoin',
+            'SOL'  => 'solana',
+        ];
+
+        if (!isset($coingeckoMap[$symbol])) {
+            return $this->getMockOraclePrice($symbol);
+        }
+
+        $cgId = $coingeckoMap[$symbol];
+
+        try {
+            // Try fetching from Cache first
+            $prices = \Illuminate\Support\Facades\Cache::remember('coingecko_prices', 120, function () {
+                $response = \Illuminate\Support\Facades\Http::timeout(3)
+                    ->get('https://api.coingecko.com/api/v3/simple/price', [
+                        'ids'           => 'bitcoin,ethereum,tether,usd-coin,binancecoin,solana',
+                        'vs_currencies' => 'idr',
+                    ]);
+
+                if ($response->successful()) {
+                    return $response->json();
+                }
+
+                throw new \Exception('CoinGecko API returned status ' . $response->status());
+            });
+
+            if (isset($prices[$cgId]['idr'])) {
+                return (string) $prices[$cgId]['idr'];
+            }
+        } catch (\Throwable $e) {
+            // Log fallback warning
+            Log::warning("Failed to fetch live crypto price for {$symbol} from CoinGecko. Falling back to Mock Oracle. Error: " . $e->getMessage());
+        }
+
+        // Fallback to Mock Price
+        return $this->getMockOraclePrice($symbol);
+    }
+
     // ─── LTV Update ───────────────────────────────────────────────────────────
 
     /**
@@ -54,7 +106,7 @@ class LiquidationService
         }
 
         $currencyCode = $loan->collateralCurrency?->code ?? 'BTC';
-        $currentPrice = $this->getMockOraclePrice($currencyCode);
+        $currentPrice = $this->getCryptoPrice($currencyCode);
 
         // current_ltv = loan_amount / (collateral_amount * current_price) * 100
         $collateralValueIdr = bcmul((string)$loan->collateral_amount, $currentPrice, 2);

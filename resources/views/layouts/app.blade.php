@@ -46,6 +46,7 @@
                     <!-- Desktop Nav Links -->
                     <nav class="hidden md:flex items-center gap-6">
                         <a href="{{ route('marketplace.index') }}" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors">Marketplace</a>
+                        <a href="{{ route('calculator.index') }}" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors">🧮 Kalkulator</a>
                         @auth
                             <a href="{{ route('dashboard') }}" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors">Dashboard</a>
                             <a href="{{ route('loans.index') }}" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors">My Loans</a>
@@ -129,6 +130,7 @@
         <div x-show="mobileMenuOpen" class="border-b border-gray-200 bg-white md:hidden" style="display: none;">
             <div class="space-y-1 px-4 pb-4 pt-2">
                 <a href="{{ route('marketplace.index') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600 transition-colors">Marketplace</a>
+                <a href="{{ route('calculator.index') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600 transition-colors">🧮 Kalkulator</a>
                 @auth
                     <a href="{{ route('dashboard') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600 transition-colors">Dashboard</a>
                     <a href="{{ route('loans.index') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600 transition-colors">My Loans</a>

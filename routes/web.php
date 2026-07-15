@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Route;
 // ─── Public Landing Page ──────────────────────────────────────────────────────
 Route::get('/', fn () => view('welcome'))->name('home');
 
+// ─── 🧮 Loan Calculator (Public — No Auth Required) ──────────────────────────
+Route::get('/calculator', [\App\Modules\Loan\Controllers\LoanCalculatorController::class, 'index'])->name('calculator.index');
+Route::post('/calculator/calculate', [\App\Modules\Loan\Controllers\LoanCalculatorController::class, 'calculate'])->name('calculator.calculate');
+
+
 // ─── Auth Routes (Guest only) ─────────────────────────────────────────────────
 Route::middleware('guest')->group(function () {
     // Register

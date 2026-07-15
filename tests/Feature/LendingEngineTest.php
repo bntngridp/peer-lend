@@ -114,13 +114,13 @@ class LendingEngineTest extends TestCase
     public function test_complete_lending_and_repayment_lifecycle(): void
     {
         // ─── Step 1: Borrower Submits Loan Request (Rp 10.000.000) ────
+        // Note: risk_grade & interest_rate are now auto-assigned by CreditScoringService.
+        // Borrower has KYC approved (+40) + complete profile (+10) = 50 pts → Grade C
         $response = $this->actingAs($this->borrower)->post(route('loans.store'), [
             'category_id'            => $this->businessCategory->id,
             'amount'                 => 10000000,
             'duration'               => 12,
-            'interest_rate'          => 12.00, // 12% APR
             'purpose'                => 'Expand grocery store',
-            'risk_grade'             => 'B',
             'collateral_currency_id' => null, // Unsecured fiat
         ]);
 
@@ -130,7 +130,7 @@ class LendingEngineTest extends TestCase
             'borrower_id' => $this->borrower->id,
             'amount'      => 10000000,
             'status'      => 'pending',
-            'risk_grade'  => 'B',
+            'risk_grade'  => 'C', // Auto-assigned: score 50 = Grade C
         ]);
 
         $loan = LoanRequest::where('borrower_id', $this->borrower->id)->firstOrFail();
@@ -210,13 +210,14 @@ class LendingEngineTest extends TestCase
         // Verify Amortization schedule has been generated
         $this->assertCount(12, $loan->installments);
 
+        // Grade C: 16.5% APR (midpoint of 15–18%)
         // 10,000,000 / 12 months = 833,333.33 Monthly Principal
-        // 10,000,000 * 12% APR / 12 months = 100,000.00 Monthly Interest
-        // Total monthly payment = Rp 933,333.33
+        // 10,000,000 * 16.5% APR / 12 months = 137,500.00 Monthly Interest
+        // Total monthly payment = Rp 970,833.33
         $firstInstallment = $loan->installments()->first();
         $this->assertEquals(833333.33, (float) $firstInstallment->principal_amount);
-        $this->assertEquals(100000.00, (float) $firstInstallment->interest_amount);
-        $this->assertEquals(933333.33, (float) $firstInstallment->total_amount);
+        $this->assertEquals(137500.00, (float) $firstInstallment->interest_amount);
+        $this->assertEquals(970833.33, (float) $firstInstallment->total_amount);
 
         // ─── Step 6: Borrower Repays First Installment ────────────────
         // Borrower deposits enough fiat into wallet first
@@ -234,27 +235,27 @@ class LendingEngineTest extends TestCase
         $this->assertEquals('paid', $firstInstallment->status);
         $this->assertNotNull($firstInstallment->paid_at);
 
-        // Assert borrower wallet balance: Rp 10.850.000 - Rp 933.333,33 = Rp 9.916.666,67
+        // Assert borrower wallet balance: Rp 10.850.000 - Rp 970.833,33 = Rp 9.879.166,67
         $this->assertDatabaseHas('wallets', [
             'user_id'           => $this->borrower->id,
             'currency_id'       => $this->idr->id,
-            'available_balance' => 9916666.67,
+            'available_balance' => 9879166.67,
         ]);
 
-        // Assert Lender 1 (40% share) payout: 933,333.33 * 40% = 373,333.33
-        // New balance: 2,000,000 + 373,333.33 = 2,373,333.33
+        // Assert Lender 1 (40% share) payout: 970,833.33 * 40% = 388,333.33
+        // New balance: 2,000,000 + 388,333.33 = 2,388,333.33
         $this->assertDatabaseHas('wallets', [
             'user_id'           => $this->lender1->id,
             'currency_id'       => $this->idr->id,
-            'available_balance' => 2373333.33,
+            'available_balance' => 2388333.33,
         ]);
 
-        // Assert Lender 2 (60% share) payout: 933,333.33 * 60% = 559,999.998 => truncated to 559,999.99
-        // New balance: 0 + 559,999.99 = 559,999.99
+        // Assert Lender 2 (60% share) payout: 970,833.33 * 60% = 582,499.998 => truncated to 582,499.99
+        // New balance: 0 + 582,499.99 = 582,499.99
         $this->assertDatabaseHas('wallets', [
             'user_id'           => $this->lender2->id,
             'currency_id'       => $this->idr->id,
-            'available_balance' => 559999.99,
+            'available_balance' => 582499.99,
         ]);
     }
 }

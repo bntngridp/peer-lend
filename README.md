@@ -1,58 +1,60 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Peer-Lend: P2P Crypto Lending Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Peer-Lend adalah platform P2P Lending inovatif berbasis Laravel 11, PostgreSQL, dan Redis, yang memungkinkan peminjam (borrower) menggunakan aset crypto sebagai kolateral (LTV-based) dan pendana (lender) mendanai pinjaman secara terdistribusi.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Fitur Utama
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **LTV Collateral Management**: Sistem kalkulasi nilai kolateral berbasis Real-time Crypto Price Oracle (CoinGecko API) dengan caching dan fallback mock system.
+- **Auto Credit Scoring Engine**: Perhitungan skor kredit otomatis untuk menentukan *Risk Grade* (A, B, C, D) dan suku bunga pinjaman berdasarkan KYC, kelengkapan profil, dan riwayat pinjaman.
+- **Interactive Loan Calculator**: Simulasi kalkulasi cicilan, bunga flat/midpoint, total biaya awal, dan jadwal amortisasi bulanan tanpa reload (AJAX-powered).
+- **Automated Liquidation Engine**: Sistem monitoring rasio LTV harian untuk melikuidasi kolateral secara otomatis apabila mencapai ambang batas 80%.
+- **Late Fee & Penalty Engine**: Perhitungan denda cicilan terlambat (0.1% per hari) secara terjadwal otomatis setiap hari.
+- **Security Baseline**: 2-Factor Authentication (2FA) via Google Authenticator, KYC secure document streaming, dan Role-based middleware protection (Admin, Borrower, Lender).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🐳 Docker Deployment (Production-Ready)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Platform ini sudah dikonainerisasi secara penuh dengan Docker. Pastikan Anda sudah menginstal Docker & Docker Compose sebelum memulai.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
+### 1. Persiapan Environment
+Salin template environment dan sesuaikan konfigurasinya:
 ```bash
-composer require laravel/boost --dev
+cp .env.example .env
+```
+*Pastikan parameter database di `.env` merujuk ke service database docker (`DB_HOST=postgres`, `REDIS_HOST=redis`).*
 
-php artisan boost:install
+### 2. Build dan Jalankan Container
+Jalankan perintah berikut untuk membuild asset frontend secara multi-stage dan mengaktifkan seluruh service di background:
+```bash
+docker compose up -d --build
+```
+Ini akan mengaktifkan 6 container:
+1. `peer_lend_app`: Backend PHP 8.3-FPM
+2. `peer_lend_nginx`: Web Server Nginx (Port 80)
+3. `peer_lend_postgres`: Database PostgreSQL 16 (Port 5433 eksternal)
+4. `peer_lend_redis`: Cache & Queue storage (Port 6380 eksternal)
+5. `peer_lend_queue`: Worker untuk antrean transaksi/pembayaran
+6. `peer_lend_scheduler`: Cron task runner untuk pembaruan LTV dan kalkulasi denda harian
+
+### 3. Inisialisasi Database
+Setelah semua container berjalan lancar, lakukan migrasi dan seeding data:
+```bash
+docker compose exec app php artisan migrate --seed
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Aplikasi kini dapat diakses melalui browser Anda di **[http://localhost](http://localhost)**.
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🧪 Pengujian Suite
+Untuk menjalankan seluruh 37 tests (termasuk dashboard, KYC, keamanan, kalkulator, dan kredit):
+```bash
+docker compose exec app php artisan test
+```
 
 ## License
+The Peer-Lend platform is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

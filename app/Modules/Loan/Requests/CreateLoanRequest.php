@@ -2,7 +2,6 @@
 
 namespace App\Modules\Loan\Requests;
 
-use App\Models\InterestRate;
 use App\Models\Setting;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -13,6 +12,11 @@ class CreateLoanRequest extends FormRequest
         return true;
     }
 
+    /**
+     * Validation rules for a new loan application.
+     * Note: risk_grade and interest_rate are NOT user-submitted.
+     *       They are auto-assigned by CreditScoringService in LoanRequestService.
+     */
     public function rules(): array
     {
         $minAmount = (int) Setting::getVal('min_loan_amount', 1000000);
@@ -21,16 +25,6 @@ class CreateLoanRequest extends FormRequest
         return [
             'category_id'            => ['required', 'exists:loan_categories,id'],
             'amount'                 => ['required', 'numeric', "min:{$minAmount}", "max:{$maxAmount}"],
-            'risk_grade'             => ['required', 'in:A,B,C,D'],
-            'interest_rate'          => ['required', 'numeric', function ($attribute, $value, $fail) {
-                $grade = $this->input('risk_grade');
-                if ($grade) {
-                    $limits = InterestRate::rangeForGrade($grade);
-                    if ($limits && ! $limits->isValidRate($value)) {
-                        $fail("The interest rate for Grade {$grade} must be between {$limits->min_rate}% and {$limits->max_rate}%.");
-                    }
-                }
-            }],
             'duration'               => ['required', 'integer', 'in:3,6,12,24'],
             'purpose'                => ['required', 'string', 'max:255'],
             'collateral_currency_id' => ['nullable', 'exists:currencies,id'],

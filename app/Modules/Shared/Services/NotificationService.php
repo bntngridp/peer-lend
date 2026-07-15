@@ -33,7 +33,7 @@ class NotificationService
         string $body,
         array $data = []
     ): Notification {
-        return Notification::create([
+        $notification = Notification::create([
             'user_id' => $user->id,
             'type'    => $type,
             'title'   => $title,
@@ -41,6 +41,10 @@ class NotificationService
             'data'    => $data,
             'read_at' => null,
         ]);
+
+        \App\Jobs\SendNotificationEmailJob::dispatch($user, $notification);
+
+        return $notification;
     }
 
     // ─── KYC Notifications ────────────────────────────────────────────────────

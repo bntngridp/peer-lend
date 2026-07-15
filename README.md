@@ -1,60 +1,146 @@
-# Peer-Lend: P2P Crypto Lending Platform
+# LendFlow: Peer-to-Peer (P2P) Lending & Collateral FinTech Platform
 
-Peer-Lend adalah platform P2P Lending inovatif berbasis Laravel 11, PostgreSQL, dan Redis, yang memungkinkan peminjam (borrower) menggunakan aset crypto sebagai kolateral (LTV-based) dan pendana (lender) mendanai pinjaman secara terdistribusi.
-
----
-
-## Fitur Utama
-
-- **LTV Collateral Management**: Sistem kalkulasi nilai kolateral berbasis Real-time Crypto Price Oracle (CoinGecko API) dengan caching dan fallback mock system.
-- **Auto Credit Scoring Engine**: Perhitungan skor kredit otomatis untuk menentukan *Risk Grade* (A, B, C, D) dan suku bunga pinjaman berdasarkan KYC, kelengkapan profil, dan riwayat pinjaman.
-- **Interactive Loan Calculator**: Simulasi kalkulasi cicilan, bunga flat/midpoint, total biaya awal, dan jadwal amortisasi bulanan tanpa reload (AJAX-powered).
-- **Automated Liquidation Engine**: Sistem monitoring rasio LTV harian untuk melikuidasi kolateral secara otomatis apabila mencapai ambang batas 80%.
-- **Late Fee & Penalty Engine**: Perhitungan denda cicilan terlambat (0.1% per hari) secara terjadwal otomatis setiap hari.
-- **Security Baseline**: 2-Factor Authentication (2FA) via Google Authenticator, KYC secure document streaming, dan Role-based middleware protection (Admin, Borrower, Lender).
+LendFlow adalah platform teknologi finansial *Peer-to-Peer (P2P) Lending* kelas *enterprise* berbasis **PHP Laravel 11**, **PostgreSQL**, dan **Redis**. Platform ini mengusung arsitektur **Modular Monolith** dengan pemisahan domain yang bersih, memfasilitasi transaksi pendanaan terdistribusi secara transparan, aman, dan efisien antara Peminjam (*Borrower*) dan Pemberi Dana (*Lender*).
 
 ---
 
-## 🐳 Docker Deployment (Production-Ready)
+## 🎨 Fitur Utama & Keunggulan
 
-Platform ini sudah dikonainerisasi secara penuh dengan Docker. Pastikan Anda sudah menginstal Docker & Docker Compose sebelum memulai.
+- **📊 Interactive Dashboard & Live Analytics**: Visualisasi data keuangan dinamis berbasis Chart.js (Doughnut Chart pelunasan Borrower & Bar Chart distribusi grade investasi Lender).
+- **🔌 OpenAPI 3.0 REST API + Swagger UI**: Dokumentasi REST API interaktif mandiri di `/api/docs` lengkap dengan skema request/response untuk integrasi mobile app dan third-party.
+- **🤖 Smart Auto-Invest Matching Engine**: Robot pendanaan otomatis bagi Lender berdasarkan aturan grade risiko pinjaman (A–D), batas LTV, dan limit alokasi dana per transaksi.
+- **💳 Midtrans Payment Gateway (Sandbox)**: Integrasi deposit saldo IDR via Snap Popup Midtrans dengan Webhook callback otomatis terproteksi signature SHA512.
+- **⚙️ Laravel Queue & Background Jobs**: Email notifikasi HTML dikirim secara asinkron via `SendNotificationEmailJob` (database queue driver) agar latensi request tetap cepat.
+- **⏰ Automated Repayment Reminders**: Scheduler harian memindai cicilan jatuh tempo 3 hari ke depan dan mengirim pengingat otomatis melalui antrean email.
+- **💬 Closed-Group Internal Messaging**: Ruang obrolan antar Borrower, Lender, dan Admin (per pinjaman) dengan proteksi akses 403 Forbidden untuk user tidak berwenang.
+- **📜 Legal Agreement Generator**: Surat perjanjian kontrak pinjaman formal berkop hukum siap cetak/unduh PDF dengan jadwal amortisasi rinci dan meterai digital.
+- **🧮 Loan Simulator Calculator**: Simulasi pinjaman real-time (anuitas / flat) menampilkan total cicilan, total bunga, dan jadwal amortisasi bulanan.
+- **📈 Crypto LTV Collateral + Auto-Liquidation**: Penilaian agunan kripto (BTC, ETH, USDT) dengan mekanisme likuidasi otomatis jika LTV menyentuh 80%.
+- **⚡ Daily Penalty Engine**: Penghitung denda keterlambatan harian (0.1%/hari) via scheduler Artisan otomatis.
+- **🛡️ Enterprise Security**: 2-Factor Authentication (2FA) via Google Authenticator, KYC document secure streaming, dan Role-Based Access Control (RBAC: Admin, Borrower, Lender).
 
-### 1. Persiapan Environment
-Salin template environment dan sesuaikan konfigurasinya:
+---
+
+## 🏗️ Tech Stack
+
+| Layer | Teknologi |
+|-------|-----------|
+| **Backend** | PHP 8.3, Laravel 11 (Modular Monolith) |
+| **Database** | PostgreSQL 16 |
+| **Cache & Queue** | Redis (via database driver untuk development) |
+| **Frontend** | Laravel Blade, Alpine.js, Chart.js, Tailwind CSS |
+| **Payment Gateway** | Midtrans Sandbox (Snap API) |
+| **API Documentation** | OpenAPI 3.0 + Swagger UI (CDN) |
+| **DevOps** | Docker, Docker Compose, Nginx, PHP-FPM |
+| **Testing** | PHPUnit (52 tests, 250 assertions) |
+
+---
+
+## 🐳 Quick Start — Docker (Direkomendasikan)
+
+LendFlow sudah dikontainerisasi penuh dengan Docker Compose.
+
 ```bash
+# 1. Clone & copy environment
 cp .env.example .env
-```
-*Pastikan parameter database di `.env` merujuk ke service database docker (`DB_HOST=postgres`, `REDIS_HOST=redis`).*
 
-### 2. Build dan Jalankan Container
-Jalankan perintah berikut untuk membuild asset frontend secara multi-stage dan mengaktifkan seluruh service di background:
-```bash
+# 2. Build dan jalankan semua container
 docker compose up -d --build
-```
-Ini akan mengaktifkan 6 container:
-1. `peer_lend_app`: Backend PHP 8.3-FPM
-2. `peer_lend_nginx`: Web Server Nginx (Port 80)
-3. `peer_lend_postgres`: Database PostgreSQL 16 (Port 5433 eksternal)
-4. `peer_lend_redis`: Cache & Queue storage (Port 6380 eksternal)
-5. `peer_lend_queue`: Worker untuk antrean transaksi/pembayaran
-6. `peer_lend_scheduler`: Cron task runner untuk pembaruan LTV dan kalkulasi denda harian
 
-### 3. Inisialisasi Database
-Setelah semua container berjalan lancar, lakukan migrasi dan seeding data:
-```bash
+# 3. Migrasi database & seed data awal
 docker compose exec app php artisan migrate --seed
 ```
 
-Aplikasi kini dapat diakses melalui browser Anda di **[http://localhost](http://localhost)**.
+Akses aplikasi di **[http://localhost](http://localhost)** | API Docs di **[http://localhost/api/docs](http://localhost/api/docs)**
+
+**Layanan Container yang Berjalan:**
+| Container | Fungsi | Port |
+|-----------|--------|------|
+| `peer_lend_app` | Backend PHP 8.3-FPM | — |
+| `peer_lend_nginx` | Web Server Nginx | 80 |
+| `peer_lend_postgres` | Database PostgreSQL 16 | 5433 |
+| `peer_lend_redis` | Cache & Queue | 6380 |
+| `peer_lend_queue` | Laravel Queue Worker | — |
+| `peer_lend_scheduler` | Cron Scheduler | — |
 
 ---
 
-## 🧪 Pengujian Suite
-Untuk menjalankan seluruh 37 tests (termasuk dashboard, KYC, keamanan, kalkulator, dan kredit):
+## 🛠️ Local Development (Tanpa Docker)
+
 ```bash
-docker compose exec app php artisan test
+# 1. Install dependencies
+composer install && npm install && npm run build
+
+# 2. Copy & konfigurasi environment
+cp .env.example .env
+php artisan key:generate
+
+# 3. Migrasi & seed database
+php artisan migrate --seed
+
+# 4. Jalankan semua service paralel (server, queue, vite)
+npm run dev
 ```
 
-## License
-The Peer-Lend platform is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**Konfigurasi `.env` wajib:**
+```dotenv
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=peer-lend-db
 
+MIDTRANS_SERVER_KEY=SB-Mid-server-xxxxxxxx
+MIDTRANS_CLIENT_KEY=SB-Mid-client-xxxxxxxx
+MIDTRANS_IS_PRODUCTION=false
+```
+
+---
+
+## ⚙️ Artisan Commands Operasional
+
+| Command | Fungsi | Jadwal |
+|---------|--------|--------|
+| `php artisan peer-lend:run-auto-invest` | Pencocokan & pendanaan otomatis Auto-Invest | Tiap jam |
+| `php artisan peer-lend:calculate-penalties` | Hitung denda cicilan terlambat harian | Harian |
+| `php artisan peer-lend:send-repayment-reminders` | Kirim reminder cicilan jatuh tempo 3 hari | Harian |
+| `php artisan peer-lend:update-crypto-ltv` | Update harga & rasio LTV aset kripto | Tiap jam |
+| `php artisan queue:work` | Jalankan worker antrean background jobs | Terus-menerus |
+
+---
+
+## 🧪 Test Suite
+
+```bash
+php artisan test
+```
+
+**Hasil Terkini: 52 tests, 250 assertions — ✅ Semua Hijau**
+
+| Test Class | Tests | Keterangan |
+|---|---|---|
+| `Phase10And11MidtransSwaggerTest` | 4 | Payment Gateway & Swagger |
+| `Phase8And9AutoInvestApiTest` | 4 | REST API & Auto-Invest |
+| `Phase7ChatAndAgreementTest` | 5 | Chat & PDF Agreement |
+| `Phase6CalculatorCreditScoringTest` | 7 | Kalkulator & Credit Score |
+| `Phase5LateFeeOracleTest` | 5 | Penalty Engine & LTV |
+| `+ other suites` | 27 | Auth, KYC, Wallet, Admin |
+
+---
+
+## 📚 API Documentation
+
+Setelah server berjalan, buka Swagger UI interaktif di:
+```
+http://localhost/api/docs
+```
+
+**Endpoint yang tersedia:**
+- `GET  /api/v1/marketplace` — Daftar pinjaman terbuka (paginated)
+- `GET  /api/v1/marketplace/{id}` — Detail pinjaman + riwayat funding
+- `POST /api/v1/loans/apply` — Ajukan pinjaman baru (KYC required)
+
+---
+
+## License
+
+LendFlow is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).

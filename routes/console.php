@@ -25,6 +25,12 @@ Schedule::command('peer-lend:calculate-penalties')
     ->withoutOverlapping()
     ->appendOutputTo(storage_path('logs/calculate-penalties.log'));
 
+// Send repayment reminders for installments due in 3 days — runs every day
+Schedule::command(\App\Console\Commands\SendRepaymentRemindersCommand::class)
+    ->daily()
+    ->withoutOverlapping()
+    ->appendOutputTo(storage_path('logs/repayment-reminders.log'));
+
 // 🤖 Auto-Invest Engine (Every Hour matching & auto-funding)
 Schedule::command('peer-lend:run-auto-invest')
     ->hourly()

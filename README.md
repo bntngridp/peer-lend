@@ -51,15 +51,15 @@ docker compose up -d --build
 docker compose exec app php artisan migrate --seed
 ```
 
-Akses aplikasi di **[http://localhost](http://localhost)** | API Docs di **[http://localhost/api/docs](http://localhost/api/docs)**
+Akses aplikasi di **[http://localhost:9090](http://localhost:9090)** | API Docs di **[http://localhost:9090/api/docs](http://localhost:9090/api/docs)**
 
 **Layanan Container yang Berjalan:**
 | Container | Fungsi | Port |
 |-----------|--------|------|
 | `peer_lend_app` | Backend PHP 8.3-FPM | — |
-| `peer_lend_nginx` | Web Server Nginx | 80 |
-| `peer_lend_postgres` | Database PostgreSQL 16 | 5433 |
-| `peer_lend_redis` | Cache & Queue | 6380 |
+| `peer_lend_nginx` | Web Server Nginx | 9090 |
+| `peer_lend_postgres` | Database PostgreSQL 16 | 9091 |
+| `peer_lend_redis` | Cache & Queue | 9092 |
 | `peer_lend_queue` | Laravel Queue Worker | — |
 | `peer_lend_scheduler` | Cron Scheduler | — |
 

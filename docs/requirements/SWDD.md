@@ -938,7 +938,7 @@ services:
       POSTGRES_DB: peer-lend-db
       POSTGRES_PASSWORD: secretpassword
     ports:
-      - "5433:5432"
+      - "9091:5432"
     volumes:
       - peer_lend_pgdata:/var/lib/postgresql/data
 
@@ -960,12 +960,12 @@ volumes:
 APP_NAME="Peer-Lend"
 APP_ENV=local
 APP_DEBUG=true
-APP_URL=http://localhost:8000
+APP_URL=http://localhost:9090
 
 # Database
 DB_CONNECTION=pgsql
 DB_HOST=127.0.0.1
-DB_PORT=5433
+DB_PORT=9091
 DB_DATABASE=peer-lend-db
 DB_USERNAME=postgres
 DB_PASSWORD=secretpassword

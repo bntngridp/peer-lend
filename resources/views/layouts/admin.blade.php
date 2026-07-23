@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Admin Panel - {{ config('app.name', 'Peer-Lend') }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/persegi-nobg.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,13 +38,11 @@
            :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'">
         
         <!-- Sidebar Header (Logo) -->
-        <div class="flex h-16 items-center px-6 border-b border-gray-100">
+        <div class="flex h-16 items-center px-6 border-b border-gray-100 justify-between">
             <a href="{{ route('home') }}" class="flex items-center gap-2">
-                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 text-white font-bold">
-                    PL
-                </div>
-                <span class="text-lg font-bold tracking-tight text-gray-900">PL <span class="text-indigo-600">Admin</span></span>
+                <img src="{{ asset('images/persegi-panjang-liegt-mode.png') }}" alt="LendFlow Logo" class="h-8 w-auto object-contain">
             </a>
+            <span class="rounded bg-indigo-50 px-2 py-0.5 text-xs font-bold text-indigo-600 border border-indigo-100">ADMIN</span>
         </div>
 
         <!-- Sidebar Navigation Menu -->

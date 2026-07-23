@@ -18,12 +18,13 @@ class Phase6CalculatorCreditScoringTest extends TestCase
         parent::setUp();
 
         // Seed interest rates used by CreditScoringService and Calculator
-        InterestRate::insert([
+        // Use upsert to avoid duplicate key violations when seeder data already exists
+        InterestRate::upsert([
             ['risk_grade' => 'A', 'min_rate' => 8.00,  'max_rate' => 10.00, 'created_at' => now(), 'updated_at' => now()],
             ['risk_grade' => 'B', 'min_rate' => 11.00, 'max_rate' => 14.00, 'created_at' => now(), 'updated_at' => now()],
             ['risk_grade' => 'C', 'min_rate' => 15.00, 'max_rate' => 18.00, 'created_at' => now(), 'updated_at' => now()],
             ['risk_grade' => 'D', 'min_rate' => 19.00, 'max_rate' => 24.00, 'created_at' => now(), 'updated_at' => now()],
-        ]);
+        ], ['risk_grade'], ['min_rate', 'max_rate', 'updated_at']);
     }
 
     // ─── Loan Calculator Tests ─────────────────────────────────────────────────

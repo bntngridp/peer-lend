@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Peer-Lend') }} - P2P Lending Platform</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/persegi-nobg.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,10 +38,7 @@
                 <!-- Logo & Left Nav -->
                 <div class="flex items-center gap-8">
                     <a href="{{ route('home') }}" class="flex items-center gap-2 group">
-                        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 group-hover:scale-105 transition-transform duration-200">
-                            <span class="text-xl font-bold">PL</span>
-                        </div>
-                        <span class="text-xl font-bold tracking-tight text-gray-900 group-hover:text-indigo-600 transition-colors">Peer<span class="text-indigo-600">Lend</span></span>
+                        <img src="{{ asset('images/persegi-panjang-liegt-mode.png') }}" alt="LendFlow Logo" class="h-10 w-auto object-contain group-hover:scale-105 transition-transform duration-200">
                     </a>
 
                     <!-- Desktop Nav Links -->

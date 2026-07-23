@@ -92,7 +92,7 @@ class Phase7ChatAndAgreementTest extends TestCase
     {
         // Intruder is not borrower, has not funded, and is not admin
         $response = $this->actingAs($this->intruder)
-            ->withSession(['two_factor_verified' => true])
+            ->withSession(['google2fa_verified' => true])
             ->getJson(route('loans.messages.fetch', $this->loan->id));
         $response->assertStatus(403);
     }
@@ -101,7 +101,7 @@ class Phase7ChatAndAgreementTest extends TestCase
     {
         // Borrower sends a message
         $response = $this->actingAs($this->borrower)
-            ->withSession(['two_factor_verified' => true])
+            ->withSession(['google2fa_verified' => true])
             ->postJson(route('loans.messages.send', $this->loan->id), [
                 'message' => 'Halo pendana, terima kasih banyak.'
             ]);
@@ -112,7 +112,7 @@ class Phase7ChatAndAgreementTest extends TestCase
 
         // Borrower fetches messages
         $response = $this->actingAs($this->borrower)
-            ->withSession(['two_factor_verified' => true])
+            ->withSession(['google2fa_verified' => true])
             ->getJson(route('loans.messages.fetch', $this->loan->id));
         $response->assertStatus(200)
             ->assertJsonCount(1, 'messages');
@@ -122,19 +122,19 @@ class Phase7ChatAndAgreementTest extends TestCase
     {
         // Lender funds Rp 5.000.000 (becomes participant)
         $this->actingAs($this->lender)
-            ->withSession(['two_factor_verified' => true])
+            ->withSession(['google2fa_verified' => true])
             ->post(route('marketplace.fund', $this->loan->id), [
                 'amount' => 5000000
             ]);
 
         // Now lender can fetch and post messages
         $response = $this->actingAs($this->lender)
-            ->withSession(['two_factor_verified' => true])
+            ->withSession(['google2fa_verified' => true])
             ->getJson(route('loans.messages.fetch', $this->loan->id));
         $response->assertStatus(200);
 
         $response = $this->actingAs($this->lender)
-            ->withSession(['two_factor_verified' => true])
+            ->withSession(['google2fa_verified' => true])
             ->postJson(route('loans.messages.send', $this->loan->id), [
                 'message' => 'Sama-sama Kak! Semoga usahanya lancar.'
             ]);
@@ -149,7 +149,7 @@ class Phase7ChatAndAgreementTest extends TestCase
         $this->loan->update(['status' => LoanRequest::STATUS_ACTIVE]);
 
         $response = $this->actingAs($this->borrower)
-            ->withSession(['two_factor_verified' => true])
+            ->withSession(['google2fa_verified' => true])
             ->get(route('loans.agreement', $this->loan->id));
         
         $response->assertStatus(200)
@@ -163,7 +163,7 @@ class Phase7ChatAndAgreementTest extends TestCase
         $this->loan->update(['status' => LoanRequest::STATUS_ACTIVE]);
 
         $response = $this->actingAs($this->intruder)
-            ->withSession(['two_factor_verified' => true])
+            ->withSession(['google2fa_verified' => true])
             ->get(route('loans.agreement', $this->loan->id));
         $response->assertStatus(403);
     }

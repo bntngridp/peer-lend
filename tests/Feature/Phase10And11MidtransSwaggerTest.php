@@ -58,7 +58,7 @@ class Phase10And11MidtransSwaggerTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->borrower)
-            ->withSession(['two_factor_verified' => true])
+            ->withSession(['google2fa_verified' => true])
             ->postJson(route('wallet.deposit.initiate'), [
                 'amount' => 500000,
             ]);

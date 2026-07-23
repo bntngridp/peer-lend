@@ -80,7 +80,8 @@
     <div class="container">
         <div class="card">
             <div class="header">
-                <h1>LendFlow Platform</h1>
+                <img src="{{ asset('images/persegi-panjang-drak-mode.png') }}" alt="LendFlow Logo" style="height: 36px; max-width: 200px; object-fit: contain; margin-bottom: 4px;">
+                <h1 style="font-size: 14px; opacity: 0.8; font-weight: 500; margin-top: 4px;">Notification System</h1>
             </div>
             <div class="content">
                 <h2>{{ $notification->title }}</h2>

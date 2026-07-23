@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="LendFlow — Platform P2P Lending terpercaya. Investasikan dana Anda atau ajukan pinjaman dengan agunan crypto secara transparan dan aman.">
     <title>LendFlow — Smarter P2P Lending</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/persegi-nobg.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -344,8 +345,7 @@
         <!-- Navbar -->
         <nav>
             <a href="{{ route('home') }}" class="nav-logo">
-                <div class="nav-logo-icon">L</div>
-                <span class="nav-logo-text">LendFlow</span>
+                <img src="{{ asset('images/persegi-panjang-drak-mode.png') }}" alt="LendFlow Logo" style="height: 38px; width: auto; object-fit: contain;">
             </a>
             <div class="nav-links">
                 <a href="{{ route('calculator.index') }}" class="btn btn-ghost" id="nav-calculator">

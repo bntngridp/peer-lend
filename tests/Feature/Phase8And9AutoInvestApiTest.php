@@ -77,7 +77,7 @@ class Phase8And9AutoInvestApiTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->borrower)
-            ->withSession(['two_factor_verified' => true])
+            ->withSession(['google2fa_verified' => true])
             ->getJson(route('api.v1.marketplace.index'));
 
         $response->assertStatus(200)
@@ -103,7 +103,7 @@ class Phase8And9AutoInvestApiTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->borrower)
-            ->withSession(['two_factor_verified' => true])
+            ->withSession(['google2fa_verified' => true])
             ->getJson(route('api.v1.marketplace.show', $loan->id));
 
         $response->assertStatus(200)
@@ -195,7 +195,7 @@ class Phase8And9AutoInvestApiTest extends TestCase
     public function test_api_borrower_can_apply_loan_via_api(): void
     {
         $response = $this->actingAs($this->borrower)
-            ->withSession(['two_factor_verified' => true])
+            ->withSession(['google2fa_verified' => true])
             ->postJson(route('api.v1.loans.apply'), [
                 'category_id' => $this->education->id,
                 'amount'      => 3000000,
@@ -223,7 +223,7 @@ class Phase8And9AutoInvestApiTest extends TestCase
     public function test_api_loan_apply_fails_validation_with_422(): void
     {
         $response = $this->actingAs($this->borrower)
-            ->withSession(['two_factor_verified' => true])
+            ->withSession(['google2fa_verified' => true])
             ->postJson(route('api.v1.loans.apply'), [
                 'amount'   => 100, // Below minimum (1.000.000)
                 'duration' => 99,  // Not in allowed set

@@ -1,457 +1,783 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="LendFlow — Platform P2P Lending terpercaya. Investasikan dana Anda atau ajukan pinjaman dengan agunan crypto secara transparan dan aman.">
-    <title>LendFlow — Smarter P2P Lending</title>
+    <meta name="description" content="LendFlow — Platform P2P Lending generasi baru. Infrastruktur keuangan kelas institusi untuk mengoptimalkan likuiditas dan imbal hasil Anda.">
+    <title>LendFlow — Platform P2P Lending Generasi Baru</title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/persegi-nobg.png') }}">
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --bg-primary: #050811;
-            --bg-secondary: #0c1120;
-            --accent-blue: #4f8ef7;
-            --accent-cyan: #06d6f7;
-            --accent-purple: #a855f7;
-            --accent-green: #10d98a;
-            --text-primary: #f0f4ff;
-            --text-muted: #8899bb;
-            --glass-bg: rgba(255,255,255,0.04);
-            --glass-border: rgba(255,255,255,0.09);
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
-        html { scroll-behavior: smooth; }
+        :root {
+            /* Dark Theme Variables (Default matching Stitch Dark Mockup) */
+            --bg-body: #090d16;
+            --bg-card: #0f172a;
+            --bg-card-hover: #1e293b;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-card: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-muted: #64748b;
+            --accent-primary: #3b82f6;
+            --accent-primary-hover: #2563eb;
+            --accent-glow: rgba(59, 130, 246, 0.35);
+            --badge-bg: rgba(59, 130, 246, 0.12);
+            --badge-border: rgba(59, 130, 246, 0.3);
+            --badge-text: #60a5fa;
+            --grid-line: rgba(59, 130, 246, 0.04);
+            --code-bg: #040711;
+            --code-text: #38bdf8;
+            --nav-bg: rgba(9, 13, 22, 0.85);
+            --nav-border: rgba(255, 255, 255, 0.08);
+        }
+
+        html.light {
+            /* Light Theme Variables (Matching Stitch Light Mockup) */
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f1f5f9;
+            --border-color: #e2e8f0;
+            --border-card: #e2e8f0;
+            --text-main: #0f172a;
+            --text-sub: #475569;
+            --text-muted: #64748b;
+            --accent-primary: #2563eb;
+            --accent-primary-hover: #1d4ed8;
+            --accent-glow: rgba(37, 99, 235, 0.2);
+            --badge-bg: #eff6ff;
+            --badge-border: #bfdbfe;
+            --badge-text: #1d4ed8;
+            --grid-line: rgba(37, 99, 235, 0.05);
+            --code-bg: #0f172a;
+            --code-text: #38bdf8;
+            --nav-bg: rgba(248, 250, 252, 0.85);
+            --nav-border: #e2e8f0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
+            background-color: var(--bg-body);
+            color: var(--text-main);
             min-height: 100vh;
+            line-height: 1.5;
             overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* ── Animated Background ── */
-        .bg-canvas {
+        /* ── Grid Line Background Pattern ── */
+        .grid-background {
             position: fixed;
             inset: 0;
+            pointer-events: none;
             z-index: 0;
-            overflow: hidden;
-        }
-        .bg-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.18;
-            animation: orb-float 12s ease-in-out infinite;
-        }
-        .bg-orb-1 {
-            width: 700px; height: 700px;
-            background: radial-gradient(circle, #4f8ef7 0%, transparent 70%);
-            top: -200px; left: -150px;
-            animation-delay: 0s;
-        }
-        .bg-orb-2 {
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, #a855f7 0%, transparent 70%);
-            bottom: -100px; right: -100px;
-            animation-delay: -4s;
-        }
-        .bg-orb-3 {
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, #06d6f7 0%, transparent 70%);
-            top: 40%; left: 50%;
-            transform: translate(-50%, -50%);
-            animation-delay: -8s;
-        }
-        @keyframes orb-float {
-            0%, 100% { transform: translateY(0px) scale(1); }
-            33% { transform: translateY(-30px) scale(1.05); }
-            66% { transform: translateY(20px) scale(0.97); }
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 48px 48px;
+            background-position: center center;
         }
 
-        /* Grid lines bg */
-        .bg-grid {
+        /* Ambient Glow Orb */
+        .ambient-glow {
             position: fixed;
-            inset: 0;
+            top: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(124, 58, 237, 0.08) 50%, transparent 70%);
+            filter: blur(80px);
+            pointer-events: none;
             z-index: 0;
-            background-image:
-                linear-gradient(rgba(79,142,247,0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(79,142,247,0.04) 1px, transparent 1px);
-            background-size: 60px 60px;
+            transition: opacity 0.3s ease;
         }
 
-        /* ── Layout ── */
-        .page-wrap {
+        /* ── Layout Wrap ── */
+        .layout-wrap {
             position: relative;
             z-index: 1;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
 
-        /* ── Navbar ── */
-        nav {
+        /* ── Header / Navbar ── */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--nav-border);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 24px 40px;
-            border-bottom: 1px solid var(--glass-border);
-            backdrop-filter: blur(16px);
-            background: rgba(5,8,17,0.6);
         }
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-        .nav-logo-icon {
-            width: 36px; height: 36px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 16px;
-            color: #fff;
-        }
-        .nav-logo-text {
-            font-size: 20px;
-            font-weight: 800;
-            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .nav-links { display: flex; align-items: center; gap: 12px; }
 
-        /* ── Buttons ── */
-        .btn {
+        .nav-logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .nav-logo-link:hover {
+            opacity: 0.9;
+        }
+
+        .nav-logo-img {
+            height: 38px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-link {
+            color: var(--text-sub);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+        .nav-link:hover {
+            color: var(--text-main);
+        }
+
+        /* Buttons */
+        .btn-primary {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
-            padding: 11px 24px;
-            border-radius: 10px;
+            background-color: var(--accent-primary);
+            color: #ffffff;
             font-size: 14px;
             font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 10px;
             text-decoration: none;
-            cursor: pointer;
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 14px var(--accent-glow);
             transition: all 0.2s ease;
-        }
-        .btn-ghost {
-            background: transparent;
-            color: var(--text-primary);
-            border: 1px solid var(--glass-border);
-        }
-        .btn-ghost:hover {
-            background: var(--glass-bg);
-            border-color: rgba(79,142,247,0.4);
-            color: var(--accent-blue);
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent-blue), #3b7de8);
-            color: #fff;
-            box-shadow: 0 4px 20px rgba(79,142,247,0.35);
+            cursor: pointer;
         }
         .btn-primary:hover {
+            background-color: var(--accent-primary-hover);
             transform: translateY(-1px);
-            box-shadow: 0 6px 28px rgba(79,142,247,0.5);
+            box-shadow: 0 6px 20px var(--accent-glow);
         }
-        .btn-outline {
-            background: transparent;
-            color: var(--text-primary);
-            border: 1px solid rgba(79,142,247,0.5);
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-size: 14px;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            border: 1px solid var(--border-card);
+            transition: all 0.2s ease;
+            cursor: pointer;
         }
-        .btn-outline:hover {
-            background: rgba(79,142,247,0.1);
-            border-color: var(--accent-blue);
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--text-muted);
+            transform: translateY(-1px);
         }
-        .btn-lg {
-            padding: 16px 36px;
-            font-size: 16px;
-            border-radius: 14px;
+
+        /* Theme Toggle Button */
+        .theme-toggle-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            color: var(--text-sub);
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .theme-toggle-btn:hover {
+            color: var(--text-main);
+            border-color: var(--text-muted);
         }
 
         /* ── Hero Section ── */
-        .hero {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 80px 24px;
+        .hero-section {
+            padding: 80px 0 60px;
+            text-align: left;
         }
-        .hero-badge {
+
+        .pill-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 6px 16px;
-            background: rgba(79,142,247,0.12);
-            border: 1px solid rgba(79,142,247,0.25);
-            border-radius: 100px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--accent-blue);
-            margin-bottom: 32px;
-            animation: fade-in-up 0.6s ease both;
+            background: var(--badge-bg);
+            border: 1px solid var(--badge-border);
+            color: var(--badge-text);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
         }
-        .hero-badge-dot {
-            width: 7px; height: 7px;
-            background: var(--accent-blue);
+
+        .pill-badge-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--badge-text);
             border-radius: 50%;
-            animation: pulse-dot 2s ease infinite;
+            box-shadow: 0 0 8px var(--badge-text);
+            animation: pulse-dot 2s infinite;
         }
+
         @keyframes pulse-dot {
             0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
+            50% { opacity: 0.4; transform: scale(0.8); }
         }
-        h1 {
-            font-size: clamp(42px, 7vw, 80px);
+
+        .hero-headline {
+            font-size: clamp(36px, 5.5vw, 64px);
             font-weight: 900;
-            line-height: 1.08;
-            letter-spacing: -2px;
-            margin-bottom: 24px;
-            animation: fade-in-up 0.6s ease 0.1s both;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+            color: var(--text-main);
         }
-        .h1-gradient {
-            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-cyan) 50%, var(--accent-purple) 100%);
+
+        .headline-gradient {
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #a855f7 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
-        .hero-sub {
-            font-size: clamp(16px, 2.5vw, 20px);
-            color: var(--text-muted);
-            max-width: 560px;
-            line-height: 1.7;
-            margin-bottom: 48px;
-            animation: fade-in-up 0.6s ease 0.2s both;
+
+        .hero-subtitle {
+            font-size: clamp(16px, 2vw, 19px);
+            color: var(--text-sub);
+            max-width: 680px;
+            line-height: 1.6;
+            font-weight: 400;
+            margin-bottom: 36px;
         }
-        .hero-cta {
+
+        .hero-cta-group {
             display: flex;
             align-items: center;
             gap: 16px;
             flex-wrap: wrap;
-            justify-content: center;
-            animation: fade-in-up 0.6s ease 0.3s both;
-        }
-        @keyframes fade-in-up {
-            from { opacity: 0; transform: translateY(24px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         /* ── Stats Strip ── */
         .stats-strip {
-            display: flex;
-            justify-content: center;
-            gap: 48px;
-            padding: 40px 24px;
-            border-top: 1px solid var(--glass-border);
-            flex-wrap: wrap;
-            animation: fade-in-up 0.6s ease 0.4s both;
-        }
-        .stat-item { text-align: center; }
-        .stat-value {
-            font-size: 28px;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .stat-label {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-top: 4px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1px;
+            background: var(--border-card);
+            border: 1px solid var(--border-card);
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 48px 0 80px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
 
-        /* ── Feature Cards ── */
-        .features {
-            padding: 60px 40px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            max-width: 1100px;
-            margin: 0 auto;
-            width: 100%;
+        .stat-card {
+            background: var(--bg-card);
+            padding: 28px 24px;
+            transition: background-color 0.2s ease;
         }
-        .feature-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 28px;
-            backdrop-filter: blur(12px);
-            transition: all 0.25s ease;
+        .stat-card:hover {
+            background: var(--bg-card-hover);
         }
-        .feature-card:hover {
-            border-color: rgba(79,142,247,0.3);
-            background: rgba(79,142,247,0.06);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(79,142,247,0.12);
-        }
-        .feature-icon {
+
+        .stat-number {
             font-size: 28px;
-            margin-bottom: 14px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+            margin-bottom: 4px;
         }
-        .feature-title {
-            font-size: 16px;
+
+        .stat-desc {
+            font-size: 11px;
             font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+
+        /* ── Section Header ── */
+        .section-header {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
             margin-bottom: 8px;
         }
-        .feature-desc {
-            font-size: 13px;
-            color: var(--text-muted);
+
+        .section-sub {
+            font-size: 16px;
+            color: var(--text-sub);
+        }
+
+        /* ── Feature Cards Grid ── */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 90px;
+        }
+
+        .feature-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-box:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .feature-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: var(--accent-primary);
+            font-size: 22px;
+        }
+
+        .feature-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 10px;
+        }
+
+        .feature-body {
+            font-size: 14px;
+            color: var(--text-sub);
             line-height: 1.6;
+        }
+
+        /* ── Technical Showcase Grid (Stitch Light & Tech Style) ── */
+        .tech-showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 90px;
+        }
+
+        @media (max-width: 868px) {
+            .tech-showcase-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tech-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 16px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .tech-card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-top: 16px;
+            align-self: flex-start;
+        }
+
+        /* Progress Bar Graphic in Card */
+        .yield-progress-wrap {
+            margin-top: 24px;
+            background: var(--border-card);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .yield-progress-bar {
+            height: 100%;
+            width: 78%;
+            background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+            border-radius: 4px;
+        }
+
+        /* Code Snippet Card */
+        .code-block-preview {
+            background: var(--code-bg);
+            border: 1px solid var(--border-card);
+            border-radius: 10px;
+            padding: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--code-text);
+            margin-top: 20px;
+            overflow-x: auto;
+            line-height: 1.5;
         }
 
         /* ── Footer ── */
         footer {
-            text-align: center;
-            padding: 28px;
-            border-top: 1px solid var(--glass-border);
-            color: var(--text-muted);
-            font-size: 13px;
+            border-top: 1px solid var(--border-color);
+            padding: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 40px;
         }
-        footer a { color: var(--accent-blue); text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
 
-        /* ── Responsive ── */
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .footer-logo-img {
+            height: 28px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .footer-copyright {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .footer-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .footer-link {
+            font-size: 13px;
+            color: var(--text-sub);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .footer-link:hover {
+            color: var(--text-main);
+        }
+
+        /* Responsive Breakpoints */
         @media (max-width: 640px) {
-            nav { padding: 16px 20px; }
-            .features { padding: 40px 20px; }
-            .stats-strip { gap: 28px; }
-            h1 { letter-spacing: -1px; }
+            .nav-menu {
+                gap: 10px;
+            }
+            .nav-link {
+                display: none;
+            }
+            .hero-section {
+                padding: 50px 0 40px;
+            }
+            footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="bg-canvas">
-        <div class="bg-orb bg-orb-1"></div>
-        <div class="bg-orb bg-orb-2"></div>
-        <div class="bg-orb bg-orb-3"></div>
-    </div>
-    <div class="bg-grid"></div>
 
-    <div class="page-wrap">
-        <!-- Navbar -->
-        <nav>
-            <a href="{{ route('home') }}" class="nav-logo">
-                <img src="{{ asset('images/persegi-panjang-drak-mode.png') }}" alt="LendFlow Logo" style="height: 38px; width: auto; object-fit: contain;">
+    <!-- Grid Line Background & Ambient Lighting -->
+    <div class="grid-background"></div>
+    <div class="ambient-glow"></div>
+
+    <!-- Header Navbar -->
+    <header>
+        <div class="nav-container">
+            <a href="{{ route('home') }}" class="nav-logo-link" id="nav-brand-logo">
+                <img id="logo-img-header" src="{{ asset('images/persegi-panjang-drak-mode.png') }}" alt="LendFlow Logo" class="nav-logo-img">
             </a>
-            <div class="nav-links">
-                <a href="{{ route('calculator.index') }}" class="btn btn-ghost" id="nav-calculator">
-                    🧮 Simulator
-                </a>
+
+            <div class="nav-menu">
+                <a href="{{ route('calculator.index') }}" class="nav-link" id="nav-simulator">Simulator</a>
+                
                 @auth
-                    <a href="{{ route('dashboard') }}" class="btn btn-primary" id="nav-dashboard">
+                    <a href="{{ route('dashboard') }}" class="btn-primary" id="nav-dashboard">
                         Dashboard →
                     </a>
                 @else
-                    <a href="{{ route('login') }}" class="btn btn-ghost" id="nav-login">
-                        Sign In
-                    </a>
-                    <a href="{{ route('register') }}" class="btn btn-primary" id="nav-register">
+                    <a href="{{ route('login') }}" class="nav-link" id="nav-signin">Sign In</a>
+                    <a href="{{ route('register') }}" class="btn-primary" id="nav-getstarted">
                         Get Started →
                     </a>
                 @endauth
-            </div>
-        </nav>
 
-        <!-- Hero -->
-        <main class="hero">
-            <div class="hero-badge">
-                <div class="hero-badge-dot"></div>
+                <!-- Dark/Light Theme Toggle -->
+                <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" title="Switch Theme">
+                    <span id="theme-icon">☀️</span>
+                    <span id="theme-label" style="display: none;">Theme</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="layout-wrap">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="pill-badge">
+                <div class="pill-badge-dot"></div>
                 Platform P2P Lending Generasi Baru
             </div>
 
-            <h1>
+            <h1 class="hero-headline">
                 Dana Mengalir,<br>
-                <span class="h1-gradient">Peluang Tumbuh</span>
+                <span class="headline-gradient">Peluang Tumbuh</span>
             </h1>
 
-            <p class="hero-sub">
-                LendFlow menghubungkan Peminjam dan Pemberi Dana dalam satu ekosistem
-                yang transparan, aman, dan didukung teknologi agunan crypto canggih.
+            <p class="hero-subtitle">
+                Infrastruktur keuangan kelas institusi untuk mengoptimalkan likuiditas dan imbal hasil Anda. Aman, transparan, dan berkinerja tinggi.
             </p>
 
-            @guest
-            <div class="hero-cta">
-                <a href="{{ route('register') }}" class="btn btn-primary btn-lg" id="hero-register">
-                    🚀 Mulai Sekarang — Gratis
-                </a>
-                <a href="{{ route('login') }}" class="btn btn-outline btn-lg" id="hero-login">
-                    Sudah punya akun? Masuk
-                </a>
-            </div>
-            @else
-            <div class="hero-cta">
-                <a href="{{ route('dashboard') }}" class="btn btn-primary btn-lg" id="hero-dashboard">
-                    Ke Dashboard →
-                </a>
-            </div>
-            @endguest
-        </main>
-
-        <!-- Stats Strip -->
-        <div class="stats-strip">
-            <div class="stat-item">
-                <div class="stat-value">IDR 0</div>
-                <div class="stat-label">Total Pinjaman Disalurkan</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">0%</div>
-                <div class="stat-label">Tingkat Default</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">52</div>
-                <div class="stat-label">Test Suite Passed ✅</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">13</div>
-                <div class="stat-label">Fase Pengembangan</div>
-            </div>
-        </div>
-
-        <!-- Feature Cards -->
-        <section class="features">
-            <div class="feature-card">
-                <div class="feature-icon">🤖</div>
-                <div class="feature-title">Auto-Invest Engine</div>
-                <div class="feature-desc">Dana Anda bekerja otomatis. Tentukan kriteria grade risiko dan batas alokasi — mesin kami yang mencocokkan.</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">💳</div>
-                <div class="feature-title">Payment Gateway</div>
-                <div class="feature-desc">Top-up saldo via Midtrans Snap. Webhook terverifikasi SHA512 untuk keamanan transaksi maksimal.</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📈</div>
-                <div class="feature-title">Crypto Collateral</div>
-                <div class="feature-desc">BTC, ETH, USDT sebagai agunan dengan monitoring LTV real-time dan likuidasi otomatis di 80%.</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🛡️</div>
-                <div class="feature-title">Enterprise Security</div>
-                <div class="feature-desc">2FA Google Authenticator, KYC terverifikasi, dan RBAC (Admin/Borrower/Lender) melindungi setiap akun.</div>
+            <div class="hero-cta-group">
+                @guest
+                    <a href="{{ route('register') }}" class="btn-primary" style="padding: 14px 28px; font-size: 15px;" id="hero-btn-register">
+                        Mulai Sekarang — Gratis →
+                    </a>
+                    <a href="{{ route('login') }}" class="btn-secondary" style="padding: 14px 24px; font-size: 15px;" id="hero-btn-login">
+                        Sudah punya akun? Masuk
+                    </a>
+                @else
+                    <a href="{{ route('dashboard') }}" class="btn-primary" style="padding: 14px 28px; font-size: 15px;" id="hero-btn-dashboard">
+                        Ke Dashboard Utamamu →
+                    </a>
+                @endauth
             </div>
         </section>
 
+        <!-- Stats Strip (4 Columns Grid) -->
+        <div class="stats-strip">
+            <div class="stat-card">
+                <div class="stat-number">IDR 0</div>
+                <div class="stat-desc">Biaya Tersembunyi</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">0%</div>
+                <div class="stat-desc">Gagal Bayar T90</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">52</div>
+                <div class="stat-desc">Mitra Institusi</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">13</div>
+                <div class="stat-desc">Lapis Keamanan</div>
+            </div>
+        </div>
+
+        <!-- Section: Core Infrastructure -->
+        <div class="section-header">
+            <h2 class="section-title">Infrastruktur Inti</h2>
+            <p class="section-sub">Dibangun untuk presisi dan skalabilitas tinggi.</p>
+        </div>
+
+        <!-- Feature Cards (Grid 2x2) -->
+        <div class="features-grid">
+            <div class="feature-box">
+                <div class="feature-icon-wrapper">⚙️</div>
+                <h3 class="feature-name">Auto-Invest Engine</h3>
+                <p class="feature-body">Algoritma alokasi dana otomatis berdasarkan profil risiko presisi tinggi dan batas alokasi sesuai toleransi Anda.</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-icon-wrapper">💳</div>
+                <h3 class="feature-name">Payment Gateway</h3>
+                <p class="feature-body">Integrasi langsung dengan bank tier-1 untuk settlement instan dan enkripsi Webhook verifikasi SHA512.</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-icon-wrapper">₿</div>
+                <h3 class="feature-name">Crypto Collateral</h3>
+                <p class="feature-body">Opsi pinjaman aset digital terenkripsi dengan smart contract dan pemantauan LTV real-time Oracle.</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-icon-wrapper">🛡️</div>
+                <h3 class="feature-name">Enterprise Security</h3>
+                <p class="feature-body">Arsitektur zero-trust dengan enkripsi AES-256, otentikasi Google 2FA, dan audit berkala.</p>
+            </div>
+        </div>
+
+        <!-- Section 2: Technical Excellence Showcase (Stitch Tech Cards) -->
+        <div class="tech-showcase-grid">
+            <!-- Algorithmic Precision Card -->
+            <div class="tech-card">
+                <div>
+                    <div class="feature-icon-wrapper" style="width: 40px; height: 40px; font-size: 18px;">⚡</div>
+                    <h3 class="feature-name" style="font-size: 20px;">Algorithmic Precision</h3>
+                    <p class="feature-body">Leverage our proprietary routing engine to optimize yield across decentralized and institutional liquidity pools with minimal slippage.</p>
+                </div>
+                <div>
+                    <div class="yield-progress-wrap">
+                        <div class="yield-progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fortified Security Card -->
+            <div class="tech-card">
+                <div>
+                    <div class="feature-icon-wrapper" style="width: 40px; height: 40px; font-size: 18px;">🔒</div>
+                    <h3 class="feature-name" style="font-size: 20px;">Fortified Security</h3>
+                    <p class="feature-body">Multi-signature consensus and real-time threat detection safeguard your capital at every layer.</p>
+                </div>
+                <div class="tech-card-badge">
+                    ✓ Audited by Trail of Bits
+                </div>
+            </div>
+
+            <!-- High Throughput Card -->
+            <div class="tech-card">
+                <div>
+                    <div class="feature-icon-wrapper" style="width: 40px; height: 40px; font-size: 18px;">☁️</div>
+                    <h3 class="feature-name" style="font-size: 20px;">High-Throughput</h3>
+                    <p class="feature-body">Execute massive volume with sub-millisecond latency. Built for algorithmic trading systems and enterprise treasury management.</p>
+                </div>
+            </div>
+
+            <!-- Seamless Integration Card with Code Snippet -->
+            <div class="tech-card">
+                <div>
+                    <div class="feature-icon-wrapper" style="width: 40px; height: 40px; font-size: 18px;">🔌</div>
+                    <h3 class="feature-name" style="font-size: 20px;">Seamless Integration</h3>
+                    <p class="feature-body">Connect your existing treasury systems via our robust REST API and WebSocket events.</p>
+                </div>
+                <div class="code-block-preview">
+<span style="color: #60a5fa;">POST</span> /v1/allocations
+{
+  <span style="color: #f472b6;">"strategy"</span>: <span style="color: #a7f3d0;">"conservative"</span>,
+  <span style="color: #f472b6;">"amount"</span>: <span style="color: #fde047;">5000000</span>,
+  <span style="color: #f472b6;">"currency"</span>: <span style="color: #a7f3d0;">"IDR"</span>
+}
+                </div>
+            </div>
+        </div>
+
         <!-- Footer -->
         <footer>
-            <p>© {{ date('Y') }} <strong>LendFlow</strong> — Built with ❤️ using Laravel 11 &amp; PHP 8.3 &nbsp;·&nbsp;
-                <a href="{{ route('calculator.index') }}">Loan Simulator</a> &nbsp;·&nbsp;
-                <a href="{{ route('api.docs') }}">API Docs</a>
-            </p>
+            <div class="footer-left">
+                <img id="logo-img-footer" src="{{ asset('images/persegi-panjang-drak-mode.png') }}" alt="LendFlow Logo" class="footer-logo-img">
+                <span class="footer-copyright">© {{ date('Y') }} LendFlow. All rights reserved.</span>
+            </div>
+            <div class="footer-links">
+                <a href="{{ route('calculator.index') }}" class="footer-link">Simulator</a>
+                <a href="{{ route('api.docs') }}" class="footer-link">API Docs</a>
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">Terms of Service</a>
+                <a href="#" class="footer-link">Security</a>
+            </div>
         </footer>
     </div>
+
+    <!-- Theme Switcher JavaScript -->
+    <script>
+        const darkLogo = "{{ asset('images/persegi-panjang-drak-mode.png') }}";
+        const lightLogo = "{{ asset('images/persegi-panjang-liegt-mode.png') }}";
+
+        function applyTheme(isLight) {
+            const htmlEl = document.documentElement;
+            const logoHeader = document.getElementById('logo-img-header');
+            const logoFooter = document.getElementById('logo-img-footer');
+            const themeIcon = document.getElementById('theme-icon');
+
+            if (isLight) {
+                htmlEl.classList.remove('dark');
+                htmlEl.classList.add('light');
+                logoHeader.src = lightLogo;
+                logoFooter.src = lightLogo;
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('lendflow_theme', 'light');
+            } else {
+                htmlEl.classList.remove('light');
+                htmlEl.classList.add('dark');
+                logoHeader.src = darkLogo;
+                logoFooter.src = darkLogo;
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('lendflow_theme', 'dark');
+            }
+        }
+
+        function toggleTheme() {
+            const isLight = document.documentElement.classList.contains('light');
+            applyTheme(!isLight);
+        }
+
+        // Initialize Theme from localStorage
+        (function initTheme() {
+            const savedTheme = localStorage.getItem('lendflow_theme');
+            if (savedTheme === 'light') {
+                applyTheme(true);
+            } else {
+                applyTheme(false);
+            }
+        })();
+    </script>
 </body>
 </html>

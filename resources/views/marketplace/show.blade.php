@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+<div class="space-y-6 max-w-5xl mx-auto">
     
     <!-- Navigation Back -->
-    <div class="mb-6">
-        <a href="{{ route('marketplace.index') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-800">
-            &larr; Back to marketplace
+    <div>
+        <a href="{{ route('marketplace.index') }}" class="inline-flex items-center gap-2 text-xs font-bold text-emerald-700 hover:text-emerald-800 transition-colors">
+            &larr; Back to Marketplace
         </a>
     </div>
 
@@ -16,73 +16,73 @@
         <div class="lg:col-span-2 space-y-6">
             
             <!-- Core Loan Details -->
-            <div class="overflow-hidden shadow-xl shadow-gray-200/40 rounded-2xl border border-gray-150 bg-white">
-                <div class="px-6 py-6 sm:px-8 border-b border-gray-150 bg-gray-50/70">
+            <div class="overflow-hidden shadow-xs rounded-2xl border border-slate-200 bg-white">
+                <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50">
                     <div class="flex items-center justify-between flex-wrap gap-2">
                         <div>
-                            <h2 class="text-xl font-bold text-gray-900">{{ $loan->purpose }}</h2>
-                            <p class="text-xs text-gray-500 mt-1">Application ID: {{ $loan->id }} • Category: {{ $loan->category->name }}</p>
+                            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">{{ $loan->purpose }}</h2>
+                            <p class="text-xs text-slate-500 mt-1 font-medium">Application ID: #LN-{{ substr($loan->id, 0, 8) }} • Category: {{ $loan->category->name }}</p>
                         </div>
-                        <span class="inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-bold uppercase tracking-wider
-                            @if($loan->risk_grade === 'A') bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/10
-                            @elseif($loan->risk_grade === 'B') bg-blue-50 text-blue-700 ring-1 ring-blue-600/10
-                            @elseif($loan->risk_grade === 'C') bg-amber-50 text-amber-700 ring-1 ring-amber-600/10
-                            @else bg-red-50 text-red-700 ring-1 ring-red-600/10 @endif">
+                        <span class="inline-flex items-center rounded px-2.5 py-0.5 text-xs font-extrabold uppercase tracking-wider
+                            @if($loan->risk_grade === 'A') bg-emerald-100 text-emerald-800 border border-emerald-200
+                            @elseif($loan->risk_grade === 'B') bg-blue-100 text-blue-800 border border-blue-200
+                            @elseif($loan->risk_grade === 'C') bg-amber-100 text-amber-800 border border-amber-200
+                            @else bg-rose-100 text-rose-800 border border-rose-200 @endif">
                             Grade {{ $loan->risk_grade }}
                         </span>
                     </div>
                 </div>
 
-                <div class="px-6 py-6 sm:px-8 space-y-6">
+                <div class="px-6 py-6 space-y-6">
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                         <div>
-                            <span class="block text-xs font-semibold uppercase tracking-wider text-gray-400">Target Capital</span>
-                            <span class="text-xl font-extrabold text-gray-950">Rp {{ number_format($loan->amount, 0, ',', '.') }}</span>
+                            <span class="block text-[11px] font-bold uppercase tracking-wider text-slate-400">Target Capital</span>
+                            <span class="text-xl font-extrabold text-slate-900 mt-1 block">Rp {{ number_format($loan->amount, 0, ',', '.') }}</span>
                         </div>
                         <div>
-                            <span class="block text-xs font-semibold uppercase tracking-wider text-gray-400">Annual Return (APR)</span>
-                            <span class="text-xl font-extrabold text-emerald-600">{{ $loan->interest_rate }}%</span>
+                            <span class="block text-[11px] font-bold uppercase tracking-wider text-slate-400">Annual Return (APR)</span>
+                            <span class="text-xl font-extrabold text-emerald-700 mt-1 block">{{ $loan->interest_rate }}%</span>
                         </div>
                         <div>
-                            <span class="block text-xs font-semibold uppercase tracking-wider text-gray-400">Loan Duration</span>
-                            <span class="text-xl font-extrabold text-gray-950">{{ $loan->duration }} Months</span>
+                            <span class="block text-[11px] font-bold uppercase tracking-wider text-slate-400">Loan Duration</span>
+                            <span class="text-xl font-extrabold text-slate-900 mt-1 block">{{ $loan->duration }} Months</span>
                         </div>
                     </div>
 
                     <!-- Description -->
-                    <div class="border-t border-gray-100 pt-6">
-                        <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-2">Loan Description</h4>
-                        <p class="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{{ $loan->description ?: 'No detailed description provided by the borrower.' }}</p>
+                    <div class="border-t border-slate-100 pt-6">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Loan Description</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed whitespace-pre-line font-medium">{{ $loan->description ?: 'No detailed description provided by the borrower.' }}</p>
                     </div>
                 </div>
             </div>
 
             <!-- Collateral / DeFi Security parameters (only displayed if Crypto loan) -->
             @if($loan->isCryptoLoan())
-                <div class="overflow-hidden shadow-xl shadow-gray-200/40 rounded-2xl border border-indigo-100 bg-indigo-50/20 p-6 sm:p-8">
-                    <div class="flex items-center gap-3 border-b border-indigo-100 pb-3 mb-6">
-                        <div class="h-8 w-8 rounded-lg bg-indigo-600 text-white font-bold flex items-center justify-center text-sm uppercase">
+                <div class="overflow-hidden shadow-xs rounded-2xl border border-emerald-200 bg-emerald-50/30 p-6">
+                    <div class="flex items-center gap-3 border-b border-emerald-200/60 pb-3 mb-4">
+                        <div class="h-8 w-8 rounded-lg bg-emerald-700 text-white font-black flex items-center justify-center text-xs uppercase shadow-xs">
                             {{ $loan->collateralCurrency->code }}
                         </div>
-                        <h3 class="text-base font-bold text-indigo-900">DeFi Smart Collateral Security</h3>
+                        <h3 class="text-sm font-bold text-emerald-950">DeFi Smart Collateral Security</h3>
                     </div>
 
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-                        <div class="bg-white rounded-xl p-3 border border-indigo-100/50">
-                            <span class="block text-[10px] font-semibold uppercase tracking-wider text-gray-400">Collateral Locked</span>
-                            <span class="text-sm font-bold text-gray-900 mt-1 block">{{ number_format($loan->collateral_amount, $loan->collateralCurrency->decimal_places) }} {{ $loan->collateralCurrency->code }}</span>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                        <div class="bg-white rounded-xl p-3 border border-emerald-100 shadow-xs">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Collateral Locked</span>
+                            <span class="text-xs font-extrabold text-slate-900 mt-1 block">{{ number_format($loan->collateral_amount, $loan->collateralCurrency->decimal_places) }} {{ $loan->collateralCurrency->code }}</span>
                         </div>
-                        <div class="bg-white rounded-xl p-3 border border-indigo-100/50">
-                            <span class="block text-[10px] font-semibold uppercase tracking-wider text-gray-400">Initial LTV</span>
-                            <span class="text-sm font-bold text-gray-900 mt-1 block">{{ $loan->initial_ltv }}%</span>
+                        <div class="bg-white rounded-xl p-3 border border-emerald-100 shadow-xs">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Initial LTV</span>
+                            <span class="text-xs font-extrabold text-slate-900 mt-1 block">{{ $loan->initial_ltv }}%</span>
                         </div>
-                        <div class="bg-white rounded-xl p-3 border border-indigo-100/50">
-                            <span class="block text-[10px] font-semibold uppercase tracking-wider text-gray-400">Liquidation LTV</span>
-                            <span class="text-sm font-bold text-red-600 mt-1 block">{{ $loan->liquidation_ltv }}%</span>
+                        <div class="bg-white rounded-xl p-3 border border-emerald-100 shadow-xs">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Liquidation LTV</span>
+                            <span class="text-xs font-extrabold text-rose-600 mt-1 block">{{ $loan->liquidation_ltv }}%</span>
                         </div>
-                        <div class="bg-white rounded-xl p-3 border border-indigo-100/50">
-                            <span class="block text-[10px] font-semibold uppercase tracking-wider text-gray-400">Liquidation Price</span>
-                            <span class="text-sm font-bold text-red-600 mt-1 block">Rp {{ number_format($loan->liquidation_price, 0, ',', '.') }}</span>
+                        <div class="bg-white rounded-xl p-3 border border-emerald-100 shadow-xs">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Liquidation Price</span>
+                            <span class="text-xs font-extrabold text-rose-600 mt-1 block">Rp {{ number_format($loan->liquidation_price, 0, ',', '.') }}</span>
                         </div>
                     </div>
                 </div>
@@ -94,28 +94,28 @@
         <div class="lg:col-span-1 space-y-6">
             
             <!-- Investment Form Card -->
-            <div class="overflow-hidden shadow-xl shadow-gray-200/40 rounded-2xl border border-gray-150 bg-white p-6">
-                <h3 class="text-base font-bold text-gray-900 mb-4 border-b border-gray-50 pb-3">Fund this loan</h3>
+            <div class="overflow-hidden shadow-xs rounded-2xl border border-slate-200 bg-white p-6">
+                <h3 class="text-sm font-bold text-slate-900 mb-4 border-b border-slate-100 pb-3">Fund This Loan</h3>
 
                 <div class="space-y-4">
                     <!-- Progress summary -->
                     <div>
-                        <div class="flex items-center justify-between text-xs font-semibold mb-1">
-                            <span class="text-indigo-600">{{ $loan->funded_percentage }}% funded</span>
-                            <span class="text-gray-400">Rp {{ number_format($loan->fundings()->sum('amount'), 0, ',', '.') }}</span>
+                        <div class="flex items-center justify-between text-xs font-bold mb-1.5">
+                            <span class="text-emerald-700">{{ (int)$loan->funded_percentage }}% funded</span>
+                            <span class="text-slate-500">Rp {{ number_format($loan->fundings()->sum('amount'), 0, ',', '.') }}</span>
                         </div>
-                        <div class="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
-                            <div class="bg-indigo-600 h-1.5 rounded-full" style="width: {{ min(100, $loan->funded_percentage) }}%"></div>
+                        <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                            <div class="bg-emerald-700 h-2 rounded-full" style="width: {{ min(100, $loan->funded_percentage) }}%"></div>
                         </div>
                     </div>
 
-                    <div class="text-xs text-gray-500 border-t border-gray-50 pt-4 flex justify-between">
+                    <div class="text-xs text-slate-500 border-t border-slate-100 pt-3 flex justify-between font-medium">
                         <span>Total Target:</span>
-                        <strong class="text-gray-900">Rp {{ number_format($loan->amount, 0, ',', '.') }}</strong>
+                        <strong class="text-slate-900 font-extrabold">Rp {{ number_format($loan->amount, 0, ',', '.') }}</strong>
                     </div>
 
                     @if(Auth::id() === $loan->borrower_id)
-                        <div class="rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs text-amber-800">
+                        <div class="rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs text-amber-800 font-semibold">
                             You cannot invest in your own loan applications.
                         </div>
                     @else
@@ -123,17 +123,17 @@
                         <form action="{{ route('marketplace.fund', $loan->id) }}" method="POST" class="space-y-3 pt-2">
                             @csrf
                             <div>
-                                <label for="amount" class="block text-[10px] font-semibold uppercase tracking-wider text-gray-500">Investment Amount (IDR)</label>
-                                <input type="number" name="amount" id="amount" required min="100000"
-                                       class="mt-1.5 block w-full rounded-xl border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500 @error('amount') border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500 @enderror"
+                                <label for="amount" class="block text-[11px] font-bold uppercase tracking-wider text-slate-500">Investment Amount (IDR)</label>
+                                <input type="number" name="amount" id="amount" required min="100000" step="50000"
+                                       class="mt-1.5 block w-full rounded-xl border border-slate-200 px-3.5 py-2 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 @error('amount') border-rose-300 text-rose-900 @enderror"
                                        placeholder="e.g. 500000">
                                 @error('amount')
-                                    <p class="mt-1.5 text-xs text-red-600 font-medium">{{ $message }}</p>
-                                @enderror
+                                    <p class="mt-1.5 text-xs text-rose-600 font-bold">{{ $message }}</p>
+                                @errorEnd
                             </div>
                             <button type="submit"
-                                    class="w-full rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-md shadow-indigo-600/10 hover:bg-indigo-700 transition-colors">
-                                Deploy Capital
+                                    class="w-full rounded-xl bg-emerald-700 px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition-colors">
+                                Deploy Capital &rarr;
                             </button>
                         </form>
                     @endif
@@ -141,9 +141,9 @@
             </div>
 
             <!-- Risk Disclosure -->
-            <div class="rounded-2xl border border-gray-200 bg-gray-50 p-4 text-xs text-gray-500 leading-relaxed">
-                <h4 class="font-bold text-gray-700 mb-1">Risk Warning</h4>
-                P2P lending involves high financial risks. Diversify your investments. Borrower repayments are not guaranteed unless secured by collateral assets. Past performance is not a guarantee of future outcomes.
+            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-500 leading-relaxed font-medium">
+                <h4 class="font-bold text-slate-800 mb-1">Risk Warning</h4>
+                P2P lending involves financial risks. Borrower repayments are not guaranteed unless secured by collateral assets. Past performance is not a guarantee of future outcomes.
             </div>
 
         </div>

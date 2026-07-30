@@ -20,12 +20,38 @@ class MarketplaceController extends Controller
     /**
      * List all public loan listings open for investor funding.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $loans = LoanRequest::with(['borrower.profile', 'category', 'currency'])
-            ->openFunding()
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+        $query = LoanRequest::with(['borrower.profile', 'category', 'currency'])
+            ->openFunding();
+
+        if ($request->filled('risk_grade')) {
+            $query->where('risk_grade', $request->risk_grade);
+        }
+
+        if ($request->filled('term')) {
+            $query->where('duration', $request->term);
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('purpose', 'like', "%{$search}%")
+                  ->orWhereHas('borrower.profile', function ($qp) use ($search) {
+                      $qp->where('full_name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        if ($request->get('sort') === 'interest_desc') {
+            $query->orderBy('interest_rate', 'desc');
+        } elseif ($request->get('sort') === 'amount_desc') {
+            $query->orderBy('amount', 'desc');
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $loans = $query->paginate(15)->withQueryString();
 
         return view('marketplace.index', compact('loans'));
     }

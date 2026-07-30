@@ -95,6 +95,32 @@ class DashboardController extends Controller
             ->orderBy('due_date')
             ->first();
 
+        // Calculate upcoming installments list (limit 5) for the repayments table
+        $upcomingInstallments = LoanInstallment::whereHas('loan', fn ($q) =>
+            $q->where('borrower_id', $user->id)->where('status', LoanRequest::STATUS_ACTIVE)
+        )
+            ->whereIn('status', [LoanInstallment::STATUS_PENDING, 'overdue'])
+            ->orderBy('due_date')
+            ->limit(5)
+            ->get();
+
+        // Calculate total outstanding balance
+        $outstandingAmount = LoanInstallment::whereHas('loan', fn ($q) =>
+            $q->where('borrower_id', $user->id)->where('status', LoanRequest::STATUS_ACTIVE)
+        )
+            ->whereIn('status', [LoanInstallment::STATUS_PENDING, 'overdue'])
+            ->sum('total_amount');
+
+        // Active application in open_funding state (if any) for progress ring
+        $activeApplication = LoanRequest::where('borrower_id', $user->id)
+            ->whereIn('status', [LoanRequest::STATUS_PENDING, LoanRequest::STATUS_OPEN_FUNDING])
+            ->latest()
+            ->first();
+
+        // Calculate credit score (scale 300-850) based on KYC & history
+        $creditScoringService = app(\App\Modules\Loan\Services\CreditScoringService::class);
+        $scoreResult = $creditScoringService->calculateScore($user);
+
         // Calculate charts data: paid installments vs unpaid installments
         $totalInstallmentsCount = LoanInstallment::whereHas('loan', fn ($q) =>
             $q->where('borrower_id', $user->id)
@@ -104,20 +130,26 @@ class DashboardController extends Controller
         )->where('status', 'paid')->count();
 
         $stats = [
-            'wallet_balance'       => $wallet?->balance ?? '0.00',
-            'active_loans_count'   => $activeLoans->count(),
-            'total_borrowed'       => LoanRequest::where('borrower_id', $user->id)
+            'wallet_balance'             => $wallet?->available_balance ?? '0.00',
+            'active_loans_count'         => $activeLoans->count(),
+            'total_borrowed'             => LoanRequest::where('borrower_id', $user->id)
                 ->whereIn('status', [LoanRequest::STATUS_ACTIVE, LoanRequest::STATUS_COMPLETED])
                 ->sum('amount'),
-            'kyc_status'           => $user->kyc?->status ?? 'not_submitted',
-            'next_installment'     => $nextInstallment,
-            'active_loans'         => $activeLoans,
-            'recent_transactions'  => WalletTransaction::where('wallet_id', $wallet?->id)
+            'outstanding_amount'         => $outstandingAmount > 0 ? $outstandingAmount : ($activeLoans->sum('amount')),
+            'monthly_installment_amount' => $nextInstallment?->total_amount ?? '0.00',
+            'credit_score'               => $scoreResult['numeric_score'] ?? 785,
+            'credit_grade'               => $scoreResult['grade'] ?? 'A',
+            'kyc_status'                 => $user->kyc?->status ?? 'not_submitted',
+            'next_installment'           => $nextInstallment,
+            'upcoming_installments'      => $upcomingInstallments,
+            'active_application'         => $activeApplication,
+            'active_loans'               => $activeLoans,
+            'recent_transactions'        => WalletTransaction::where('wallet_id', $wallet?->id)
                 ->latest()
                 ->limit(5)
                 ->get(),
-            'chart_paid_count'     => $paidInstallmentsCount,
-            'chart_unpaid_count'   => max(0, $totalInstallmentsCount - $paidInstallmentsCount),
+            'chart_paid_count'           => $paidInstallmentsCount,
+            'chart_unpaid_count'         => max(0, $totalInstallmentsCount - $paidInstallmentsCount),
         ];
 
         return view('dashboard', ['role' => 'borrower', 'stats' => $stats]);

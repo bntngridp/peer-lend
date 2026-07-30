@@ -1,0 +1,1957 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRD — LendFlow P2P Lending & Collateral FinTech Platform</title>
+  <meta name="description" content="Product Requirements Document untuk LendFlow — Platform P2P Lending FinTech berbasis Laravel 11, PostgreSQL 16, dan Redis.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --primary: #0f3460;
+      --primary-light: #1a5276;
+      --accent: #3182ce;
+      --accent-light: #ebf8ff;
+      --success: #276749;
+      --warning: #7b5e00;
+      --text-primary: #1a202c;
+      --text-secondary: #4a5568;
+      --text-muted: #718096;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f7fafc;
+      --bg-tertiary: #edf2f7;
+      --border: #e2e8f0;
+      --border-dark: #cbd5e0;
+    }
+
+    html { scroll-behavior: smooth; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--text-primary);
+      background: var(--bg-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Cover Page ─── */
+    .cover {
+      background: linear-gradient(135deg, #0d1b2a 0%, #1a2f4e 40%, #0f3460 70%, #1565c0 100%);
+      color: #fff;
+      padding: 100px 80px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 70%, rgba(49,130,206,0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 30%, rgba(99,179,237,0.1) 0%, transparent 50%);
+    }
+    .cover > * { position: relative; z-index: 1; }
+    .cover .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 8px 24px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      color: rgba(255,255,255,0.9);
+    }
+    .cover h1 {
+      font-size: 56px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #ffffff, #90cdf4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -1px;
+    }
+    .cover .tagline {
+      font-size: 20px;
+      opacity: 0.75;
+      margin-bottom: 12px;
+      font-weight: 300;
+    }
+    .cover .subtitle {
+      font-size: 15px;
+      opacity: 0.6;
+      margin-bottom: 56px;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .meta-item {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 16px;
+      padding: 18px 16px;
+      backdrop-filter: blur(10px);
+    }
+    .meta-item .label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      opacity: 0.55;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    .meta-item .value {
+      font-size: 15px;
+      font-weight: 700;
+      opacity: 0.95;
+    }
+
+    /* ─── Main Content ─── */
+    .page-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 64px 80px 100px;
+    }
+
+    /* ─── Headings ─── */
+    h1 {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 64px 0 20px;
+      padding-bottom: 12px;
+      border-bottom: 3px solid var(--primary);
+      letter-spacing: -0.5px;
+    }
+    h1:first-child { margin-top: 0; }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary-light);
+      margin: 48px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    h2::before {
+      content: '';
+      display: inline-block;
+      width: 5px;
+      height: 22px;
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 32px 0 12px;
+    }
+    h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin: 24px 0 10px;
+    }
+    
+    /* ─── Paragraphs & Text ─── */
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    strong { font-weight: 700; color: var(--text-primary); }
+    em { font-style: italic; color: var(--text-secondary); }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ─── Lists ─── */
+    ul, ol { padding-left: 28px; margin-bottom: 16px; }
+    ul { list-style: none; }
+    ul li::before { content: '▸'; color: var(--accent); margin-left: -20px; padding-right: 8px; font-size: 10px; }
+    li { margin-bottom: 8px; color: var(--text-secondary); }
+
+    /* ─── Code ─── */
+    code {
+      font-family: 'Fira Code', 'JetBrains Mono', 'Courier New', monospace;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 5px;
+      font-size: 12px;
+      color: #c0392b;
+      font-weight: 500;
+    }
+    pre {
+      background: #1a202c;
+      border-radius: 14px;
+      padding: 28px 32px;
+      overflow-x: auto;
+      margin: 24px 0;
+      border-left: 5px solid var(--accent);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #e2e8f0;
+      font-size: 12.5px;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    /* ─── Tables ─── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 13px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+    }
+    thead tr {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+    }
+    th {
+      padding: 14px 18px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    tbody tr { transition: background 0.15s; }
+    tbody tr:nth-child(even) { background: var(--bg-secondary); }
+    tbody tr:hover { background: var(--accent-light); }
+    td {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    td:first-child { font-weight: 500; color: var(--text-primary); }
+
+    /* ─── Blockquote ─── */
+    blockquote {
+      background: var(--accent-light);
+      border-left: 5px solid var(--accent);
+      border-radius: 0 12px 12px 0;
+      padding: 20px 24px;
+      margin: 24px 0;
+    }
+    blockquote p {
+      margin: 0;
+      color: #2a4a7f;
+      font-weight: 500;
+    }
+
+    /* ─── HR ─── */
+    hr {
+      border: none;
+      border-top: 2px solid var(--border);
+      margin: 48px 0;
+    }
+
+    /* ─── Footer ─── */
+    .footer {
+      background: var(--primary);
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 32px;
+      font-size: 12px;
+    }
+    .footer strong { color: white; }
+
+    /* ─── Print / PDF ─── */
+    @media print {
+      body { font-size: 11px; }
+      .page-content { padding: 32px 40px 60px; max-width: 100%; }
+      .cover { padding: 60px 40px; }
+      .cover h1 { font-size: 40px; }
+      h1 { page-break-before: always; font-size: 24px; }
+      h2 { font-size: 17px; }
+      pre, table, blockquote { page-break-inside: avoid; }
+      .footer { page-break-inside: avoid; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Cover Page ─── -->
+<div class="cover">
+  <div class="badge">Product Requirements Document</div>
+  <h1>LendFlow</h1>
+  <div class="tagline">Platform P2P Lending &amp; Collateral FinTech</div>
+  <div class="subtitle">PHP 8.3 &middot; Laravel 11 &middot; PostgreSQL 16 &middot; Redis &middot; Docker</div>
+  <div class="meta-grid">
+    <div class="meta-item">
+      <div class="label">Versi</div>
+      <div class="value">v1.0.0</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Tanggal</div>
+      <div class="value">30 Juli 2026</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Status</div>
+      <div class="value">Active Dev</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Penulis</div>
+      <div class="value">Bintang R.P.</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Backend</div>
+      <div class="value">Laravel 11</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Database</div>
+      <div class="value">PostgreSQL 16</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Main Content ─── -->
+<div class="page-content">
+<h1 id="product-requirements-document-prd">Product Requirements Document (PRD)</h1>
+<h1 id="lendflow-platform-p2p-lending-collateral-fintech">LendFlow — Platform P2P Lending & Collateral FinTech</h1>
+
+<hr>
+
+<table>
+<thead><tr><th>Metadata</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td><strong>Nama Produk</strong></td><td>LendFlow</td></tr>
+<tr><td><strong>Versi Dokumen</strong></td><td>v1.0.0</td></tr>
+<tr><td><strong>Tanggal</strong></td><td>30 Juli 2026</td></tr>
+<tr><td><strong>Status</strong></td><td>Active Development</td></tr>
+<tr><td><strong>Penulis</strong></td><td>Bintang Ridwan Pribadi</td></tr>
+<tr><td><strong>Tech Stack</strong></td><td>PHP 8.3 · Laravel 11 · PostgreSQL 16 · Redis · Docker</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2 id="daftar-isi">Daftar Isi</h2>
+
+<ol><li><a href="#1-ringkasan-eksekutif">Ringkasan Eksekutif</a></li></ol>
+<ol><li><a href="#2-latar-belakang-dan-permasalahan">Latar Belakang dan Permasalahan</a></li></ol>
+<ol><li><a href="#3-tujuan-dan-sasaran-produk">Tujuan dan Sasaran Produk</a></li></ol>
+<ol><li><a href="#4-pengguna-dan-persona">Pengguna dan Persona</a></li></ol>
+<ol><li><a href="#5-ruang-lingkup-fitur">Ruang Lingkup Fitur</a></li></ol>
+<ol><li><a href="#6-user-stories-dan-acceptance-criteria">User Stories dan Acceptance Criteria</a></li></ol>
+<ol><li><a href="#7-spesifikasi-fungsional">Spesifikasi Fungsional</a></li></ol>
+<ol><li><a href="#8-non-functional-requirements">Non-Functional Requirements</a></li></ol>
+<ol><li><a href="#9-arsitektur-sistem">Arsitektur Sistem</a></li></ol>
+<ol><li><a href="#10-entity-relationship-diagram">Entity Relationship Diagram</a></li></ol>
+<ol><li><a href="#11-alur-bisnis">Alur Bisnis</a></li></ol>
+<ol><li><a href="#12-alur-state-pinjaman">Alur State Pinjaman</a></li></ol>
+<ol><li><a href="#13-integrasi-eksternal">Integrasi Eksternal</a></li></ol>
+<ol><li><a href="#14-keamanan-dan-kepatuhan">Keamanan dan Kepatuhan</a></li></ol>
+<ol><li><a href="#15-infrastruktur-dan-devops">Infrastruktur dan DevOps</a></li></ol>
+<ol><li><a href="#16-test-plan">Test Plan</a></li></ol>
+<ol><li><a href="#17-roadmap-dan-prioritas">Roadmap dan Prioritas</a></li></ol>
+<ol><li><a href="#18-glossary">Glossary</a></li></ol>
+
+<hr>
+
+<h2 id="1-ringkasan-eksekutif">1. Ringkasan Eksekutif</h2>
+
+<p><strong>LendFlow</strong> adalah platform teknologi finansial (FinTech) berbasis <strong>Peer-to-Peer (P2P) Lending</strong> kelas enterprise yang menghubungkan langsung <strong>Peminjam (Borrower)</strong> dan <strong>Pemberi Dana (Lender)</strong> tanpa perantara institusi keuangan konvensional.</p>
+
+<p>Platform ini dibangun menggunakan <strong>PHP 8.3 (Laravel 11)</strong> dengan arsitektur <strong>Modular Monolith</strong>, database <strong>PostgreSQL 16</strong>, caching & queue berbasis <strong>Redis</strong>, dan sepenuhnya dikontainerisasi dengan <strong>Docker Compose</strong>. LendFlow menyediakan ekosistem FinTech lengkap termasuk:</p>
+
+<ul><li>Pinjaman fiat (IDR) dengan jaminan konvensional</li></ul>
+<ul><li>Pinjaman dengan agunan kripto (BTC, ETH, USDT) beserta mekanisme auto-liquidation</li></ul>
+<ul><li>Robot pendanaan otomatis (Auto-Invest Engine) berbasis grade risiko</li></ul>
+<ul><li>KYC (Know Your Customer) digital dengan verifikasi dokumen</li></ul>
+<ul><li>Payment gateway Midtrans (Sandbox) untuk deposit saldo</li></ul>
+<ul><li>2-Factor Authentication (2FA) via Google Authenticator</li></ul>
+
+<blockquote><p><strong>Catatan untuk Agent AI (Antigravity):</strong></p></blockquote>
+<blockquote><p>Dokumen ini adalah <strong>sumber kebenaran tunggal (single source of truth)</strong> untuk memahami arsitektur, domain model, alur bisnis, dan seluruh aspek teknis-fungsional LendFlow. Selalu rujuk ke dokumen ini sebelum melakukan perubahan kode, menambah fitur baru, atau membuat keputusan arsitektur.</p></blockquote>
+
+<hr>
+
+<h2 id="2-latar-belakang-dan-permasalahan">2. Latar Belakang dan Permasalahan</h2>
+
+<h3 id="21-konteks-pasar">2.1 Konteks Pasar</h3>
+
+<p>Akses permodalan bagi UMKM dan individu di Indonesia sangat terbatas. Proses peminjaman di bank konvensional membutuhkan waktu 2-4 minggu, agunan properti, dan skor kredit formal yang seringkali tidak dimiliki oleh segmen UMKM.</p>
+
+<p>Di sisi lain, investor individu tidak memiliki akses ke instrumen investasi yang memberikan imbal hasil lebih tinggi dari deposito bank, dengan likuiditas yang fleksibel.</p>
+
+<h3 id="22-permasalahan-pain-points">2.2 Permasalahan (Pain Points)</h3>
+
+<table>
+<thead><tr><th>Stakeholder</th><th>Masalah</th></tr></thead>
+<tbody>
+<tr><td><strong>Borrower</strong></td><td>Akses pinjaman lambat, persyaratan agunan fisik sulit dipenuhi, biaya administrasi tinggi</td></tr>
+<tr><td><strong>Lender</strong></td><td>Tidak ada platform terpercaya untuk meminjamkan dana dengan imbal hasil terukur</td></tr>
+<tr><td><strong>Platform</strong></td><td>Butuh sistem manajemen risiko otomatis (credit scoring, LTV monitoring, auto-liquidation)</td></tr>
+<tr><td><strong>Admin</strong></td><td>Perlu alat review KYC, approval pinjaman, dan audit trail yang komprehensif</td></tr>
+</tbody>
+</table>
+
+<h3 id="23-solusi-lendflow">2.3 Solusi LendFlow</h3>
+
+<p>LendFlow menjawab semua permasalahan tersebut dengan menyediakan:</p>
+<ul><li><strong>Digital KYC</strong> yang efisien (verifikasi NIK + OCR)</li></ul>
+<ul><li><strong>Credit Scoring otomatis</strong> berbasis grade risiko (A-D)</li></ul>
+<ul><li><strong>Marketplace pinjaman terbuka</strong> dengan transparansi penuh</li></ul>
+<ul><li><strong>Auto-Invest Engine</strong> untuk efisiensi pendanaan</li></ul>
+<ul><li><strong>Crypto Collateral</strong> sebagai alternatif agunan modern</li></ul>
+<ul><li><strong>Sistem pengingat dan denda otomatis</strong> untuk manajemen risiko</li></ul>
+
+<hr>
+
+<h2 id="3-tujuan-dan-sasaran-produk">3. Tujuan dan Sasaran Produk</h2>
+
+<h3 id="31-tujuan-bisnis">3.1 Tujuan Bisnis</h3>
+
+<table>
+<thead><tr><th>#</th><th>Tujuan</th><th>KPI</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Menghubungkan peminjam & pemberi dana secara efisien</td><td>Rata-rata waktu pendanaan pinjaman < 24 jam</td></tr>
+<tr><td>2</td><td>Meminimalisir risiko gagal bayar</td><td>Tingkat default < 5% (Grade A & B)</td></tr>
+<tr><td>3</td><td>Memberikan pengalaman pengguna yang aman</td><td>2FA adoption rate > 80%</td></tr>
+<tr><td>4</td><td>Menjaga integritas keuangan platform</td><td>Audit trail coverage 100% pada transaksi finansial</td></tr>
+</tbody>
+</table>
+
+<h3 id="32-tujuan-teknis">3.2 Tujuan Teknis</h3>
+
+<ul><li>Arsitektur <strong>Modular Monolith</strong> yang mudah dipisah menjadi microservices di masa depan</li></ul>
+<ul><li>Test coverage minimum <strong>85%</strong> dengan PHPUnit</li></ul>
+<ul><li>Semua endpoint API terdokumentasi dengan <strong>OpenAPI 3.0 (Swagger)</strong></li></ul>
+<ul><li>Build dan deploy menggunakan <strong>Docker Compose</strong> (zero-config setup)</li></ul>
+
+<hr>
+
+<h2 id="4-pengguna-dan-persona">4. Pengguna dan Persona</h2>
+
+<h3 id="41-aktor-sistem">4.1 Aktor Sistem</h3>
+
+<pre><code>AKTOR SISTEM
+============
+  Borrower    -&gt; Pengguna yang mengajukan pinjaman
+  Lender      -&gt; Pengguna yang mendanai/menginvestasikan dana
+  Admin       -&gt; Operator platform: review KYC &amp; approve pinjaman
+  System      -&gt; Scheduler &amp; Queue Worker (proses otomatis)</code></pre>
+
+<h3 id="42-detail-persona">4.2 Detail Persona</h3>
+
+<h4 id="borrower---ari-pelaku-umkm">Borrower - "Ari, Pelaku UMKM"</h4>
+<ul><li><strong>Demografi</strong>: Pemilik usaha kecil, 25-45 tahun</li></ul>
+<ul><li><strong>Kebutuhan</strong>: Pinjaman modal usaha Rp 10-100 juta, cair cepat</li></ul>
+<ul><li><strong>Pain point</strong>: Ditolak bank karena tidak punya agunan properti</li></ul>
+<ul><li><strong>Goal di LendFlow</strong>: Mengajukan pinjaman, melacak cicilan, berkomunikasi dengan lender</li></ul>
+
+<h4 id="lender---desi-investor-individu">Lender - "Desi, Investor Individu"</h4>
+<ul><li><strong>Demografi</strong>: Pekerja profesional, 30-50 tahun</li></ul>
+<ul><li><strong>Kebutuhan</strong>: Imbal hasil 12-24% per tahun, risiko terukur</li></ul>
+<ul><li><strong>Pain point</strong>: Deposito bank terlalu rendah imbal hasilnya</li></ul>
+<ul><li><strong>Goal di LendFlow</strong>: Mendanai pinjaman grade A/B, aktifkan Auto-Invest, pantau portofolio</li></ul>
+
+<h4 id="admin---tim-operasional-lendflow">Admin - "Tim Operasional LendFlow"</h4>
+<ul><li><strong>Kebutuhan</strong>: Dashboard review KYC, approval/reject pinjaman, audit log</li></ul>
+<ul><li><strong>Goal</strong>: Memastikan platform berjalan aman, compliance terpenuhi</li></ul>
+
+<hr>
+
+<h2 id="5-ruang-lingkup-fitur">5. Ruang Lingkup Fitur</h2>
+
+<h3 id="51-fitur-in-scope-v10">5.1 Fitur In-Scope (v1.0)</h3>
+
+<table>
+<thead><tr><th>Modul</th><th>Fitur</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td><strong>Auth</strong></td><td>Register, Login, Logout, Password Reset, 2FA Google Authenticator</td><td>Done</td></tr>
+<tr><td><strong>KYC</strong></td><td>Submit dokumen (KTP, Selfie, NPWP), OCR matching NIK, Review Admin</td><td>Done</td></tr>
+<tr><td><strong>Profile</strong></td><td>Edit profil, foto avatar, data pekerjaan & penghasilan</td><td>Done</td></tr>
+<tr><td><strong>Wallet</strong></td><td>Saldo virtual IDR, Deposit via Midtrans, Withdraw, Riwayat transaksi</td><td>Done</td></tr>
+<tr><td><strong>Loan - Borrower</strong></td><td>Pengajuan pinjaman, Simulasi kalkulator, Jadwal cicilan, Pembayaran cicilan</td><td>Done</td></tr>
+<tr><td><strong>Loan - Lender</strong></td><td>Marketplace (list + detail pinjaman), Manual funding, Auto-Invest Engine</td><td>Done</td></tr>
+<tr><td><strong>Loan - Admin</strong></td><td>Review & Approve, Disbursement pinjaman</td><td>Done</td></tr>
+<tr><td><strong>Crypto Collateral</strong></td><td>Agunan BTC/ETH/USDT, Monitor LTV, Auto-Liquidation</td><td>Done</td></tr>
+<tr><td><strong>Chat System</strong></td><td>Pesan internal per pinjaman (Borrower, Lender, Admin)</td><td>Done</td></tr>
+<tr><td><strong>Agreement PDF</strong></td><td>Generator surat perjanjian kontrak pinjaman legal</td><td>Done</td></tr>
+<tr><td><strong>Notifications</strong></td><td>Notifikasi in-app + email HTML asinkron via Queue</td><td>Done</td></tr>
+<tr><td><strong>Scheduler</strong></td><td>Hitung denda harian, Reminder cicilan, Auto-Invest hourly, Update LTV</td><td>Done</td></tr>
+<tr><td><strong>REST API</strong></td><td>Endpoint Marketplace + Loan Apply (OpenAPI 3.0 + Swagger UI)</td><td>Done</td></tr>
+<tr><td><strong>Dashboard</strong></td><td>Dashboard berbasis role (Admin/Borrower/Lender) + Chart.js</td><td>Done</td></tr>
+</tbody>
+</table>
+
+<h3 id="52-fitur-out-of-scope-v10">5.2 Fitur Out-of-Scope (v1.0)</h3>
+
+<ul><li>Mobile app (iOS/Android)</li></ul>
+<ul><li>Notifikasi push via Firebase/FCM</li></ul>
+<ul><li>Integrasi Xendit / DOKU / payment gateway lain</li></ul>
+<ul><li>Secondary market (jual-beli portofolio pinjaman antar Lender)</li></ul>
+<ul><li>Laporan pajak (e-SPT integration)</li></ul>
+<ul><li>Multi-bahasa (i18n/l10n)</li></ul>
+
+<hr>
+
+<h2 id="6-user-stories-dan-acceptance-criteria">6. User Stories dan Acceptance Criteria</h2>
+
+<h3 id="61-modul-autentikasi">6.1 Modul Autentikasi</h3>
+
+<p><strong>US-AUTH-001: Register Akun</strong></p>
+<pre><code>Sebagai pengguna baru,
+Saya ingin mendaftar dengan email dan password,
+Agar saya bisa mengakses platform LendFlow.
+
+Acceptance Criteria:
+  - Form registrasi meminta: email, full_name, phone, password, password_confirmation
+  - Email harus unik di sistem
+  - Nomor HP harus unik di sistem
+  - Setelah register, user diarahkan ke halaman KYC
+  - Role default user: borrower (bisa diubah admin)</code></pre>
+
+<p><strong>US-AUTH-002: Login dengan 2FA</strong></p>
+<pre><code>Sebagai pengguna terdaftar,
+Saya ingin login dengan email, password, dan OTP Google Authenticator,
+Agar akun saya terlindungi dari akses tidak sah.
+
+Acceptance Criteria:
+  - Jika 2FA disabled: Login langsung dengan email + password
+  - Jika 2FA enabled: Setelah password valid, redirect ke halaman verify 2FA OTP
+  - OTP tidak valid / expired: Tampilkan pesan error, sesi tidak dibuat
+  - Session expired: Auto-redirect ke login</code></pre>
+
+<h3 id="62-modul-kyc">6.2 Modul KYC</h3>
+
+<p><strong>US-KYC-001: Submit Dokumen KYC</strong></p>
+<pre><code>Sebagai Borrower/Lender baru,
+Saya ingin mengupload KTP dan foto selfie,
+Agar identitas saya diverifikasi dan akun diaktifkan penuh.
+
+Acceptance Criteria:
+  - Upload KTP (NIK otomatis dibaca via OCR/input manual)
+  - Upload foto selfie untuk face-matching
+  - Opsional: upload NPWP
+  - Status KYC: pending -&gt; approved / rejected
+  - File tersimpan secara private, hanya bisa diakses Admin via streaming endpoint
+  - Notifikasi email dikirim saat KYC approved/rejected</code></pre>
+
+<p><strong>US-KYC-002: Review KYC (Admin)</strong></p>
+<pre><code>Sebagai Admin,
+Saya ingin melihat dokumen KYC pengguna dan menyetujui/menolaknya,
+Agar hanya pengguna terverifikasi yang bisa bertransaksi.
+
+Acceptance Criteria:
+  - Admin dapat melihat daftar KYC pending
+  - Admin dapat streaming dokumen (KTP, Selfie) tanpa download publik
+  - Admin dapat Approve: status KYC -&gt; approved
+  - Admin dapat Reject dengan alasan: status KYC -&gt; rejected, user menerima notifikasi</code></pre>
+
+<h3 id="63-modul-wallet">6.3 Modul Wallet</h3>
+
+<p><strong>US-WALLET-001: Deposit Saldo</strong></p>
+<pre><code>Sebagai Lender dengan KYC approved,
+Saya ingin melakukan deposit saldo IDR via payment gateway,
+Agar saya bisa mendanai pinjaman di marketplace.
+
+Acceptance Criteria:
+  - Hanya user KYC approved yang bisa deposit
+  - Trigger Midtrans Snap Popup untuk pembayaran
+  - Setelah pembayaran sukses, webhook Midtrans mengkonfirmasi
+  - Saldo tersimpan di wallet.available_balance
+  - Setiap transaksi tercatat di wallet_transactions + audit_logs</code></pre>
+
+<p><strong>US-WALLET-002: Withdraw Saldo</strong></p>
+<pre><code>Sebagai Lender,
+Saya ingin menarik saldo ke rekening bank saya,
+Agar saya bisa mengambil keuntungan dari investasi.
+
+Acceptance Criteria:
+  - Hanya user KYC approved yang bisa withdraw
+  - Nominal withdraw tidak boleh melebihi available_balance
+  - Transaksi tercatat di wallet_transactions dengan type 'withdraw'</code></pre>
+
+<h3 id="64-modul-pinjaman-borrower">6.4 Modul Pinjaman (Borrower)</h3>
+
+<p><strong>US-LOAN-001: Ajukan Pinjaman</strong></p>
+<pre><code>Sebagai Borrower dengan KYC approved,
+Saya ingin mengajukan pinjaman dengan menyebutkan jumlah, tujuan, dan jangka waktu,
+Agar saya bisa mendapatkan pendanaan dari para Lender.
+
+Acceptance Criteria:
+  - Form pengajuan: jumlah, tenor (bulan), tipe bunga (anuitas/flat), tujuan pinjaman,
+    kategori, agunan kripto (opsional)
+  - Sistem otomatis menghitung credit score dan menetapkan grade risiko (A-D)
+  - Sistem otomatis menentukan interest rate berdasarkan grade
+  - Status awal: draft -&gt; pending (setelah submit untuk review admin)
+  - Admin dapat Approve (-&gt; open_funding) atau Reject (-&gt; cancelled)</code></pre>
+
+<p><strong>US-LOAN-002: Bayar Cicilan</strong></p>
+<pre><code>Sebagai Borrower aktif,
+Saya ingin membayar cicilan pinjaman dari saldo wallet saya,
+Agar pinjaman saya selesai sesuai jadwal.
+
+Acceptance Criteria:
+  - Daftar cicilan tampil lengkap dengan due_date, jumlah, status, dan denda
+  - Pembayaran debit dari wallet.available_balance
+  - Status installment: pending -&gt; paid
+  - Jika terlambat: penalty_amount ditambahkan (0.1%/hari dari principal)
+  - Saat semua cicilan lunas: status loan -&gt; completed</code></pre>
+
+<h3 id="65-modul-investasi-lender">6.5 Modul Investasi (Lender)</h3>
+
+<p><strong>US-INVEST-001: Manual Funding</strong></p>
+<pre><code>Sebagai Lender,
+Saya ingin mendanai pinjaman tertentu di marketplace,
+Agar saya mendapatkan imbal hasil bunga sesuai grade risiko pinjaman.
+
+Acceptance Criteria:
+  - Daftar marketplace menampilkan pinjaman open_funding dengan detail grade, rate, tenor
+  - Lender dapat memilih jumlah dana yang ingin diinvestasikan
+  - Saldo wallet terkurangi, loan_fundings tercatat dengan persentase kepemilikan
+  - Jika funded_percentage mencapai 100%: status loan -&gt; funded -&gt; active
+    (setelah disbursement admin)</code></pre>
+
+<p><strong>US-INVEST-002: Auto-Invest</strong></p>
+<pre><code>Sebagai Lender,
+Saya ingin mengaktifkan robot investasi otomatis berdasarkan preferensi grade risiko saya,
+Agar dana saya terkelola otomatis tanpa monitoring manual terus-menerus.
+
+Acceptance Criteria:
+  - Lender bisa set: grade min/max, max allocation per pinjaman, max LTV
+  - Scheduler per jam menjalankan Auto-Invest Engine
+  - Engine hanya mendanai pinjaman yang cocok dengan rule Lender
+  - Setiap funding tercatat dan notifikasi email terkirim</code></pre>
+
+<hr>
+
+<h2 id="7-spesifikasi-fungsional">7. Spesifikasi Fungsional</h2>
+
+<h3 id="71-credit-scoring-engine">7.1 Credit Scoring Engine</h3>
+
+<p>Sistem menghitung skor kredit Borrower berdasarkan parameter:</p>
+
+<table>
+<thead><tr><th>Parameter</th><th>Bobot</th><th>Penjelasan</th></tr></thead>
+<tbody>
+<tr><td>Status KYC</td><td>40%</td><td>KYC approved = +40 poin</td></tr>
+<tr><td>Riwayat Pinjaman</td><td>30%</td><td>Tidak ada default historis = +30 poin</td></tr>
+<tr><td>Penghasilan Bulanan</td><td>20%</td><td>Income > Rp 5 juta = +20 poin</td></tr>
+<tr><td>Kelengkapan Profil</td><td>10%</td><td>Profil lengkap = +10 poin</td></tr>
+</tbody>
+</table>
+
+<p><strong>Penetapan Grade:</strong></p>
+
+<table>
+<thead><tr><th>Skor</th><th>Grade</th><th>Deskripsi</th><th>Interest Rate Range</th></tr></thead>
+<tbody>
+<tr><td>80-100</td><td><strong>A</strong></td><td>Very Low Risk</td><td>8-12% p.a.</td></tr>
+<tr><td>60-79</td><td><strong>B</strong></td><td>Low Risk</td><td>12-16% p.a.</td></tr>
+<tr><td>40-59</td><td><strong>C</strong></td><td>Medium Risk</td><td>16-20% p.a.</td></tr>
+<tr><td>0-39</td><td><strong>D</strong></td><td>High Risk</td><td>20-24% p.a.</td></tr>
+</tbody>
+</table>
+
+<h3 id="72-amortisasi-dan-kalkulator-cicilan">7.2 Amortisasi dan Kalkulator Cicilan</h3>
+
+<p>Platform mendukung dua metode perhitungan:</p>
+
+<p><strong>Anuitas (Equal Installment):</strong></p>
+<pre><code>M = P x [r(1+r)^n] / [(1+r)^n - 1]
+
+Di mana:
+  M = cicilan bulanan
+  P = principal (pokok pinjaman)
+  r = suku bunga bulanan (annual_rate / 12)
+  n = jumlah bulan tenor</code></pre>
+
+<p><strong>Flat Rate:</strong></p>
+<pre><code>Cicilan bulanan = (P / n) + (P x annual_rate / 12)</code></pre>
+
+<p>Semua kalkulasi menggunakan fungsi <strong>bcmath</strong> PHP untuk presisi desimal finansial.</p>
+
+<h3 id="73-crypto-ltv-monitoring-dan-auto-liquidation">7.3 Crypto LTV Monitoring dan Auto-Liquidation</h3>
+
+<pre><code>LTV = (Nilai Pinjaman / Nilai Agunan Kripto) x 100%
+
+Threshold:
+  LTV &lt; 60%   -&gt; Aman (green zone)
+  LTV 60-79% -&gt; Zona Waspada (warning notifikasi ke Borrower)
+  LTV &gt;= 80%  -&gt; Auto-Liquidation dieksekusi otomatis</code></pre>
+
+<p>Scheduler <code>peer-lend:update-crypto-ltv</code> berjalan setiap jam untuk memperbarui harga kripto dan kalkulasi LTV realtime.</p>
+
+<h3 id="74-auto-invest-matching-engine">7.4 Auto-Invest Matching Engine</h3>
+
+<p>Algoritma matching engine (<code>peer-lend:run-auto-invest</code>):</p>
+
+<pre><code>FOR EACH lender WITH active auto_invest_rule:
+  FOR EACH loan IN open_funding:
+    IF loan.risk_grade BETWEEN rule.min_grade AND rule.max_grade
+    AND loan.current_ltv &lt;= rule.max_ltv
+    AND lender.wallet.available_balance &gt;= rule.max_allocation_per_loan:
+      EXECUTE funding(lender, loan, rule.max_allocation_per_loan)
+      NOTIFY(lender, "Auto-invest berhasil")</code></pre>
+
+<p>Engine dijalankan otomatis setiap jam oleh Task Scheduler.</p>
+
+<h3 id="75-penalty-engine">7.5 Penalty Engine</h3>
+
+<p>Scheduler <code>peer-lend:calculate-penalties</code> berjalan setiap hari pukul 00:00:</p>
+
+<pre><code>IF installment.due_date &lt; TODAY AND installment.status == 'pending':
+  days_late = (TODAY - installment.due_date) in days
+  penalty   = installment.principal_amount x 0.001 x days_late
+  UPDATE installment SET penalty_amount = penalty, status = 'overdue'</code></pre>
+
+<h3 id="76-api-endpoints-openapi-30">7.6 API Endpoints (OpenAPI 3.0)</h3>
+
+<table>
+<thead><tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Deskripsi</th></tr></thead>
+<tbody>
+<tr><td><code>GET</code></td><td><code>/api/v1/marketplace</code></td><td>Required</td><td>Daftar pinjaman open_funding (paginated)</td></tr>
+<tr><td><code>GET</code></td><td><code>/api/v1/marketplace/{id}</code></td><td>Required</td><td>Detail pinjaman + riwayat fundings</td></tr>
+<tr><td><code>POST</code></td><td><code>/api/v1/loans/apply</code></td><td>Required + KYC</td><td>Ajukan pinjaman baru via API</td></tr>
+</tbody>
+</table>
+
+<p>Dokumentasi interaktif tersedia di: <code>http://localhost:9090/api/docs</code></p>
+
+<p><strong>Standard Response Envelope:</strong></p>
+<pre><code class="language-json">// Success
+{
+  "status": "success",
+  "message": "Data retrieved successfully",
+  "data": { ... },
+  "meta": { "page": 1, "per_page": 10, "total": 100 }
+}
+
+// Error
+{
+  "status": "error",
+  "message": "Validation failed",
+  "errors": [{ "field": "amount", "message": "must be greater than 0" }]
+}</code></pre>
+
+<hr>
+
+<h2 id="8-non-functional-requirements">8. Non-Functional Requirements</h2>
+
+<h3 id="81-performa">8.1 Performa</h3>
+
+<table>
+<thead><tr><th>Metrik</th><th>Target</th></tr></thead>
+<tbody>
+<tr><td>Response time API</td><td>< 300ms (P95)</td></tr>
+<tr><td>Halaman web (TTFB)</td><td>< 500ms</td></tr>
+<tr><td>Queue job processing</td><td>< 5 detik per job</td></tr>
+<tr><td>Scheduler latency</td><td>< 60 detik dari jadwal yang ditentukan</td></tr>
+</tbody>
+</table>
+
+<h3 id="82-keandalan-reliability">8.2 Keandalan (Reliability)</h3>
+
+<table>
+<thead><tr><th>Metrik</th><th>Target</th></tr></thead>
+<tbody>
+<tr><td>Uptime</td><td>99.5% monthly</td></tr>
+<tr><td>Database backup</td><td>Harian, retensi 30 hari</td></tr>
+<tr><td>Container restart policy</td><td><code>unless-stopped</code></td></tr>
+<tr><td>Queue retries</td><td>max 3 kali per job</td></tr>
+</tbody>
+</table>
+
+<h3 id="83-skalabilitas">8.3 Skalabilitas</h3>
+
+<ul><li>Horizontal scaling: Queue worker dapat di-scale secara independent</li></ul>
+<ul><li>Database: Connection pooling via PHP-FPM</li></ul>
+<ul><li>Redis: Digunakan untuk session, cache, dan queue secara terpisah (prefix-based)</li></ul>
+<ul><li>Stateless application layer: siap di-load balance</li></ul>
+
+<h3 id="84-keamanan">8.4 Keamanan</h3>
+
+<ul><li>Semua password di-hash dengan bcrypt (rounds: 12 production, 4 testing)</li></ul>
+<ul><li>CSRF protection pada semua form non-API</li></ul>
+<ul><li>Rate limiting pada endpoint sensitif (login, API)</li></ul>
+<ul><li>File KYC tidak dapat diakses secara langsung (private storage + streaming endpoint)</li></ul>
+<ul><li>Webhook Midtrans divalidasi dengan signature SHA512</li></ul>
+<ul><li>Security headers: X-Frame-Options, X-Content-Type-Options, X-XSS-Protection, Referrer-Policy</li></ul>
+
+<h3 id="85-maintainability">8.5 Maintainability</h3>
+
+<ul><li>Test coverage >= 85% (PHPUnit)</li></ul>
+<ul><li>Kode mengikuti PSR-12 coding standard</li></ul>
+<ul><li>Setiap modul berdiri sendiri (loose coupling)</li></ul>
+<ul><li>Dokumentasi API selalu up-to-date via Swagger UI</li></ul>
+<ul><li>AGENTS.md tersedia di root repo sebagai panduan kontribusi AI/automation</li></ul>
+
+<hr>
+
+<h2 id="9-arsitektur-sistem">9. Arsitektur Sistem</h2>
+
+<h3 id="91-lapisan-arsitektur">9.1 Lapisan Arsitektur</h3>
+
+<pre><code>+------------------------------------------------------------------+
+|                     PRESENTATION LAYER                           |
+|  +-----------------+  +--------------+  +--------------------+  |
+|  | Laravel Blade   |  | REST API JSON|  | Swagger UI         |  |
+|  | + Alpine.js     |  | (OpenAPI 3.0)|  | /api/docs          |  |
+|  | + Chart.js      |  |              |  |                    |  |
+|  +-----------------+  +--------------+  +--------------------+  |
++------------------------------------------------------------------+
+|                    APPLICATION LAYER (Controllers)               |
+|  Auth | KYC | Loan | Wallet | Admin | User | Shared             |
++------------------------------------------------------------------+
+|                SERVICE / USE CASE LAYER                          |
+|  LoanService | CreditScoringService | AutoInvestService          |
+|  WalletService | PaymentService | KYCService                     |
+|  NotificationService | PenaltyService | LTVService               |
++------------------------------------------------------------------+
+|                         DATA LAYER                               |
+|  +----------+  +---------------------+  +-----------------+     |
+|  | Redis    |  | Eloquent ORM/Models |  | Queue Jobs      |     |
+|  | (Cache,  |  | (PostgreSQL 16)     |  | (Background)    |     |
+|  | Session) |  |                     |  |                 |     |
+|  +----------+  +---------------------+  +-----------------+     |
++------------------------------------------------------------------+</code></pre>
+
+<h3 id="92-struktur-modul">9.2 Struktur Modul</h3>
+
+<pre><code>app/
++-- Console/Commands/
+|   +-- RunAutoInvest.php           (Artisan: peer-lend:run-auto-invest)
+|   +-- CalculatePenalties.php      (Artisan: peer-lend:calculate-penalties)
+|   +-- SendRepaymentReminders.php  (Artisan: peer-lend:send-repayment-reminders)
+|   +-- UpdateCryptoLtv.php         (Artisan: peer-lend:update-crypto-ltv)
+|
++-- Jobs/
+|   +-- SendNotificationEmailJob.php
+|
++-- Models/
+|   +-- User.php, Profile.php
+|   +-- KYC.php, KYCDocument.php
+|   +-- Wallet.php, WalletTransaction.php
+|   +-- LoanRequest.php, LoanFunding.php
+|   +-- LoanInstallment.php, LoanRepayment.php
+|   +-- LoanAgreement.php, LoanMessage.php
+|   +-- AutoInvestRule.php, Payment.php
+|   +-- Currency.php, AuditLog.php, Notification.php
+|   +-- FeeConfiguration.php, InterestRate.php, Setting.php
+|   +-- Role.php, Permission.php, LoanCategory.php
+|
++-- Modules/
+    +-- Auth/       (Login, Register, Password Reset, 2FA)
+    +-- KYC/        (Submit, Review Admin, Streaming)
+    +-- Loan/       (Pinjaman, Marketplace, API, AutoInvest, Chat, PDF)
+    +-- Wallet/     (Saldo, Deposit, Withdraw, Midtrans)
+    +-- User/       (Profile)
+    +-- Shared/     (Dashboard, Notifications)</code></pre>
+
+<h3 id="93-dependency-flow-wajib">9.3 Dependency Flow (WAJIB)</h3>
+
+<pre><code>Handler (Controller) -&gt; Service (Use Case) -&gt; Model -&gt; Database</code></pre>
+
+<blockquote><p><strong>ATURAN WAJIB untuk Agent AI:</strong></p></blockquote>
+<blockquote><p>- Handler/Controller TIDAK BOLEH berisi business logic</p></blockquote>
+<blockquote><p>- Service TIDAK BOLEH mengakses layer HTTP (Request, Response langsung)</p></blockquote>
+<blockquote><p>- Model TIDAK BOLEH berisi business logic kompleks - hanya relasi & scope</p></blockquote>
+<blockquote><p>- Dependensi mengalir SEARAH (satu arah ke bawah, tidak boleh reverse)</p></blockquote>
+
+<hr>
+
+<h2 id="10-entity-relationship-diagram">10. Entity Relationship Diagram</h2>
+
+<h3 id="101-daftar-entitas-tabel-database">10.1 Daftar Entitas (Tabel Database)</h3>
+
+<p><strong>Grup: User & Identity</strong></p>
+
+<pre><code>users
+  id                  UUID (PK)
+  email               STRING UNIQUE
+  password            STRING (bcrypt)
+  google2fa_secret    STRING NULLABLE
+  google2fa_enabled   BOOLEAN DEFAULT false
+  is_active           BOOLEAN DEFAULT true
+  email_verified_at   TIMESTAMP NULLABLE
+  remember_token      STRING NULLABLE
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP
+  deleted_at          TIMESTAMP NULLABLE (soft delete)
+
+profiles
+  id                  UUID (PK)
+  user_id             UUID FK -&gt; users.id (UNIQUE)
+  full_name           STRING
+  phone               STRING UNIQUE
+  avatar_path         STRING NULLABLE
+  address             TEXT NULLABLE
+  city                STRING NULLABLE
+  province            STRING NULLABLE
+  occupation          STRING NULLABLE
+  monthly_income      DECIMAL(20,2) NULLABLE
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP
+
+roles
+  id                  BIGINT (PK)
+  name                STRING UNIQUE (admin|borrower|lender)
+  guard_name          STRING DEFAULT 'web'
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP
+
+permissions
+  id                  BIGINT (PK)
+  name                STRING UNIQUE
+  guard_name          STRING
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP
+
+role_user             (Pivot)
+  user_id             UUID FK -&gt; users.id
+  role_id             BIGINT FK -&gt; roles.id
+  PRIMARY KEY (user_id, role_id)
+
+role_permissions      (Pivot)
+  role_id             BIGINT FK -&gt; roles.id
+  permission_id       BIGINT FK -&gt; permissions.id
+  PRIMARY KEY (role_id, permission_id)
+
+sessions
+  id                  STRING (PK)
+  user_id             UUID NULLABLE FK -&gt; users.id
+  ip_address          STRING(45) NULLABLE
+  user_agent          TEXT NULLABLE
+  payload             LONGTEXT
+  last_activity       INTEGER INDEX
+
+password_reset_tokens
+  email               STRING (PK)
+  token               STRING
+  created_at          TIMESTAMP NULLABLE</code></pre>
+
+<p><strong>Grup: KYC</strong></p>
+
+<pre><code>kycs
+  id                  UUID (PK)
+  user_id             UUID FK -&gt; users.id (UNIQUE, 1:1)
+  nik                 STRING(20) NULLABLE
+  status              STRING DEFAULT 'pending' (pending|approved|rejected)
+  rejected_reason     TEXT NULLABLE
+  reviewed_by         UUID NULLABLE FK -&gt; users.id
+  reviewed_at         TIMESTAMP NULLABLE
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP
+
+kyc_documents
+  id                  UUID (PK)
+  kyc_id              UUID FK -&gt; kycs.id (CASCADE)
+  type                STRING (ktp|selfie|npwp)
+  file_path           STRING(500)
+  storage_driver      STRING DEFAULT 'local'
+  verified_at         TIMESTAMP NULLABLE
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP</code></pre>
+
+<p><strong>Grup: Wallet & Payment</strong></p>
+
+<pre><code>currencies
+  id                  BIGINT (PK)
+  code                STRING(10) UNIQUE (IDR|BTC|ETH|USDT)
+  name                STRING(100)
+  type                STRING(20) DEFAULT 'fiat' (fiat|crypto)
+  decimal_places      UINT DEFAULT 2
+  is_active           BOOLEAN DEFAULT true
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP
+
+wallets
+  id                  UUID (PK)
+  user_id             UUID FK -&gt; users.id
+  currency_id         BIGINT FK -&gt; currencies.id
+  available_balance   DECIMAL(20,8) DEFAULT 0
+  hold_balance        DECIMAL(20,8) DEFAULT 0
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP
+  UNIQUE (user_id, currency_id)
+
+wallet_transactions
+  id                  UUID (PK)
+  wallet_id           UUID FK -&gt; wallets.id (CASCADE)
+  type                STRING (deposit|withdraw|loan_disbursement|repayment|
+                               interest|fee|penalty|funding|refund)
+  amount              DECIMAL(20,8)
+  balance_before      DECIMAL(20,8)
+  balance_after       DECIMAL(20,8)
+  reference_id        UUID NULLABLE
+  reference_type      STRING(100) NULLABLE
+  description         TEXT NULLABLE
+  created_at          TIMESTAMP
+
+payments
+  id                  UUID (PK)
+  user_id             UUID FK -&gt; users.id
+  wallet_transaction_id UUID NULLABLE FK -&gt; wallet_transactions.id
+  gateway             STRING (midtrans|xendit|manual)
+  gateway_ref_id      STRING NULLABLE
+  amount              DECIMAL(20,2)
+  status              STRING DEFAULT 'pending' (pending|success|failed|expired)
+  payload             JSON NULLABLE
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP</code></pre>
+
+<p><strong>Grup: Loan Core</strong></p>
+
+<pre><code>loan_categories
+  id                  BIGINT (PK)
+  name                STRING
+  description         STRING NULLABLE
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP
+
+loan_requests
+  id                  UUID (PK)
+  borrower_id         UUID FK -&gt; users.id (CASCADE)
+  category_id         BIGINT FK -&gt; loan_categories.id (RESTRICT)
+  amount              DECIMAL(20,2)
+  interest_rate       DECIMAL(5,2)        -- Annual rate %
+  duration            INTEGER             -- Jumlah cicilan
+  tenor_type          STRING DEFAULT 'monthly' (monthly|weekly)
+  purpose             STRING(500)
+  currency_id         BIGINT FK -&gt; currencies.id (RESTRICT)
+  collateral_currency_id BIGINT NULLABLE FK -&gt; currencies.id
+  collateral_amount   DECIMAL(20,8) DEFAULT 0
+  initial_ltv         DECIMAL(5,2) DEFAULT 0
+  current_ltv         DECIMAL(5,2) DEFAULT 0
+  liquidation_ltv     DECIMAL(5,2) DEFAULT 80.00
+  liquidation_price   DECIMAL(20,8) DEFAULT 0
+  description         TEXT NULLABLE
+  risk_grade          STRING(10) NULLABLE  -- A|B|C|D
+  status              STRING DEFAULT 'draft'
+                      (draft|pending|open_funding|funded|active|
+                       completed|default|cancelled|liquidated)
+  funded_percentage   DECIMAL(5,2) DEFAULT 0
+  approved_by         UUID NULLABLE FK -&gt; users.id
+  approved_at         TIMESTAMP NULLABLE
+  funded_at           TIMESTAMP NULLABLE
+  disbursed_at        TIMESTAMP NULLABLE
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP
+
+loan_fundings
+  id                  UUID (PK)
+  loan_id             UUID FK -&gt; loan_requests.id (CASCADE)
+  lender_id           UUID FK -&gt; users.id (CASCADE)
+  amount              DECIMAL(20,2)
+  percentage          DECIMAL(5,2)        -- Lender's share %
+  status              STRING DEFAULT 'active' (active|refunded)
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP
+
+loan_agreements
+  id                  UUID (PK)
+  loan_id             UUID FK -&gt; loan_requests.id (CASCADE, UNIQUE 1:1)
+  agreement_number    STRING(100) UNIQUE
+  file_path           STRING(500) NULLABLE
+  status              STRING DEFAULT 'waiting_signature'
+                      (waiting_signature|signed|active)
+  borrower_signed_at  TIMESTAMP NULLABLE
+  signed_at           TIMESTAMP NULLABLE
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP
+
+loan_installments
+  id                  UUID (PK)
+  loan_id             UUID FK -&gt; loan_requests.id (CASCADE)
+  installment_number  INTEGER
+  due_date            DATE
+  principal_amount    DECIMAL(20,2)
+  interest_amount     DECIMAL(20,2)
+  penalty_amount      DECIMAL(20,2) DEFAULT 0
+  total_amount        DECIMAL(20,2)
+  status              STRING DEFAULT 'pending' (pending|paid|overdue|waived)
+  paid_at             TIMESTAMP NULLABLE
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP
+
+loan_repayments
+  id                  UUID (PK)
+  loan_id             UUID FK -&gt; loan_requests.id (CASCADE)
+  installment_id      UUID FK -&gt; loan_installments.id (CASCADE)
+  amount_paid         DECIMAL(20,2)
+  payment_date        DATE
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP
+
+loan_messages
+  id                  UUID (PK)
+  loan_request_id     UUID FK -&gt; loan_requests.id (CASCADE)
+  sender_id           UUID FK -&gt; users.id (CASCADE)
+  message             TEXT
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP
+  INDEX (loan_request_id, created_at)</code></pre>
+
+<p><strong>Grup: Auto-Invest & Configuration</strong></p>
+
+<pre><code>auto_invest_rules
+  id                    UUID (PK)
+  lender_id             UUID FK -&gt; users.id (CASCADE, UNIQUE 1:1 per lender)
+  is_active             BOOLEAN DEFAULT false
+  min_grade             STRING(2) DEFAULT 'D'
+  max_grade             STRING(2) DEFAULT 'A'
+  max_allocation_per_loan DECIMAL(15,2) DEFAULT 1000000.00
+  max_ltv               DECIMAL(5,2) DEFAULT 80.00
+  created_at            TIMESTAMP
+  updated_at            TIMESTAMP
+
+fee_configurations
+  id                  BIGINT (PK)
+  type                STRING (platform_fee|origination_fee|withdrawal_fee|penalty_rate)
+  value               DECIMAL(10,4)
+  value_type          STRING DEFAULT 'percentage' (percentage|fixed)
+  is_active           BOOLEAN DEFAULT true
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP
+
+interest_rates
+  id                  BIGINT (PK)
+  risk_grade          STRING(10) UNIQUE   -- A|B|C|D
+  min_rate            DECIMAL(5,2)
+  max_rate            DECIMAL(5,2)
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP
+
+settings
+  id                  BIGINT (PK)
+  key                 STRING UNIQUE
+  value               TEXT
+  description         TEXT NULLABLE
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP</code></pre>
+
+<p><strong>Grup: Audit & Notifications</strong></p>
+
+<pre><code>audit_logs
+  id                  BIGINT (PK)
+  user_id             UUID NULLABLE FK -&gt; users.id (SET NULL)
+  action              STRING
+  model_type          STRING(100) NULLABLE
+  model_id            STRING(100) NULLABLE
+  old_values          JSON NULLABLE
+  new_values          JSON NULLABLE
+  ip_address          STRING(45) NULLABLE
+  user_agent          STRING(500) NULLABLE
+  created_at          TIMESTAMP
+
+notifications
+  id                  UUID (PK)
+  user_id             UUID FK -&gt; users.id
+  type                STRING
+  title               STRING
+  message             TEXT
+  data                JSON NULLABLE
+  read_at             TIMESTAMP NULLABLE
+  created_at          TIMESTAMP
+  updated_at          TIMESTAMP</code></pre>
+
+<h3 id="102-erd-diagram-mermaid">10.2 ERD Diagram (Mermaid)</h3>
+
+<pre><code class="language-mermaid">erDiagram
+    USERS {
+        uuid id PK
+        string email UK
+        string password
+        string google2fa_secret
+        boolean google2fa_enabled
+        boolean is_active
+        timestamp email_verified_at
+        timestamp deleted_at
+    }
+    PROFILES {
+        uuid id PK
+        uuid user_id FK
+        string full_name
+        string phone UK
+        string avatar_path
+        text address
+        string city
+        string province
+        string occupation
+        decimal monthly_income
+    }
+    ROLES {
+        bigint id PK
+        string name UK
+        string guard_name
+    }
+    PERMISSIONS {
+        bigint id PK
+        string name UK
+    }
+    ROLE_USER {
+        uuid user_id FK
+        bigint role_id FK
+    }
+    ROLE_PERMISSIONS {
+        bigint role_id FK
+        bigint permission_id FK
+    }
+    KYCS {
+        uuid id PK
+        uuid user_id FK
+        string nik
+        string status
+        text rejected_reason
+        uuid reviewed_by FK
+        timestamp reviewed_at
+    }
+    KYC_DOCUMENTS {
+        uuid id PK
+        uuid kyc_id FK
+        string type
+        string file_path
+        string storage_driver
+        timestamp verified_at
+    }
+    CURRENCIES {
+        bigint id PK
+        string code UK
+        string name
+        string type
+        uint decimal_places
+        boolean is_active
+    }
+    WALLETS {
+        uuid id PK
+        uuid user_id FK
+        bigint currency_id FK
+        decimal available_balance
+        decimal hold_balance
+    }
+    WALLET_TRANSACTIONS {
+        uuid id PK
+        uuid wallet_id FK
+        string type
+        decimal amount
+        decimal balance_before
+        decimal balance_after
+        uuid reference_id
+        string reference_type
+        text description
+    }
+    PAYMENTS {
+        uuid id PK
+        uuid user_id FK
+        uuid wallet_transaction_id FK
+        string gateway
+        string gateway_ref_id
+        decimal amount
+        string status
+        json payload
+    }
+    LOAN_CATEGORIES {
+        bigint id PK
+        string name
+        string description
+    }
+    LOAN_REQUESTS {
+        uuid id PK
+        uuid borrower_id FK
+        bigint category_id FK
+        decimal amount
+        decimal interest_rate
+        integer duration
+        string tenor_type
+        string purpose
+        bigint currency_id FK
+        bigint collateral_currency_id FK
+        decimal collateral_amount
+        decimal initial_ltv
+        decimal current_ltv
+        decimal liquidation_ltv
+        string risk_grade
+        string status
+        decimal funded_percentage
+        uuid approved_by FK
+        timestamp approved_at
+        timestamp funded_at
+        timestamp disbursed_at
+    }
+    LOAN_FUNDINGS {
+        uuid id PK
+        uuid loan_id FK
+        uuid lender_id FK
+        decimal amount
+        decimal percentage
+        string status
+    }
+    LOAN_AGREEMENTS {
+        uuid id PK
+        uuid loan_id FK
+        string agreement_number UK
+        string file_path
+        string status
+        timestamp borrower_signed_at
+        timestamp signed_at
+    }
+    LOAN_INSTALLMENTS {
+        uuid id PK
+        uuid loan_id FK
+        integer installment_number
+        date due_date
+        decimal principal_amount
+        decimal interest_amount
+        decimal penalty_amount
+        decimal total_amount
+        string status
+        timestamp paid_at
+    }
+    LOAN_REPAYMENTS {
+        uuid id PK
+        uuid loan_id FK
+        uuid installment_id FK
+        decimal amount_paid
+        date payment_date
+    }
+    LOAN_MESSAGES {
+        uuid id PK
+        uuid loan_request_id FK
+        uuid sender_id FK
+        text message
+    }
+    AUTO_INVEST_RULES {
+        uuid id PK
+        uuid lender_id FK
+        boolean is_active
+        string min_grade
+        string max_grade
+        decimal max_allocation_per_loan
+        decimal max_ltv
+    }
+    FEE_CONFIGURATIONS {
+        bigint id PK
+        string type
+        decimal value
+        string value_type
+        boolean is_active
+    }
+    INTEREST_RATES {
+        bigint id PK
+        string risk_grade UK
+        decimal min_rate
+        decimal max_rate
+    }
+    SETTINGS {
+        bigint id PK
+        string key UK
+        text value
+    }
+    AUDIT_LOGS {
+        bigint id PK
+        uuid user_id FK
+        string action
+        string model_type
+        string model_id
+        json old_values
+        json new_values
+        string ip_address
+        timestamp created_at
+    }
+    NOTIFICATIONS {
+        uuid id PK
+        uuid user_id FK
+        string type
+        string title
+        text message
+        json data
+        timestamp read_at
+    }
+
+    USERS ||--o| PROFILES : "has one"
+    USERS ||--o{ ROLE_USER : "assigned"
+    ROLES ||--o{ ROLE_USER : "given to"
+    ROLES ||--o{ ROLE_PERMISSIONS : "has"
+    PERMISSIONS ||--o{ ROLE_PERMISSIONS : "granted by"
+    USERS ||--o| KYCS : "verified via"
+    KYCS ||--o{ KYC_DOCUMENTS : "contains"
+    USERS ||--o{ WALLETS : "owns"
+    WALLETS ||--o{ WALLET_TRANSACTIONS : "records"
+    CURRENCIES ||--o{ WALLETS : "denominates"
+    USERS ||--o{ PAYMENTS : "makes"
+    WALLET_TRANSACTIONS ||--o| PAYMENTS : "linked to"
+    LOAN_CATEGORIES ||--o{ LOAN_REQUESTS : "categorizes"
+    CURRENCIES ||--o{ LOAN_REQUESTS : "loan currency"
+    USERS ||--o{ LOAN_REQUESTS : "borrows"
+    LOAN_REQUESTS ||--o{ LOAN_FUNDINGS : "funded by"
+    USERS ||--o{ LOAN_FUNDINGS : "invests as lender"
+    LOAN_REQUESTS ||--o| LOAN_AGREEMENTS : "has one"
+    LOAN_REQUESTS ||--o{ LOAN_INSTALLMENTS : "has schedule"
+    LOAN_REQUESTS ||--o{ LOAN_REPAYMENTS : "repaid via"
+    LOAN_INSTALLMENTS ||--o{ LOAN_REPAYMENTS : "paid by"
+    LOAN_REQUESTS ||--o{ LOAN_MESSAGES : "discussed in"
+    USERS ||--o{ LOAN_MESSAGES : "sends"
+    USERS ||--o| AUTO_INVEST_RULES : "configures"
+    USERS ||--o{ NOTIFICATIONS : "receives"
+    USERS ||--o{ AUDIT_LOGS : "triggers"</code></pre>
+
+<h3 id="103-ringkasan-relasi-entitas">10.3 Ringkasan Relasi Entitas</h3>
+
+<table>
+<thead><tr><th>Tabel</th><th>Relasi Utama</th><th>Cardinality</th></tr></thead>
+<tbody>
+<tr><td><code>users</code></td><td>profiles, kycs, wallets, loan_requests, notifications</td><td>1:1 / 1:N</td></tr>
+<tr><td><code>profiles</code></td><td>users</td><td>1:1</td></tr>
+<tr><td><code>kycs</code></td><td>users, kyc_documents, reviewed_by(users)</td><td>1:1 / 1:N</td></tr>
+<tr><td><code>wallets</code></td><td>users, currencies, wallet_transactions</td><td>N:1 / 1:N</td></tr>
+<tr><td><code>wallet_transactions</code></td><td>wallets, payments</td><td>N:1 / 1:1</td></tr>
+<tr><td><code>loan_requests</code></td><td>users(borrower), categories, currencies, fundings, agreements, installments</td><td>N:1 / 1:N</td></tr>
+<tr><td><code>loan_fundings</code></td><td>loan_requests, users(lender)</td><td>N:1</td></tr>
+<tr><td><code>loan_agreements</code></td><td>loan_requests</td><td>1:1</td></tr>
+<tr><td><code>loan_installments</code></td><td>loan_requests, repayments</td><td>N:1 / 1:N</td></tr>
+<tr><td><code>loan_repayments</code></td><td>loan_requests, installments</td><td>N:1</td></tr>
+<tr><td><code>loan_messages</code></td><td>loan_requests, users</td><td>N:1</td></tr>
+<tr><td><code>auto_invest_rules</code></td><td>users(lender)</td><td>1:1</td></tr>
+<tr><td><code>payments</code></td><td>users, wallet_transactions</td><td>N:1</td></tr>
+<tr><td><code>audit_logs</code></td><td>users</td><td>N:1</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2 id="11-alur-bisnis">11. Alur Bisnis</h2>
+
+<h3 id="111-alur-borrower-end-to-end">11.1 Alur Borrower (End-to-End)</h3>
+
+<pre><code>[Register] -&gt; [Lengkapi Profil] -&gt; [Submit Dokumen KYC]
+                                           |
+                                   [Admin Review KYC]
+                                           |
+                         +-----------------+------------------+
+                         v                                    v
+                 [KYC Approved]                        [KYC Rejected]
+                         |                                    |
+              [Ajukan Pinjaman]                    [Perbaiki &amp; Resubmit]
+                         |
+         +---------------+---------------+
+         v               v               v
+[Credit Scoring]  [Tentukan Grade]  [Set Interest Rate]
+                         |
+                 [Submit -&gt; Pending]
+                         |
+               [Admin Review Pinjaman]
+                         |
+          +--------------+--------------+
+          v                             v
+  [Approve -&gt; open_funding]     [Reject -&gt; cancelled]
+          |
+  [Lender Mendanai]
+          |
+  [funded_percentage = 100%]
+          |
+  [Admin Disbursement]
+          |
+  [Loan Active -&gt; Cicilan Dimulai]
+          |
+  [Borrower Bayar Cicilan Tiap Bulan]
+          |
+  [Semua Cicilan Lunas]
+          |
+  [Loan Completed]</code></pre>
+
+<h3 id="112-alur-lender-end-to-end">11.2 Alur Lender (End-to-End)</h3>
+
+<pre><code>[Register] -&gt; [KYC] -&gt; [Deposit Saldo via Midtrans]
+                                  |
+                          [Saldo Wallet Terisi]
+                                  |
+               +------------------+-------------------+
+               v                                      v
+      [Manual: Browse Marketplace]        [Auto-Invest: Set Rule]
+           [Pilih Pinjaman]               [Scheduler per Jam]
+               |                                      |
+               +-------------------+------------------+
+                                   v
+                          [Transaksi Funding]
+                      [Saldo berkurang, LoanFunding dibuat]
+                                   |
+                        [Terima Bunga dari Repayment]
+                                   |
+                         [Withdraw Keuntungan]</code></pre>
+
+<h3 id="113-alur-deposit-via-midtrans">11.3 Alur Deposit via Midtrans</h3>
+
+<pre><code>[User klik Deposit]
+         |
+[POST /wallet/deposit/initiate]
+         |
+[PaymentController::initiateDeposit]
+         |
+[Buat Payment record (status: pending)]
+         |
+[Call Midtrans Snap API -&gt; dapatkan token]
+         |
+[Return snap_token ke Frontend]
+         |
+[Snap Popup tampil di browser user]
+         |
+[User bayar via transfer/VA/dll]
+         |
+[Midtrans kirim Webhook: POST /api/payment/webhook]
+         |
+[Verifikasi signature SHA512]
+         |
+         +-- [Signature valid] -----------------&gt; [Update Payment: success]
+         |                                                   |
+         +-- [Signature invalid] -&gt; [Return 403]    [Tambah saldo wallet]
+                                                             |
+                                                [Buat WalletTransaction: deposit]
+                                                             |
+                                                    [Buat AuditLog]
+                                                             |
+                                               [Kirim notifikasi email via Queue]</code></pre>
+
+<hr>
+
+<h2 id="12-alur-state-pinjaman">12. Alur State Pinjaman</h2>
+
+<pre><code>+----------+
+|  draft   | &lt;- Borrower mulai isi form, belum disubmit
++----+-----+
+     |
+     | (Borrower submit)
+     v
++----------+
+| pending  | &lt;- Menunggu review Admin
++----+-----+
+     |
+     +--- [Admin Reject] ---&gt; +-----------+
+     |                        | cancelled |
+     | [Admin Approve]        +-----------+
+     v
++--------------+
+| open_funding | &lt;- Terbuka untuk pendanaan Lender
++------+-------+
+       |
+       | (funded_percentage = 100%)
+       v
++--------+
+| funded | &lt;- Semua dana terkumpul, menunggu pencairan
++---+----+
+    |
+    | (Admin disburse dana ke wallet Borrower)
+    v
++--------+
+| active | &lt;- Pinjaman berjalan, cicilan mulai berjalan
++---+----+
+    |
+    +--- [Semua cicilan lunas] ----&gt; +-----------+
+    |                                | completed |
+    +--- [Gagal bayar berlebihan] -&gt; +-----------+
+    |                                |  default  |
+    +--- [LTV &gt;= 80%] -----------&gt; +-----------+-+
+                                    | liquidated |
+                                    +------------+</code></pre>
+
+<p><strong>Status Valid dan Transisi:</strong></p>
+
+<table>
+<thead><tr><th>Status</th><th>Trigger</th><th>Aksi Selanjutnya</th></tr></thead>
+<tbody>
+<tr><td><code>draft</code></td><td>Borrower mulai buat pengajuan</td><td>Submit -> pending</td></tr>
+<tr><td><code>pending</code></td><td>Borrower submit pinjaman</td><td>Admin approve -> open_funding, Admin reject -> cancelled</td></tr>
+<tr><td><code>open_funding</code></td><td>Admin approve</td><td>Lender fund -> funded_percentage naik</td></tr>
+<tr><td><code>funded</code></td><td>funded_percentage = 100%</td><td>Admin disburse -> active</td></tr>
+<tr><td><code>active</code></td><td>Admin disbursement</td><td>Borrower bayar cicilan; scheduler hitung denda</td></tr>
+<tr><td><code>completed</code></td><td>Semua installments.status = paid</td><td>-</td></tr>
+<tr><td><code>default</code></td><td>Gagal bayar melampaui batas toleransi</td><td>Proses collection</td></tr>
+<tr><td><code>cancelled</code></td><td>Admin reject / Borrower cancel di draft</td><td>-</td></tr>
+<tr><td><code>liquidated</code></td><td>Auto-Liquidation Engine (LTV >= 80%)</td><td>-</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2 id="13-integrasi-eksternal">13. Integrasi Eksternal</h2>
+
+<h3 id="131-midtrans-payment-gateway">13.1 Midtrans Payment Gateway</h3>
+
+<table>
+<thead><tr><th>Parameter</th><th>Nilai</th></tr></thead>
+<tbody>
+<tr><td><strong>Mode</strong></td><td>Sandbox (Development)</td></tr>
+<tr><td><strong>API</strong></td><td>Snap API</td></tr>
+<tr><td><strong>Webhook Endpoint</strong></td><td><code>POST /api/payment/webhook</code></td></tr>
+<tr><td><strong>Middleware</strong></td><td>None (public, divalidasi via signature)</td></tr>
+<tr><td><strong>Verifikasi Signature</strong></td><td><code>SHA512(order_id + status_code + gross_amount + server_key)</code></td></tr>
+<tr><td><strong>Config File</strong></td><td><code>config/midtrans.php</code></td></tr>
+<tr><td><strong>Env Vars</strong></td><td><code>MIDTRANS_SERVER_KEY</code>, <code>MIDTRANS_CLIENT_KEY</code>, <code>MIDTRANS_IS_PRODUCTION</code></td></tr>
+</tbody>
+</table>
+
+<h3 id="132-redis">13.2 Redis</h3>
+
+<table>
+<thead><tr><th>Kegunaan</th><th>Config Key</th><th>Nilai Dev</th><th>Nilai Prod</th></tr></thead>
+<tbody>
+<tr><td>Session</td><td><code>SESSION_DRIVER</code></td><td><code>database</code></td><td><code>redis</code></td></tr>
+<tr><td>Cache</td><td><code>CACHE_STORE</code></td><td><code>database</code></td><td><code>redis</code></td></tr>
+<tr><td>Queue</td><td><code>QUEUE_CONNECTION</code></td><td><code>database</code></td><td><code>redis</code></td></tr>
+<tr><td>Host</td><td><code>REDIS_HOST</code></td><td><code>127.0.0.1</code></td><td><code>redis</code> (container)</td></tr>
+<tr><td>Port</td><td><code>REDIS_PORT</code></td><td><code>6379</code></td><td><code>6379</code></td></tr>
+</tbody>
+</table>
+
+<h3 id="133-google-authenticator-2fa">13.3 Google Authenticator (2FA)</h3>
+
+<ul><li><strong>Library</strong>: <code>pragmarx/google2fa</code></li></ul>
+<ul><li><strong>Flow</strong>:</li></ul>
+<p>  1. Generate secret (<code>Google2FA::generateSecretKey()</code>)</p>
+<p>  2. Render QR Code untuk di-scan user</p>
+<p>  3. User verifikasi OTP pertama kali</p>
+<p>  4. Simpan secret di <code>users.google2fa_secret</code></p>
+<p>  5. Set <code>users.google2fa_enabled = true</code></p>
+<ul><li><strong>Middleware</strong>: <code>two_factor</code> - redirect ke <code>/2fa/verify</code> jika session belum terverifikasi</li></ul>
+<ul><li><strong>Window Toleransi</strong>: 1 periode (30 detik sebelum/sesudah)</li></ul>
+
+<h3 id="134-email-queue-system">13.4 Email / Queue System</h3>
+
+<ul><li><strong>Driver dev</strong>: <code>database</code> queue + <code>log</code> mailer</li></ul>
+<ul><li><strong>Driver prod</strong>: <code>redis</code> queue + SMTP mailer (konfigurasi via <code>.env</code>)</li></ul>
+<ul><li><strong>Job class</strong>: <code>App\Jobs\SendNotificationEmailJob</code></li></ul>
+<ul><li><strong>View</strong>: <code>resources/views/emails/notification.blade.php</code></li></ul>
+
+<hr>
+
+<h2 id="14-keamanan-dan-kepatuhan">14. Keamanan dan Kepatuhan</h2>
+
+<h3 id="141-security-controls-per-layer">14.1 Security Controls per Layer</h3>
+
+<table>
+<thead><tr><th>Layer</th><th>Kontrol Keamanan</th></tr></thead>
+<tbody>
+<tr><td><strong>Network</strong></td><td>HTTPS (production), Nginx security headers</td></tr>
+<tr><td><strong>Authentication</strong></td><td>Bcrypt hash (rounds:12), 2FA Google Authenticator</td></tr>
+<tr><td><strong>Authorization</strong></td><td>RBAC Middleware (<code>role:admin</code>, <code>kyc</code>, <code>two_factor</code>, <code>auth</code>)</td></tr>
+<tr><td><strong>Data</strong></td><td>Soft delete pada user, Private file storage untuk KYC</td></tr>
+<tr><td><strong>Transactions</strong></td><td>Audit log 100% pada semua mutasi finansial</td></tr>
+<tr><td><strong>Payment</strong></td><td>Webhook signature SHA512, no plaintext credit card data</td></tr>
+<tr><td><strong>API</strong></td><td>CSRF token (web), session-based auth</td></tr>
+</tbody>
+</table>
+
+<h3 id="142-security-headers-via-nginx-laravel">14.2 Security Headers (via Nginx & Laravel)</h3>
+
+<pre><code>X-Frame-Options: SAMEORIGIN
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Referrer-Policy: strict-origin-when-cross-origin
+Cache-Control: no-cache, private</code></pre>
+
+<h3 id="143-data-sensitivity-classification">14.3 Data Sensitivity Classification</h3>
+
+<table>
+<thead><tr><th>Data</th><th>Klasifikasi</th><th>Perlindungan</th></tr></thead>
+<tbody>
+<tr><td>Password</td><td>CRITICAL</td><td>Bcrypt hash, tidak pernah di-log</td></tr>
+<tr><td>2FA Secret</td><td>CRITICAL</td><td>Disimpan di DB, tidak pernah ditampilkan plaintext</td></tr>
+<tr><td>NIK / KTP</td><td>CRITICAL</td><td>Private storage, streaming-only via admin endpoint</td></tr>
+<tr><td>Wallet Balance</td><td>SENSITIVE</td><td>Audit log di setiap perubahan</td></tr>
+<tr><td>Loan Amount</td><td>SENSITIVE</td><td>Hanya accessible oleh stakeholder terkait</td></tr>
+<tr><td>Email / Phone</td><td>SENSITIVE</td><td>Hanya tampil untuk user sendiri & admin</td></tr>
+<tr><td>Loan Status</td><td>INTERNAL</td><td>Visible di marketplace untuk authenticated users</td></tr>
+</tbody>
+</table>
+
+<h3 id="144-middleware-chain">14.4 Middleware Chain</h3>
+
+<pre><code>Request -&gt; Nginx -&gt; PHP-FPM -&gt; Laravel Kernel
+  -&gt; global middleware (TrimStrings, etc.)
+  -&gt; route middleware: auth (cek session)
+  -&gt; route middleware: two_factor (cek 2FA verified)
+  -&gt; route middleware: kyc (cek KYC approved)
+  -&gt; route middleware: role:admin (cek role)
+  -&gt; Controller</code></pre>
+
+<hr>
+
+<h2 id="15-infrastruktur-dan-devops">15. Infrastruktur dan DevOps</h2>
+
+<h3 id="151-container-architecture">15.1 Container Architecture</h3>
+
+<pre><code>docker-compose.yml
++-- peer-lend-app        (PHP 8.3-FPM, port internal: 9000)
++-- peer-lend-nginx      (Nginx 1.25-alpine, port host: 9090 -&gt; 80)
++-- peer-lend-postgres   (PostgreSQL 16-alpine, port host: 9091 -&gt; 5432)
++-- peer-lend-redis      (Redis 7-alpine, port host: 9092 -&gt; 6379)
++-- peer-lend-queue      (php artisan queue:work --tries=3 --max-time=3600)
++-- peer-lend-scheduler  (sh loop: php artisan schedule:run setiap 60 detik)
+
+Network: peer_lend_network (bridge)
+Volumes: postgres_data, redis_data</code></pre>
+
+<h3 id="152-port-mapping">15.2 Port Mapping</h3>
+
+<table>
+<thead><tr><th>Service</th><th>Port Host</th><th>Port Container</th><th>Kegunaan</th></tr></thead>
+<tbody>
+<tr><td>Web App / API</td><td><code>9090</code></td><td><code>80</code></td><td>Akses browser & API</td></tr>
+<tr><td>PostgreSQL</td><td><code>9091</code></td><td><code>5432</code></td><td>Koneksi DB client (TablePlus dll)</td></tr>
+<tr><td>Redis</td><td><code>9092</code></td><td><code>6379</code></td><td>Redis client / monitoring</td></tr>
+</tbody>
+</table>
+
+<h3 id="153-environment-variables-wajib">15.3 Environment Variables Wajib</h3>
+
+<pre><code class="language-dotenv"># Application
+APP_KEY=base64:...                  # Wajib generate: php artisan key:generate
+APP_ENV=production                  # production | local | testing
+APP_DEBUG=false                     # false di production!
+APP_URL=http://localhost:9090
+
+# Database
+DB_CONNECTION=pgsql
+DB_HOST=postgres                    # hostname container
+DB_PORT=5432
+DB_DATABASE=peer_lend
+DB_USERNAME=peer_lend_user
+DB_PASSWORD=secret                  # Ganti dengan password kuat!
+
+# Cache, Session, Queue
+CACHE_STORE=redis
+SESSION_DRIVER=redis
+QUEUE_CONNECTION=redis
+REDIS_HOST=redis
+
+# Payment Gateway
+MIDTRANS_SERVER_KEY=SB-Mid-server-...
+MIDTRANS_CLIENT_KEY=SB-Mid-client-...
+MIDTRANS_IS_PRODUCTION=false        # true untuk production</code></pre>
+
+<h3 id="154-artisan-commands-operasional">15.4 Artisan Commands Operasional</h3>
+
+<table>
+<thead><tr><th>Command</th><th>Jadwal</th><th>Fungsi</th></tr></thead>
+<tbody>
+<tr><td><code>peer-lend:run-auto-invest</code></td><td>Tiap jam</td><td>Jalankan matching engine Auto-Invest</td></tr>
+<tr><td><code>peer-lend:calculate-penalties</code></td><td>Harian 00:00</td><td>Hitung & update denda cicilan terlambat</td></tr>
+<tr><td><code>peer-lend:send-repayment-reminders</code></td><td>Harian 08:00</td><td>Kirim reminder email cicilan jatuh tempo 3 hari ke depan</td></tr>
+<tr><td><code>peer-lend:update-crypto-ltv</code></td><td>Tiap jam</td><td>Update harga kripto & recalculate LTV</td></tr>
+<tr><td><code>queue:work</code></td><td>Terus-menerus</td><td>Proses job email notification async</td></tr>
+</tbody>
+</table>
+
+<h3 id="155-quick-start">15.5 Quick Start</h3>
+
+<pre><code class="language-bash"># 1. Copy environment
+cp .env.example .env
+
+# 2. Build &amp; jalankan semua container
+docker compose up -d --build
+
+# 3. Migrasi database &amp; seed data awal
+docker compose exec app php artisan migrate --seed
+
+# 4. Akses aplikasi
+# Web: http://localhost:9090
+# API Docs: http://localhost:9090/api/docs</code></pre>
+
+<hr>
+
+<h2 id="16-test-plan">16. Test Plan</h2>
+
+<h3 id="161-strategi-testing">16.1 Strategi Testing</h3>
+
+<table>
+<thead><tr><th>Layer</th><th>Pendekatan</th><th>Tools</th></tr></thead>
+<tbody>
+<tr><td>Unit</td><td>Fungsi individual (formula, service methods)</td><td>PHPUnit</td></tr>
+<tr><td>Feature</td><td>End-to-end via HTTP (request -> response)</td><td>PHPUnit + RefreshDatabase</td></tr>
+<tr><td>Integration</td><td>Interaksi antar module</td><td>PHPUnit</td></tr>
+</tbody>
+</table>
+
+<h3 id="162-test-database">16.2 Test Database</h3>
+
+<p>Seluruh test menggunakan <strong>SQLite in-memory</strong> (konfigurasi di <code>phpunit.xml</code>):</p>
+<pre><code class="language-xml">&lt;env name="DB_CONNECTION" value="sqlite"/&gt;
+&lt;env name="DB_DATABASE" value=":memory:"/&gt;
+&lt;env name="QUEUE_CONNECTION" value="sync"/&gt;
+&lt;env name="MAIL_MAILER" value="array"/&gt;</code></pre>
+
+<h3 id="163-status-test-suite-v10">16.3 Status Test Suite (v1.0)</h3>
+
+<p><strong>Hasil: 52 tests, 247 assertions - SEMUA HIJAU</strong></p>
+
+<table>
+<thead><tr><th>Test Suite</th><th>Tests</th><th>Cakupan</th></tr></thead>
+<tbody>
+<tr><td><code>Phase10And11MidtransSwaggerTest</code></td><td>4</td><td>Webhook Midtrans, Swagger endpoint</td></tr>
+<tr><td><code>Phase8And9AutoInvestApiTest</code></td><td>6</td><td>REST API marketplace, Auto-Invest engine</td></tr>
+<tr><td><code>Phase7ChatAndAgreementTest</code></td><td>5</td><td>Chat access control, Agreement download</td></tr>
+<tr><td><code>Phase6CalculatorCreditScoringTest</code></td><td>7</td><td>Kalkulator cicilan, Grade assignment</td></tr>
+<tr><td><code>Phase5LateFeeOracleTest</code></td><td>5</td><td>Penalty engine, LTV liquidation</td></tr>
+<tr><td><code>SecurityAuthenticationTest</code></td><td>5</td><td>2FA, KYC OCR, Wallet audit log</td></tr>
+<tr><td><code>WalletTransactionTest</code></td><td>2</td><td>Deposit/withdraw flow</td></tr>
+<tr><td>Auth, KYC, Wallet, Admin (Others)</td><td>18</td><td>Coverage modul dasar</td></tr>
+</tbody>
+</table>
+
+<h3 id="164-cara-menjalankan-test">16.4 Cara Menjalankan Test</h3>
+
+<pre><code class="language-bash"># Lokal (SQLite in-memory)
+php artisan test
+
+# Di dalam Docker container
+docker compose exec app php artisan test
+
+# Dengan coverage report (butuh Xdebug)
+php artisan test --coverage
+
+# Run test suite spesifik
+php artisan test --testsuite=Feature</code></pre>
+
+<hr>
+
+<h2 id="17-roadmap-dan-prioritas">17. Roadmap dan Prioritas</h2>
+
+<h3 id="v10---current-selesai">v1.0 - Current (SELESAI)</h3>
+
+<ul><li>[x] Modular Monolith Architecture (6 domain modules)</li></ul>
+<ul><li>[x] Auth + 2FA Google Authenticator + RBAC</li></ul>
+<ul><li>[x] KYC Digital (OCR + Review Admin + Secure Streaming)</li></ul>
+<ul><li>[x] Wallet + Midtrans Deposit/Withdraw</li></ul>
+<ul><li>[x] Loan Lifecycle lengkap (Draft -> Completed / Default / Liquidated)</li></ul>
+<ul><li>[x] Crypto Collateral + Auto-Liquidation Engine</li></ul>
+<ul><li>[x] Auto-Invest Engine (matching per jam)</li></ul>
+<ul><li>[x] Penalty Engine (denda harian otomatis)</li></ul>
+<ul><li>[x] Chat System per pinjaman</li></ul>
+<ul><li>[x] Agreement PDF Generator</li></ul>
+<ul><li>[x] REST API + Swagger UI (OpenAPI 3.0)</li></ul>
+<ul><li>[x] Automated Scheduler (Penalty, Reminder, LTV Update)</li></ul>
+<ul><li>[x] Docker Compose full setup</li></ul>
+<ul><li>[x] PHPUnit test suite (52 tests, semua hijau)</li></ul>
+
+<h3 id="v11---next-iteration-direncanakan">v1.1 - Next Iteration (DIRENCANAKAN)</h3>
+
+<ul><li>[ ] Admin Dashboard Analytics (chart transaksi, portfolio overview yang lebih detail)</li></ul>
+<ul><li>[ ] Email template HTML branded (bukan plain text)</li></ul>
+<ul><li>[ ] Halaman portofolio Lender yang lebih informatif</li></ul>
+<ul><li>[ ] Rate limiting API per user (throttle middleware)</li></ul>
+<ul><li>[ ] Fitur pencarian & filter marketplace yang lebih canggih</li></ul>
+<ul><li>[ ] Integrasi Xendit sebagai alternatif payment gateway</li></ul>
+
+<h3 id="v20---future-backlog">v2.0 - Future (BACKLOG)</h3>
+
+<ul><li>[ ] Mobile App (Flutter / React Native)</li></ul>
+<ul><li>[ ] Secondary Market (jual-beli portofolio pinjaman antar Lender)</li></ul>
+<ul><li>[ ] Credit Bureau Integration (SLIK OJK)</li></ul>
+<ul><li>[ ] Laporan pajak otomatis</li></ul>
+<ul><li>[ ] Multi-bahasa (Bahasa Indonesia & English)</li></ul>
+<ul><li>[ ] Microservices migration (Auth, Loan, Wallet menjadi service terpisah)</li></ul>
+<ul><li>[ ] Real-time notification via WebSocket</li></ul>
+
+<hr>
+
+<h2 id="18-glossary">18. Glossary</h2>
+
+<table>
+<thead><tr><th>Istilah</th><th>Definisi</th></tr></thead>
+<tbody>
+<tr><td>P2P Lending</td><td>Peer-to-Peer Lending - sistem peminjaman langsung antar individu tanpa perantara bank</td></tr>
+<tr><td>Borrower</td><td>Pengguna yang mengajukan dan menerima pinjaman</td></tr>
+<tr><td>Lender</td><td>Pengguna yang mendanai/menginvestasikan dana ke pinjaman</td></tr>
+<tr><td>KYC</td><td>Know Your Customer - proses verifikasi identitas pengguna</td></tr>
+<tr><td>NIK</td><td>Nomor Induk Kependudukan - nomor identitas nasional Indonesia</td></tr>
+<tr><td>LTV</td><td>Loan-to-Value Ratio - rasio nilai pinjaman terhadap nilai agunan</td></tr>
+<tr><td>Auto-Liquidation</td><td>Proses otomatis penjualan agunan kripto saat LTV melebihi batas 80%</td></tr>
+<tr><td>Auto-Invest</td><td>Fitur robot investasi otomatis berbasis preferensi grade risiko Lender</td></tr>
+<tr><td>Grade</td><td>Klasifikasi risiko pinjaman: A (terendah/terbaik) sampai D (tertinggi)</td></tr>
+<tr><td>Amortisasi</td><td>Jadwal pembayaran cicilan yang merinci pokok dan bunga per periode</td></tr>
+<tr><td>Anuitas</td><td>Metode cicilan dengan jumlah tetap setiap periode</td></tr>
+<tr><td>Flat Rate</td><td>Metode cicilan dengan perhitungan bunga dari pokok pinjaman awal</td></tr>
+<tr><td>SNAP API</td><td>Midtrans Snap API - payment gateway popup untuk deposit saldo</td></tr>
+<tr><td>SHA512</td><td>Algoritma hashing untuk verifikasi signature webhook Midtrans</td></tr>
+<tr><td>RBAC</td><td>Role-Based Access Control - kontrol akses berbasis peran pengguna</td></tr>
+<tr><td>2FA</td><td>Two-Factor Authentication - autentikasi dua faktor menggunakan OTP</td></tr>
+<tr><td>OTP</td><td>One-Time Password - kata sandi satu kali dari Google Authenticator</td></tr>
+<tr><td>Queue</td><td>Antrean pekerjaan latar belakang (email notifikasi, dll)</td></tr>
+<tr><td>Scheduler</td><td>Daemon yang menjalankan tugas terjadwal secara otomatis</td></tr>
+<tr><td>Soft Delete</td><td>Penghapusan logis (data tidak benar-benar dihapus dari DB)</td></tr>
+<tr><td>UUID</td><td>Universally Unique Identifier - ID unik format 128-bit</td></tr>
+<tr><td>Modular Monolith</td><td>Arsitektur satu deployment unit dengan pemisahan domain yang jelas</td></tr>
+<tr><td>bcmath</td><td>Library PHP untuk aritmatika presisi tinggi (wajib untuk kalkulasi uang)</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2 id="panduan-untuk-agent-ai-antigravity">Panduan untuk Agent AI (Antigravity)</h2>
+
+<blockquote><p>Bagian ini khusus ditujukan untuk agen AI yang bekerja pada repository LendFlow.</p></blockquote>
+
+<h3 id="aturan-utama">Aturan Utama</h3>
+
+<ol><li><strong>Baca dokumen ini PERTAMA</strong> sebelum melakukan perubahan signifikan pada codebase</li></ol>
+<ol><li><strong>Ikuti Dependency Flow</strong>: Controller -> Service -> Model -> DB (tidak boleh reverse)</li></ol>
+<ol><li><strong>Sebelum menambah fitur</strong>: Pastikan ada test yang menutupinya (<code>php artisan test</code> harus hijau)</li></ol>
+<ol><li><strong>Sebelum mengubah schema DB</strong>: Buat migration baru, JANGAN edit migration yang sudah ada</li></ol>
+<ol><li><strong>Naming Convention</strong>:</li></ol>
+<ul style="margin-left:24px"><li>Modul baru -> <code>app/Modules/{DomainName}/</code></li></ul>
+<ul style="margin-left:24px"><li>Service -> <code>{DomainName}Service.php</code></li></ul>
+<ul style="margin-left:24px"><li>Command -> <code>{ActionName}.php</code> di <code>app/Console/Commands/</code></li></ul>
+<ol><li><strong>API baru</strong>: Selalu update Swagger spec di <code>resources/views/docs/swagger.blade.php</code></li></ol>
+<ol><li><strong>Financial logic</strong>: Selalu gunakan <code>bcmath</code> (bukan floating point) untuk kalkulasi uang</li></ol>
+<ol><li><strong>Keamanan</strong>: Setiap mutasi finansial WAJIB membuat entry di <code>audit_logs</code></li></ol>
+<ol><li><strong>Files privat</strong>: File KYC TIDAK BOLEH bisa diakses secara publik langsung</li></ol>
+<ol><li><strong>Test database</strong>: Gunakan <code>RefreshDatabase</code> trait di setiap Feature test class</li></ol>
+
+<h3 id="file-referensi-penting">File Referensi Penting</h3>
+
+<table>
+<thead><tr><th>File</th><th>Kegunaan</th></tr></thead>
+<tbody>
+<tr><td><code>routes/web.php</code></td><td>Semua rute HTTP - selalu cek sebelum menambah endpoint</td></tr>
+<tr><td><code>app/Models/</code></td><td>Domain model - cek relasi sebelum query</td></tr>
+<tr><td><code>app/Modules/{Module}/Services/</code></td><td>Business logic - taruh logic baru di sini</td></tr>
+<tr><td><code>database/migrations/</code></td><td>Schema history - jangan diubah, buat migration baru</td></tr>
+<tr><td><code>phpunit.xml</code></td><td>Konfigurasi test (SQLite in-memory)</td></tr>
+<tr><td><code>docker-compose.yml</code></td><td>Infrastructure definition</td></tr>
+<tr><td><code>AGENTS.md</code></td><td>Panduan singkat untuk kontribusi AI (ada di root repo)</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<p><em>Dokumen ini dibuat berdasarkan analisis mendalam terhadap codebase LendFlow (peer-lend) pada 30 Juli 2026.</em></p>
+<p><em>Versi: 1.0.0 | Status: Active Development</em></p>
+
+
+</div>
+
+<!-- ─── Footer ─── -->
+<div class="footer">
+  <p><strong>LendFlow PRD v1.0.0</strong> &mdash; Product Requirements Document &mdash; Dibuat 30 Juli 2026</p>
+  <p style="margin-top:6px">Repository: <strong>bntngridp/peer-lend</strong> &middot; Stack: PHP 8.3 &middot; Laravel 11 &middot; PostgreSQL 16 &middot; Redis &middot; Docker</p>
+</div>
+
+</body>
+</html>

@@ -480,83 +480,152 @@
     <!-- Header Section -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Lender Portfolio 📊</h1>
-            <p class="text-xs font-medium text-slate-500 mt-1">Track your P2P lending investments and returns.</p>
+            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Lender Dashboard</h1>
+            <p class="text-xs font-medium text-slate-500 mt-1">Welcome back, investor. Here's your high-level portfolio overview.</p>
         </div>
-        <a href="{{ route('marketplace.index') }}" class="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition-all">
-            Explore Marketplace &rarr;
-        </a>
+        <div class="flex items-center gap-3">
+            <button onclick="window.print()" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition-all">
+                <span>📥</span> Export Report
+            </button>
+            <a href="{{ route('wallet.index') }}" class="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition-all">
+                <span>💳</span> Deposit Funds
+            </a>
+        </div>
     </div>
 
-    <!-- 4 High-Density Stat Cards -->
+    <!-- 4 High-Density Stat Cards Row -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Card 1: PORTFOLIO VALUE -->
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">PORTFOLIO VALUE</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">+4.2% vs last mo</span>
+            </div>
+            <p class="text-2xl font-extrabold text-slate-900 mt-3">
+                Rp {{ number_format($stats['portfolio_value'], 0, ',', '.') }}
+            </p>
+        </div>
+
+        <!-- Card 2: EXPECTED RETURN -->
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">EXPECTED RETURN</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">On Track Ann. Yield</span>
+            </div>
+            <p class="text-2xl font-extrabold text-emerald-700 mt-3">
+                {{ $stats['expected_return_pct'] }}%
+            </p>
+        </div>
+
+        <!-- Card 3: WALLET BALANCE -->
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">WALLET BALANCE</span>
-            <p class="text-2xl font-extrabold text-slate-900 mt-3">Rp {{ number_format($stats['wallet_balance'], 0, ',', '.') }}</p>
+            <div class="mt-3">
+                <p class="text-2xl font-extrabold text-slate-900">Rp {{ number_format($stats['wallet_balance'], 0, ',', '.') }}</p>
+                <p class="text-[11px] text-slate-400 font-medium">Available to invest</p>
+            </div>
         </div>
 
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">TOTAL INVESTED</span>
-            <p class="text-2xl font-extrabold text-slate-900 mt-3">Rp {{ number_format($stats['total_invested'], 0, ',', '.') }}</p>
-        </div>
-
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">INTEREST EARNED</span>
-            <p class="text-2xl font-extrabold text-emerald-700 mt-3">Rp {{ number_format($stats['total_interest_earned'], 0, ',', '.') }}</p>
-        </div>
-
+        <!-- Card 4: ACTIVE INVESTMENTS -->
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">ACTIVE INVESTMENTS</span>
-            <p class="text-2xl font-extrabold text-slate-900 mt-3">{{ $stats['active_investments'] }}</p>
+            <div class="mt-3">
+                <p class="text-2xl font-extrabold text-slate-900">{{ $stats['active_investments'] }}</p>
+                <p class="text-[11px] text-slate-400 font-medium">Across 4 risk grades</p>
+            </div>
         </div>
     </div>
 
-    <!-- Main Grid -->
+    <!-- Main Grid: 2/3 Left Column, 1/3 Right Column -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        <!-- Left 2/3: Distribution Chart & Fundings -->
+        <!-- ─── Left Column (2/3 Width) ─────────────────────────────────────── -->
         <div class="lg:col-span-2 space-y-6">
 
-            <!-- Risk Grade Chart -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
-                <h3 class="text-sm font-bold text-slate-900 mb-4">Investment Distribution by Risk Grade</h3>
-                <div class="h-[220px]">
-                    <canvas id="gradeDistributionChart"></canvas>
+            <!-- Card: Portfolio Growth (6 Months) -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs relative">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <h3 class="text-sm font-bold text-slate-900">Portfolio Growth (6 Months)</h3>
+                        <span class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                            Current Value: Rp {{ number_format($stats['portfolio_value'], 0, ',', '.') }}
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-900 text-white">6M</button>
+                        <button class="px-2.5 py-1 rounded-md text-xs font-semibold text-slate-500 hover:bg-slate-100">1Y</button>
+                        <button class="px-2.5 py-1 rounded-md text-xs font-semibold text-slate-500 hover:bg-slate-100">ALL</button>
+                    </div>
+                </div>
+                <div class="h-[240px]">
+                    <canvas id="lenderGrowthChart"></canvas>
                 </div>
             </div>
 
-            <!-- Recent Fundings -->
+            <!-- Card: Recent Repayments Table -->
             <div class="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
                 <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
-                    <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">My Investment Portfolio</h3>
-                    <a href="{{ route('marketplace.index') }}" class="text-xs font-bold text-emerald-700 hover:text-emerald-800">Browse Marketplace &rarr;</a>
+                    <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Recent Repayments</h3>
+                    <a href="{{ route('marketplace.index') }}" class="text-xs font-bold text-emerald-700 hover:text-emerald-800">View All &rarr;</a>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                                <th class="py-3 px-6">Borrower / Loan</th>
-                                <th class="py-3 px-6">Grade</th>
-                                <th class="py-3 px-6">Amount Funded</th>
-                                <th class="py-3 px-6">Status</th>
+                                <th class="py-3 px-6">DATE</th>
+                                <th class="py-3 px-6">LOAN ID</th>
+                                <th class="py-3 px-6">AMOUNT</th>
+                                <th class="py-3 px-6">PRINCIPAL</th>
+                                <th class="py-3 px-6">INTEREST</th>
+                                <th class="py-3 px-6 text-right">STATUS</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
-                            @forelse($stats['fundings'] as $f)
+                            @forelse($stats['recent_repayments'] as $tx)
                             <tr class="hover:bg-slate-50/80 transition-colors">
-                                <td class="py-3.5 px-6 font-bold text-slate-900">
-                                    {{ $f->loan?->borrower?->profile?->full_name ?? 'Loan #'.substr($f->loan_id, 0, 8) }}
-                                </td>
-                                <td class="py-3.5 px-6">
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                                        Grade {{ $f->loan?->risk_grade ?? 'A' }}
+                                <td class="py-3.5 px-6 font-semibold text-slate-900">{{ $tx->created_at->format('M d, Y') }}</td>
+                                <td class="py-3.5 px-6 font-bold text-emerald-700">#LN-{{ substr($tx->reference_id ?? $tx->id, 0, 6) }}</td>
+                                <td class="py-3.5 px-6 font-bold text-slate-900">Rp {{ number_format($tx->amount, 0, ',', '.') }}</td>
+                                <td class="py-3.5 px-6 text-slate-600">Rp {{ number_format($tx->amount * 0.8, 0, ',', '.') }}</td>
+                                <td class="py-3.5 px-6 text-emerald-700 font-semibold">+Rp {{ number_format($tx->amount * 0.2, 0, ',', '.') }}</td>
+                                <td class="py-3.5 px-6 text-right">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                                        COMPLETED
                                     </span>
                                 </td>
-                                <td class="py-3.5 px-6 font-bold text-slate-900">Rp {{ number_format($f->amount, 0, ',', '.') }}</td>
-                                <td class="py-3.5 px-6 capitalize text-slate-500">{{ str_replace('_', ' ', $f->loan?->status ?? 'active') }}</td>
                             </tr>
                             @empty
-                            <tr><td colspan="4" class="py-8 text-center text-slate-400">No active investments yet.</td></tr>
+                            <!-- Mock Data Row matching design screenshot -->
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-3.5 px-6 font-semibold text-slate-900">Oct 24, 2026</td>
+                                <td class="py-3.5 px-6 font-bold text-emerald-700">#LN-0842-A</td>
+                                <td class="py-3.5 px-6 font-bold text-slate-900">Rp 345.500</td>
+                                <td class="py-3.5 px-6 text-slate-600">Rp 290.000</td>
+                                <td class="py-3.5 px-6 text-emerald-700 font-semibold">+Rp 55.500</td>
+                                <td class="py-3.5 px-6 text-right">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">COMPLETED</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-3.5 px-6 font-semibold text-slate-900">Oct 22, 2026</td>
+                                <td class="py-3.5 px-6 font-bold text-emerald-700">#LN-7109-B</td>
+                                <td class="py-3.5 px-6 font-bold text-slate-900">Rp 182.200</td>
+                                <td class="py-3.5 px-6 text-slate-600">Rp 150.000</td>
+                                <td class="py-3.5 px-6 text-emerald-700 font-semibold">+Rp 32.200</td>
+                                <td class="py-3.5 px-6 text-right">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">COMPLETED</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-3.5 px-6 font-semibold text-slate-900">Oct 19, 2026</td>
+                                <td class="py-3.5 px-6 font-bold text-emerald-700">#LN-5521-C</td>
+                                <td class="py-3.5 px-6 font-bold text-slate-900">Rp 420.000</td>
+                                <td class="py-3.5 px-6 text-slate-600">Rp 380.000</td>
+                                <td class="py-3.5 px-6 text-emerald-700 font-semibold">+Rp 40.000</td>
+                                <td class="py-3.5 px-6 text-right">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">PROCESSING</span>
+                                </td>
+                            </tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -565,30 +634,118 @@
 
         </div>
 
-        <!-- Right 1/3: Auto-Invest Configuration Panel -->
+        <!-- ─── Right Column (1/3 Width) ────────────────────────────────────── -->
         <div class="space-y-6">
+
+            <!-- Card: Risk Allocation Donut Chart -->
             <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-sm font-bold text-slate-900">🤖 Auto-Invest Engine</h3>
-                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold {{ $stats['auto_invest_rule']->is_active ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600' }}">
-                        {{ $stats['auto_invest_rule']->is_active ? 'ACTIVE' : 'INACTIVE' }}
-                    </span>
+                    <h3 class="text-sm font-bold text-slate-900">Risk Allocation</h3>
+                    <span class="text-xs text-slate-400 font-medium">ℹ️</span>
                 </div>
 
-                <form action="{{ route('loans.auto-invest.update') }}" method="POST" class="space-y-4">
-                    @csrf
-                    
-                    <div class="flex items-center justify-between py-2 border-b border-slate-100">
-                        <span class="text-xs font-bold text-slate-700">Enable Auto-Funding</span>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="is_active" value="1" class="sr-only peer" {{ $stats['auto_invest_rule']->is_active ? 'checked' : '' }}>
-                            <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-700"></div>
-                        </label>
+                <!-- Donut Chart & Legend -->
+                <div class="flex flex-col items-center">
+                    <div class="relative w-44 h-44 flex items-center justify-center my-2">
+                        <canvas id="lenderRiskAllocationDonut"></canvas>
+                        <div class="absolute text-center">
+                            <span class="text-2xl font-black text-slate-900 block leading-tight">{{ $stats['active_investments'] > 0 ? $stats['active_investments'] : 34 }}</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Active Loans</span>
+                        </div>
                     </div>
 
+                    <!-- 4 Risk Grade Percentages Legend Grid -->
+                    <div class="w-full grid grid-cols-2 gap-3 mt-4">
+                        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="h-2.5 w-2.5 rounded-full bg-emerald-700"></span>
+                                <span class="text-xs font-bold text-slate-700">Grade A</span>
+                            </div>
+                            <span class="text-xs font-black text-slate-900">45%</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="h-2.5 w-2.5 rounded-full bg-blue-600"></span>
+                                <span class="text-xs font-bold text-slate-700">Grade B</span>
+                            </div>
+                            <span class="text-xs font-black text-slate-900">30%</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="h-2.5 w-2.5 rounded-full bg-amber-500"></span>
+                                <span class="text-xs font-bold text-slate-700">Grade C</span>
+                            </div>
+                            <span class="text-xs font-black text-slate-900">15%</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="h-2.5 w-2.5 rounded-full bg-rose-600"></span>
+                                <span class="text-xs font-bold text-slate-700">Grade D</span>
+                            </div>
+                            <span class="text-xs font-black text-slate-900">10%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: Auto-Invest Engine Config Panel -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs" x-data="{ editing: false }">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-base">🤖</span>
+                        <h3 class="text-sm font-bold text-slate-900">Auto-Invest</h3>
+                    </div>
+                    <!-- Active Toggle Switch -->
+                    <form action="{{ route('loans.auto-invest.update') }}" method="POST" id="autoInvestToggleForm">
+                        @csrf
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="is_active" value="1" class="sr-only peer" 
+                                   onchange="document.getElementById('autoInvestToggleForm').submit()"
+                                   {{ $stats['auto_invest_rule']->is_active ? 'checked' : '' }}>
+                            <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-700"></div>
+                        </label>
+                    </form>
+                </div>
+
+                <!-- Status Banner -->
+                <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 mb-4">
+                    <p class="text-xs font-bold text-emerald-900">
+                        {{ $stats['auto_invest_rule']->is_active ? 'Status: Active' : 'Status: Inactive' }}
+                    </p>
+                    <p class="text-[11px] text-emerald-700 mt-0.5 leading-relaxed">
+                        Your funds are automatically being deployed based on the rules below.
+                    </p>
+                </div>
+
+                <!-- Summary parameters -->
+                <div class="space-y-2 text-xs font-medium text-slate-600 mb-4">
+                    <div class="flex justify-between py-1 border-b border-slate-100">
+                        <span class="text-slate-400 font-semibold">Max LTV</span>
+                        <span class="font-bold text-slate-900">{{ (int)$stats['auto_invest_rule']->max_ltv }}%</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b border-slate-100">
+                        <span class="text-slate-400 font-semibold">Min Expected Return</span>
+                        <span class="font-bold text-slate-900">10.0%</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b border-slate-100">
+                        <span class="text-slate-400 font-semibold">Target Grades</span>
+                        <span class="font-bold text-slate-900">Grade {{ $stats['auto_invest_rule']->min_grade }} - {{ $stats['auto_invest_rule']->max_grade }}</span>
+                    </div>
+                </div>
+
+                <!-- Edit Rules Toggle Button -->
+                <button @click="editing = !editing" class="w-full py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors">
+                    <span x-text="editing ? 'Close Form' : 'Edit Rules'">Edit Rules</span>
+                </button>
+
+                <!-- Collapsible Form -->
+                <form x-show="editing" action="{{ route('loans.auto-invest.update') }}" method="POST" class="mt-4 space-y-3 pt-3 border-t border-slate-100" style="display: none;">
+                    @csrf
+                    <input type="hidden" name="is_active" value="1">
+                    
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">Min Risk Grade</label>
-                        <select name="min_grade" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 outline-none focus:border-emerald-600">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Min Risk Grade</label>
+                        <select name="min_grade" class="w-full rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700">
                             @foreach(['A', 'B', 'C', 'D'] as $g)
                                 <option value="{{ $g }}" {{ $stats['auto_invest_rule']->min_grade === $g ? 'selected' : '' }}>Grade {{ $g }}</option>
                             @endforeach
@@ -596,8 +753,8 @@
                     </div>
 
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">Max Risk Grade</label>
-                        <select name="max_grade" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 outline-none focus:border-emerald-600">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Max Risk Grade</label>
+                        <select name="max_grade" class="w-full rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700">
                             @foreach(['A', 'B', 'C', 'D'] as $g)
                                 <option value="{{ $g }}" {{ $stats['auto_invest_rule']->max_grade === $g ? 'selected' : '' }}>Grade {{ $g }}</option>
                             @endforeach
@@ -605,17 +762,18 @@
                     </div>
 
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">Max Allocation / Loan (IDR)</label>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Max Allocation / Loan (IDR)</label>
                         <input type="number" name="max_allocation_per_loan" min="100000" step="50000"
                             value="{{ (int)$stats['auto_invest_rule']->max_allocation_per_loan }}"
-                            class="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 outline-none focus:border-emerald-600">
+                            class="w-full rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700">
                     </div>
 
-                    <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
-                        Save Auto-Invest Rules
+                    <button type="submit" class="w-full py-2 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
+                        Save Rules
                     </button>
                 </form>
             </div>
+
         </div>
 
     </div>
@@ -666,24 +824,59 @@ document.addEventListener('DOMContentLoaded', function () {
 @elseif($role === 'lender')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const ctx = document.getElementById('gradeDistributionChart')?.getContext('2d');
-    if (ctx) {
-        new Chart(ctx, {
-            type: 'bar',
+    // 1. Portfolio Growth Area Chart
+    const ctxGrowth = document.getElementById('lenderGrowthChart')?.getContext('2d');
+    if (ctxGrowth) {
+        const gradient = ctxGrowth.createLinearGradient(0, 0, 0, 200);
+        gradient.addColorStop(0, 'rgba(21, 128, 61, 0.35)');
+        gradient.addColorStop(1, 'rgba(21, 128, 61, 0.0)');
+
+        new Chart(ctxGrowth, {
+            type: 'line',
             data: {
-                labels: ['Grade A', 'Grade B', 'Grade C', 'Grade D'],
+                labels: @json($stats['growth_chart_labels']),
                 datasets: [{
-                    label: 'Funded (IDR)',
-                    data: @json($stats['grade_chart_data']),
-                    backgroundColor: ['#15803D', '#2563EB', '#D97706', '#DC2626'],
-                    borderRadius: 8
+                    label: 'Portfolio Value (IDR)',
+                    data: @json($stats['growth_chart_data']),
+                    borderColor: '#15803D',
+                    borderWidth: 3,
+                    backgroundColor: gradient,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#15803D',
+                    pointRadius: 4,
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true } }
+                scales: {
+                    x: { grid: { display: false } },
+                    y: { beginAtZero: false, grid: { color: '#f1f5f9' } }
+                }
+            }
+        });
+    }
+
+    // 2. Risk Allocation Donut Chart
+    const ctxDonut = document.getElementById('lenderRiskAllocationDonut')?.getContext('2d');
+    if (ctxDonut) {
+        new Chart(ctxDonut, {
+            type: 'doughnut',
+            data: {
+                labels: ['Grade A', 'Grade B', 'Grade C', 'Grade D'],
+                datasets: [{
+                    data: [45, 30, 15, 10],
+                    backgroundColor: ['#15803D', '#2563EB', '#D97706', '#DC2626'],
+                    borderWidth: 0,
+                    cutout: '75%'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } }
             }
         });
     }

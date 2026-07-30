@@ -70,7 +70,9 @@ class DashboardController extends Controller
                 ->get(),
 
             // Monthly loan chart data (last 6 months)
-            'monthly_loans'        => $this->getMonthlyLoanData(),
+            'monthly_loans'          => $this->getMonthlyLoanData(),
+            'monthly_volume_labels'  => array_column($this->getMonthlyLoanData(), 'label'),
+            'monthly_volume_data'    => array_column($this->getMonthlyLoanData(), 'volume'),
         ];
 
         return view('dashboard', ['role' => 'admin', 'stats' => $stats]);
@@ -233,11 +235,14 @@ class DashboardController extends Controller
         $data = [];
         for ($i = 5; $i >= 0; $i--) {
             $month = now()->subMonths($i);
+            $query = LoanRequest::whereYear('created_at', $month->year)
+                ->whereMonth('created_at', $month->month);
+            $count  = $query->count();
+            $volume = $query->sum('amount');
             $data[] = [
-                'label' => $month->format('M Y'),
-                'count' => LoanRequest::whereYear('created_at', $month->year)
-                    ->whereMonth('created_at', $month->month)
-                    ->count(),
+                'label'  => $month->format('M Y'),
+                'count'  => $count,
+                'volume' => (float) $volume,
             ];
         }
         return $data;

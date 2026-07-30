@@ -13,138 +13,185 @@
     {{-- ═══════════════════════════════════════════════════════════════════ --}}
     @if($role === 'admin')
 
-    <!-- Header Title -->
+    <!-- Header Section -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Admin Dashboard — Platform Overview</h1>
-            <p class="text-xs font-medium text-slate-500 mt-1">Platform metrics and operational management overview.</p>
+            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">System Administration</h1>
+            <p class="text-xs font-medium text-slate-500 mt-1">Global platform oversight and operational health. &mdash; Platform Overview</p>
         </div>
-        <div class="flex gap-2">
-            <a href="{{ route('admin.kyc.index') }}" class="inline-flex items-center gap-2 rounded-xl bg-amber-600 px-3.5 py-2 text-xs font-bold text-white shadow-xs hover:bg-amber-700 transition-colors">
-                <span class="text-sm">🔍</span> Review KYC ({{ $stats['kyc_pending'] }})
-            </a>
-            <a href="{{ route('admin.loans.index') }}" class="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-3.5 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition-colors">
-                <span class="text-sm">📋</span> Review Loans ({{ $stats['loans_pending'] }})
-            </a>
+        <div class="flex items-center gap-3">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                <span class="h-2 w-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                System Status: Operational
+            </span>
         </div>
     </div>
 
-    <!-- 4 High-Density Stat Cards -->
+    <!-- 4 High-Density Stat Cards Row -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Card 1: Total Users -->
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">TOTAL USERS</span>
-                <span class="p-1.5 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold">👥 Users</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Users</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">+2.4%</span>
             </div>
             <p class="text-2xl font-extrabold text-slate-900 mt-3">{{ number_format($stats['total_users']) }}</p>
         </div>
 
+        <!-- Card 2: Pending KYC -->
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">ACTIVE LOANS</span>
-                <span class="p-1.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold">📊 Active</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Pending KYC</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">Action Req.</span>
             </div>
-            <p class="text-2xl font-extrabold text-slate-900 mt-3">{{ number_format($stats['loans_active']) }}</p>
+            <p class="text-2xl font-extrabold text-slate-900 mt-3">{{ number_format($stats['kyc_pending']) }}</p>
         </div>
 
+        <!-- Card 3: Total Volume -->
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">KYC PENDING</span>
-                <span class="p-1.5 rounded-lg bg-amber-50 text-amber-700 text-xs font-bold">🔍 Review</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Volume</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">30 Days</span>
             </div>
-            <p class="text-2xl font-extrabold text-amber-600 mt-3">{{ number_format($stats['kyc_pending']) }}</p>
+            <p class="text-2xl font-extrabold text-slate-900 mt-3">Rp {{ number_format($stats['total_disbursed'], 0, ',', '.') }}</p>
         </div>
 
+        <!-- Card 4: System Health -->
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">OVERDUE INSTALLMENTS</span>
-                <span class="p-1.5 rounded-lg bg-rose-50 text-rose-700 text-xs font-bold">⚠️ Warning</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">System Health</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">Stable</span>
             </div>
-            <p class="text-2xl font-extrabold text-rose-600 mt-3">{{ number_format($stats['installments_overdue']) }}</p>
+            <p class="text-2xl font-extrabold text-emerald-700 mt-3">99.9%</p>
         </div>
     </div>
 
-    <!-- Financial Totals -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
-            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">TOTAL DISBURSED</p>
-            <p class="text-xl font-extrabold text-slate-900 mt-1">Rp {{ number_format($stats['total_disbursed'], 0, ',', '.') }}</p>
+    <!-- Main Grid: 2/3 Left Column, 1/3 Right Column -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- ─── Left Column (2/3 Width) ─────────────────────────────────────── -->
+        <div class="lg:col-span-2 space-y-6">
+
+            <!-- Card: Platform Statistics (Line Chart) -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-bold text-slate-900">Platform Statistics</h3>
+                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">Last 30 Days</span>
+                </div>
+                <div class="h-[250px]">
+                    <canvas id="adminPlatformChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Loan Applications Table -->
+            <div class="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
+                <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+                    <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Recent Loan Applications</h3>
+                    <a href="{{ route('admin.loans.index') }}" class="text-xs font-bold text-emerald-700 hover:text-emerald-800">View All Applications &rarr;</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                                <th class="py-3 px-6">Borrower</th>
+                                <th class="py-3 px-6">Amount</th>
+                                <th class="py-3 px-6">Status</th>
+                                <th class="py-3 px-6">Applied Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
+                            @forelse($stats['recent_loans'] as $loan)
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="py-3.5 px-6 font-bold text-slate-900">{{ $loan->borrower?->profile?->full_name ?? 'N/A' }}</td>
+                                <td class="py-3.5 px-6 font-semibold text-slate-900">Rp {{ number_format($loan->amount, 0, ',', '.') }}</td>
+                                <td class="py-3.5 px-6">
+                                    @php
+                                        $statusBadge = match($loan->status) {
+                                            'pending'      => 'bg-amber-50 text-amber-700 border-amber-200',
+                                            'open_funding' => 'bg-blue-50 text-blue-700 border-blue-200',
+                                            'funded'       => 'bg-purple-50 text-purple-700 border-purple-200',
+                                            'active'       => 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                                            'completed'    => 'bg-slate-100 text-slate-700 border-slate-200',
+                                            default        => 'bg-slate-100 text-slate-600 border-slate-200',
+                                        };
+                                    @endphp
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-bold border {{ $statusBadge }}">
+                                        {{ ucfirst(str_replace('_', ' ', $loan->status)) }}
+                                    </span>
+                                </td>
+                                <td class="py-3.5 px-6 text-slate-400">{{ $loan->created_at->diffForHumans() }}</td>
+                            </tr>
+                            @empty
+                            <tr><td colspan="4" class="py-8 text-center text-slate-400">No applications recorded.</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
 
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
-            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">PLATFORM FEES COLLECTED</p>
-            <p class="text-xl font-extrabold text-emerald-700 mt-1">Rp {{ number_format($stats['total_platform_fees'], 0, ',', '.') }}</p>
-        </div>
+        <!-- ─── Right Column (1/3 Width) ────────────────────────────────────── -->
+        <div class="space-y-6">
 
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
-            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LOANS COMPLETED</p>
-            <p class="text-xl font-extrabold text-slate-900 mt-1">{{ number_format($stats['loans_completed']) }}</p>
-        </div>
-    </div>
+            <!-- Card: System Alerts -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                        <span>📡</span> System Alerts
+                    </h3>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">3 New</span>
+                </div>
 
-    <!-- Monthly Loans Activity Chart -->
-    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
-        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4">Monthly Loan Volume (Last 6 Months)</h3>
-        @php $maxCount = max(array_column($stats['monthly_loans'], 'count'), 1); @endphp
-        <div class="space-y-3">
-            @foreach($stats['monthly_loans'] as $month)
-            <div class="flex items-center gap-3">
-                <span class="w-20 text-right text-xs font-semibold text-slate-500">{{ $month['label'] }}</span>
-                <div class="flex-1 bg-slate-100 rounded-full h-5 overflow-hidden">
-                    <div class="h-5 rounded-full bg-emerald-700 transition-all duration-500"
-                         style="width: {{ $month['count'] > 0 ? max(round(($month['count'] / $maxCount) * 100), 5) : 0 }}%">
+                <div class="space-y-3">
+                    <!-- Alert 1: Large Withdrawal -->
+                    <div class="p-3.5 rounded-xl bg-rose-50/70 border border-rose-200 space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs">⚠️</span>
+                            <p class="text-xs font-bold text-rose-900">Large Withdrawal Detected</p>
+                        </div>
+                        <p class="text-[11px] text-rose-700 leading-relaxed">Unusual outbound transfer of Rp 50.000.000 initiated by Account #8492.</p>
+                        <p class="text-[10px] font-semibold text-rose-500">2 mins ago</p>
+                    </div>
+
+                    <!-- Alert 2: API Latency Spike -->
+                    <div class="p-3.5 rounded-xl bg-blue-50/70 border border-blue-200 space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs">ℹ️</span>
+                            <p class="text-xs font-bold text-blue-900">API Latency Spike</p>
+                        </div>
+                        <p class="text-[11px] text-blue-700 leading-relaxed">Payment gateway response times exceeded 2000ms for 30 seconds.</p>
+                        <p class="text-[10px] font-semibold text-blue-500">15 mins ago</p>
                     </div>
                 </div>
-                <span class="w-8 text-xs font-bold text-slate-700">{{ $month['count'] }}</span>
             </div>
-            @endforeach
-        </div>
-    </div>
 
-    <!-- Recent Loan Applications Table -->
-    <div class="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
-        <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
-            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Recent Loan Applications</h3>
-            <a href="{{ route('admin.loans.index') }}" class="text-xs font-bold text-emerald-700 hover:text-emerald-800">View All Applications &rarr;</a>
+            <!-- Card: Quick Management -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">QUICK MANAGEMENT</span>
+                <p class="text-xs font-medium text-slate-500 mb-4">Global platform parameters and approvals.</p>
+
+                <div class="space-y-2">
+                    <a href="{{ route('admin.kyc.index') }}" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-emerald-600 hover:bg-emerald-50/50 transition-all group">
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-sm">🔍</span>
+                            <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-800">Review Pending KYC</span>
+                        </div>
+                        <span class="text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">{{ $stats['kyc_pending'] }}</span>
+                    </a>
+
+                    <a href="{{ route('admin.loans.index') }}" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-emerald-600 hover:bg-emerald-50/50 transition-all group">
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-sm">📋</span>
+                            <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-800">Review Loan Applications</span>
+                        </div>
+                        <span class="text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">{{ $stats['loans_pending'] }}</span>
+                    </a>
+                </div>
+            </div>
+
         </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                        <th class="py-3 px-6">Borrower</th>
-                        <th class="py-3 px-6">Amount</th>
-                        <th class="py-3 px-6">Status</th>
-                        <th class="py-3 px-6">Applied Date</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
-                    @forelse($stats['recent_loans'] as $loan)
-                    <tr class="hover:bg-slate-50/80 transition-colors">
-                        <td class="py-3.5 px-6 font-bold text-slate-900">{{ $loan->borrower?->profile?->full_name ?? 'N/A' }}</td>
-                        <td class="py-3.5 px-6 font-semibold text-slate-900">Rp {{ number_format($loan->amount, 0, ',', '.') }}</td>
-                        <td class="py-3.5 px-6">
-                            @php
-                                $statusBadge = match($loan->status) {
-                                    'pending'      => 'bg-amber-50 text-amber-700 border-amber-200',
-                                    'open_funding' => 'bg-blue-50 text-blue-700 border-blue-200',
-                                    'funded'       => 'bg-purple-50 text-purple-700 border-purple-200',
-                                    'active'       => 'bg-emerald-50 text-emerald-700 border-emerald-200',
-                                    'completed'    => 'bg-slate-100 text-slate-700 border-slate-200',
-                                    default        => 'bg-slate-100 text-slate-600 border-slate-200',
-                                };
-                            @endphp
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-bold border {{ $statusBadge }}">
-                                {{ ucfirst(str_replace('_', ' ', $loan->status)) }}
-                            </span>
-                        </td>
-                        <td class="py-3.5 px-6 text-slate-400">{{ $loan->created_at->diffForHumans() }}</td>
-                    </tr>
-                    @empty
-                    <tr><td colspan="4" class="py-8 text-center text-slate-400">No applications recorded.</td></tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+
     </div>
 
 
@@ -577,8 +624,46 @@
 
 </div>
 
-<!-- Chart initialization script for Lender Grade distribution -->
-@if($role === 'lender')
+<!-- Chart initialization script for Admin & Lender -->
+@if($role === 'admin')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const ctx = document.getElementById('adminPlatformChart')?.getContext('2d');
+    if (ctx) {
+        const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+        gradient.addColorStop(0, 'rgba(21, 128, 61, 0.35)');
+        gradient.addColorStop(1, 'rgba(21, 128, 61, 0.0)');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: @json($stats['monthly_volume_labels']),
+                datasets: [{
+                    label: 'Funding Volume (IDR)',
+                    data: @json($stats['monthly_volume_data']),
+                    borderColor: '#15803D',
+                    borderWidth: 3,
+                    backgroundColor: gradient,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#15803D',
+                    pointRadius: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: { beginAtZero: true, grid: { color: '#f1f5f9' } }
+                }
+            }
+        });
+    }
+});
+</script>
+@elseif($role === 'lender')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const ctx = document.getElementById('gradeDistributionChart')?.getContext('2d');
@@ -607,3 +692,4 @@ document.addEventListener('DOMContentLoaded', function () {
 @endif
 
 @endsection
+

@@ -10,7 +10,7 @@
             <p class="text-xs font-medium text-slate-500 mt-1">Manage and verify pending institutional and retail client applications.</p>
         </div>
         <button onclick="window.print()" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition-all">
-            <span>📊</span> Export CSV
+            <span></span> Export CSV
         </button>
     </div>
 

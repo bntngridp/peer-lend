@@ -29,7 +29,7 @@
                         <div @click="selectedRole = 'borrower'"
                              :class="selectedRole === 'borrower' ? 'border-emerald-700 bg-emerald-50/50 ring-1 ring-emerald-700' : 'border-slate-200 hover:border-slate-300 bg-slate-50/50'"
                              class="flex flex-col items-center p-3 border rounded-xl cursor-pointer transition-all select-none text-center">
-                            <span class="text-base mb-1">💼</span>
+                            <span class="text-base mb-1"></span>
                             <span class="text-xs font-bold text-slate-900">Borrower</span>
                             <span class="text-[10px] text-slate-500 font-medium">Apply for credit</span>
                         </div>
@@ -38,7 +38,7 @@
                         <div @click="selectedRole = 'lender'"
                              :class="selectedRole === 'lender' ? 'border-emerald-700 bg-emerald-50/50 ring-1 ring-emerald-700' : 'border-slate-200 hover:border-slate-300 bg-slate-50/50'"
                              class="flex flex-col items-center p-3 border rounded-xl cursor-pointer transition-all select-none text-center">
-                            <span class="text-base mb-1">🏦</span>
+                            <span class="text-base mb-1"></span>
                             <span class="text-xs font-bold text-slate-900">Lender (Investor)</span>
                             <span class="text-[10px] text-slate-500 font-medium">Fund capital</span>
                         </div>

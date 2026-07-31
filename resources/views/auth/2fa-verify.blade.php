@@ -8,7 +8,7 @@
             
             <!-- Shield Icon Badge -->
             <div class="mx-auto h-12 w-12 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center text-xl mb-4 shadow-xs">
-                🛡️
+                
             </div>
 
             <!-- Title & Subtitle -->
@@ -50,7 +50,7 @@
                 <!-- Resend / Recovery Links -->
                 <div class="flex items-center justify-between text-xs font-semibold text-slate-500 pt-2 border-t border-slate-100">
                     <button type="button" class="hover:text-emerald-700 flex items-center gap-1">
-                        <span>🔄</span> Resend Code
+                        <span></span> Resend Code
                     </button>
                     <a href="{{ route('login') }}" class="hover:text-emerald-700">
                         Use Recovery Code
@@ -60,7 +60,7 @@
 
             <!-- Security Footnote -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-[11px] text-slate-400 font-medium">
-                🔒 Secured by LendFlow Institutional Grade Encryption
+                Secured by LendFlow Institutional Grade Encryption
             </div>
 
         </div>

@@ -19,7 +19,7 @@
         <!-- REJECTED STATE Banner + Form -->
         <div class="rounded-2xl border border-rose-200 bg-rose-50/50 p-6 text-rose-900 shadow-xs mb-6">
             <div class="flex items-start gap-3">
-                <span class="text-xl">⚠️</span>
+                <span class="text-xl"></span>
                 <div>
                     <h4 class="text-sm font-bold">Verification Request Rejected</h4>
                     <p class="text-xs mt-1 text-rose-800 font-medium">Reason: <strong>{{ $kyc->rejected_reason }}</strong></p>
@@ -39,7 +39,7 @@
             <!-- Review in Progress Card Banner -->
             <div class="rounded-2xl border border-amber-200 bg-amber-50/50 p-6 shadow-xs">
                 <div class="flex items-start gap-3">
-                    <span class="text-xl">⏳</span>
+                    <span class="text-xl"></span>
                     <div>
                         <span class="text-xs font-bold text-amber-900 uppercase tracking-wider block">pending_actions Review in Progress</span>
                         <p class="text-xs text-amber-800 mt-1 leading-relaxed font-medium">
@@ -91,7 +91,7 @@
                         @foreach($kyc->documents as $doc)
                         <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <span class="text-base">📄</span>
+                                <span class="text-base"></span>
                                 <div>
                                     <span class="text-xs font-bold text-slate-900 block capitalize">{{ str_replace('_', ' ', $doc->type) }} Document</span>
                                     <span class="text-[10px] text-emerald-700 font-bold block mt-0.5">cloud_done Uploaded successfully</span>
@@ -113,7 +113,7 @@
         <!-- APPROVED STATE -->
         <div class="rounded-2xl border border-emerald-200 bg-white p-8 text-center shadow-xs space-y-4">
             <div class="mx-auto h-16 w-16 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center text-2xl shadow-xs">
-                ✓
+                
             </div>
             <h3 class="text-xl font-extrabold text-slate-900 tracking-tight">Account Verified</h3>
             <p class="text-xs text-slate-500 max-w-md mx-auto leading-relaxed font-medium">

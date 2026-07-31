@@ -13,7 +13,7 @@
             <!-- Step 1: Basic Info -->
             <div class="flex items-start gap-3">
                 <div class="h-7 w-7 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs border border-emerald-200">
-                    ✓
+                    
                 </div>
                 <div>
                     <span class="text-xs font-bold text-slate-900 block">Basic Info</span>
@@ -56,7 +56,7 @@
         </div>
 
         <div class="pt-4 border-t border-slate-100 text-[11px] text-slate-400 flex items-center gap-1">
-            <span>🔒</span> End-to-end encrypted verification
+            <span></span> End-to-end encrypted verification
         </div>
     </div>
 
@@ -75,17 +75,17 @@
                 
                 <!-- KTP Dropzone Card -->
                 <div class="border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center hover:border-emerald-600 transition-colors bg-slate-50/50">
-                    <div class="text-4xl mb-2">📁</div>
+                    <div class="text-4xl mb-2"></div>
                     <h4 class="text-xs font-bold text-slate-900">Drag &amp; Drop your file here</h4>
                     <p class="text-[11px] text-slate-400 mt-0.5">Supported formats: JPG, PNG, PDF. Max size: 10 MB.</p>
                     
                     <div class="flex flex-wrap items-center justify-center gap-3 mt-4">
                         <label for="ktp" class="cursor-pointer py-2 px-4 rounded-xl bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800 transition-colors shadow-xs inline-flex items-center gap-1.5">
-                            <span>📁</span> Browse Files
+                            <span></span> Browse Files
                             <input id="ktp" name="ktp" type="file" class="sr-only" required accept="image/*,application/pdf">
                         </label>
                         <button type="button" class="py-2 px-4 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-bold hover:bg-slate-50 transition-colors shadow-xs inline-flex items-center gap-1.5">
-                            <span>📷</span> Take Photo
+                            <span></span> Take Photo
                         </button>
                     </div>
                 </div>
@@ -110,19 +110,19 @@
                 <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/50 space-y-3">
                     <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Document Preview</span>
                     <div class="h-28 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 text-xs font-medium">
-                        🖼️ Image Preview
+                        ️ Image Preview
                     </div>
 
                     <div class="space-y-2 pt-2 border-t border-slate-200 text-[11px]">
                         <span class="font-bold text-slate-700 block">Guidelines:</span>
                         <div class="flex items-center gap-1.5 text-emerald-800 font-medium">
-                            <span>✓</span> All 4 corners must be visible
+                            <span></span> All 4 corners must be visible
                         </div>
                         <div class="flex items-center gap-1.5 text-emerald-800 font-medium">
-                            <span>✓</span> Ensure good lighting, no glare
+                            <span></span> Ensure good lighting, no glare
                         </div>
                         <div class="flex items-center gap-1.5 text-rose-600 font-medium">
-                            <span>✕</span> No blurred or hidden details
+                            <span></span> No blurred or hidden details
                         </div>
                     </div>
                 </div>

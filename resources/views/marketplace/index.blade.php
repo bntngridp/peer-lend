@@ -17,7 +17,7 @@
                 <input type="text" name="search" value="{{ request('search') }}" 
                        placeholder="Search marketplace..." 
                        class="w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 py-2 text-xs font-medium text-slate-700 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 shadow-xs">
-                <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
+                <span class="absolute left-3 top-2.5 text-slate-400 text-xs"></span>
             </div>
 
             <!-- Filter: Risk Grade -->

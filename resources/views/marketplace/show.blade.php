@@ -26,7 +26,7 @@
     @if(request('status') === 'success' || session('success'))
     <div class="rounded-2xl border border-emerald-200 bg-white p-8 text-center shadow-xs space-y-4 max-w-2xl mx-auto">
         <div class="mx-auto h-16 w-16 rounded-full bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-3xl shadow-xs">
-            ✓
+            
         </div>
         <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Investment Confirmed</h2>
         <p class="text-xs text-slate-600 font-medium">
@@ -56,7 +56,7 @@
                 Back to Marketplace
             </a>
         </div>
-        <p class="text-[10px] text-slate-400 font-medium">🔒 Your funds are held in escrow until the loan is fully funded.</p>
+        <p class="text-[10px] text-slate-400 font-medium">Your funds are held in escrow until the loan is fully funded.</p>
     </div>
     @endif
 
@@ -129,12 +129,12 @@
                     <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">Security</h3>
                     <div class="space-y-2 text-xs">
                         <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
-                            <span class="font-bold text-slate-900 block text-xs">🛡️ Senior Secured First Lien</span>
+                            <span class="font-bold text-slate-900 block text-xs">Senior Secured First Lien</span>
                             <span class="text-[10px] text-slate-500 font-medium block mt-0.5">Secured against business asset portfolio.</span>
                         </div>
                         @if($loan->isCryptoLoan())
                         <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200">
-                            <span class="font-bold text-emerald-950 block text-xs">⚡ Crypto Collateral Locked</span>
+                            <span class="font-bold text-emerald-950 block text-xs">Crypto Collateral Locked</span>
                             <span class="text-[10px] text-emerald-800 font-medium block mt-0.5">
                                 {{ number_format($loan->collateral_amount, $loan->collateralCurrency->decimal_places) }} {{ $loan->collateralCurrency->code }} in cold storage.
                             </span>
@@ -200,7 +200,7 @@
 
                 @if(Auth::id() === $loan->borrower_id)
                     <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 font-semibold">
-                        ⚠️ You cannot invest in your own loan applications.
+                        You cannot invest in your own loan applications.
                     </div>
                 @else
                     <form action="{{ route('marketplace.fund', $loan->id) }}" method="POST" class="space-y-4">
@@ -242,7 +242,7 @@
                 @endif
 
                 <button onclick="window.print()" class="w-full py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-bold text-xs hover:bg-slate-50 transition-colors">
-                    📄 DOWNLOAD TERM SHEET
+                    DOWNLOAD TERM SHEET
                 </button>
             </div>
         </div>

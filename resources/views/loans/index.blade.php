@@ -10,7 +10,7 @@
             <p class="text-xs font-medium text-slate-500 mt-1">Track verification approvals, funding percentage progress, and manage active installments.</p>
         </div>
         <a href="{{ route('loans.create') }}" class="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition-all">
-            <span>➕</span> Apply for Loan
+            <span></span> Apply for Loan
         </a>
     </div>
 

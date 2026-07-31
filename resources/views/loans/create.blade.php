@@ -40,17 +40,17 @@
                     <div class="grid grid-cols-3 gap-3">
                         <label class="p-3.5 rounded-xl border border-emerald-700 bg-emerald-50/50 flex flex-col items-center justify-center text-center cursor-pointer">
                             <input type="radio" name="purpose_type" value="Business Exp" checked class="sr-only">
-                            <span class="text-lg mb-1">🏪</span>
+                            <span class="text-lg mb-1"></span>
                             <span class="text-xs font-bold text-slate-900">Business Exp</span>
                         </label>
                         <label class="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col items-center justify-center text-center cursor-pointer hover:border-slate-300">
                             <input type="radio" name="purpose_type" value="Inventory" class="sr-only">
-                            <span class="text-lg mb-1">📦</span>
+                            <span class="text-lg mb-1"></span>
                             <span class="text-xs font-bold text-slate-700">Inventory</span>
                         </label>
                         <label class="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col items-center justify-center text-center cursor-pointer hover:border-slate-300">
                             <input type="radio" name="purpose_type" value="Equipment" class="sr-only">
-                            <span class="text-lg mb-1">🏗️</span>
+                            <span class="text-lg mb-1"></span>
                             <span class="text-xs font-bold text-slate-700">Equipment</span>
                         </label>
                     </div>

@@ -22,11 +22,11 @@
             @if($loan->status !== 'pending')
                 <a href="{{ route('loans.agreement', $loan->id) }}" target="_blank"
                    class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition-all">
-                    📜 View Legal Agreement
+                    View Legal Agreement
                 </a>
             @endif
             <button onclick="window.print()" class="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition-all">
-                📥 Download Schedule (PDF)
+                Download Schedule (PDF)
             </button>
         </div>
     </div>
@@ -47,7 +47,7 @@
                     Rp {{ $nextInstallment ? number_format($nextInstallment->total_due, 0, ',', '.') : '0' }}
                 </p>
                 <p class="text-[11px] text-emerald-700 font-bold mt-0.5">
-                    {{ $nextInstallment ? '📅 Due: ' . $nextInstallment->due_date->format('Oct d, Y') : '✓ All Payments Completed' }}
+                    {{ $nextInstallment ? 'Due: ' . $nextInstallment->due_date->format('Oct d, Y') : 'All Payments Completed' }}
                 </p>
             </div>
         </div>

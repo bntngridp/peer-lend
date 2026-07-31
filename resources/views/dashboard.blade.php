@@ -138,7 +138,7 @@
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
-                        <span>📡</span> System Alerts
+                        <span></span> System Alerts
                     </h3>
                     <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">3 New</span>
                 </div>
@@ -147,7 +147,7 @@
                     <!-- Alert 1: Large Withdrawal -->
                     <div class="p-3.5 rounded-xl bg-rose-50/70 border border-rose-200 space-y-1">
                         <div class="flex items-center gap-2">
-                            <span class="text-xs">⚠️</span>
+                            <span class="text-xs"></span>
                             <p class="text-xs font-bold text-rose-900">Large Withdrawal Detected</p>
                         </div>
                         <p class="text-[11px] text-rose-700 leading-relaxed">Unusual outbound transfer of Rp 50.000.000 initiated by Account #8492.</p>
@@ -157,7 +157,7 @@
                     <!-- Alert 2: API Latency Spike -->
                     <div class="p-3.5 rounded-xl bg-blue-50/70 border border-blue-200 space-y-1">
                         <div class="flex items-center gap-2">
-                            <span class="text-xs">ℹ️</span>
+                            <span class="text-xs">️</span>
                             <p class="text-xs font-bold text-blue-900">API Latency Spike</p>
                         </div>
                         <p class="text-[11px] text-blue-700 leading-relaxed">Payment gateway response times exceeded 2000ms for 30 seconds.</p>
@@ -174,7 +174,7 @@
                 <div class="space-y-2">
                     <a href="{{ route('admin.kyc.index') }}" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-emerald-600 hover:bg-emerald-50/50 transition-all group">
                         <div class="flex items-center gap-2.5">
-                            <span class="text-sm">🔍</span>
+                            <span class="text-sm"></span>
                             <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-800">Review Pending KYC</span>
                         </div>
                         <span class="text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">{{ $stats['kyc_pending'] }}</span>
@@ -182,7 +182,7 @@
 
                     <a href="{{ route('admin.loans.index') }}" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-emerald-600 hover:bg-emerald-50/50 transition-all group">
                         <div class="flex items-center gap-2.5">
-                            <span class="text-sm">📋</span>
+                            <span class="text-sm"></span>
                             <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-800">Review Loan Applications</span>
                         </div>
                         <span class="text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">{{ $stats['loans_pending'] }}</span>
@@ -203,7 +203,7 @@
     <!-- Header Section -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Borrower Dashboard — Welcome back, {{ Auth::user()->profile?->full_name ?? 'Borrower' }}! 👋</h1>
+            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Borrower Dashboard — Welcome back, {{ Auth::user()->profile?->full_name ?? 'Borrower' }}! </h1>
             <p class="text-xs font-medium text-slate-500 mt-1">Overview of your current loans and upcoming obligations.</p>
         </div>
         <div class="flex items-center gap-3">
@@ -435,7 +435,7 @@
                 @if($stats['kyc_status'] === 'approved')
                     <div class="flex items-start gap-3">
                         <div class="h-8 w-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0 font-bold text-sm">
-                            ✓
+                            
                         </div>
                         <div>
                             <p class="text-xs font-bold text-slate-900">KYC Status: Verified</p>
@@ -485,10 +485,10 @@
         </div>
         <div class="flex items-center gap-3">
             <button onclick="window.print()" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition-all">
-                <span>📥</span> Export Report
+                <span></span> Export Report
             </button>
             <a href="{{ route('wallet.index') }}" class="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition-all">
-                <span>💳</span> Deposit Funds
+                <span></span> Deposit Funds
             </a>
         </div>
     </div>
@@ -641,7 +641,7 @@
             <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-sm font-bold text-slate-900">Risk Allocation</h3>
-                    <span class="text-xs text-slate-400 font-medium">ℹ️</span>
+                    <span class="text-xs text-slate-400 font-medium">️</span>
                 </div>
 
                 <!-- Donut Chart & Legend -->
@@ -692,7 +692,7 @@
             <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs" x-data="{ editing: false }">
                 <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
-                        <span class="text-base">🤖</span>
+                        <span class="text-base"></span>
                         <h3 class="text-sm font-bold text-slate-900">Auto-Invest</h3>
                     </div>
                     <!-- Active Toggle Switch -->

@@ -11,7 +11,7 @@
         </div>
         <div class="flex items-center gap-3">
             <button onclick="window.print()" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition-all">
-                📊 Export Report
+                Export Report
             </button>
         </div>
     </div>
@@ -50,7 +50,7 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">PORTFOLIO RISK STATUS</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">⚠️ Monitor</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">Monitor</span>
             </div>
             <div class="mt-3 space-y-1 text-xs font-semibold">
                 <div class="flex items-center gap-1.5 text-rose-600">
@@ -182,7 +182,7 @@
     <div class="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
         <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50/50">
             <div class="flex items-center gap-2">
-                <span class="text-rose-600 text-sm">🚨</span>
+                <span class="text-rose-600 text-sm"></span>
                 <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Liquidation Warnings &amp; Margin Calls</h3>
             </div>
             <span class="text-xs font-bold text-rose-700">Action Required</span>

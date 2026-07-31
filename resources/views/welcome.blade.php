@@ -131,7 +131,7 @@
                         <span class="text-[10px] font-bold text-emerald-700 block mt-0.5">↑ 12.4% MoM</span>
                     </div>
                     <div class="h-10 w-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 text-lg">
-                        📊
+                        
                     </div>
                 </div>
 

@@ -21,10 +21,10 @@
         </div>
         <div class="flex items-center gap-3">
             <button @click="activeTab = 'deposit'" class="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition-all">
-                <span>📥</span> Deposit Funds
+                <span></span> Deposit Funds
             </button>
             <button @click="activeTab = 'withdraw'" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition-all">
-                <span>📤</span> Withdraw Funds
+                <span></span> Withdraw Funds
             </button>
         </div>
     </div>
@@ -164,7 +164,7 @@
                 </div>
 
                 <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-[11px] text-emerald-900 font-medium">
-                    ⏱️ <strong>Expected Processing Time:</strong> Instant settlement for Bank Transfer via Midtrans Virtual Account.
+                    <strong>Expected Processing Time:</strong> Instant settlement for Bank Transfer via Midtrans Virtual Account.
                 </div>
             </div>
         </div>

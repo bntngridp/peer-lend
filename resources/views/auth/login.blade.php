@@ -98,7 +98,7 @@
             <!-- Security Restriction Notice Box -->
             <div class="mt-8 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-500 leading-relaxed font-medium">
                 <div class="flex items-start gap-2">
-                    <span class="text-sm">🔒</span>
+                    <span class="text-sm"></span>
                     <span>Access is restricted to authorized personnel only. All activities are monitored and logged. By signing in, you agree to LendFlow's <a href="#" class="font-bold text-slate-700 underline">Terms of Service</a> and <a href="#" class="font-bold text-slate-700 underline">Privacy Policy</a>.</span>
                 </div>
             </div>

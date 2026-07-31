@@ -38,10 +38,6 @@
 
             <!-- Header Right Navigation Actions -->
             <div class="flex items-center gap-4">
-                <a href="{{ route('calculator.index') }}" class="hidden sm:inline-flex text-xs font-bold text-slate-600 hover:text-emerald-700 tracking-wider uppercase transition-colors">
-                    Simulasi Kalkulator
-                </a>
-
                 @if(request()->routeIs('login'))
                     <a href="{{ route('register') }}" class="py-2 px-4 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
                         Create Account

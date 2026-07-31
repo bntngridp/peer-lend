@@ -49,17 +49,19 @@
                         Forgot Password?
                     </a>
                 </div>
-                <div class="flex items-center w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 focus-within:border-emerald-600 focus-within:ring-4 focus-within:ring-emerald-600/15 transition-all duration-200 @error('password') border-rose-300 @enderror">
+                <div class="flex items-center w-full rounded-xl border border-slate-200 bg-white overflow-hidden px-3.5 py-2.5 focus-within:border-emerald-600 focus-within:ring-4 focus-within:ring-emerald-600/15 transition-all duration-200 @error('password') border-rose-300 @enderror">
                     <input id="password" name="password" type="password" autocomplete="current-password" required
                            class="w-full bg-transparent text-xs font-medium text-slate-800 placeholder-slate-400 outline-none border-none p-0 focus:ring-0"
                            placeholder="••••••••">
-                    <button type="button" onclick="togglePass('password', this)" class="ml-2 text-slate-400 hover:text-emerald-700 focus:outline-none transition-colors shrink-0 p-0.5" title="Toggle password visibility">
+                    <button type="button" onclick="togglePass('password', this)" class="ml-2 text-slate-400 hover:text-emerald-700 focus:outline-none transition-colors shrink-0 p-1 rounded-lg hover:bg-slate-100" title="Toggle password visibility">
+                        <!-- Eye Open -->
                         <svg class="eye-open w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
+                        <!-- Eye Off (Clean Modern Lucide Eye-Off) -->
                         <svg class="eye-closed w-4 h-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.018 10.018 0 013.682-.763c4.478 0 8.268 2.943 9.542 7a9.97 9.97 0 01-2.499 4.14m-5.8-5.8a3 3 0 11-4.243-4.243m4.242 4.242L3 3l18 18" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.94 17.94A10.07 10.07 0 0112 19c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" />
                         </svg>
                     </button>
                 </div>
@@ -84,15 +86,6 @@
             <!-- Primary Submit Button -->
             <button type="submit"
                     class="w-full py-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-600/20 transition-all duration-200 shadow-xs">
-                Sign In
-            </button>
-
-            <!-- Divider -->
-            <div class="relative my-6">
-                <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div>
-                <div class="relative flex justify-center text-[10px] uppercase"><span class="bg-white px-2 font-bold text-slate-400">OR CONTINUE WITH</span></div>
-            </div>
-
                 Sign In &rarr;
             </button>
 
@@ -130,7 +123,7 @@
         <!-- Security Restriction Notice Box -->
         <div class="mt-8 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-500 leading-relaxed font-medium">
             <div class="flex items-start gap-2">
-                <span>Access is restricted to authorized personnel only. All activities are monitored and logged. By signing in, you agree to LendFlow's <a href="#" class="font-bold text-slate-700 underline">Terms of Service</a> and <a href="#" class="font-bold text-slate-700 underline">Privacy Policy</a>.</span>
+                <span>Access is restricted to authorized personnel only. All activities are monitored and logged. By signing in, you agree to LendFlow's <a href="{{ route('terms.show') }}" target="_blank" class="font-bold text-slate-700 underline">Terms of Service</a> and <a href="{{ route('privacy.show') }}" target="_blank" class="font-bold text-slate-700 underline">Privacy Policy</a>.</span>
             </div>
         </div>
 

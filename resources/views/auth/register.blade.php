@@ -19,55 +19,41 @@
         <form class="space-y-4" action="{{ route('register') }}" method="POST">
             @csrf
 
-            <!-- Guaranteed Clickable Role Selection Cards -->
+            <!-- Sleek, Compact & Light-Border Role Selection Cards -->
             <div class="mb-5">
-                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2.5">I want to register as:</label>
+                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">I want to register as:</label>
 
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-2.5">
                     <!-- Borrower Card -->
                     <label id="card-borrower" onclick="selectRole('borrower')"
-                           class="relative flex flex-col items-start p-4 border-2 rounded-2xl cursor-pointer transition-all duration-200 select-none text-left w-full border-emerald-700 bg-emerald-50/80 ring-2 ring-emerald-600/20">
+                           class="relative flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-all duration-200 select-none text-left w-full border-emerald-500 bg-emerald-50/60 shadow-xs">
                         <input type="radio" name="role" value="borrower" id="radio-borrower" class="sr-only" {{ old('role', 'borrower') === 'borrower' ? 'checked' : '' }}>
                         
-                        <!-- Checkmark Indicator -->
-                        <div id="check-borrower" class="absolute top-3.5 right-3.5 w-5 h-5 rounded-full border-2 border-emerald-600 bg-emerald-600 flex items-center justify-center transition-all">
-                            <svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
+                        <!-- Radio Circle Dot -->
+                        <div id="check-borrower" class="w-4 h-4 rounded-full border-2 border-emerald-600 bg-emerald-600 flex items-center justify-center shrink-0 transition-all">
+                            <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
                         </div>
 
-                        <!-- Role Icon -->
-                        <div id="icon-borrower" class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center mb-2.5 transition-colors shadow-xs">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+                        <div class="min-w-0">
+                            <div class="text-xs font-bold text-slate-900 leading-tight">Borrower</div>
+                            <div class="text-[10px] font-medium text-slate-500 truncate">Apply for credit</div>
                         </div>
-
-                        <span class="text-xs font-black text-slate-900 mb-0.5">Borrower</span>
-                        <span class="text-[10px] font-semibold text-slate-500 leading-tight">Apply for credit &amp; business loans</span>
                     </label>
 
                     <!-- Lender Card -->
                     <label id="card-lender" onclick="selectRole('lender')"
-                           class="relative flex flex-col items-start p-4 border-2 rounded-2xl cursor-pointer transition-all duration-200 select-none text-left w-full border-slate-200 hover:border-slate-300 bg-slate-50/50">
+                           class="relative flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-all duration-200 select-none text-left w-full border-slate-200 bg-white hover:border-slate-300">
                         <input type="radio" name="role" value="lender" id="radio-lender" class="sr-only" {{ old('role') === 'lender' ? 'checked' : '' }}>
                         
-                        <!-- Checkmark Indicator -->
-                        <div id="check-lender" class="absolute top-3.5 right-3.5 w-5 h-5 rounded-full border-2 border-slate-300 bg-white flex items-center justify-center transition-all">
-                            <svg class="w-3 h-3 text-white hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
+                        <!-- Radio Circle Dot -->
+                        <div id="check-lender" class="w-4 h-4 rounded-full border border-slate-300 bg-white flex items-center justify-center shrink-0 transition-all">
+                            <div class="w-1.5 h-1.5 rounded-full bg-white hidden"></div>
                         </div>
 
-                        <!-- Role Icon -->
-                        <div id="icon-lender" class="w-8 h-8 rounded-xl bg-slate-200/60 text-slate-600 flex items-center justify-center mb-2.5 transition-colors shadow-xs">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                            </svg>
+                        <div class="min-w-0">
+                            <div class="text-xs font-bold text-slate-900 leading-tight">Lender (Investor)</div>
+                            <div class="text-[10px] font-medium text-slate-500 truncate">Fund capital &amp; earn</div>
                         </div>
-
-                        <span class="text-xs font-black text-slate-900 mb-0.5">Lender (Investor)</span>
-                        <span class="text-[10px] font-semibold text-slate-500 leading-tight">Fund loans &amp; earn interest yield</span>
                     </label>
                 </div>
             </div>
@@ -162,54 +148,52 @@ function selectRole(role) {
     const checkBorrower = document.getElementById('check-borrower');
     const checkLender = document.getElementById('check-lender');
 
-    const iconBorrower = document.getElementById('icon-borrower');
-    const iconLender = document.getElementById('icon-lender');
-
     if (!cardBorrower || !cardLender) return;
 
     if (role === 'borrower') {
         if (radioBorrower) radioBorrower.checked = true;
         if (radioLender) radioLender.checked = false;
 
-        cardBorrower.className = 'relative flex flex-col items-start p-4 border-2 rounded-2xl cursor-pointer transition-all duration-200 select-none text-left w-full border-emerald-700 bg-emerald-50/80 ring-2 ring-emerald-600/20';
-        cardLender.className = 'relative flex flex-col items-start p-4 border-2 rounded-2xl cursor-pointer transition-all duration-200 select-none text-left w-full border-slate-200 hover:border-slate-300 bg-slate-50/50';
+        cardBorrower.className = 'relative flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-all duration-200 select-none text-left w-full border-emerald-500 bg-emerald-50/60 shadow-xs';
+        cardLender.className = 'relative flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-all duration-200 select-none text-left w-full border-slate-200 bg-white hover:border-slate-300';
 
         if (checkBorrower) {
-            checkBorrower.className = 'absolute top-3.5 right-3.5 w-5 h-5 rounded-full border-2 border-emerald-600 bg-emerald-600 flex items-center justify-center transition-all';
-            const svg = checkBorrower.querySelector('svg');
-            if (svg) svg.classList.remove('hidden');
+            checkBorrower.className = 'w-4 h-4 rounded-full border-2 border-emerald-600 bg-emerald-600 flex items-center justify-center shrink-0 transition-all';
+            const dot = checkBorrower.querySelector('div');
+            if (dot) dot.classList.remove('hidden');
         }
 
         if (checkLender) {
-            checkLender.className = 'absolute top-3.5 right-3.5 w-5 h-5 rounded-full border-2 border-slate-300 bg-white flex items-center justify-center transition-all';
-            const svg = checkLender.querySelector('svg');
-            if (svg) svg.classList.add('hidden');
+            checkLender.className = 'w-4 h-4 rounded-full border border-slate-300 bg-white flex items-center justify-center shrink-0 transition-all';
+            const dot = checkLender.querySelector('div');
+            if (dot) dot.classList.add('hidden');
         }
-
-        if (iconBorrower) iconBorrower.className = 'w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center mb-2.5 transition-colors shadow-xs';
-        if (iconLender) iconLender.className = 'w-8 h-8 rounded-xl bg-slate-200/60 text-slate-600 flex items-center justify-center mb-2.5 transition-colors shadow-xs';
     } else {
         if (radioLender) radioLender.checked = true;
         if (radioBorrower) radioBorrower.checked = false;
 
-        cardLender.className = 'relative flex flex-col items-start p-4 border-2 rounded-2xl cursor-pointer transition-all duration-200 select-none text-left w-full border-emerald-700 bg-emerald-50/80 ring-2 ring-emerald-600/20';
-        cardBorrower.className = 'relative flex flex-col items-start p-4 border-2 rounded-2xl cursor-pointer transition-all duration-200 select-none text-left w-full border-slate-200 hover:border-slate-300 bg-slate-50/50';
+        cardLender.className = 'relative flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-all duration-200 select-none text-left w-full border-emerald-500 bg-emerald-50/60 shadow-xs';
+        cardBorrower.className = 'relative flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-all duration-200 select-none text-left w-full border-slate-200 bg-white hover:border-slate-300';
 
         if (checkLender) {
-            checkLender.className = 'absolute top-3.5 right-3.5 w-5 h-5 rounded-full border-2 border-emerald-600 bg-emerald-600 flex items-center justify-center transition-all';
-            const svg = checkLender.querySelector('svg');
-            if (svg) svg.classList.remove('hidden');
+            checkLender.className = 'w-4 h-4 rounded-full border-2 border-emerald-600 bg-emerald-600 flex items-center justify-center shrink-0 transition-all';
+            const dot = checkLender.querySelector('div');
+            if (dot) dot.classList.remove('hidden');
         }
 
         if (checkBorrower) {
-            checkBorrower.className = 'absolute top-3.5 right-3.5 w-5 h-5 rounded-full border-2 border-slate-300 bg-white flex items-center justify-center transition-all';
-            const svg = checkBorrower.querySelector('svg');
-            if (svg) svg.classList.add('hidden');
+            checkBorrower.className = 'w-4 h-4 rounded-full border border-slate-300 bg-white flex items-center justify-center shrink-0 transition-all';
+            const dot = checkBorrower.querySelector('div');
+            if (dot) dot.classList.add('hidden');
         }
-
-        if (iconLender) iconLender.className = 'w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center mb-2.5 transition-colors shadow-xs';
-        if (iconBorrower) iconBorrower.className = 'w-8 h-8 rounded-xl bg-slate-200/60 text-slate-600 flex items-center justify-center mb-2.5 transition-colors shadow-xs';
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const checkedRadio = document.querySelector('input[name="role"]:checked');
+    if (checkedRadio) {
+        selectRole(checkedRadio.value);
+    }
+});
 </script>
 @endsection

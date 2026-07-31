@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 
 // ─── Public Landing Page ──────────────────────────────────────────────────────
 Route::get('/', fn () => view('welcome'))->name('home');
+Route::get('/terms', fn () => view('legal.terms'))->name('terms.show');
+Route::get('/privacy', fn () => view('legal.privacy'))->name('privacy.show');
 Route::post('/api/payment/webhook', [\App\Modules\Wallet\Controllers\PaymentController::class, 'webhook'])->name('payment.webhook');
 Route::get('/api/docs', fn () => view('docs.swagger'))->name('api.docs');
 

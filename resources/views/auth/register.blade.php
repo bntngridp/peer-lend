@@ -202,17 +202,23 @@
                 <p class="mt-1 text-xs text-rose-600 font-semibold">{{ $message }}</p>
             @enderror
 
-            <!-- Terms Checkbox -->
+            <!-- Terms Checkbox with Legal Links -->
             <div class="py-1">
                 <label class="flex items-center select-none cursor-pointer">
-                    <input type="checkbox" required class="rounded border-slate-300 text-emerald-700 focus:ring-emerald-600 h-4 w-4">
-                    <span class="ml-2 text-[11px] font-medium text-slate-600">I agree to the <a href="#" class="font-bold text-slate-700 underline">Terms &amp; Conditions</a> and <a href="#" class="font-bold text-slate-700 underline">Privacy Policy</a>.</span>
+                    <input type="checkbox" id="terms_agree" onchange="toggleTermsAgreement(this)" required
+                           class="rounded border-slate-300 text-emerald-700 focus:ring-emerald-600 h-4 w-4 cursor-pointer">
+                    <span class="ml-2 text-[11px] font-medium text-slate-600">
+                        I agree to the 
+                        <a href="{{ route('terms.show') }}" target="_blank" class="font-bold text-emerald-700 hover:underline">Terms &amp; Conditions</a> 
+                        and 
+                        <a href="{{ route('privacy.show') }}" target="_blank" class="font-bold text-emerald-700 hover:underline">Privacy Policy</a>.
+                    </span>
                 </label>
             </div>
 
-            <!-- Submit Button -->
-            <button type="submit"
-                    class="w-full py-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-600/20 transition-all duration-200 shadow-xs">
+            <!-- Submit Button (Disabled by default until terms checked) -->
+            <button type="submit" id="btn_submit" disabled
+                    class="w-full py-3 rounded-xl bg-slate-300 text-slate-500 font-bold text-xs cursor-not-allowed transition-all duration-200 shadow-none border-none">
                 Create Account &rarr;
             </button>
 
@@ -343,6 +349,19 @@ function updateReq(el, isValid) {
     }
 }
 
+function toggleTermsAgreement(checkbox) {
+    const btnSubmit = document.getElementById('btn_submit');
+    if (!btnSubmit) return;
+
+    if (checkbox.checked) {
+        btnSubmit.disabled = false;
+        btnSubmit.className = 'w-full py-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-600/20 transition-all duration-200 shadow-xs cursor-pointer';
+    } else {
+        btnSubmit.disabled = true;
+        btnSubmit.className = 'w-full py-3 rounded-xl bg-slate-300 text-slate-500 font-bold text-xs cursor-not-allowed transition-all duration-200 shadow-none border-none';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const checkedRadio = document.querySelector('input[name="role"]:checked');
     if (checkedRadio) {
@@ -351,6 +370,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const passInput = document.getElementById('password');
     if (passInput && passInput.value) {
         checkPasswordRequirements(passInput.value);
+    }
+    const termsCheckbox = document.getElementById('terms_agree');
+    if (termsCheckbox) {
+        toggleTermsAgreement(termsCheckbox);
     }
 });
 </script>

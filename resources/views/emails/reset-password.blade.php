@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reset Your LendFlow Password</title>
+    <title>Reset Kata Sandi LendFlow</title>
     <style>
         body {
             margin: 0;
@@ -111,12 +111,16 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
+        <!-- Header with Official LendFlow Logo -->
         <div class="header">
-            <span class="logo-badge">L</span>
-            <span class="logo-text">LendFlow</span>
-            <div style="font-size: 10px; color: #86efac; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">
-                Institutional Grade P2P Lending
+            @if(isset($message) && file_exists(public_path('images/persegi-panjang-drak-mode.png')))
+                <img src="{{ $message->embed(public_path('images/persegi-panjang-drak-mode.png')) }}" alt="LendFlow Logo" style="max-height: 48px; width: auto; display: inline-block; vertical-align: middle;">
+            @else
+                <span class="logo-badge">L</span>
+                <span class="logo-text">LendFlow</span>
+            @endif
+            <div style="font-size: 10px; color: #86efac; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 10px;">
+                Institutional Grade P2P Lending Platform
             </div>
         </div>
 

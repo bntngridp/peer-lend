@@ -28,10 +28,10 @@ class LendFlowResetPasswordNotification extends Notification
 
         return (new MailMessage)
             ->subject('🔐 Reset Kata Sandi Akun LendFlow Anda')
-            ->html(view('emails.reset-password', [
+            ->view('emails.reset-password', [
                 'url'   => $url,
                 'user'  => $notifiable,
                 'count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire', 60),
-            ])->render());
+            ]);
     }
 }

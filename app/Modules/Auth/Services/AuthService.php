@@ -111,15 +111,21 @@ class AuthService
      */
     public function sendResetLink(string $email): string
     {
-        $status = Password::sendResetLink(['email' => $email]);
+        $user = User::where('email', $email)->first();
 
-        if ($status !== Password::RESET_LINK_SENT) {
+        if (! $user) {
             throw ValidationException::withMessages([
-                'email' => [__($status)],
+                'email' => ['Kami tidak dapat menemukan pengguna dengan alamat email tersebut.'],
             ]);
         }
 
-        return $status;
+        // Generate password reset token via broker
+        $token = Password::broker()->createToken($user);
+
+        // Explicitly send custom LendFlow email template
+        $user->notify(new \App\Notifications\LendFlowResetPasswordNotification($token));
+
+        return Password::RESET_LINK_SENT;
     }
 
     /**

@@ -34,11 +34,12 @@
     <aside class="fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-gray-200 bg-white transition-transform duration-300 md:static md:translate-x-0"
            :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'">
         
-        <!-- Sidebar Header (Logo) -->
-        <div class="flex h-16 items-center px-6 border-b border-gray-100 justify-between">
-            <a href="{{ route('home') }}" class="flex items-center gap-2">
-                <img src="{{ asset('images/persegi-panjang-liegt-mode.png') }}" alt="LendFlow Logo" class="h-8 w-auto object-contain">
-            </a>
+        <!-- Sidebar Header (Logo - Non-clickable static header) -->
+        <div class="flex h-16 items-center px-6 border-b border-gray-100 justify-between select-none">
+            <div class="flex items-center gap-2">
+                <span class="h-8 w-8 rounded-xl bg-emerald-700 text-white font-black flex items-center justify-center text-base shadow-xs shrink-0">L</span>
+                <span class="text-base font-extrabold tracking-tight text-slate-900 block leading-none">LendFlow</span>
+            </div>
             <span class="rounded bg-indigo-50 px-2 py-0.5 text-xs font-bold text-indigo-600 border border-indigo-100">ADMIN</span>
         </div>
 

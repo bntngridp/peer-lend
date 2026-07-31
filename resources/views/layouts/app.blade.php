@@ -37,15 +37,15 @@
         <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 transform transition-transform duration-200 ease-in-out md:static md:translate-x-0 flex flex-col"
                :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'">
             
-            <!-- Brand Logo & Header -->
-            <div class="h-16 flex items-center justify-between px-6 border-b border-slate-100">
-                <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                    <img src="{{ asset('images/persegi-panjang-liegt-mode.png') }}" alt="LendFlow Logo" class="h-8 w-auto object-contain">
+            <!-- Brand Logo & Header (Non-clickable static header matching welcome page logo) -->
+            <div class="h-16 flex items-center justify-between px-6 border-b border-slate-100 select-none">
+                <div class="flex items-center gap-2.5">
+                    <span class="h-8 w-8 rounded-xl bg-emerald-700 text-white font-black flex items-center justify-center text-base shadow-xs shrink-0">L</span>
                     <div>
-                        <span class="text-base font-bold tracking-tight text-slate-900 block leading-none">LendFlow</span>
-                        <span class="text-[10px] font-semibold text-emerald-700 tracking-wider uppercase block mt-1">Institutional Grade P2P</span>
+                        <span class="text-base font-extrabold tracking-tight text-slate-900 block leading-none">LendFlow</span>
+                        <span class="text-[9px] font-bold text-emerald-700 tracking-wider uppercase block mt-1">Institutional Grade P2P</span>
                     </div>
-                </a>
+                </div>
                 <button @click="sidebarOpen = false" class="md:hidden text-slate-400 hover:text-slate-600">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>

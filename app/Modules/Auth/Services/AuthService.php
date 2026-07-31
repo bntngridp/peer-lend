@@ -2,15 +2,17 @@
 
 namespace App\Modules\Auth\Services;
 
+use App\Mail\ResetPasswordMail;
+use App\Models\Currency;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Wallet;
-use App\Models\Currency;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 
@@ -25,26 +27,27 @@ class AuthService
     public function register(array $data): User
     {
         return DB::transaction(function () use ($data) {
-            // 1. Create user account
             $user = User::create([
-                'email'             => $data['email'],
-                'password'          => Hash::make($data['password']),
-                'email_verified_at' => null,
-                'is_active'         => true,
+                'email'    => $data['email'],
+                'password' => Hash::make($data['password']),
             ]);
 
-            // 2. Create profile
+            // Form full_name from request or fallback
+            $fullName = trim(($data['first_name'] ?? '') . ' ' . ($data['last_name'] ?? ''));
+            if (empty($fullName)) {
+                $fullName = $data['full_name'] ?? 'LendFlow Member';
+            }
+
             Profile::create([
                 'user_id'   => $user->id,
-                'full_name' => $data['full_name'],
-                'phone'     => $data['phone'],
+                'full_name' => $fullName,
+                'phone'     => $data['phone'] ?? null,
             ]);
 
-            // 3. Assign role (borrower / lender)
             $role = Role::where('name', $data['role'])->firstOrFail();
             $user->roles()->attach($role->id);
 
-            // 4. Initialise IDR wallet
+            // Seed default IDR wallet
             $idr = Currency::where('code', 'IDR')->first();
             if ($idr) {
                 Wallet::create([
@@ -55,7 +58,6 @@ class AuthService
                 ]);
             }
 
-            // 5. Fire registered event (sends email verification)
             event(new Registered($user));
 
             return $user;
@@ -111,15 +113,33 @@ class AuthService
      */
     public function sendResetLink(string $email): string
     {
-        $status = Password::sendResetLink(['email' => $email]);
+        $user = User::where('email', $email)->first();
 
-        if ($status !== Password::RESET_LINK_SENT) {
+        if (! $user) {
             throw ValidationException::withMessages([
-                'email' => [__($status)],
+                'email' => ['Email yang Anda masukkan tidak terdaftar. Silakan periksa kembali email Anda.'],
             ]);
         }
 
-        return $status;
+        // Generate reset token
+        $token = Password::createToken($user);
+
+        // Build password reset URL
+        $url = url(route('password.reset', [
+            'token' => $token,
+            'email' => $user->email,
+        ], false));
+
+        $expireMinutes = config('auth.passwords.'.config('auth.defaults.passwords').'.expire', 60);
+
+        // Explicitly send LendFlow Branded Mailable
+        Mail::to($user->email)->send(new ResetPasswordMail(
+            user: $user,
+            url: $url,
+            expireMinutes: $expireMinutes
+        ));
+
+        return Password::RESET_LINK_SENT;
     }
 
     /**

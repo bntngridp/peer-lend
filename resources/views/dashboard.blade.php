@@ -641,7 +641,6 @@
             <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-sm font-bold text-slate-900">Risk Allocation</h3>
-                    <span class="text-xs text-slate-400 font-medium">️</span>
                 </div>
 
                 <!-- Donut Chart & Legend -->
@@ -692,7 +691,6 @@
             <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs" x-data="{ editing: false }">
                 <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
-                        <span class="text-base"></span>
                         <h3 class="text-sm font-bold text-slate-900">Auto-Invest</h3>
                     </div>
                     <!-- Active Toggle Switch -->

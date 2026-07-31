@@ -1,18 +1,14 @@
 @extends('layouts.auth')
 
 @section('content')
-<div class="sm:mx-auto sm:w-full sm:max-w-md relative">
-    
-    <!-- Explicit Green Glow Aura Backdrop around Card -->
-    <div class="green-glow-card-aura"></div>
-
+<div class="sm:mx-auto sm:w-full sm:max-w-md">
     <!-- LendFlow Register Card Container -->
-    <div class="relative bg-white/95 backdrop-blur-md px-8 py-10 shadow-2xl shadow-emerald-900/10 rounded-2xl border border-emerald-100/80 z-10">
+    <div class="bg-white px-8 py-10 shadow-xl shadow-slate-900/5 rounded-2xl border border-slate-200">
         
         <!-- Brand Logo & Header -->
         <div class="text-center mb-8">
             <a href="{{ route('home') }}" class="inline-flex items-center justify-center gap-2 mb-3 group">
-                <span class="h-9 w-9 rounded-xl bg-emerald-700 text-white font-black flex items-center justify-center text-lg shadow-sm group-hover:bg-emerald-800 transition-colors">L</span>
+                <span class="h-9 w-9 rounded-xl bg-emerald-700 text-white font-black flex items-center justify-center text-lg shadow-xs group-hover:bg-emerald-800 transition-colors">L</span>
                 <span class="text-2xl font-black text-slate-900 tracking-tight">LendFlow</span>
             </a>
             <h2 class="text-base font-bold text-slate-900">Create an Account</h2>
@@ -30,7 +26,7 @@
                 <div class="grid grid-cols-2 gap-3 mb-4">
                     <!-- Borrower Card -->
                     <div @click="selectedRole = 'borrower'"
-                         :class="selectedRole === 'borrower' ? 'border-emerald-700 bg-emerald-50/60 ring-2 ring-emerald-600/30' : 'border-slate-200 hover:border-slate-300 bg-slate-50/50'"
+                         :class="selectedRole === 'borrower' ? 'border-emerald-700 bg-emerald-50/60 ring-1 ring-emerald-600/30' : 'border-slate-200 hover:border-slate-300 bg-slate-50/50'"
                          class="flex flex-col items-center p-3 border rounded-xl cursor-pointer transition-all select-none text-center">
                         <span class="text-xs font-bold text-slate-900">Borrower</span>
                         <span class="text-[10px] text-slate-500 font-medium">Apply for credit</span>
@@ -38,7 +34,7 @@
 
                     <!-- Lender Card -->
                     <div @click="selectedRole = 'lender'"
-                         :class="selectedRole === 'lender' ? 'border-emerald-700 bg-emerald-50/60 ring-2 ring-emerald-600/30' : 'border-slate-200 hover:border-slate-300 bg-slate-50/50'"
+                         :class="selectedRole === 'lender' ? 'border-emerald-700 bg-emerald-50/60 ring-1 ring-emerald-600/30' : 'border-slate-200 hover:border-slate-300 bg-slate-50/50'"
                          class="flex flex-col items-center p-3 border rounded-xl cursor-pointer transition-all select-none text-center">
                         <span class="text-xs font-bold text-slate-900">Lender (Investor)</span>
                         <span class="text-[10px] text-slate-500 font-medium">Fund capital</span>
@@ -50,7 +46,7 @@
             <div>
                 <label for="full_name" class="block text-xs font-bold text-slate-700 mb-1">Full Name</label>
                 <input id="full_name" name="full_name" type="text" required value="{{ old('full_name') }}"
-                       class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/20 transition-all duration-200 @error('full_name') border-rose-300 text-rose-900 focus:ring-rose-500/20 @enderror"
+                       class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/15 transition-all duration-200 @error('full_name') border-rose-300 text-rose-900 focus:ring-rose-500/20 @enderror"
                        placeholder="John Doe">
                 @error('full_name')
                     <p class="mt-1 text-xs text-rose-600 font-semibold">{{ $message }}</p>
@@ -61,7 +57,7 @@
             <div>
                 <label for="email" class="block text-xs font-bold text-slate-700 mb-1">Business Email</label>
                 <input id="email" name="email" type="email" autocomplete="email" required value="{{ old('email') }}"
-                       class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/20 transition-all duration-200 @error('email') border-rose-300 text-rose-900 focus:ring-rose-500/20 @enderror"
+                       class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/15 transition-all duration-200 @error('email') border-rose-300 text-rose-900 focus:ring-rose-500/20 @enderror"
                        placeholder="john@company.com">
                 @error('email')
                     <p class="mt-1 text-xs text-rose-600 font-semibold">{{ $message }}</p>
@@ -72,7 +68,7 @@
             <div>
                 <label for="phone" class="block text-xs font-bold text-slate-700 mb-1">Phone Number</label>
                 <input id="phone" name="phone" type="tel" required value="{{ old('phone') }}"
-                       class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/20 transition-all duration-200 @error('phone') border-rose-300 text-rose-900 focus:ring-rose-500/20 @enderror"
+                       class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/15 transition-all duration-200 @error('phone') border-rose-300 text-rose-900 focus:ring-rose-500/20 @enderror"
                        placeholder="+1 (555) 000-0000">
                 @error('phone')
                     <p class="mt-1 text-xs text-rose-600 font-semibold">{{ $message }}</p>
@@ -84,7 +80,7 @@
                 <div>
                     <label for="password" class="block text-xs font-bold text-slate-700 mb-1">Password</label>
                     <input id="password" name="password" type="password" required
-                           class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/20 transition-all duration-200 @error('password') border-rose-300 text-rose-900 focus:ring-rose-500/20 @enderror"
+                           class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/15 transition-all duration-200 @error('password') border-rose-300 text-rose-900 focus:ring-rose-500/20 @enderror"
                            placeholder="••••••••">
                     @error('password')
                         <p class="mt-1 text-xs text-rose-600 font-semibold">{{ $message }}</p>
@@ -94,7 +90,7 @@
                 <div>
                     <label for="password_confirmation" class="block text-xs font-bold text-slate-700 mb-1">Confirm Password</label>
                     <input id="password_confirmation" name="password_confirmation" type="password" required
-                           class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/20 transition-all duration-200"
+                           class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/15 transition-all duration-200"
                            placeholder="••••••••">
                 </div>
             </div>
@@ -109,7 +105,7 @@
 
             <!-- Submit Button -->
             <button type="submit"
-                    class="w-full py-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-600/20 transition-all duration-200 shadow-sm">
+                    class="w-full py-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-600/20 transition-all duration-200 shadow-xs">
                 Create Account &rarr;
             </button>
 

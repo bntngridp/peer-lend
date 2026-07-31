@@ -21,42 +21,32 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
         @keyframes pulseOrb {
-            0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.85; }
-            50% { transform: scale(1.18) translate(30px, -20px); opacity: 1; }
+            0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.6; }
+            50% { transform: scale(1.15) translate(25px, -15px); opacity: 0.85; }
         }
         .green-glow-orb-top {
             position: fixed;
-            top: -120px;
-            left: -120px;
-            width: 600px;
-            height: 600px;
+            top: -150px;
+            left: -150px;
+            width: 650px;
+            height: 650px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(34, 197, 94, 0.35) 0%, rgba(21, 128, 61, 0.2) 45%, rgba(255, 255, 255, 0) 70%);
-            filter: blur(50px);
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.22) 0%, rgba(21, 128, 61, 0.12) 50%, rgba(255, 255, 255, 0) 75%);
+            filter: blur(60px);
             animation: pulseOrb 8s ease-in-out infinite;
             pointer-events: none;
             z-index: 0;
         }
         .green-glow-orb-bottom {
             position: fixed;
-            bottom: -120px;
-            right: -120px;
-            width: 650px;
-            height: 650px;
+            bottom: -150px;
+            right: -150px;
+            width: 700px;
+            height: 700px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(21, 128, 61, 0.32) 0%, rgba(34, 197, 94, 0.18) 45%, rgba(255, 255, 255, 0) 70%);
-            filter: blur(55px);
+            background: radial-gradient(circle, rgba(21, 128, 61, 0.2) 0%, rgba(34, 197, 94, 0.1) 50%, rgba(255, 255, 255, 0) 75%);
+            filter: blur(65px);
             animation: pulseOrb 10s ease-in-out infinite reverse;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .green-glow-card-aura {
-            position: absolute;
-            inset: -20px;
-            border-radius: 32px;
-            background: radial-gradient(circle, rgba(34, 197, 94, 0.45) 0%, rgba(21, 128, 61, 0.25) 55%, rgba(255, 255, 255, 0) 80%);
-            filter: blur(30px);
-            animation: pulseOrb 6s ease-in-out infinite;
             pointer-events: none;
             z-index: 0;
         }
@@ -64,7 +54,7 @@
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col justify-between relative overflow-x-hidden">
 
-    <!-- Explicit Radial Ambient Green Glow Orbs -->
+    <!-- Soft Page Background Ambient Green Orbs -->
     <div class="green-glow-orb-top"></div>
     <div class="green-glow-orb-bottom"></div>
 

@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             InterestRateSeeder::class,
             SettingSeeder::class,
             AdminUserSeeder::class,
+            DummyUsersSeeder::class,
         ]);
     }
 }

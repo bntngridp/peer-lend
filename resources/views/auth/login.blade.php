@@ -32,7 +32,7 @@
                 @enderror
             </div>
 
-            <!-- Password -->
+            <!-- Password with Eye Toggle -->
             <div>
                 <div class="flex items-center justify-between mb-1.5">
                     <label for="password" class="block text-xs font-bold text-slate-700">Password</label>
@@ -42,8 +42,17 @@
                 </div>
                 <div class="relative">
                     <input id="password" name="password" type="password" autocomplete="current-password" required
-                           class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/15 transition-all duration-200 @error('password') border-rose-300 text-rose-900 focus:ring-rose-500/20 @enderror"
+                           class="w-full rounded-xl border border-slate-200 bg-white pl-3.5 pr-10 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/15 transition-all duration-200 @error('password') border-rose-300 text-rose-900 focus:ring-rose-500/20 @enderror"
                            placeholder="••••••••">
+                    <button type="button" onclick="togglePass('password', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-700 focus:outline-none transition-colors p-1" title="Toggle password visibility">
+                        <svg class="eye-open w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        <svg class="eye-closed w-4 h-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.018 10.018 0 013.682-.763c4.478 0 8.268 2.943 9.542 7a9.97 9.97 0 01-2.499 4.14m-5.8-5.8a3 3 0 11-4.243-4.243m4.242 4.242L3 3l18 18" />
+                        </svg>
+                    </button>
                 </div>
                 @error('password')
                     <p class="mt-1 text-xs text-rose-600 font-semibold">{{ $message }}</p>
@@ -104,4 +113,25 @@
 
     </div>
 </div>
+
+<script>
+function togglePass(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    const isPassword = input.type === 'password';
+    input.type = isPassword ? 'text' : 'password';
+    
+    const eyeOpen = btn.querySelector('.eye-open');
+    const eyeClosed = btn.querySelector('.eye-closed');
+    if (eyeOpen && eyeClosed) {
+        if (isPassword) {
+            eyeOpen.classList.add('hidden');
+            eyeClosed.classList.remove('hidden');
+        } else {
+            eyeOpen.classList.remove('hidden');
+            eyeClosed.classList.add('hidden');
+        }
+    }
+}
+</script>
 @endsection

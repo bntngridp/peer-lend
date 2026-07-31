@@ -110,4 +110,12 @@ class User extends Authenticatable
     {
         return $this->wallets()->where('currency_id', $currencyId)->first();
     }
+
+    /**
+     * Send custom LendFlow password reset notification link to user email.
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new \App\Notifications\LendFlowResetPasswordNotification($token));
+    }
 }

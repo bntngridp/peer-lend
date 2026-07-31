@@ -20,10 +20,30 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
-        @keyframes pulseOrb {
-            0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.6; }
-            50% { transform: scale(1.15) translate(25px, -15px); opacity: 0.85; }
+
+        /* ─── Dynamic Moving Green Ambient Orbs ────────────────────────────── */
+        @keyframes floatOrbitOne {
+            0%   { transform: translate(0px, 0px) scale(1); opacity: 0.7; }
+            25%  { transform: translate(160px, 90px) scale(1.25); opacity: 0.95; }
+            50%  { transform: translate(80px, 200px) scale(0.9); opacity: 0.65; }
+            75%  { transform: translate(-100px, 110px) scale(1.2); opacity: 0.9; }
+            100% { transform: translate(0px, 0px) scale(1); opacity: 0.7; }
         }
+
+        @keyframes floatOrbitTwo {
+            0%   { transform: translate(0px, 0px) scale(1); opacity: 0.65; }
+            25%  { transform: translate(-180px, -100px) scale(1.3); opacity: 0.9; }
+            50%  { transform: translate(-90px, -220px) scale(0.85); opacity: 0.6; }
+            75%  { transform: translate(110px, -110px) scale(1.25); opacity: 0.95; }
+            100% { transform: translate(0px, 0px) scale(1); opacity: 0.65; }
+        }
+
+        @keyframes floatOrbitThree {
+            0%   { transform: translate(-50%, -50%) scale(0.9) rotate(0deg); opacity: 0.5; }
+            50%  { transform: translate(-42%, -58%) scale(1.35) rotate(180deg); opacity: 0.85; }
+            100% { transform: translate(-50%, -50%) scale(0.9) rotate(360deg); opacity: 0.5; }
+        }
+
         .green-glow-orb-top {
             position: fixed;
             top: -150px;
@@ -31,12 +51,14 @@
             width: 650px;
             height: 650px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(34, 197, 94, 0.22) 0%, rgba(21, 128, 61, 0.12) 50%, rgba(255, 255, 255, 0) 75%);
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.3) 0%, rgba(21, 128, 61, 0.15) 50%, rgba(255, 255, 255, 0) 75%);
             filter: blur(60px);
-            animation: pulseOrb 8s ease-in-out infinite;
+            animation: floatOrbitOne 14s ease-in-out infinite;
             pointer-events: none;
             z-index: 0;
+            will-change: transform, opacity;
         }
+
         .green-glow-orb-bottom {
             position: fixed;
             bottom: -150px;
@@ -44,19 +66,36 @@
             width: 700px;
             height: 700px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(21, 128, 61, 0.2) 0%, rgba(34, 197, 94, 0.1) 50%, rgba(255, 255, 255, 0) 75%);
+            background: radial-gradient(circle, rgba(21, 128, 61, 0.28) 0%, rgba(34, 197, 94, 0.14) 50%, rgba(255, 255, 255, 0) 75%);
             filter: blur(65px);
-            animation: pulseOrb 10s ease-in-out infinite reverse;
+            animation: floatOrbitTwo 16s ease-in-out infinite;
             pointer-events: none;
             z-index: 0;
+            will-change: transform, opacity;
+        }
+
+        .green-glow-orb-center {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.2) 0%, rgba(22, 101, 52, 0.1) 60%, rgba(255, 255, 255, 0) 80%);
+            filter: blur(80px);
+            animation: floatOrbitThree 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+            will-change: transform, opacity;
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col justify-between relative overflow-x-hidden">
 
-    <!-- Soft Page Background Ambient Green Orbs -->
+    <!-- Dynamic Moving Background Green Ambient Orbs -->
     <div class="green-glow-orb-top"></div>
     <div class="green-glow-orb-bottom"></div>
+    <div class="green-glow-orb-center"></div>
 
     <!-- Main Auth Page Content -->
     <main class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 relative z-10">

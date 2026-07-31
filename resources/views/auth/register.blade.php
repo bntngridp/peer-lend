@@ -19,26 +19,33 @@
         <form class="space-y-4" action="{{ route('register') }}" method="POST">
             @csrf
 
-            <!-- Role Selection Cards -->
+            <!-- Native Radio Role Selection Cards -->
             <div x-data="{ selectedRole: '{{ old('role', 'borrower') }}' }">
                 <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">I want to register as:</label>
-                <input type="hidden" name="role" :value="selectedRole">
                 <div class="grid grid-cols-2 gap-3 mb-4">
                     <!-- Borrower Card -->
-                    <div @click="selectedRole = 'borrower'"
-                         :class="selectedRole === 'borrower' ? 'border-emerald-700 bg-emerald-50/60 ring-1 ring-emerald-600/30' : 'border-slate-200 hover:border-slate-300 bg-slate-50/50'"
-                         class="flex flex-col items-center p-3 border rounded-xl cursor-pointer transition-all select-none text-center">
-                        <span class="text-xs font-bold text-slate-900">Borrower</span>
+                    <label @click="selectedRole = 'borrower'"
+                           :class="selectedRole === 'borrower' ? 'border-emerald-700 bg-emerald-50/80 ring-2 ring-emerald-600/20' : 'border-slate-200 hover:border-slate-300 bg-white'"
+                           class="relative flex flex-col items-center p-3.5 border-2 rounded-xl cursor-pointer transition-all duration-200 select-none text-center group">
+                        <input type="radio" name="role" value="borrower" class="sr-only" x-model="selectedRole" {{ old('role', 'borrower') === 'borrower' ? 'checked' : '' }}>
+                        <div class="flex items-center gap-1.5 mb-0.5">
+                            <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">Borrower</span>
+                            <span x-show="selectedRole === 'borrower'" class="w-2 h-2 rounded-full bg-emerald-600 inline-block"></span>
+                        </div>
                         <span class="text-[10px] text-slate-500 font-medium">Apply for credit</span>
-                    </div>
+                    </label>
 
                     <!-- Lender Card -->
-                    <div @click="selectedRole = 'lender'"
-                         :class="selectedRole === 'lender' ? 'border-emerald-700 bg-emerald-50/60 ring-1 ring-emerald-600/30' : 'border-slate-200 hover:border-slate-300 bg-slate-50/50'"
-                         class="flex flex-col items-center p-3 border rounded-xl cursor-pointer transition-all select-none text-center">
-                        <span class="text-xs font-bold text-slate-900">Lender (Investor)</span>
+                    <label @click="selectedRole = 'lender'"
+                           :class="selectedRole === 'lender' ? 'border-emerald-700 bg-emerald-50/80 ring-2 ring-emerald-600/20' : 'border-slate-200 hover:border-slate-300 bg-white'"
+                           class="relative flex flex-col items-center p-3.5 border-2 rounded-xl cursor-pointer transition-all duration-200 select-none text-center group">
+                        <input type="radio" name="role" value="lender" class="sr-only" x-model="selectedRole" {{ old('role') === 'lender' ? 'checked' : '' }}>
+                        <div class="flex items-center gap-1.5 mb-0.5">
+                            <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">Lender (Investor)</span>
+                            <span x-show="selectedRole === 'lender'" class="w-2 h-2 rounded-full bg-emerald-600 inline-block"></span>
+                        </div>
                         <span class="text-[10px] text-slate-500 font-medium">Fund capital</span>
-                    </div>
+                    </label>
                 </div>
             </div>
 

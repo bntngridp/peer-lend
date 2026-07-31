@@ -3,8 +3,8 @@
 namespace App\Modules\Loan\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Modules\Loan\Models\Loan;
-use App\Modules\Wallet\Models\Currency;
+use App\Models\LoanRequest as Loan;
+use App\Models\Currency;
 use Illuminate\Http\Request;
 
 class CollateralDashboardController extends Controller

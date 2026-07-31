@@ -38,6 +38,10 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
     // Verification notice fallback
     Route::get('/email/verify', fn () => redirect()->route('login'))->name('verification.notice');
+
+    // Google OAuth Routes
+    Route::get('/auth/google', [\App\Modules\Auth\Controllers\GoogleAuthController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('/auth/google/callback', [\App\Modules\Auth\Controllers\GoogleAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 });
 
 // ─── Authenticated Routes ─────────────────────────────────────────────────────

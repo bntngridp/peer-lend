@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
 @section('content')
 <div class="min-h-[80vh] flex flex-col justify-center py-12 sm:px-6 lg:px-8">

@@ -29,7 +29,7 @@ class RegisterController extends Controller
     {
         $this->authService->register($request->validated());
 
-        return redirect()->route('verification.notice')
-            ->with('success', 'Registration successful! Please check your email to verify your account.');
+        return redirect()->route('login')
+            ->with('success', 'Registration successful! Your account has been created. Please sign in with your email and password.');
     }
 }

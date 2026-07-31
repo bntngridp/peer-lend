@@ -34,6 +34,8 @@ Route::middleware('guest')->group(function () {
     // Reset Password
     Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
     Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
+    // Verification notice fallback
+    Route::get('/email/verify', fn () => redirect()->route('login'))->name('verification.notice');
 });
 
 // ─── Authenticated Routes ─────────────────────────────────────────────────────

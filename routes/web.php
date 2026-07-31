@@ -65,6 +65,7 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
 
     // 💳 Virtual Wallet Routes
     Route::get('/wallet', [\App\Modules\Wallet\Controllers\WalletController::class, 'index'])->name('wallet.index');
+    Route::get('/collateral', [\App\Modules\Loan\Controllers\CollateralDashboardController::class, 'index'])->name('collateral.index');
     Route::middleware('kyc')->group(function () {
         Route::post('/wallet/deposit', [\App\Modules\Wallet\Controllers\WalletController::class, 'deposit'])->name('wallet.deposit');
         Route::post('/wallet/deposit/initiate', [\App\Modules\Wallet\Controllers\PaymentController::class, 'initiateDeposit'])->name('wallet.deposit.initiate');

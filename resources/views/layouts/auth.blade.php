@@ -20,48 +20,34 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
+        @keyframes floatGlow {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.25; }
+            50% { transform: translate(30px, -20px) scale(1.1); opacity: 0.4; }
+        }
+        .animate-glow-slow {
+            animation: floatGlow 10s ease-in-out infinite;
+        }
+        .animate-glow-reverse {
+            animation: floatGlow 12s ease-in-out infinite reverse;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col justify-between">
+<body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col justify-between relative overflow-x-hidden">
 
-    <!-- ─── Top Navigation Header (Matching Welcome Landing Page) ──────────── -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <!-- Brand Logo -->
-            <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                <img src="{{ asset('images/persegi-panjang-liegt-mode.png') }}" alt="LendFlow Logo" class="h-8 w-auto object-contain">
-                <div>
-                    <span class="text-base font-bold tracking-tight text-slate-900 block leading-none">LendFlow</span>
-                    <span class="text-[10px] font-semibold text-emerald-700 tracking-wider uppercase block mt-1">Institutional Grade P2P</span>
-                </div>
-            </a>
+    <!-- Ambient Green Background Glow Blobs -->
+    <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        <div class="absolute -top-32 -left-32 h-[30rem] w-[30rem] rounded-full bg-emerald-400/25 blur-3xl animate-glow-slow"></div>
+        <div class="absolute -bottom-32 -right-32 h-[32rem] w-[32rem] rounded-full bg-emerald-500/20 blur-3xl animate-glow-reverse"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[40rem] w-[40rem] rounded-full bg-emerald-300/15 blur-[120px] pointer-events-none"></div>
+    </div>
 
-            <!-- Header Right Navigation Actions -->
-            <div class="flex items-center gap-4">
-                @if(request()->routeIs('login'))
-                    <a href="{{ route('register') }}" class="py-2 px-4 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
-                        Create Account
-                    </a>
-                @elseif(request()->routeIs('register'))
-                    <a href="{{ route('login') }}" class="py-2 px-4 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
-                        Sign In
-                    </a>
-                @else
-                    <a href="{{ route('home') }}" class="text-xs font-bold text-slate-600 hover:text-slate-900 transition-colors">
-                        &larr; Back to Home
-                    </a>
-                @endif
-            </div>
-        </div>
-    </header>
-
-    <!-- ─── Main Auth Page Content ─────────────────────────────────────────── -->
-    <main class="flex-1 flex flex-col justify-center py-10 px-4 sm:px-6 lg:px-8">
+    <!-- Main Auth Page Content (No Top Header Bar) -->
+    <main class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 relative z-10">
         @yield('content')
     </main>
 
-    <!-- ─── Minimalist Footer ──────────────────────────────────────────────── -->
-    <footer class="bg-white border-t border-slate-200 py-6">
+    <!-- Minimalist Footer -->
+    <footer class="bg-white/80 backdrop-blur-md border-t border-slate-200 py-4 relative z-10">
         <div class="max-w-7xl mx-auto px-4 text-center text-xs font-medium text-slate-400">
             &copy; {{ date('Y') }} LendFlow Inc. Regulated Financial Services Platform. All rights reserved.
         </div>

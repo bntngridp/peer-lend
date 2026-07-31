@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Modules\Auth\Services\AuthService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -26,13 +27,41 @@ class PasswordResetController extends Controller
     {
         $request->validate(['email' => ['required', 'email']]);
 
-        try {
-            $this->authService->sendResetLink($request->email);
-        } catch (ValidationException $e) {
-            return back()->withErrors($e->errors());
+        $emailKey = strtolower(trim($request->email));
+        $ip = $request->ip();
+
+        $dailyKey = 'reset-password-daily:' . $ip . '-' . $emailKey;
+        $cooldownKey = 'reset-password-cooldown:' . $ip . '-' . $emailKey;
+
+        // 1. Check Daily Limit (Max 3x per 24 hours)
+        if (RateLimiter::tooManyAttempts($dailyKey, 3)) {
+            return back()->withErrors([
+                'email' => 'Anda telah mencapai batas maksimal 3x permintaan reset password per hari. Silakan coba lagi besok.',
+            ])->withInput();
         }
 
-        return back()->with('success', 'Password reset link has been sent to your email.');
+        // 2. Check 60-second Cooldown Timer Limit
+        if (RateLimiter::tooManyAttempts($cooldownKey, 1)) {
+            $seconds = RateLimiter::availableIn($cooldownKey);
+            return back()->withErrors([
+                'email' => "Harap tunggu {$seconds} detik sebelum meminta link reset password kembali.",
+            ])->with('cooldown_seconds', $seconds)->withInput();
+        }
+
+        try {
+            $this->authService->sendResetLink($request->email);
+
+            // Record attempts
+            RateLimiter::hit($dailyKey, 86400); // 1 day decay (24 hours)
+            RateLimiter::hit($cooldownKey, 60);  // 60 seconds cooldown
+
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
+        }
+
+        return back()
+            ->with('success', 'Tautan pemulihan password telah dikirimkan ke email Anda. Silakan periksa inbox atau folder spam.')
+            ->with('cooldown_seconds', 60);
     }
 
     // ─── Reset Password ───────────────────────────────────────────────
@@ -50,7 +79,20 @@ class PasswordResetController extends Controller
         $request->validate([
             'token'                 => ['required'],
             'email'                 => ['required', 'email'],
-            'password'              => ['required', 'min:8', 'confirmed'],
+            'password'              => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/[a-z]/',
+                'regex:/[A-Z]/',
+                'regex:/[0-9]/',
+                'regex:/[@$!%*#?&]/',
+                'confirmed'
+            ],
+        ], [
+            'password.min'       => 'Password harus terdiri dari minimal 8 karakter.',
+            'password.regex'     => 'Password harus mengandung huruf besar, huruf kecil, angka, dan karakter khusus (@, $, !, %, *, #, ?, &).',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
         ]);
 
         try {
@@ -62,6 +104,6 @@ class PasswordResetController extends Controller
         }
 
         return redirect()->route('login')
-            ->with('success', 'Your password has been reset successfully. Please login.');
+            ->with('success', 'Password Anda telah berhasil diperbarui! Silakan sign in dengan password baru.');
     }
 }

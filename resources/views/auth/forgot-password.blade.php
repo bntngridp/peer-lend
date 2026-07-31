@@ -13,9 +13,23 @@
             </a>
             <h2 class="text-base font-bold text-slate-900">Reset Password</h2>
             <p class="text-xs font-medium text-slate-500 mt-1 leading-relaxed">
-                Enter the email address associated with your LendFlow account, and we'll send you a secure link to reset your password.
+                Masukkan alamat email akun LendFlow Anda. Kami akan mengirimkan tautan aman untuk membuat password baru secara langsung.
             </p>
         </div>
+
+        @if (session('success'))
+            <div class="mb-5 p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-800 flex items-start gap-2.5">
+                <svg class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div>
+                    <div>{{ session('success') }}</div>
+                    <div id="cooldown-banner" class="mt-1 text-[11px] font-bold text-emerald-700">
+                        Dapat meminta tautan ulang dalam: <span id="timer-count">60</span>s
+                    </div>
+                </div>
+            </div>
+        @endif
 
         <!-- Form -->
         <form class="space-y-5" action="{{ route('password.email') }}" method="POST">
@@ -33,9 +47,9 @@
             </div>
 
             <!-- Submit Button -->
-            <button type="submit"
+            <button type="submit" id="btn_submit"
                     class="w-full py-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-600/20 transition-all duration-200 shadow-xs">
-                Send Recovery Link
+                Send Recovery Link &rarr;
             </button>
 
             <!-- Back to Login -->
@@ -48,4 +62,55 @@
 
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let secondsLeft = {{ session('cooldown_seconds', 0) }};
+    
+    // Check localStorage for persisted cooldown
+    const storedExpire = localStorage.getItem('lendflow_reset_cooldown');
+    if (storedExpire) {
+        const now = Math.floor(Date.now() / 1000);
+        const remaining = parseInt(storedExpire) - now;
+        if (remaining > 0 && remaining > secondsLeft) {
+            secondsLeft = remaining;
+        }
+    }
+
+    if (secondsLeft > 0) {
+        const btnSubmit = document.getElementById('btn_submit');
+        const timerCount = document.getElementById('timer-count');
+        const expireTime = Math.floor(Date.now() / 1000) + secondsLeft;
+        localStorage.setItem('lendflow_reset_cooldown', expireTime);
+
+        function updateTimer() {
+            const now = Math.floor(Date.now() / 1000);
+            const left = expireTime - now;
+
+            if (left <= 0) {
+                localStorage.removeItem('lendflow_reset_cooldown');
+                if (btnSubmit) {
+                    btnSubmit.disabled = false;
+                    btnSubmit.className = 'w-full py-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-600/20 transition-all duration-200 shadow-xs cursor-pointer';
+                    btnSubmit.innerHTML = 'Send Recovery Link &rarr;';
+                }
+                const banner = document.getElementById('cooldown-banner');
+                if (banner) banner.style.display = 'none';
+                return;
+            }
+
+            if (timerCount) timerCount.textContent = left;
+            if (btnSubmit) {
+                btnSubmit.disabled = true;
+                btnSubmit.className = 'w-full py-3 rounded-xl bg-slate-300 text-slate-500 font-bold text-xs cursor-not-allowed transition-all duration-200 shadow-none border-none';
+                btnSubmit.innerHTML = 'Kirim Ulang Link (' + left + 's)';
+            }
+
+            setTimeout(updateTimer, 1000);
+        }
+
+        updateTimer();
+    }
+});
+</script>
 @endsection

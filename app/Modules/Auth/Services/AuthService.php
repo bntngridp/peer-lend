@@ -69,18 +69,27 @@ class AuthService
      */
     public function login(array $credentials, bool $remember = false): User
     {
-        if (! Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']], $remember)) {
+        // 1. Check if user with this email exists
+        $user = User::where('email', $credentials['email'])->first();
+
+        if (! $user) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                'email' => ['Email yang Anda masukkan tidak terdaftar. Silakan periksa kembali email Anda atau buat akun baru.'],
             ]);
         }
 
-        $user = Auth::user();
+        // 2. Check if password matches
+        if (! Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']], $remember)) {
+            throw ValidationException::withMessages([
+                'password' => ['Password yang Anda masukkan salah. Silakan periksa kembali password Anda atau klik Lupa Password.'],
+            ]);
+        }
 
+        // 3. Check if account is active
         if (! $user->is_active) {
             Auth::logout();
             throw ValidationException::withMessages([
-                'email' => ['Your account has been suspended. Please contact support.'],
+                'email' => ['Akun Anda sedang dinonaktifkan. Silakan hubungi dukungan pelanggan LendFlow.'],
             ]);
         }
 

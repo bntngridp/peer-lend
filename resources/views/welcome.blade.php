@@ -180,19 +180,19 @@
 
                 <!-- Right Lender Graphic (Spans 6 Cols) -->
                 <div class="lg:col-span-6">
-                    <div class="rounded-2xl border border-slate-200 bg-slate-900 text-white p-6 shadow-md space-y-4">
-                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                            <span class="text-xs font-extrabold text-white">Lender Portfolio Preview</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-700 text-white">+12.4% APY</span>
+                    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-md space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <span class="text-xs font-extrabold text-slate-900">Lender Portfolio Preview</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">+12.4% APY</span>
                         </div>
                         <div class="grid grid-cols-2 gap-3 text-xs">
-                            <div class="p-3 rounded-xl bg-slate-800 border border-slate-700">
+                            <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
                                 <span class="text-[10px] text-slate-400 font-bold uppercase block">Portfolio Value</span>
-                                <span class="text-base font-extrabold text-white block mt-1">Rp 48.250.000</span>
+                                <span class="text-base font-extrabold text-slate-900 block mt-1">Rp 48.250.000</span>
                             </div>
-                            <div class="p-3 rounded-xl bg-slate-800 border border-slate-700">
+                            <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
                                 <span class="text-[10px] text-slate-400 font-bold uppercase block">Active Deals</span>
-                                <span class="text-base font-extrabold text-white block mt-1">34 Loans</span>
+                                <span class="text-base font-extrabold text-slate-900 block mt-1">34 Loans</span>
                             </div>
                         </div>
                     </div>

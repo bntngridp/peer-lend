@@ -36,7 +36,16 @@ class RegisterRequest extends FormRequest
     {
         return [
             'email'       => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password'    => ['required', 'string', 'min:8', 'confirmed'],
+            'password'    => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/[a-z]/',        // At least one lowercase letter
+                'regex:/[A-Z]/',        // At least one uppercase letter
+                'regex:/[0-9]/',        // At least one number
+                'regex:/[@$!%*#?&]/',    // At least one special character
+                'confirmed'
+            ],
             'full_name'   => ['required', 'string', 'max:255'],
             'phone'       => ['required', 'string', 'max:20', 'unique:profiles,phone'],
             'role'        => ['required', 'in:borrower,lender'],
@@ -48,6 +57,8 @@ class RegisterRequest extends FormRequest
         return [
             'email.unique'       => 'Email address already registered.',
             'phone.unique'       => 'Phone number already in use.',
+            'password.min'       => 'Password must be at least 8 characters long.',
+            'password.regex'     => 'Password must contain uppercase, lowercase, number, and special character (@, $, !, %, *, #, ?, &).',
             'password.confirmed' => 'Password confirmation does not match.',
         ];
     }

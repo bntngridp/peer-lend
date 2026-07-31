@@ -1,44 +1,52 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex min-h-[80vh] flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50/50">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <h2 class="mt-6 text-3xl font-extrabold tracking-tight text-gray-900">Reset your password</h2>
-        <p class="mt-2 text-sm text-gray-600">
-            Remembered your credentials?
-            <a href="{{ route('login') }}" class="font-semibold text-indigo-600 hover:text-indigo-500 transition-colors">
-                Sign in instead
-            </a>
-        </p>
-    </div>
+<div class="min-h-[85vh] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+        <!-- Password Recovery Card -->
+        <div class="bg-white px-8 py-10 shadow-xs rounded-2xl border border-slate-200">
+            
+            <!-- Brand Logo & Header -->
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center gap-2 mb-3">
+                    <span class="h-8 w-8 rounded-xl bg-emerald-700 text-white font-black flex items-center justify-center text-base shadow-xs">L</span>
+                    <span class="text-xl font-extrabold text-slate-900 tracking-tight">LendFlow</span>
+                </div>
+                <h2 class="text-base font-bold text-slate-900">Reset Password</h2>
+                <p class="text-xs font-medium text-slate-500 mt-1 leading-relaxed">
+                    Enter the email address associated with your LendFlow account, and we'll send you a secure link to reset your password.
+                </p>
+            </div>
 
-    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div class="bg-white px-6 py-8 shadow-xl shadow-gray-200/50 rounded-2xl border border-gray-100 sm:px-10">
-            <form class="space-y-6" action="{{ route('password.email') }}" method="POST">
+            <!-- Form -->
+            <form class="space-y-5" action="{{ route('password.email') }}" method="POST">
                 @csrf
 
                 <!-- Email Input -->
                 <div>
-                    <label for="email" class="block text-xs font-semibold uppercase tracking-wider text-gray-600">Email Address</label>
-                    <p class="text-[11px] text-gray-500 mb-2">We will email you a link to reset your password.</p>
-                    <div class="mt-1.5 relative rounded-xl shadow-sm">
-                        <input id="email" name="email" type="email" autocomplete="email" required value="{{ old('email') }}"
-                               class="block w-full rounded-xl border-gray-300 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-indigo-500 @error('email') border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500 @enderror"
-                               placeholder="you@example.com">
-                    </div>
+                    <label for="email" class="block text-xs font-bold text-slate-700 mb-1.5">Email Address</label>
+                    <input id="email" name="email" type="email" autocomplete="email" required value="{{ old('email') }}"
+                           class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 @error('email') border-rose-300 text-rose-900 @enderror"
+                           placeholder="admin@institution.com">
                     @error('email')
-                        <p class="mt-1.5 text-xs text-red-600 font-medium">{{ $message }}</p>
+                        <p class="mt-1 text-xs text-rose-600 font-semibold">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Submit Button -->
-                <div>
-                    <button type="submit"
-                            class="flex w-full justify-center rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-md shadow-indigo-600/10 hover:bg-indigo-700 hover:scale-[1.01] active:scale-[0.99] transition-all">
-                        Send reset link
-                    </button>
+                <button type="submit"
+                        class="w-full py-2.5 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
+                    Send Recovery Link
+                </button>
+
+                <!-- Back to Login -->
+                <div class="text-center pt-2">
+                    <a href="{{ route('login') }}" class="text-xs font-bold text-slate-600 hover:text-emerald-700 inline-flex items-center gap-1">
+                        &larr; Return to Login
+                    </a>
                 </div>
             </form>
+
         </div>
     </div>
 </div>

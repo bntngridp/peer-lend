@@ -20,26 +20,53 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
-        @keyframes floatGlow {
-            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
-            50% { transform: translate(25px, -15px) scale(1.15); opacity: 0.8; }
+        @keyframes pulseOrb {
+            0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.85; }
+            50% { transform: scale(1.18) translate(30px, -20px); opacity: 1; }
         }
-        .animate-glow-slow {
-            animation: floatGlow 8s ease-in-out infinite;
+        .green-glow-orb-top {
+            position: fixed;
+            top: -120px;
+            left: -120px;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.35) 0%, rgba(21, 128, 61, 0.2) 45%, rgba(255, 255, 255, 0) 70%);
+            filter: blur(50px);
+            animation: pulseOrb 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
         }
-        .animate-glow-reverse {
-            animation: floatGlow 10s ease-in-out infinite reverse;
+        .green-glow-orb-bottom {
+            position: fixed;
+            bottom: -120px;
+            right: -120px;
+            width: 650px;
+            height: 650px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(21, 128, 61, 0.32) 0%, rgba(34, 197, 94, 0.18) 45%, rgba(255, 255, 255, 0) 70%);
+            filter: blur(55px);
+            animation: pulseOrb 10s ease-in-out infinite reverse;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .green-glow-card-aura {
+            position: absolute;
+            inset: -20px;
+            border-radius: 32px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.45) 0%, rgba(21, 128, 61, 0.25) 55%, rgba(255, 255, 255, 0) 80%);
+            filter: blur(30px);
+            animation: pulseOrb 6s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col justify-between relative overflow-x-hidden">
 
-    <!-- Rich Ambient Green Background Gradient Blobs -->
-    <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        <div class="absolute -top-20 -left-20 h-[32rem] w-[32rem] rounded-full bg-gradient-to-br from-emerald-400/40 to-teal-500/30 blur-3xl animate-glow-slow"></div>
-        <div class="absolute -bottom-20 -right-20 h-[36rem] w-[36rem] rounded-full bg-gradient-to-tl from-emerald-500/45 to-emerald-300/30 blur-3xl animate-glow-reverse"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[45rem] w-[45rem] rounded-full bg-emerald-400/20 blur-[140px]"></div>
-    </div>
+    <!-- Explicit Radial Ambient Green Glow Orbs -->
+    <div class="green-glow-orb-top"></div>
+    <div class="green-glow-orb-bottom"></div>
 
     <!-- Main Auth Page Content -->
     <main class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 relative z-10">

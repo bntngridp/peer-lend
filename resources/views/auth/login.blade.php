@@ -3,11 +3,11 @@
 @section('content')
 <div class="sm:mx-auto sm:w-full sm:max-w-md relative">
     
-    <!-- Glowing Green Aura Backdrop Box -->
-    <div class="absolute -inset-3 rounded-3xl bg-gradient-to-r from-emerald-500/40 via-emerald-400/30 to-teal-500/40 blur-2xl opacity-85 animate-pulse"></div>
+    <!-- Explicit Green Glow Aura Backdrop around Card -->
+    <div class="green-glow-card-aura"></div>
 
     <!-- LendFlow Card Container -->
-    <div class="relative bg-white/95 backdrop-blur-md px-8 py-10 shadow-2xl shadow-emerald-900/10 rounded-2xl border border-emerald-100/80">
+    <div class="relative bg-white/95 backdrop-blur-md px-8 py-10 shadow-2xl shadow-emerald-900/10 rounded-2xl border border-emerald-100/80 z-10">
         
         <!-- Brand Logo & Header -->
         <div class="text-center mb-8">

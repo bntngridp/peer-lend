@@ -112,10 +112,26 @@ class User extends Authenticatable
     }
 
     /**
-     * Send custom LendFlow password reset notification link to user email.
+     * Send custom LendFlow branded password reset email directly via Mailable.
+     * We bypass the Notification mail channel to prevent Laravel wrapping our HTML.
      */
     public function sendPasswordResetNotification($token): void
     {
-        $this->notify(new \App\Notifications\LendFlowResetPasswordNotification($token));
+        $url = url(route('password.reset', [
+            'token' => $token,
+            'email' => $this->email,
+        ], false));
+
+        $expireMinutes = config(
+            'auth.passwords.' . config('auth.defaults.passwords') . '.expire',
+            60
+        );
+
+        \Illuminate\Support\Facades\Mail::to($this->email)
+            ->send(new \App\Mail\ResetPasswordMail(
+                user: $this,
+                url: $url,
+                expireMinutes: $expireMinutes
+            ));
     }
 }

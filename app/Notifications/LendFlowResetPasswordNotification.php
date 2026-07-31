@@ -2,9 +2,12 @@
 
 namespace App\Notifications;
 
+use App\Mail\ResetPasswordMail;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Mail;
 
 class LendFlowResetPasswordNotification extends Notification
 {
@@ -19,19 +22,20 @@ class LendFlowResetPasswordNotification extends Notification
         return ['mail'];
     }
 
-    public function toMail(object $notifiable): MailMessage
+    public function toMail(object $notifiable): void
     {
         $url = url(route('password.reset', [
             'token' => $this->token,
             'email' => $notifiable->getEmailForPasswordReset(),
         ], false));
 
-        return (new MailMessage)
-            ->subject('🔐 Reset Kata Sandi Akun LendFlow Anda')
-            ->view('emails.reset-password', [
-                'url'   => $url,
-                'user'  => $notifiable,
-                'count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire', 60),
-            ]);
+        $expireMinutes = config('auth.passwords.'.config('auth.defaults.passwords').'.expire', 60);
+
+        Mail::to($notifiable->email)
+            ->send(new ResetPasswordMail(
+                user: $notifiable,
+                url: $url,
+                expireMinutes: $expireMinutes
+            ));
     }
 }

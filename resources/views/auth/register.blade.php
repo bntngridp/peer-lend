@@ -19,64 +19,40 @@
         <form class="space-y-4" action="{{ route('register') }}" method="POST">
             @csrf
 
-            <!-- Premium Visual Role Selection Cards -->
+            <!-- Sleek & Soft Emerald Role Selection Cards (No Dark Strokes) -->
             <div class="mb-5">
-                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2.5">Select Account Type:</label>
+                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">I want to register as:</label>
 
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-2.5">
                     <!-- Borrower Card -->
                     <label id="card-borrower" onclick="selectRole('borrower')"
-                           class="relative flex flex-col p-3.5 border-2 rounded-2xl cursor-pointer transition-all duration-200 select-none text-left w-full border-emerald-500 bg-emerald-50/60 ring-2 ring-emerald-500/15 shadow-xs">
+                           class="relative flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-all duration-200 select-none text-left w-full border-emerald-500 bg-emerald-50/60 shadow-xs">
                         <input type="radio" name="role" value="borrower" id="radio-borrower" class="sr-only" {{ old('role', 'borrower') === 'borrower' ? 'checked' : '' }}>
                         
-                        <!-- Top Row: Icon + Check Indicator -->
-                        <div class="flex items-center justify-between w-full mb-2.5">
-                            <div id="icon-borrower" class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center transition-colors shadow-xs">
-                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m3 0v-4a1 1 0 011-1h2a1 1 0 011 1v4m-4 0h4" />
-                                </svg>
-                            </div>
-
-                            <!-- Check Badge -->
-                            <div id="check-borrower" class="w-5 h-5 rounded-full border border-emerald-500 bg-emerald-600 text-white flex items-center justify-center transition-all">
-                                <svg class="w-3 h-3 stroke-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </div>
+                        <!-- Radio Circle Dot (Soft Emerald, No Black Border) -->
+                        <div id="check-borrower" class="w-4 h-4 rounded-full border border-emerald-500 bg-emerald-500 flex items-center justify-center shrink-0 transition-all">
+                            <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
                         </div>
 
-                        <!-- Title & Description -->
-                        <div>
-                            <div class="text-xs font-black text-slate-900 leading-snug">Borrower</div>
-                            <div class="text-[11px] font-medium text-slate-500 leading-tight mt-0.5">Ajukan Pinjaman &amp; Modal Usaha</div>
+                        <div class="min-w-0">
+                            <div class="text-xs font-bold text-slate-800 leading-tight">Borrower</div>
+                            <div class="text-[10px] font-medium text-slate-500 truncate">Apply for credit</div>
                         </div>
                     </label>
 
                     <!-- Lender Card -->
                     <label id="card-lender" onclick="selectRole('lender')"
-                           class="relative flex flex-col p-3.5 border-2 rounded-2xl cursor-pointer transition-all duration-200 select-none text-left w-full border-slate-200 bg-white hover:border-slate-300">
+                           class="relative flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-all duration-200 select-none text-left w-full border-slate-200 bg-white hover:border-slate-300">
                         <input type="radio" name="role" value="lender" id="radio-lender" class="sr-only" {{ old('role') === 'lender' ? 'checked' : '' }}>
                         
-                        <!-- Top Row: Icon + Check Indicator -->
-                        <div class="flex items-center justify-between w-full mb-2.5">
-                            <div id="icon-lender" class="w-9 h-9 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center transition-colors shadow-xs">
-                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                                </svg>
-                            </div>
-
-                            <!-- Check Badge -->
-                            <div id="check-lender" class="w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center transition-all">
-                                <svg class="w-3 h-3 stroke-white hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </div>
+                        <!-- Radio Circle Dot -->
+                        <div id="check-lender" class="w-4 h-4 rounded-full border border-slate-300 bg-white flex items-center justify-center shrink-0 transition-all">
+                            <div class="w-1.5 h-1.5 rounded-full bg-white hidden"></div>
                         </div>
 
-                        <!-- Title & Description -->
-                        <div>
-                            <div class="text-xs font-black text-slate-900 leading-snug">Lender (Investor)</div>
-                            <div class="text-[11px] font-medium text-slate-500 leading-tight mt-0.5">Danai Pinjaman &amp; Imbal Hasil</div>
+                        <div class="min-w-0">
+                            <div class="text-xs font-bold text-slate-800 leading-tight">Lender (Investor)</div>
+                            <div class="text-[10px] font-medium text-slate-500 truncate">Fund capital &amp; earn</div>
                         </div>
                     </label>
                 </div>
@@ -115,16 +91,16 @@
                 @enderror
             </div>
 
-            <!-- Password and Confirmation with Eye Toggle Buttons -->
+            <!-- Password and Confirmation with Perfectly Embedded Flex Eye Buttons -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <!-- Password Field -->
                 <div>
                     <label for="password" class="block text-xs font-bold text-slate-700 mb-1">Password</label>
-                    <div class="relative">
+                    <div class="flex items-center w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 focus-within:border-emerald-600 focus-within:ring-4 focus-within:ring-emerald-600/15 transition-all duration-200 @error('password') border-rose-300 @enderror">
                         <input id="password" name="password" type="password" required
-                               class="w-full rounded-xl border border-slate-200 bg-white pl-3.5 pr-9 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/15 transition-all duration-200 @error('password') border-rose-300 text-rose-900 focus:ring-rose-500/20 @enderror"
+                               class="w-full bg-transparent text-xs font-medium text-slate-800 placeholder-slate-400 outline-none border-none p-0 focus:ring-0"
                                placeholder="••••••••">
-                        <button type="button" onclick="togglePass('password', this)" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-700 focus:outline-none transition-colors p-1" title="Toggle password visibility">
+                        <button type="button" onclick="togglePass('password', this)" class="ml-2 text-slate-400 hover:text-emerald-700 focus:outline-none transition-colors shrink-0 p-0.5" title="Toggle password visibility">
                             <svg class="eye-open w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -142,11 +118,11 @@
                 <!-- Password Confirmation Field -->
                 <div>
                     <label for="password_confirmation" class="block text-xs font-bold text-slate-700 mb-1">Confirm Password</label>
-                    <div class="relative">
+                    <div class="flex items-center w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 focus-within:border-emerald-600 focus-within:ring-4 focus-within:ring-emerald-600/15 transition-all duration-200">
                         <input id="password_confirmation" name="password_confirmation" type="password" required
-                               class="w-full rounded-xl border border-slate-200 bg-white pl-3.5 pr-9 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/15 transition-all duration-200"
+                               class="w-full bg-transparent text-xs font-medium text-slate-800 placeholder-slate-400 outline-none border-none p-0 focus:ring-0"
                                placeholder="••••••••">
-                        <button type="button" onclick="togglePass('password_confirmation', this)" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-700 focus:outline-none transition-colors p-1" title="Toggle confirm password visibility">
+                        <button type="button" onclick="togglePass('password_confirmation', this)" class="ml-2 text-slate-400 hover:text-emerald-700 focus:outline-none transition-colors shrink-0 p-0.5" title="Toggle confirm password visibility">
                             <svg class="eye-open w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -196,53 +172,44 @@ function selectRole(role) {
     const checkBorrower = document.getElementById('check-borrower');
     const checkLender = document.getElementById('check-lender');
 
-    const iconBorrower = document.getElementById('icon-borrower');
-    const iconLender = document.getElementById('icon-lender');
-
     if (!cardBorrower || !cardLender) return;
 
     if (role === 'borrower') {
         if (radioBorrower) radioBorrower.checked = true;
         if (radioLender) radioLender.checked = false;
 
-        cardBorrower.className = 'relative flex flex-col p-3.5 border-2 rounded-2xl cursor-pointer transition-all duration-200 select-none text-left w-full border-emerald-500 bg-emerald-50/60 ring-2 ring-emerald-500/15 shadow-xs';
-        cardLender.className = 'relative flex flex-col p-3.5 border-2 rounded-2xl cursor-pointer transition-all duration-200 select-none text-left w-full border-slate-200 bg-white hover:border-slate-300';
+        cardBorrower.className = 'relative flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-all duration-200 select-none text-left w-full border-emerald-500 bg-emerald-50/60 shadow-xs';
+        cardLender.className = 'relative flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-all duration-200 select-none text-left w-full border-slate-200 bg-white hover:border-slate-300';
 
         if (checkBorrower) {
-            checkBorrower.className = 'w-5 h-5 rounded-full border border-emerald-500 bg-emerald-600 text-white flex items-center justify-center transition-all';
-            const svg = checkBorrower.querySelector('svg');
-            if (svg) svg.classList.remove('hidden');
+            checkBorrower.className = 'w-4 h-4 rounded-full border border-emerald-500 bg-emerald-500 flex items-center justify-center shrink-0 transition-all';
+            const dot = checkBorrower.querySelector('div');
+            if (dot) dot.classList.remove('hidden');
         }
 
         if (checkLender) {
-            checkLender.className = 'w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center transition-all';
-            const svg = checkLender.querySelector('svg');
-            if (svg) svg.classList.add('hidden');
+            checkLender.className = 'w-4 h-4 rounded-full border border-slate-300 bg-white flex items-center justify-center shrink-0 transition-all';
+            const dot = checkLender.querySelector('div');
+            if (dot) dot.classList.add('hidden');
         }
-
-        if (iconBorrower) iconBorrower.className = 'w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center transition-colors shadow-xs';
-        if (iconLender) iconLender.className = 'w-9 h-9 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center transition-colors shadow-xs';
     } else {
         if (radioLender) radioLender.checked = true;
         if (radioBorrower) radioBorrower.checked = false;
 
-        cardLender.className = 'relative flex flex-col p-3.5 border-2 rounded-2xl cursor-pointer transition-all duration-200 select-none text-left w-full border-emerald-500 bg-emerald-50/60 ring-2 ring-emerald-500/15 shadow-xs';
-        cardBorrower.className = 'relative flex flex-col p-3.5 border-2 rounded-2xl cursor-pointer transition-all duration-200 select-none text-left w-full border-slate-200 bg-white hover:border-slate-300';
+        cardLender.className = 'relative flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-all duration-200 select-none text-left w-full border-emerald-500 bg-emerald-50/60 shadow-xs';
+        cardBorrower.className = 'relative flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-all duration-200 select-none text-left w-full border-slate-200 bg-white hover:border-slate-300';
 
         if (checkLender) {
-            checkLender.className = 'w-5 h-5 rounded-full border border-emerald-500 bg-emerald-600 text-white flex items-center justify-center transition-all';
-            const svg = checkLender.querySelector('svg');
-            if (svg) svg.classList.remove('hidden');
+            checkLender.className = 'w-4 h-4 rounded-full border border-emerald-500 bg-emerald-500 flex items-center justify-center shrink-0 transition-all';
+            const dot = checkLender.querySelector('div');
+            if (dot) dot.classList.remove('hidden');
         }
 
         if (checkBorrower) {
-            checkBorrower.className = 'w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center transition-all';
-            const svg = checkBorrower.querySelector('svg');
-            if (svg) svg.classList.add('hidden');
+            checkBorrower.className = 'w-4 h-4 rounded-full border border-slate-300 bg-white flex items-center justify-center shrink-0 transition-all';
+            const dot = checkBorrower.querySelector('div');
+            if (dot) dot.classList.add('hidden');
         }
-
-        if (iconLender) iconLender.className = 'w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center transition-colors shadow-xs';
-        if (iconBorrower) iconBorrower.className = 'w-9 h-9 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center transition-colors shadow-xs';
     }
 }
 

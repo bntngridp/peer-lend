@@ -32,7 +32,7 @@
                 @enderror
             </div>
 
-            <!-- Password with Eye Toggle -->
+            <!-- Password with Flex Embedded Eye Toggle -->
             <div>
                 <div class="flex items-center justify-between mb-1.5">
                     <label for="password" class="block text-xs font-bold text-slate-700">Password</label>
@@ -40,11 +40,11 @@
                         Forgot Password?
                     </a>
                 </div>
-                <div class="relative">
+                <div class="flex items-center w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 focus-within:border-emerald-600 focus-within:ring-4 focus-within:ring-emerald-600/15 transition-all duration-200 @error('password') border-rose-300 @enderror">
                     <input id="password" name="password" type="password" autocomplete="current-password" required
-                           class="w-full rounded-xl border border-slate-200 bg-white pl-3.5 pr-10 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/15 transition-all duration-200 @error('password') border-rose-300 text-rose-900 focus:ring-rose-500/20 @enderror"
+                           class="w-full bg-transparent text-xs font-medium text-slate-800 placeholder-slate-400 outline-none border-none p-0 focus:ring-0"
                            placeholder="••••••••">
-                    <button type="button" onclick="togglePass('password', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-700 focus:outline-none transition-colors p-1" title="Toggle password visibility">
+                    <button type="button" onclick="togglePass('password', this)" class="ml-2 text-slate-400 hover:text-emerald-700 focus:outline-none transition-colors shrink-0 p-0.5" title="Toggle password visibility">
                         <svg class="eye-open w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />

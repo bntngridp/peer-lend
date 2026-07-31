@@ -19,28 +19,52 @@
         <form class="space-y-4" action="{{ route('register') }}" method="POST">
             @csrf
 
-            <!-- Pure CSS & Native HTML Radio Role Selection Cards -->
-            <div>
-                <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">I want to register as:</label>
-                <div class="grid grid-cols-2 gap-3 mb-4">
+            <!-- Crystal Clear Interactive Role Selection Cards -->
+            <div class="mb-5">
+                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2.5">I want to register as:</label>
+                <div class="grid grid-cols-2 gap-3">
                     <!-- Borrower Card -->
-                    <label class="relative flex flex-col items-center p-3.5 border-2 rounded-xl cursor-pointer transition-all duration-200 select-none text-center border-slate-200 hover:border-emerald-300 bg-white has-[:checked]:border-emerald-700 has-[:checked]:bg-emerald-50/80 has-[:checked]:ring-2 has-[:checked]:ring-emerald-600/20 group">
+                    <label class="relative flex flex-col items-start p-4 border-2 rounded-2xl cursor-pointer transition-all duration-200 select-none border-slate-200 hover:border-emerald-400 bg-slate-50/50 has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50/70 has-[:checked]:ring-2 has-[:checked]:ring-emerald-600/20 group">
                         <input type="radio" name="role" value="borrower" class="peer sr-only" {{ old('role', 'borrower') === 'borrower' ? 'checked' : '' }}>
-                        <div class="flex items-center gap-1.5 mb-0.5">
-                            <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-700 peer-checked:text-emerald-800 transition-colors">Borrower</span>
-                            <span class="w-2 h-2 rounded-full bg-emerald-600 hidden peer-checked:inline-block"></span>
+                        
+                        <!-- Top Right Radio Checkmark Indicator -->
+                        <div class="absolute top-3.5 right-3.5 w-5 h-5 rounded-full border-2 border-slate-300 peer-checked:border-emerald-600 peer-checked:bg-emerald-600 flex items-center justify-center transition-all">
+                            <svg class="w-3 h-3 text-white hidden peer-checked:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
                         </div>
-                        <span class="text-[10px] text-slate-500 font-medium">Apply for credit</span>
+
+                        <!-- Role Icon -->
+                        <div class="w-8 h-8 rounded-xl bg-slate-200/60 peer-checked:bg-emerald-600 peer-checked:text-white text-slate-600 flex items-center justify-center mb-2.5 transition-colors shadow-xs">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+
+                        <span class="text-xs font-black text-slate-900 mb-0.5 group-hover:text-emerald-700 transition-colors">Borrower</span>
+                        <span class="text-[10px] font-semibold text-slate-500 leading-tight">Apply for credit &amp; business loans</span>
                     </label>
 
                     <!-- Lender Card -->
-                    <label class="relative flex flex-col items-center p-3.5 border-2 rounded-xl cursor-pointer transition-all duration-200 select-none text-center border-slate-200 hover:border-emerald-300 bg-white has-[:checked]:border-emerald-700 has-[:checked]:bg-emerald-50/80 has-[:checked]:ring-2 has-[:checked]:ring-emerald-600/20 group">
+                    <label class="relative flex flex-col items-start p-4 border-2 rounded-2xl cursor-pointer transition-all duration-200 select-none border-slate-200 hover:border-emerald-400 bg-slate-50/50 has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50/70 has-[:checked]:ring-2 has-[:checked]:ring-emerald-600/20 group">
                         <input type="radio" name="role" value="lender" class="peer sr-only" {{ old('role') === 'lender' ? 'checked' : '' }}>
-                        <div class="flex items-center gap-1.5 mb-0.5">
-                            <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-700 peer-checked:text-emerald-800 transition-colors">Lender (Investor)</span>
-                            <span class="w-2 h-2 rounded-full bg-emerald-600 hidden peer-checked:inline-block"></span>
+                        
+                        <!-- Top Right Radio Checkmark Indicator -->
+                        <div class="absolute top-3.5 right-3.5 w-5 h-5 rounded-full border-2 border-slate-300 peer-checked:border-emerald-600 peer-checked:bg-emerald-600 flex items-center justify-center transition-all">
+                            <svg class="w-3 h-3 text-white hidden peer-checked:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
                         </div>
-                        <span class="text-[10px] text-slate-500 font-medium">Fund capital</span>
+
+                        <!-- Role Icon -->
+                        <div class="w-8 h-8 rounded-xl bg-slate-200/60 peer-checked:bg-emerald-600 peer-checked:text-white text-slate-600 flex items-center justify-center mb-2.5 transition-colors shadow-xs">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                            </svg>
+                        </div>
+
+                        <span class="text-xs font-black text-slate-900 mb-0.5 group-hover:text-emerald-700 transition-colors">Lender (Investor)</span>
+                        <span class="text-[10px] font-semibold text-slate-500 leading-tight">Fund loans &amp; earn interest yield</span>
                     </label>
                 </div>
             </div>

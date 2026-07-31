@@ -44,32 +44,35 @@
 
         <!-- Sidebar Navigation Menu -->
         <nav class="flex-1 space-y-1 px-4 py-4 overflow-y-auto">
-            <a href="#" class="flex items-center gap-3 rounded-lg bg-gray-50 px-3 py-2 text-sm font-medium text-indigo-600">
-                Dashboard
+            <a href="{{ route('dashboard') }}" class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all">
+                Dashboard Overview
             </a>
             
-            <div class="py-2 text-[10px] font-bold tracking-wider text-gray-400 uppercase px-3">Approvals</div>
-            <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-950 transition-colors">
+            <div class="py-2 text-[10px] font-bold tracking-wider text-slate-400 uppercase px-3">Approvals</div>
+            <a href="{{ route('admin.kyc.index') }}" class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all">
                 KYC Verifications
             </a>
-            <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-950 transition-colors">
-                Loan Applications
+            <a href="{{ route('admin.loans.index') }}" class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all">
+                Loan Approvals
             </a>
 
-            <div class="py-2 text-[10px] font-bold tracking-wider text-gray-400 uppercase px-3">Management</div>
-            <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-950 transition-colors">
-                Users & Wallets
+            <div class="py-2 text-[10px] font-bold tracking-wider text-slate-400 uppercase px-3">Governance</div>
+            <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all">
+                User Management
             </a>
-            <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-950 transition-colors">
-                Active Contracts
+            <a href="{{ route('admin.financials.index') }}" class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all">
+                Financial Configuration
+            </a>
+            <a href="{{ route('admin.roles.index') }}" class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all">
+                Role Management
             </a>
 
-            <div class="py-2 text-[10px] font-bold tracking-wider text-gray-400 uppercase px-3">System</div>
-            <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-950 transition-colors">
-                Global Settings
+            <div class="py-2 text-[10px] font-bold tracking-wider text-slate-400 uppercase px-3">Monitoring</div>
+            <a href="{{ route('admin.transactions.index') }}" class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all">
+                Transaction Monitoring
             </a>
-            <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-950 transition-colors">
-                Audit Logs
+            <a href="{{ route('admin.analytics.index') }}" class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all">
+                Platform Analytics
             </a>
         </nav>
 

@@ -126,5 +126,12 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         Route::get('/loans/{loan}', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'show'])->name('loans.show');
         Route::post('/loans/{loan}/approve', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'approve'])->name('loans.approve');
         Route::post('/loans/{loan}/disburse', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'disburse'])->name('loans.disburse');
+
+        // Governance Suite Routes
+        Route::get('/users', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'users'])->name('users.index');
+        Route::get('/financials', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'financials'])->name('financials.index');
+        Route::get('/roles', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'roles'])->name('roles.index');
+        Route::get('/transactions', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'transactions'])->name('transactions.index');
+        Route::get('/analytics', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'analytics'])->name('analytics.index');
     });
 });

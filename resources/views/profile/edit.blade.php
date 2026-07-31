@@ -1,33 +1,37 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-6 max-w-5xl mx-auto" x-data="{ profileTab: 'personal' }">
+<div class="space-y-6 max-w-6xl mx-auto" x-data="{ profileTab: 'personal', colorTheme: 'light', density: 'comfortable' }">
     
     <!-- Top Header Bar -->
     <div>
-        <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Account &amp; Settings</h1>
-        <p class="text-xs font-medium text-slate-500 mt-1">Manage your personal profile, notification preferences, and security settings.</p>
+        <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Account &amp; System Settings</h1>
+        <p class="text-xs font-medium text-slate-500 mt-1">Manage your personal profile, security methods, active sessions, and system preferences.</p>
     </div>
 
     <!-- Navigation Tabs Header -->
-    <div class="border-b border-slate-200 flex gap-6 text-xs font-bold text-slate-500">
+    <div class="border-b border-slate-200 flex gap-6 text-xs font-bold text-slate-500 overflow-x-auto">
         <button @click="profileTab = 'personal'" 
                 :class="profileTab === 'personal' ? 'text-emerald-700 border-b-2 border-emerald-700 pb-3' : 'hover:text-slate-800 pb-3'">
             Personal Information
-        </button>
-        <button @click="profileTab = 'notifications'" 
-                :class="profileTab === 'notifications' ? 'text-emerald-700 border-b-2 border-emerald-700 pb-3' : 'hover:text-slate-800 pb-3'">
-            Notification Preferences
         </button>
         <button @click="profileTab = 'security'" 
                 :class="profileTab === 'security' ? 'text-emerald-700 border-b-2 border-emerald-700 pb-3' : 'hover:text-slate-800 pb-3'">
             Security &amp; Access
         </button>
+        <button @click="profileTab = 'notifications'" 
+                :class="profileTab === 'notifications' ? 'text-emerald-700 border-b-2 border-emerald-700 pb-3' : 'hover:text-slate-800 pb-3'">
+            Notification Preferences
+        </button>
+        <button @click="profileTab = 'system'" 
+                :class="profileTab === 'system' ? 'text-emerald-700 border-b-2 border-emerald-700 pb-3' : 'hover:text-slate-800 pb-3'">
+            System Preferences
+        </button>
     </div>
 
     <!-- ─── Tab 1: Personal Information ──────────────────────────────────── -->
     <div x-show="profileTab === 'personal'" class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6">
-        <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">Personal Profile</h3>
+        <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">Personal Profile Details</h3>
 
         <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
@@ -93,13 +97,161 @@
 
             <div class="pt-2">
                 <button type="submit" class="py-2.5 px-6 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
-                    Save Changes &rarr;
+                    Save Profile Changes &rarr;
                 </button>
             </div>
         </form>
     </div>
 
-    <!-- ─── Tab 2: Notification Preferences ──────────────────────────────── -->
+    <!-- ─── Tab 2: Security & Access ──────────────────────────────────────── -->
+    <div x-show="profileTab === 'security'" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start" style="display: none;">
+        
+        <!-- Main Form Column (Spans 8 Cols) -->
+        <div class="lg:col-span-8 space-y-6">
+            
+            <!-- Password Management Card -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
+                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-3">Password Management</h3>
+
+                <form action="#" method="POST" @submit.preventDefault="alert('Password updated successfully!')" class="space-y-4">
+                    @csrf
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">CURRENT PASSWORD</label>
+                        <input type="password" required placeholder="••••••••" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">NEW PASSWORD</label>
+                            <input type="password" required placeholder="••••••••" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">CONFIRM NEW PASSWORD</label>
+                            <input type="password" required placeholder="••••••••" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="py-2.5 px-6 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
+                        Update Password &rarr;
+                    </button>
+                </form>
+            </div>
+
+            <!-- Two-Factor Authentication Card -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
+                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-3">Two-Factor Authentication (2FA)</h3>
+
+                <div class="space-y-3">
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                        <div>
+                            <span class="font-bold text-slate-900 text-xs block">Authenticator Apps</span>
+                            <span class="text-[10px] text-slate-500 font-medium">Google Authenticator, Authy, etc.</span>
+                        </div>
+                        <a href="{{ route('2fa.setup') }}" class="py-1.5 px-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 shadow-xs">
+                            Manage &rarr;
+                        </a>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between opacity-60">
+                        <div>
+                            <span class="font-bold text-slate-700 text-xs block">SMS Authentication</span>
+                            <span class="text-[10px] text-slate-400 font-medium">Text messages sent to +62 **** **492</span>
+                        </div>
+                        <span class="text-xs font-bold text-slate-400">Setup</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Tokens Card -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">API Tokens</h3>
+                    <button type="button" @click="alert('New institutional API Token generated!')" class="py-1.5 px-3 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50">
+                        + Generate Token
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase">
+                                <th class="py-2.5 px-3">TOKEN NAME</th>
+                                <th class="py-2.5 px-3">PERMISSIONS</th>
+                                <th class="py-2.5 px-3">LAST USED</th>
+                                <th class="py-2.5 px-3 text-right">ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                            <tr>
+                                <td class="py-3 px-3 font-bold text-slate-900">Trade Execution Node</td>
+                                <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">Read / Write</span></td>
+                                <td class="py-3 px-3 text-slate-500">2 mins ago</td>
+                                <td class="py-3 px-3 text-right text-rose-600 font-bold cursor-pointer">Revoke</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Side Panel: Security Score & Active Sessions (Spans 4 Cols) -->
+        <div class="lg:col-span-4 space-y-4">
+            
+            <!-- Security Score Card -->
+            <div class="rounded-2xl border border-emerald-200 bg-emerald-50/40 p-5 shadow-xs space-y-3">
+                <span class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block">SECURITY SCORE</span>
+                
+                <div class="flex items-baseline gap-2">
+                    <span class="text-3xl font-black text-emerald-700">92</span>
+                    <span class="text-xs font-bold text-slate-400">/ 100</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-700 text-white ml-auto">Strong Protection</span>
+                </div>
+
+                <div class="space-y-2 text-xs border-t border-emerald-200/60 pt-3">
+                    <div class="flex justify-between">
+                        <span class="text-slate-600">Password Strength</span>
+                        <span class="font-bold text-emerald-800">Strong</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-600">2FA Setup</span>
+                        <span class="font-bold text-emerald-800">Enabled</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Sessions Card -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-3">
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Active Sessions</span>
+
+                <div class="space-y-3 text-xs">
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                        <div>
+                            <span class="font-bold text-slate-900 block text-xs">Mac OS • Safari</span>
+                            <span class="text-[10px] text-slate-400 font-medium block">Jakarta, ID • 182.1.22.4</span>
+                        </div>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 text-emerald-800">CURRENT</span>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between opacity-70">
+                        <div>
+                            <span class="font-bold text-slate-800 block text-xs">iOS • LendFlow App</span>
+                            <span class="text-[10px] text-slate-400 font-medium block">Active 2 hours ago</span>
+                        </div>
+                        <button type="button" @click="alert('Session revoked!')" class="text-[10px] font-bold text-rose-600 hover:underline">Revoke</button>
+                    </div>
+                </div>
+
+                <button type="button" @click="alert('All other sessions signed out!')" class="w-full py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50">
+                    Sign out all other sessions
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ─── Tab 3: Notification Preferences ──────────────────────────────── -->
     <div x-show="profileTab === 'notifications'" class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6" style="display: none;">
         <div>
             <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-2">Notification Preferences</h3>
@@ -107,61 +259,32 @@
         </div>
 
         <div class="space-y-6">
-            <!-- Section 1: Security Alerts -->
             <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
-                <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-                    <div>
-                        <h4 class="text-xs font-bold text-slate-900">Security Alerts</h4>
-                        <p class="text-[11px] text-slate-500 font-medium">Critical alerts regarding your account security, login attempts, and password changes.</p>
-                    </div>
-                </div>
-
-                <div class="space-y-3 text-xs">
-                    <div class="flex items-center justify-between">
-                        <span class="font-bold text-slate-800">Unrecognized Logins</span>
-                        <div class="flex gap-4">
-                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                                <input type="checkbox" checked class="accent-emerald-700"> Email
-                            </label>
-                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                                <input type="checkbox" checked class="accent-emerald-700"> Push
-                            </label>
-                        </div>
+                <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-2">Security Alerts</h4>
+                <div class="flex items-center justify-between text-xs">
+                    <span class="font-bold text-slate-800">Unrecognized Logins &amp; Password Changes</span>
+                    <div class="flex gap-4">
+                        <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer"><input type="checkbox" checked class="accent-emerald-700"> Email</label>
+                        <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer"><input type="checkbox" checked class="accent-emerald-700"> Push</label>
                     </div>
                 </div>
             </div>
 
-            <!-- Section 2: Financial Activity -->
             <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
-                <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-                    <div>
-                        <h4 class="text-xs font-bold text-slate-900">Financial Activity</h4>
-                        <p class="text-[11px] text-slate-500 font-medium">Updates on deposits, withdrawals, loan status changes, and investment returns.</p>
-                    </div>
-                </div>
-
+                <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-2">Financial Activity</h4>
                 <div class="space-y-3 text-xs">
                     <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
                         <span class="font-bold text-slate-800">Loan Approvals &amp; Updates</span>
                         <div class="flex gap-4">
-                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                                <input type="checkbox" checked class="accent-emerald-700"> Email
-                            </label>
-                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                                <input type="checkbox" checked class="accent-emerald-700"> Push
-                            </label>
+                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer"><input type="checkbox" checked class="accent-emerald-700"> Email</label>
+                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer"><input type="checkbox" checked class="accent-emerald-700"> Push</label>
                         </div>
                     </div>
-
                     <div class="flex items-center justify-between py-1">
                         <span class="font-bold text-slate-800">Investment Milestones &amp; Returns</span>
                         <div class="flex gap-4">
-                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                                <input type="checkbox" checked class="accent-emerald-700"> Email
-                            </label>
-                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                                <input type="checkbox" checked class="accent-emerald-700"> Push
-                            </label>
+                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer"><input type="checkbox" checked class="accent-emerald-700"> Email</label>
+                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer"><input type="checkbox" checked class="accent-emerald-700"> Push</label>
                         </div>
                     </div>
                 </div>
@@ -173,22 +296,97 @@
         </div>
     </div>
 
-    <!-- ─── Tab 3: Security & Access ──────────────────────────────────────── -->
-    <div x-show="profileTab === 'security'" class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6" style="display: none;">
+    <!-- ─── Tab 4: System Preferences & Appearance ───────────────────────── -->
+    <div x-show="profileTab === 'system'" class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6" style="display: none;">
         <div>
-            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-2">Security &amp; Access</h3>
-            <p class="text-xs text-slate-500 font-medium mt-1">Manage 2-Factor Authentication (2FA) and password security.</p>
+            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-2">System Preferences</h3>
+            <p class="text-xs text-slate-500 font-medium mt-1">Manage your global application settings, appearance, and privacy controls.</p>
         </div>
 
-        <div class="space-y-4">
-            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
-                <div>
-                    <h4 class="text-xs font-bold text-slate-900">Two-Factor Authentication (2FA)</h4>
-                    <p class="text-[11px] text-slate-500 font-medium">Add an extra layer of security using Google Authenticator or TOTP.</p>
+        <div class="space-y-6">
+            <!-- Appearance Settings -->
+            <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-6">
+                <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-2">Appearance</h4>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Color Theme</label>
+                        <div class="flex gap-3">
+                            <button type="button" @click="colorTheme = 'light'"
+                                    :class="colorTheme === 'light' ? 'border-emerald-700 bg-white shadow-xs' : 'border-slate-200 bg-slate-100'"
+                                    class="py-2 px-6 rounded-xl border text-xs font-bold text-slate-800 flex items-center gap-2">
+                                Light Theme
+                            </button>
+                            <button type="button" @click="colorTheme = 'dark'"
+                                    :class="colorTheme === 'dark' ? 'border-emerald-700 bg-slate-900 text-white shadow-xs' : 'border-slate-200 bg-slate-100'"
+                                    class="py-2 px-6 rounded-xl border text-xs font-bold text-slate-700 flex items-center gap-2">
+                                Dark Theme
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Data Density</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label @click="density = 'comfortable'"
+                                   :class="density === 'comfortable' ? 'border-emerald-700 bg-white' : 'border-slate-200 bg-slate-100'"
+                                   class="p-3.5 rounded-xl border flex items-center justify-between cursor-pointer">
+                                <div>
+                                    <span class="font-bold text-slate-900 text-xs block">Comfortable</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">More whitespace, easier to read.</span>
+                                </div>
+                                <input type="radio" name="density" value="comfortable" checked class="accent-emerald-700">
+                            </label>
+
+                            <label @click="density = 'compact'"
+                                   :class="density === 'compact' ? 'border-emerald-700 bg-white' : 'border-slate-200 bg-slate-100'"
+                                   class="p-3.5 rounded-xl border flex items-center justify-between cursor-pointer">
+                                <div>
+                                    <span class="font-bold text-slate-900 text-xs block">Compact</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">High information density for trading.</span>
+                                </div>
+                                <input type="radio" name="density" value="compact" class="accent-emerald-700">
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <a href="{{ route('2fa.setup') }}" class="py-2 px-4 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
-                    Configure 2FA
-                </a>
+            </div>
+
+            <!-- Privacy & Data -->
+            <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+                <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-2">Privacy &amp; Data Controls</h4>
+
+                <div class="space-y-3 text-xs font-medium">
+                    <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+                        <div>
+                            <span class="font-bold text-slate-800 block">Public Profile Visibility</span>
+                            <span class="text-[10px] text-slate-500">Allow other institutional members to discover your profile in the directory.</span>
+                        </div>
+                        <input type="checkbox" checked class="accent-emerald-700 h-4 w-4">
+                    </div>
+
+                    <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+                        <div>
+                            <span class="font-bold text-slate-800 block">Data Sharing for Analytics</span>
+                            <span class="text-[10px] text-slate-500">Share anonymized usage data to help us improve platform performance.</span>
+                        </div>
+                        <input type="checkbox" class="accent-emerald-700 h-4 w-4">
+                    </div>
+
+                    <div class="flex items-center justify-between py-1">
+                        <div>
+                            <span class="font-bold text-slate-800 block">Third-Party Integrations</span>
+                            <span class="text-[10px] text-slate-500">Allow connected API apps to read basic profile information.</span>
+                        </div>
+                        <input type="checkbox" checked class="accent-emerald-700 h-4 w-4">
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button type="button" @click="alert('System preferences saved!')" class="py-2.5 px-6 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
+                    Save Changes &rarr;
+                </button>
             </div>
         </div>
     </div>

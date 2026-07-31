@@ -1,216 +1,193 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Kalkulator Pinjaman | LendFlow</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/persegi-nobg.png') }}">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: { 700: '#15803D', 800: '#166534', 900: '#14532D' }
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-@section('content')
-<div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <!-- Standalone Top Header Navigation (No App Dashboard Sidebar) -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="{{ route('home') }}" class="flex items-center gap-2">
+                <span class="h-8 w-8 rounded-xl bg-emerald-700 text-white font-black flex items-center justify-center text-base shadow-xs">L</span>
+                <span class="text-xl font-extrabold text-slate-900 tracking-tight">LendFlow</span>
+            </a>
 
-    {{-- ── Hero Section ─────────────────────────────────────────────────────── --}}
-    <div class="relative overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-700 pt-16 pb-24">
-        {{-- Background decorative blobs --}}
-        <div class="absolute -top-10 -left-10 h-64 w-64 rounded-full bg-white/5 blur-3xl"></div>
-        <div class="absolute -bottom-10 -right-10 h-64 w-64 rounded-full bg-purple-500/20 blur-3xl"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-96 w-96 rounded-full bg-indigo-400/10 blur-3xl"></div>
+            <nav class="hidden md:flex items-center gap-8 text-xs font-bold text-slate-600">
+                <a href="{{ route('home') }}#borrowers" class="hover:text-emerald-700 uppercase tracking-wider">Borrowers</a>
+                <a href="{{ route('home') }}#lenders" class="hover:text-emerald-700 uppercase tracking-wider">Lenders</a>
+                <a href="{{ route('home') }}#features" class="hover:text-emerald-700 uppercase tracking-wider">Features</a>
+                <a href="{{ route('calculator.index') }}" class="text-emerald-700 uppercase tracking-wider border-b-2 border-emerald-700 pb-1">Calculator</a>
+            </nav>
 
-        <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-            <div class="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-1.5 mb-6 text-sm font-medium text-white">
-                <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                Simulasi Pinjaman Real-time
-            </div>
-            <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight">
-                Kalkulator Pinjaman
-                <span class="block text-indigo-200 mt-1">Peer-Lend</span>
-            </h1>
-            <p class="mt-4 max-w-2xl mx-auto text-indigo-100 text-lg leading-relaxed">
-                Simulasikan cicilan bulanan, total pembayaran, dan jadwal amortisasi secara instan — sebelum mengajukan pinjaman.
-            </p>
-
-            {{-- Stat Pills --}}
-            <div class="mt-8 flex flex-wrap justify-center gap-4">
-                @foreach(['A' => ['8–10%', 'Risiko Rendah', 'text-emerald-300'], 'B' => ['11–14%', 'Risiko Sedang', 'text-yellow-300'], 'C' => ['15–18%', 'Risiko Tinggi', 'text-orange-300'], 'D' => ['19–24%', 'Risiko Sangat Tinggi', 'text-red-300']] as $grade => $info)
-                <div class="flex items-center gap-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 px-4 py-2">
-                    <span class="font-bold text-white text-sm">Grade {{ $grade }}</span>
-                    <span class="text-white/40">·</span>
-                    <span class="text-sm {{ $info[2] }}">{{ $info[0] }}</span>
-                </div>
-                @endforeach
+            <div class="flex items-center gap-3">
+                @auth
+                    <a href="{{ route('dashboard') }}" class="py-2 px-4 rounded-xl bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800 transition-colors shadow-xs">
+                        Dashboard &rarr;
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" class="text-xs font-bold text-slate-700 hover:text-emerald-700 px-3 py-2">
+                        Sign In
+                    </a>
+                    <a href="{{ route('register') }}" class="py-2 px-4 rounded-xl bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800 transition-colors shadow-xs">
+                        Create Account &rarr;
+                    </a>
+                @endauth
             </div>
         </div>
-    </div>
+    </header>
 
-    {{-- ── Main Calculator Section ──────────────────────────────────────────── --}}
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -mt-12 pb-20">
-        <div class="grid grid-cols-1 gap-6 lg:grid-cols-5">
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+        
+        <!-- Header Banner -->
+        <div class="text-center max-w-2xl mx-auto space-y-2">
+            <span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200 uppercase tracking-wider">
+                Real-time Loan Simulation
+            </span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Kalkulator Pinjaman Institusional</h1>
+            <p class="text-xs text-slate-500 font-medium leading-relaxed">
+                Simulasikan estimasi cicilan bulanan, total bunga, dan rincian jadwal amortisasi secara real-time.
+            </p>
+        </div>
 
-            {{-- ── Left Panel: Input Form ────────────────────────────────────── --}}
-            <div class="lg:col-span-2">
-                <div class="rounded-2xl bg-white shadow-xl shadow-indigo-900/5 border border-gray-100 overflow-hidden sticky top-24">
-                    <div class="border-b border-gray-100 px-6 py-4 bg-gray-50/50">
-                        <h2 class="text-base font-semibold text-gray-900">Parameter Pinjaman</h2>
-                        <p class="text-xs text-gray-500 mt-0.5">Isi detail pinjaman di bawah ini</p>
+        <!-- 2-Column Calculator Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Left Input Form (Spans 5 Cols) -->
+            <div class="lg:col-span-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-6">
+                <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-3">Parameter Pinjaman</h3>
+
+                <form id="calculatorForm" class="space-y-5">
+                    @csrf
+
+                    <!-- Amount Range & Number Input -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1.5">
+                            <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Jumlah Pinjaman</label>
+                            <span id="amountDisplay" class="text-sm font-extrabold text-emerald-700">Rp 10.000.000</span>
+                        </div>
+                        <input type="range" id="amountRange" min="{{ $minAmount }}" max="{{ $maxAmount }}" step="500000" value="10000000"
+                               class="w-full h-2 rounded-lg appearance-none cursor-pointer accent-emerald-700 bg-slate-200">
+                        <div class="flex justify-between text-[10px] text-slate-400 font-bold mt-1">
+                            <span>Rp {{ number_format($minAmount, 0, ',', '.') }}</span>
+                            <span>Rp {{ number_format($maxAmount, 0, ',', '.') }}</span>
+                        </div>
+                        <input type="number" id="amountInput" value="10000000" min="{{ $minAmount }}" max="{{ $maxAmount }}"
+                               class="mt-2 w-full rounded-xl border border-slate-200 px-3.5 py-2 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600">
                     </div>
 
-                    <form id="calculatorForm" class="p-6 space-y-5">
-                        @csrf
-
-                        {{-- Loan Amount --}}
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                                Jumlah Pinjaman
-                                <span id="amountDisplay" class="ml-2 font-bold text-indigo-600">Rp 10.000.000</span>
-                            </label>
-                            <input
-                                type="range"
-                                id="amountRange"
-                                min="{{ $minAmount }}"
-                                max="{{ $maxAmount }}"
-                                step="500000"
-                                value="10000000"
-                                class="w-full h-2 rounded-lg appearance-none cursor-pointer"
-                                style="accent-color: #4f46e5;"
-                            >
-                            <div class="flex justify-between text-xs text-gray-400 mt-1">
-                                <span>Rp {{ number_format($minAmount, 0, ',', '.') }}</span>
-                                <span>Rp {{ number_format($maxAmount, 0, ',', '.') }}</span>
-                            </div>
-                            <input type="number" id="amountInput" value="10000000" min="{{ $minAmount }}" max="{{ $maxAmount }}"
-                                class="mt-2 w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm text-gray-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all outline-none"
-                                placeholder="Masukkan jumlah...">
+                    <!-- Duration Selection -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Tenor (Bulan)</label>
+                        <div class="grid grid-cols-4 gap-2">
+                            @foreach([3, 6, 12, 24] as $month)
+                            <button type="button" data-duration="{{ $month }}"
+                                    class="duration-btn rounded-xl border py-2.5 text-xs font-bold transition-all
+                                        {{ $month === 12 ? 'border-emerald-700 bg-emerald-700 text-white shadow-xs' : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50' }}">
+                                {{ $month }} Bln
+                            </button>
+                            @endforeach
                         </div>
+                        <input type="hidden" id="durationInput" value="12">
+                    </div>
 
-                        {{-- Duration --}}
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Tenor (Bulan)</label>
-                            <div class="grid grid-cols-4 gap-2">
-                                @foreach([3, 6, 12, 24] as $month)
-                                <button type="button"
-                                    data-duration="{{ $month }}"
-                                    class="duration-btn rounded-xl border-2 py-2.5 text-sm font-semibold transition-all
-                                        {{ $month === 12 ? 'border-indigo-500 bg-indigo-600 text-white shadow-md shadow-indigo-600/20' : 'border-gray-200 bg-white text-gray-600 hover:border-indigo-300 hover:text-indigo-600' }}">
-                                    {{ $month }}
-                                </button>
-                                @endforeach
-                            </div>
-                            <input type="hidden" id="durationInput" value="12">
+                    <!-- Risk Grade Selection -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Credit Risk Grade</label>
+                        <div class="grid grid-cols-4 gap-2">
+                            @foreach(['A', 'B', 'C', 'D'] as $grade)
+                            <button type="button" data-grade="{{ $grade }}"
+                                    class="grade-btn rounded-xl border py-2.5 text-xs font-bold transition-all
+                                        {{ $grade === 'A' ? 'border-emerald-700 bg-emerald-700 text-white shadow-xs' : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50' }}">
+                                Grade {{ $grade }}
+                            </button>
+                            @endforeach
                         </div>
+                        <input type="hidden" id="gradeInput" value="A">
+                        <p id="gradeDescription" class="mt-2 text-[11px] text-slate-500 font-medium">
+                            Grade A: Suku bunga 8–10% / thn. Profil risiko sangat rendah.
+                        </p>
+                    </div>
 
-                        {{-- Risk Grade --}}
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Risk Grade</label>
-                            <div class="grid grid-cols-4 gap-2">
-                                @php
-                                    $gradeColors = [
-                                        'A' => 'emerald', 'B' => 'yellow', 'C' => 'orange', 'D' => 'red'
-                                    ];
-                                @endphp
-                                @foreach(['A', 'B', 'C', 'D'] as $grade)
-                                @php $color = $gradeColors[$grade]; @endphp
-                                <button type="button"
-                                    data-grade="{{ $grade }}"
-                                    class="grade-btn rounded-xl border-2 py-2.5 text-sm font-bold transition-all
-                                        {{ $grade === 'A' ? "border-{$color}-500 bg-{$color}-600 text-white shadow-md" : "border-gray-200 bg-white text-gray-600 hover:border-{$color}-300 hover:text-{$color}-600" }}">
-                                    {{ $grade }}
-                                </button>
-                                @endforeach
-                            </div>
-                            <input type="hidden" id="gradeInput" value="A">
-                            <p id="gradeDescription" class="mt-2 text-xs text-gray-500">
-                                Grade A: Suku bunga 8–10% per tahun. Risiko rendah, profil kredit sangat baik.
-                            </p>
-                        </div>
-
-                        {{-- Calculate Button --}}
-                        <button type="submit" id="calculateBtn"
-                            class="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 hover:from-indigo-700 hover:to-purple-700 hover:shadow-indigo-600/30 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2">
-                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96" />
-                            </svg>
-                            <span id="btnText">Hitung Cicilan</span>
-                        </button>
-                    </form>
-                </div>
+                    <!-- Calculate Button -->
+                    <button type="submit" id="calculateBtn"
+                            class="w-full py-3 px-6 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
+                        <span id="btnText">Hitung Simpul Pinjaman &rarr;</span>
+                    </button>
+                </form>
             </div>
 
-            {{-- ── Right Panel: Results ─────────────────────────────────────── --}}
-            <div class="lg:col-span-3 space-y-6">
-
-                {{-- Placeholder (before calculation) --}}
-                <div id="placeholder" class="rounded-2xl bg-white shadow-xl shadow-indigo-900/5 border border-gray-100 p-10 flex flex-col items-center justify-center text-center min-h-[300px]">
-                    <div class="h-16 w-16 rounded-2xl bg-indigo-50 flex items-center justify-center mb-4">
-                        <svg class="h-8 w-8 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V13.5zm0 2.25h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V18zm2.498-6.75h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zm0 2.25h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V18zm2.504-6.75h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zm0 2.25h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V18zm2.498-6.75h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zM8.25 6h7.5v2.25h-7.5V6zM12 2.25c-1.892 0-3.758.11-5.593.322C5.307 2.7 4.5 3.65 4.5 4.757V19.5a2.25 2.25 0 002.25 2.25h10.5a2.25 2.25 0 002.25-2.25V4.757c0-1.108-.806-2.057-1.907-2.185A48.507 48.507 0 0012 2.25z" />
-                        </svg>
-                    </div>
-                    <h3 class="font-semibold text-gray-900">Mulai Simulasi</h3>
-                    <p class="text-sm text-gray-500 mt-1 max-w-xs">Pilih jumlah pinjaman, tenor, dan risk grade, lalu klik <strong>Hitung Cicilan</strong>.</p>
-                </div>
-
-                {{-- Results Panel (hidden initially) --}}
-                <div id="resultsPanel" class="hidden space-y-6">
-
-                    {{-- Summary Cards --}}
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-700 p-4 text-white shadow-lg shadow-indigo-600/20">
-                            <p class="text-xs font-medium text-indigo-200">Cicilan / Bulan</p>
-                            <p id="res_monthly" class="mt-1 text-xl font-bold truncate">—</p>
+            <!-- Right Results Panel (Spans 7 Cols) -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <div id="resultsPanel" class="space-y-6">
+                    <!-- Summary Stats Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div class="rounded-2xl bg-emerald-700 text-white p-4 shadow-xs">
+                            <span class="text-[10px] font-bold text-emerald-100 uppercase tracking-wider block">CICILAN / BULAN</span>
+                            <span id="res_monthly" class="text-lg font-black text-white mt-1 block truncate">Rp 916.667</span>
                         </div>
-                        <div class="rounded-2xl bg-white border border-gray-100 shadow-md p-4">
-                            <p class="text-xs font-medium text-gray-500">Total Bayar</p>
-                            <p id="res_total" class="mt-1 text-lg font-bold text-gray-900 truncate">—</p>
+
+                        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">TOTAL BAYAR</span>
+                            <span id="res_total" class="text-base font-extrabold text-slate-900 mt-1 block truncate">Rp 11.000.000</span>
                         </div>
-                        <div class="rounded-2xl bg-white border border-gray-100 shadow-md p-4">
-                            <p class="text-xs font-medium text-gray-500">Total Bunga</p>
-                            <p id="res_interest" class="mt-1 text-lg font-bold text-rose-600 truncate">—</p>
+
+                        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">TOTAL BUNGA</span>
+                            <span id="res_interest" class="text-base font-extrabold text-emerald-700 mt-1 block truncate">Rp 1.000.000</span>
                         </div>
-                        <div class="rounded-2xl bg-white border border-gray-100 shadow-md p-4">
-                            <p class="text-xs font-medium text-gray-500">Biaya Awal (1%)</p>
-                            <p id="res_fee" class="mt-1 text-lg font-bold text-amber-600 truncate">—</p>
+
+                        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">PROVISI (1%)</span>
+                            <span id="res_fee" class="text-base font-extrabold text-slate-900 mt-1 block truncate">Rp 100.000</span>
                         </div>
                     </div>
 
-                    {{-- Grade & Rate Info --}}
-                    <div class="rounded-2xl bg-white border border-gray-100 shadow-md p-5 flex flex-wrap items-center gap-4">
-                        <div>
-                            <p class="text-xs text-gray-500">Risk Grade</p>
-                            <span id="res_grade" class="mt-1 inline-flex items-center rounded-lg px-3 py-1 text-sm font-bold bg-emerald-100 text-emerald-700">A</span>
+                    <!-- Amortization Schedule Table Card -->
+                    <div class="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
+                        <div class="p-4 border-b border-slate-100 flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Jadwal Amortisasi Angsuran</h3>
+                            <span id="res_duration_badge" class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">12 Bulan</span>
                         </div>
-                        <div class="h-8 w-px bg-gray-200 hidden sm:block"></div>
-                        <div>
-                            <p class="text-xs text-gray-500">Range Suku Bunga</p>
-                            <p id="res_rate_range" class="mt-1 text-sm font-semibold text-gray-900">—</p>
-                        </div>
-                        <div class="h-8 w-px bg-gray-200 hidden sm:block"></div>
-                        <div>
-                            <p class="text-xs text-gray-500">Suku Bunga Digunakan</p>
-                            <p id="res_annual_rate" class="mt-1 text-sm font-semibold text-indigo-600">—</p>
-                        </div>
-                        <div class="ml-auto">
-                            <a href="{{ route('register') }}" class="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-indigo-700 transition-colors">
-                                Ajukan Sekarang →
-                            </a>
-                        </div>
-                    </div>
 
-                    {{-- Amortization Table --}}
-                    <div class="rounded-2xl bg-white border border-gray-100 shadow-md overflow-hidden">
-                        <div class="flex items-center justify-between border-b border-gray-100 px-6 py-4 bg-gray-50/50">
-                            <div>
-                                <h3 class="text-sm font-semibold text-gray-900">Jadwal Amortisasi</h3>
-                                <p class="text-xs text-gray-500 mt-0.5">Rincian cicilan per bulan</p>
-                            </div>
-                            <span id="res_duration_badge" class="rounded-full bg-indigo-100 text-indigo-700 text-xs font-medium px-3 py-1">— bulan</span>
-                        </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-sm">
+                            <table class="w-full text-left text-xs border-collapse">
                                 <thead>
-                                    <tr class="border-b border-gray-100 bg-gray-50/30">
-                                        <th class="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Bulan</th>
-                                        <th class="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Cicilan</th>
-                                        <th class="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Pokok</th>
-                                        <th class="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Bunga</th>
-                                        <th class="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Sisa</th>
+                                    <tr class="bg-slate-50 border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                        <th class="py-3 px-4">BLN</th>
+                                        <th class="py-3 px-4 text-right">TOTAL ANGSURAN</th>
+                                        <th class="py-3 px-4 text-right">POKOK</th>
+                                        <th class="py-3 px-4 text-right">BUNGA</th>
+                                        <th class="py-3 px-4 text-right">SISA POKOK</th>
                                     </tr>
                                 </thead>
-                                <tbody id="scheduleBody" class="divide-y divide-gray-50">
-                                    {{-- Filled dynamically --}}
+                                <tbody id="scheduleBody" class="divide-y divide-slate-100 font-medium text-slate-700">
+                                    {{-- Rendered dynamically via JavaScript --}}
                                 </tbody>
                             </table>
                         </div>
@@ -218,179 +195,128 @@
 
                 </div>
 
-                {{-- Error Panel --}}
-                <div id="errorPanel" class="hidden rounded-2xl bg-red-50 border border-red-100 p-6 text-center">
-                    <p class="text-sm text-red-600 font-medium" id="errorMsg">Terjadi kesalahan. Silakan coba lagi.</p>
-                </div>
+            </div>
 
-            </div>{{-- end right panel --}}
         </div>
-    </div>
-</div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
+    </main>
 
-    // ── Grade descriptions ────────────────────────────────────────────────────
-    const gradeDescriptions = {
-        A: 'Grade A: Suku bunga 8–10% per tahun. Risiko rendah, profil kredit sangat baik.',
-        B: 'Grade B: Suku bunga 11–14% per tahun. Risiko sedang, profil kredit baik.',
-        C: 'Grade C: Suku bunga 15–18% per tahun. Risiko tinggi, profil kredit cukup.',
-        D: 'Grade D: Suku bunga 19–24% per tahun. Risiko sangat tinggi, profil kredit perlu perbaikan.',
-    };
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs font-medium text-slate-500">
+            <p>&copy; 2026 LendFlow Financial Systems. All rights reserved. Institutional Grade P2P Lending.</p>
+        </div>
+    </footer>
 
-    const gradeColors = {
-        A: { bg: 'bg-emerald-100', text: 'text-emerald-700' },
-        B: { bg: 'bg-yellow-100', text: 'text-yellow-700' },
-        C: { bg: 'bg-orange-100', text: 'text-orange-700' },
-        D: { bg: 'bg-red-100', text: 'text-red-700' },
-    };
+    <!-- JavaScript Calculation Engine -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const amountRange  = document.getElementById('amountRange');
+        const amountInput  = document.getElementById('amountInput');
+        const amountDisplay = document.getElementById('amountDisplay');
+        const durationInput = document.getElementById('durationInput');
+        const gradeInput    = document.getElementById('gradeInput');
+        const gradeDesc     = document.getElementById('gradeDescription');
 
-    const gradeBtnColors = {
-        A: { active: 'border-emerald-500 bg-emerald-600 text-white shadow-md', inactive: 'border-gray-200 bg-white text-gray-600' },
-        B: { active: 'border-yellow-500 bg-yellow-500 text-white shadow-md', inactive: 'border-gray-200 bg-white text-gray-600' },
-        C: { active: 'border-orange-500 bg-orange-600 text-white shadow-md', inactive: 'border-gray-200 bg-white text-gray-600' },
-        D: { active: 'border-red-500 bg-red-600 text-white shadow-md', inactive: 'border-gray-200 bg-white text-gray-600' },
-    };
+        const gradeDescriptions = {
+            A: 'Grade A: Suku bunga 8–10% / thn. Profil risiko sangat rendah.',
+            B: 'Grade B: Suku bunga 11–14% / thn. Profil risiko sedang.',
+            C: 'Grade C: Suku bunga 15–18% / thn. Profil risiko tinggi.',
+            D: 'Grade D: Suku bunga 19–24% / thn. Profil risiko sangat tinggi.',
+        };
 
-    // ── Elements ──────────────────────────────────────────────────────────────
-    const amountRange  = document.getElementById('amountRange');
-    const amountInput  = document.getElementById('amountInput');
-    const amountDisplay = document.getElementById('amountDisplay');
-    const durationInput = document.getElementById('durationInput');
-    const gradeInput    = document.getElementById('gradeInput');
-    const gradeDesc     = document.getElementById('gradeDescription');
-
-    // ── Sync range <-> number input ───────────────────────────────────────────
-    function formatRupiah(num) {
-        return 'Rp ' + Math.floor(num).toLocaleString('id-ID');
-    }
-
-    amountRange.addEventListener('input', () => {
-        amountInput.value = amountRange.value;
-        amountDisplay.textContent = formatRupiah(amountRange.value);
-    });
-
-    amountInput.addEventListener('input', () => {
-        amountRange.value = amountInput.value;
-        amountDisplay.textContent = formatRupiah(amountInput.value);
-    });
-
-    // ── Duration buttons ─────────────────────────────────────────────────────
-    document.querySelectorAll('.duration-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.duration-btn').forEach(b => {
-                b.className = b.className
-                    .replace('border-indigo-500 bg-indigo-600 text-white shadow-md shadow-indigo-600/20', '')
-                    .trim();
-                b.classList.add('border-gray-200', 'bg-white', 'text-gray-600');
-            });
-            btn.classList.remove('border-gray-200', 'bg-white', 'text-gray-600');
-            btn.classList.add('border-indigo-500', 'bg-indigo-600', 'text-white', 'shadow-md', 'shadow-indigo-600/20');
-            durationInput.value = btn.dataset.duration;
-        });
-    });
-
-    // ── Grade buttons ─────────────────────────────────────────────────────────
-    document.querySelectorAll('.grade-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const g = btn.dataset.grade;
-            gradeInput.value = g;
-            gradeDesc.textContent = gradeDescriptions[g];
-
-            document.querySelectorAll('.grade-btn').forEach(b => {
-                const bg = b.dataset.grade;
-                b.className = b.className
-                    .replace(gradeBtnColors[bg].active, '')
-                    .trim();
-                b.classList.add('border-gray-200', 'bg-white', 'text-gray-600');
-            });
-            btn.classList.remove('border-gray-200', 'bg-white', 'text-gray-600');
-            const colors = gradeBtnColors[g].active.split(' ');
-            btn.classList.add(...colors);
-        });
-    });
-
-    // ── Form submit ───────────────────────────────────────────────────────────
-    document.getElementById('calculatorForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const btn = document.getElementById('calculateBtn');
-        const btnText = document.getElementById('btnText');
-        btnText.textContent = 'Menghitung…';
-        btn.disabled = true;
-
-        document.getElementById('errorPanel').classList.add('hidden');
-
-        try {
-            const response = await fetch('{{ route("calculator.calculate") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({
-                    amount:     amountInput.value,
-                    duration:   durationInput.value,
-                    risk_grade: gradeInput.value,
-                }),
-            });
-
-            const data = await response.json();
-
-            if (!data.success) {
-                throw new Error(data.error || 'Terjadi kesalahan pada server.');
-            }
-
-            // ── Populate results ──────────────────────────────────────────────
-            document.getElementById('placeholder').classList.add('hidden');
-            document.getElementById('resultsPanel').classList.remove('hidden');
-
-            document.getElementById('res_monthly').textContent   = data.monthly_payment;
-            document.getElementById('res_total').textContent     = data.total_payment;
-            document.getElementById('res_interest').textContent  = data.total_interest;
-            document.getElementById('res_fee').textContent       = data.origination_fee;
-            document.getElementById('res_rate_range').textContent = data.rate_range;
-            document.getElementById('res_annual_rate').textContent = data.annual_rate + '% / tahun (midpoint)';
-            document.getElementById('res_duration_badge').textContent = data.duration + ' bulan';
-
-            // Grade badge
-            const gradeEl = document.getElementById('res_grade');
-            gradeEl.textContent = 'Grade ' + data.grade;
-            const gc = gradeColors[data.grade];
-            gradeEl.className = `mt-1 inline-flex items-center rounded-lg px-3 py-1 text-sm font-bold ${gc.bg} ${gc.text}`;
-
-            // Amortization schedule
-            const tbody = document.getElementById('scheduleBody');
-            tbody.innerHTML = '';
-            data.schedule.forEach((row, i) => {
-                const tr = document.createElement('tr');
-                tr.className = i % 2 === 0 ? 'hover:bg-gray-50 transition-colors' : 'bg-gray-50/40 hover:bg-gray-100/40 transition-colors';
-                tr.innerHTML = `
-                    <td class="py-3 px-4 font-medium text-gray-700">${row.month}</td>
-                    <td class="py-3 px-4 text-right font-semibold text-indigo-600">${row.payment}</td>
-                    <td class="py-3 px-4 text-right text-gray-700">${row.principal}</td>
-                    <td class="py-3 px-4 text-right text-rose-500">${row.interest}</td>
-                    <td class="py-3 px-4 text-right text-gray-500">${row.remaining}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            // Scroll to results
-            document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        } catch (err) {
-            document.getElementById('errorPanel').classList.remove('hidden');
-            document.getElementById('errorMsg').textContent = err.message;
-        } finally {
-            btnText.textContent = 'Hitung Cicilan';
-            btn.disabled = false;
+        function formatRupiah(num) {
+            return 'Rp ' + Math.floor(num).toLocaleString('id-ID');
         }
-    });
 
-    // ── Auto-calculate on load with defaults ──────────────────────────────────
-    document.getElementById('calculatorForm').dispatchEvent(new Event('submit'));
-});
-</script>
-@endsection
+        amountRange.addEventListener('input', () => {
+            amountInput.value = amountRange.value;
+            amountDisplay.textContent = formatRupiah(amountRange.value);
+        });
+
+        amountInput.addEventListener('input', () => {
+            amountRange.value = amountInput.value;
+            amountDisplay.textContent = formatRupiah(amountInput.value);
+        });
+
+        document.querySelectorAll('.duration-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.duration-btn').forEach(b => {
+                    b.className = 'duration-btn rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 py-2.5 text-xs font-bold transition-all';
+                });
+                btn.className = 'duration-btn rounded-xl border border-emerald-700 bg-emerald-700 text-white shadow-xs py-2.5 text-xs font-bold transition-all';
+                durationInput.value = btn.dataset.duration;
+            });
+        });
+
+        document.querySelectorAll('.grade-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const g = btn.dataset.grade;
+                gradeInput.value = g;
+                gradeDesc.textContent = gradeDescriptions[g];
+
+                document.querySelectorAll('.grade-btn').forEach(b => {
+                    b.className = 'grade-btn rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 py-2.5 text-xs font-bold transition-all';
+                });
+                btn.className = 'grade-btn rounded-xl border border-emerald-700 bg-emerald-700 text-white shadow-xs py-2.5 text-xs font-bold transition-all';
+            });
+        });
+
+        document.getElementById('calculatorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const btnText = document.getElementById('btnText');
+            btnText.textContent = 'Menghitung...';
+
+            try {
+                const response = await fetch('{{ route("calculator.calculate") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        amount:     amountInput.value,
+                        duration:   durationInput.value,
+                        risk_grade: gradeInput.value,
+                    }),
+                });
+
+                const data = await response.json();
+                if (!data.success) throw new Error(data.error || 'Terjadi kesalahan');
+
+                document.getElementById('res_monthly').textContent   = data.monthly_payment;
+                document.getElementById('res_total').textContent     = data.total_payment;
+                document.getElementById('res_interest').textContent  = data.total_interest;
+                document.getElementById('res_fee').textContent       = data.origination_fee;
+                document.getElementById('res_duration_badge').textContent = data.duration + ' Bulan';
+
+                const tbody = document.getElementById('scheduleBody');
+                tbody.innerHTML = '';
+                data.schedule.forEach((row) => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50/80 transition-colors';
+                    tr.innerHTML = `
+                        <td class="py-3 px-4 font-bold text-slate-900">${row.month}</td>
+                        <td class="py-3 px-4 text-right font-bold text-emerald-700">${row.payment}</td>
+                        <td class="py-3 px-4 text-right text-slate-700">${row.principal}</td>
+                        <td class="py-3 px-4 text-right text-slate-600">${row.interest}</td>
+                        <td class="py-3 px-4 text-right text-slate-500 font-mono">${row.remaining}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+            } catch (err) {
+                console.error(err);
+            } finally {
+                btnText.textContent = 'Hitung Simpul Pinjaman →';
+            }
+        });
+
+        // Trigger initial calculation
+        document.getElementById('calculatorForm').dispatchEvent(new Event('submit'));
+    });
+    </script>
+</body>
+</html>

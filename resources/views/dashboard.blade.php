@@ -135,33 +135,40 @@
         <div class="space-y-6">
 
             <!-- Card: System Alerts -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
-                        <span></span> System Alerts
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                        <svg class="h-4 w-4 text-rose-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                        </svg>
+                        <span>System Alerts</span>
                     </h3>
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">3 New</span>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800">3 New</span>
                 </div>
 
                 <div class="space-y-3">
                     <!-- Alert 1: Large Withdrawal -->
-                    <div class="p-3.5 rounded-xl bg-rose-50/70 border border-rose-200 space-y-1">
+                    <div class="p-3.5 rounded-xl bg-rose-50/80 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 space-y-1">
                         <div class="flex items-center gap-2">
-                            <span class="text-xs"></span>
-                            <p class="text-xs font-bold text-rose-900">Large Withdrawal Detected</p>
+                            <svg class="h-3.5 w-3.5 text-rose-600 dark:text-rose-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                            </svg>
+                            <p class="text-xs font-bold text-rose-900 dark:text-rose-300">Large Withdrawal Detected</p>
                         </div>
-                        <p class="text-[11px] text-rose-700 leading-relaxed">Unusual outbound transfer of Rp 50.000.000 initiated by Account #8492.</p>
-                        <p class="text-[10px] font-semibold text-rose-500">2 mins ago</p>
+                        <p class="text-[11px] text-rose-700 dark:text-rose-400 leading-relaxed font-medium">Unusual outbound transfer of Rp 50.000.000 initiated by Account #8492.</p>
+                        <p class="text-[10px] font-semibold text-rose-500 dark:text-rose-400">2 mins ago</p>
                     </div>
 
                     <!-- Alert 2: API Latency Spike -->
-                    <div class="p-3.5 rounded-xl bg-blue-50/70 border border-blue-200 space-y-1">
+                    <div class="p-3.5 rounded-xl bg-sky-50/80 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-900/60 space-y-1">
                         <div class="flex items-center gap-2">
-                            <span class="text-xs">️</span>
-                            <p class="text-xs font-bold text-blue-900">API Latency Spike</p>
+                            <svg class="h-3.5 w-3.5 text-sky-600 dark:text-sky-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <p class="text-xs font-bold text-sky-900 dark:text-sky-300">API Latency Spike</p>
                         </div>
-                        <p class="text-[11px] text-blue-700 leading-relaxed">Payment gateway response times exceeded 2000ms for 30 seconds.</p>
-                        <p class="text-[10px] font-semibold text-blue-500">15 mins ago</p>
+                        <p class="text-[11px] text-sky-700 dark:text-sky-400 leading-relaxed font-medium">Payment gateway response times exceeded 2000ms for 30 seconds.</p>
+                        <p class="text-[10px] font-semibold text-sky-500 dark:text-sky-400">15 mins ago</p>
                     </div>
                 </div>
             </div>

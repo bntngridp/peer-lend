@@ -370,14 +370,32 @@
             <p class="text-xs text-slate-500 font-medium mt-1">Manage how LendFlow communicates important updates, alerts, and marketing information to you.</p>
         </div>
 
-        <div class="space-y-6">
+        <form action="{{ route('profile.notifications.update') }}" method="POST" class="space-y-6">
+            @csrf
+            @method('PUT')
+
+            @php
+                $settings = $user->profile?->notification_settings ?? [
+                    'security_email'   => true,
+                    'security_push'    => true,
+                    'financial_email'  => true,
+                    'financial_push'   => true,
+                    'investment_email' => true,
+                    'investment_push'  => false,
+                ];
+            @endphp
+
             <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
                 <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-2">Security Alerts</h4>
                 <div class="flex items-center justify-between text-xs">
                     <span class="font-bold text-slate-800">Unrecognized Logins &amp; Password Changes</span>
                     <div class="flex gap-4">
-                        <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer"><input type="checkbox" checked class="accent-emerald-700"> Email</label>
-                        <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer"><input type="checkbox" checked class="accent-emerald-700"> Push</label>
+                        <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
+                            <input type="checkbox" name="security_email" value="1" {{ !empty($settings['security_email']) ? 'checked' : '' }} class="accent-emerald-700"> Email
+                        </label>
+                        <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
+                            <input type="checkbox" name="security_push" value="1" {{ !empty($settings['security_push']) ? 'checked' : '' }} class="accent-emerald-700"> Push
+                        </label>
                     </div>
                 </div>
             </div>
@@ -388,24 +406,32 @@
                     <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
                         <span class="font-bold text-slate-800">Loan Approvals &amp; Updates</span>
                         <div class="flex gap-4">
-                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer"><input type="checkbox" checked class="accent-emerald-700"> Email</label>
-                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer"><input type="checkbox" checked class="accent-emerald-700"> Push</label>
+                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
+                                <input type="checkbox" name="financial_email" value="1" {{ !empty($settings['financial_email']) ? 'checked' : '' }} class="accent-emerald-700"> Email
+                            </label>
+                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
+                                <input type="checkbox" name="financial_push" value="1" {{ !empty($settings['financial_push']) ? 'checked' : '' }} class="accent-emerald-700"> Push
+                            </label>
                         </div>
                     </div>
                     <div class="flex items-center justify-between py-1">
                         <span class="font-bold text-slate-800">Investment Milestones &amp; Returns</span>
                         <div class="flex gap-4">
-                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer"><input type="checkbox" checked class="accent-emerald-700"> Email</label>
-                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer"><input type="checkbox" checked class="accent-emerald-700"> Push</label>
+                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
+                                <input type="checkbox" name="investment_email" value="1" {{ !empty($settings['investment_email']) ? 'checked' : '' }} class="accent-emerald-700"> Email
+                            </label>
+                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
+                                <input type="checkbox" name="investment_push" value="1" {{ !empty($settings['investment_push']) ? 'checked' : '' }} class="accent-emerald-700"> Push
+                            </label>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <button type="button" @click="alert('Notification preferences updated!')" class="py-2.5 px-6 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
+            <button type="submit" id="btn_save_notification_preferences" class="py-2.5 px-6 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs cursor-pointer">
                 Save Preferences &rarr;
             </button>
-        </div>
+        </form>
     </div>
 
     <!-- ─── Tab 4: System Preferences & Appearance ───────────────────────── -->

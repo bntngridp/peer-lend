@@ -20,12 +20,14 @@ class Profile extends Model
         'province',
         'occupation',
         'monthly_income',
+        'notification_settings',
     ];
 
     protected function casts(): array
     {
         return [
-            'monthly_income' => 'decimal:2',
+            'monthly_income'        => 'decimal:2',
+            'notification_settings' => 'array',
         ];
     }
 

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-6 max-w-6xl mx-auto" x-data="{ profileTab: '{{ session('tab') ?? request('tab') ?? 'personal' }}', colorTheme: 'light', density: 'comfortable' }">
+<div class="space-y-6 max-w-6xl mx-auto" x-data="{ profileTab: '{{ session('tab') ?? request('tab') ?? 'personal' }}', colorTheme: 'light', density: 'comfortable', disable2faModalOpen: false }">
     
     <!-- Top Header Bar -->
     <div>
@@ -201,12 +201,9 @@
                             <span class="text-[10px] text-slate-500 font-medium mt-0.5 block">Google Authenticator, Authy, Microsoft Authenticator</span>
                         </div>
                         @if(Auth::user()->google2fa_enabled)
-                            <form action="{{ route('2fa.disable') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menonaktifkan Two-Factor Authentication (2FA)?');">
-                                @csrf
-                                <button type="submit" id="btn_disable_2fa" class="py-1.5 px-3.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer">
-                                    Nonaktifkan 2FA
-                                </button>
-                            </form>
+                            <button type="button" @click="disable2faModalOpen = true" id="btn_disable_2fa" class="py-1.5 px-3.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer">
+                                Nonaktifkan 2FA
+                            </button>
                         @else
                             <a href="{{ route('2fa.setup') }}" id="btn_setup_2fa" class="py-1.5 px-3.5 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 shadow-xs transition-colors">
                                 Setup 2FA &rarr;
@@ -453,6 +450,50 @@
                 <button type="button" @click="alert('System preferences saved!')" class="py-2.5 px-6 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
                     Save Changes &rarr;
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disable 2FA Confirmation Modal -->
+    <div x-show="disable2faModalOpen" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4" 
+         style="display: none;">
+        
+        <div @click.away="disable2faModalOpen = false" 
+             class="w-full max-w-md bg-white rounded-2xl p-6 shadow-xl border border-slate-200 space-y-5 transform transition-all text-center">
+            
+            <!-- Warning Shield Circle -->
+            <div class="mx-auto h-12 w-12 rounded-full bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+            </div>
+
+            <div>
+                <h3 class="text-base font-extrabold text-slate-900">Konfirmasi Nonaktifkan 2FA</h3>
+                <p class="text-xs text-slate-500 font-medium mt-1.5 leading-relaxed">
+                    Apakah Anda yakin ingin menonaktifkan Two-Factor Authentication (2FA)? Akun Anda akan menjadi kurang terlindungi dari risiko akses tanpa izin.
+                </p>
+            </div>
+
+            <div class="flex items-center gap-3 pt-2">
+                <button type="button" @click="disable2faModalOpen = false" 
+                        class="flex-1 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors shadow-xs cursor-pointer">
+                    Batal
+                </button>
+                <form action="{{ route('2fa.disable') }}" method="POST" class="flex-1">
+                    @csrf
+                    <button type="submit" id="btn_confirm_disable_2fa" 
+                            class="w-full py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer">
+                        Ya, Nonaktifkan 2FA
+                    </button>
+                </form>
             </div>
         </div>
     </div>

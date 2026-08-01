@@ -16,7 +16,7 @@
         </div>
 
         <!-- Registration Form -->
-        <form id="registerForm" class="space-y-4" action="{{ route('register') }}" method="POST">
+        <form class="space-y-4" action="{{ route('register') }}" method="POST">
             @csrf
 
             <!-- Premium Visual Role Selection Cards -->
@@ -148,7 +148,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                             </svg>
-                            <!-- Eye Off (Clean Modern Lucide Eye-Off) -->
+                            <!-- Eye Off -->
                             <svg class="eye-closed w-4 h-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.94 17.94A10.07 10.07 0 0112 19c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" />
                             </svg>
@@ -169,7 +169,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                             </svg>
-                            <!-- Eye Off (Clean Modern Lucide Eye-Off) -->
+                            <!-- Eye Off -->
                             <svg class="eye-closed w-4 h-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.94 17.94A10.07 10.07 0 0112 19c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" />
                             </svg>
@@ -202,16 +202,18 @@
                 <p class="mt-1 text-xs text-rose-600 font-semibold">{{ $message }}</p>
             @enderror
 
-            <!-- Terms Checkbox with Legal Links & Inline Modal Viewers -->
+            <!-- Terms Checkbox with Modal Trigger Links -->
             <div class="py-1">
                 <label class="flex items-center select-none cursor-pointer">
                     <input type="checkbox" id="terms_agree" onchange="toggleTermsAgreement(this)" required
                            class="rounded border-slate-300 text-emerald-700 focus:ring-emerald-600 h-4 w-4 cursor-pointer">
                     <span class="ml-2 text-[11px] font-medium text-slate-600">
                         I agree to the 
-                        <a href="{{ route('terms.show') }}" target="_blank" onclick="openLegalModal(event, 'terms')" class="font-bold text-emerald-700 hover:underline">Terms &amp; Conditions</a> 
+                        <button type="button" onclick="openLegalModal('terms')" id="btn_modal_terms"
+                                class="font-bold text-emerald-700 hover:underline bg-transparent border-none p-0 inline cursor-pointer">Terms &amp; Conditions</button> 
                         and 
-                        <a href="{{ route('privacy.show') }}" target="_blank" onclick="openLegalModal(event, 'privacy')" class="font-bold text-emerald-700 hover:underline">Privacy Policy</a>.
+                        <button type="button" onclick="openLegalModal('privacy')" id="btn_modal_privacy"
+                                class="font-bold text-emerald-700 hover:underline bg-transparent border-none p-0 inline cursor-pointer">Privacy Policy</button>.
                     </span>
                 </label>
             </div>
@@ -256,101 +258,164 @@
     </div>
 </div>
 
-<!-- Legal Modal Viewer (Allows reading Terms & Privacy inline without losing form data) -->
-<div id="legalModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs transition-opacity duration-200">
-    <div class="bg-white rounded-2xl max-w-xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- MODAL OVERLAY: TERMS & CONDITIONS -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div id="modal-terms" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-all duration-300">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        
         <!-- Modal Header -->
-        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-            <h3 id="modalTitle" class="text-sm font-bold text-slate-900">Legal Document</h3>
-            <button type="button" onclick="closeLegalModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-200/60 transition-colors">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/80">
+            <div class="flex items-center gap-2">
+                <span class="h-6 w-6 rounded-lg bg-emerald-700 text-white font-black flex items-center justify-center text-xs">L</span>
+                <h3 class="text-sm font-bold text-slate-900">Terms &amp; Conditions — LendFlow</h3>
+            </div>
+            <button type="button" onclick="closeLegalModal('terms')" class="text-slate-400 hover:text-slate-700 p-1 rounded-lg hover:bg-slate-200/60 transition-colors">
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
         </div>
-        <!-- Modal Content Container -->
-        <div id="modalBody" class="px-6 py-5 overflow-y-auto text-xs text-slate-600 space-y-4 leading-relaxed font-normal">
-            <!-- Dynamically Loaded -->
+
+        <!-- Modal Body Content -->
+        <div class="p-6 overflow-y-auto max-h-[60vh] text-xs text-slate-600 space-y-4 leading-relaxed">
+            <section>
+                <h4 class="text-xs font-bold text-slate-900 mb-1">1. Pendahuluan &amp; Ketentuan Umum</h4>
+                <p>Selamat datang di LendFlow. Dengan mendaftar dan menggunakan platform Peer-to-Peer (P2P) Lending LendFlow, Anda menyatakan menyetujui seluruh Syarat dan Ketentuan ini. Harap membaca dokumen ini dengan saksama sebelum melanjutkan proses pendaftaran.</p>
+            </section>
+
+            <section>
+                <h4 class="text-xs font-bold text-slate-900 mb-1">2. Peran Pengguna (Borrower &amp; Lender)</h4>
+                <ul class="list-disc pl-4 space-y-1">
+                    <li><strong>Borrower (Peminjam):</strong> Peminjam wajib memberikan data KYC (Kartu Tanda Penduduk, NPWP, Bukti Pendapatan) yang asli dan valid. Peminjam bertanggung jawab penuh atas pembayaran pokok dan bunga cicilan sesuai jadwal penagihan.</li>
+                    <li><strong>Lender (Pemberi Pinjaman):</strong> Pemberi pinjaman menyadari bahwa aktivitas pendanaan memiliki risiko bisnis. LendFlow memfasilitasi penilaian kredit (credit scoring) dan dana jaminan/collateral untuk meminimalkan risiko pendana.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h4 class="text-xs font-bold text-slate-900 mb-1">3. Verifikasi Identitas (KYC &amp; AML)</h4>
+                <p>Seluruh pengguna wajib melalui prosedur Know Your Customer (KYC) dan Anti-Money Laundering (AML) sesuai regulasi yang berlaku. Penggunaan akun oleh pihak ketiga tidak diizinkan.</p>
+            </section>
+
+            <section>
+                <h4 class="text-xs font-bold text-slate-900 mb-1">4. Pembayaran &amp; Dompet Digital</h4>
+                <p>Seluruh transaksi keuangan diproses melalui Virtual Account dan dompet digital IDR terenkripsi. Pengguna dilarang melakukan aktivitas pencucian uang atau transaksi manipulatif.</p>
+            </section>
+
+            <section>
+                <h4 class="text-xs font-bold text-slate-900 mb-1">5. Perubahan &amp; Ketentuan Hukum</h4>
+                <p>LendFlow berhak memperbarui Syarat &amp; Ketentuan ini sewaktu-waktu. Perubahan akan diberitahukan melalui email atau pengumuman di aplikasi.</p>
+            </section>
         </div>
+
         <!-- Modal Footer -->
-        <div class="px-6 py-3.5 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between">
-            <span class="text-[11px] text-slate-400 font-medium">LendFlow Legal Agreement</span>
-            <button type="button" onclick="closeLegalModal()" class="px-4 py-2 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
-                Tutup &amp; Lanjutkan Pendaftaran
+        <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 font-medium">Terakhir diperbarui: Juli 2026</span>
+            <div class="flex items-center gap-2">
+                <button type="button" onclick="closeLegalModal('terms')" class="px-4 py-2 text-xs font-bold text-slate-600 hover:text-slate-900 transition-colors">
+                    Tutup
+                </button>
+                <button type="button" onclick="acceptTermsFromModal('terms')" class="px-4 py-2 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-all shadow-xs">
+                    Saya Setuju &amp; Paham
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- MODAL OVERLAY: PRIVACY POLICY -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div id="modal-privacy" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-all duration-300">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/80">
+            <div class="flex items-center gap-2">
+                <span class="h-6 w-6 rounded-lg bg-emerald-700 text-white font-black flex items-center justify-center text-xs">L</span>
+                <h3 class="text-sm font-bold text-slate-900">Privacy Policy — LendFlow</h3>
+            </div>
+            <button type="button" onclick="closeLegalModal('privacy')" class="text-slate-400 hover:text-slate-700 p-1 rounded-lg hover:bg-slate-200/60 transition-colors">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
             </button>
         </div>
+
+        <!-- Modal Body Content -->
+        <div class="p-6 overflow-y-auto max-h-[60vh] text-xs text-slate-600 space-y-4 leading-relaxed">
+            <section>
+                <h4 class="text-xs font-bold text-slate-900 mb-1">1. Pengumpulan Informasi Pribadi</h4>
+                <p>LendFlow mengumpulkan informasi pribadi seperti Nama Lengkap, Alamat Email, Nomor Telepon, Dokumen Identitas (KTP/NPWP), dan data transaksi keuangan semata-mata untuk keperluan verifikasi akun, penilaian kelayakan pinjaman (credit scoring), dan keamanan layanan.</p>
+            </section>
+
+            <section>
+                <h4 class="text-xs font-bold text-slate-900 mb-1">2. Keamanan &amp; Enkripsi Data</h4>
+                <p>Seluruh data sensitif dan kata sandi Anda dilindungi menggunakan enkripsi standar industri (AES-256 dan bcrypt). Kami menerapkan protokol akses ketat dan arsitektur dua faktor (2FA) untuk mencegah akses tanpa izin.</p>
+            </section>
+
+            <section>
+                <h4 class="text-xs font-bold text-slate-900 mb-1">3. Pengungkapan Kepada Pihak Ketiga</h4>
+                <p>LendFlow tidak menjual atau menyewakan data pribadi Anda kepada pihak ketiga mana pun. Data hanya dibagikan kepada mitra penyedia jasa keuangan resmi (seperti Payment Gateway Midtrans) atau atas instruksi penegak hukum yang sah.</p>
+            </section>
+
+            <section>
+                <h4 class="text-xs font-bold text-slate-900 mb-1">4. Hak Pengguna &amp; Penghapusan Akun</h4>
+                <p>Pengguna berhak memperbarui data profil dan mengajukan permohonan penutupan akun sesuai dengan kebijakan retensi data yang berlaku.</p>
+            </section>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 font-medium">Terakhir diperbarui: Juli 2026</span>
+            <div class="flex items-center gap-2">
+                <button type="button" onclick="closeLegalModal('privacy')" class="px-4 py-2 text-xs font-bold text-slate-600 hover:text-slate-900 transition-colors">
+                    Tutup
+                </button>
+                <button type="button" onclick="acceptTermsFromModal('privacy')" class="px-4 py-2 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-all shadow-xs">
+                    Saya Setuju &amp; Paham
+                </button>
+            </div>
+        </div>
+
     </div>
 </div>
 
 <script>
-// ─── FORM DRAFT PERSISTENCE (Auto-Save & Restore) ─────────────────────────
-const DRAFT_KEY = 'lendflow_register_form_draft';
-
-function saveFormDraft() {
-    const draftData = {
-        role: document.querySelector('input[name="role"]:checked')?.value || 'borrower',
-        full_name: document.getElementById('full_name')?.value || '',
-        email: document.getElementById('email')?.value || '',
-        country_code: document.getElementById('country_code')?.value || '+62',
-        phone: document.getElementById('phone')?.value || '',
-        terms_agree: document.getElementById('terms_agree')?.checked || false,
-    };
-    try {
-        localStorage.setItem(DRAFT_KEY, JSON.stringify(draftData));
-    } catch (e) {
-        console.warn('Unable to save form draft:', e);
+function openLegalModal(type) {
+    const modal = document.getElementById('modal-' + type);
+    if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
     }
 }
 
-function restoreFormDraft() {
-    try {
-        const saved = localStorage.getItem(DRAFT_KEY);
-        if (!saved) return;
-        const draft = JSON.parse(saved);
-
-        // Only restore if fields aren't already set by server old()
-        const fullNameInput = document.getElementById('full_name');
-        if (fullNameInput && !fullNameInput.value && draft.full_name) {
-            fullNameInput.value = draft.full_name;
-        }
-
-        const emailInput = document.getElementById('email');
-        if (emailInput && !emailInput.value && draft.email) {
-            emailInput.value = draft.email;
-        }
-
-        const countryCodeInput = document.getElementById('country_code');
-        if (countryCodeInput && draft.country_code) {
-            countryCodeInput.value = draft.country_code;
-        }
-
-        const phoneInput = document.getElementById('phone');
-        if (phoneInput && !phoneInput.value && draft.phone) {
-            phoneInput.value = draft.phone;
-        }
-
-        if (draft.role) {
-            selectRole(draft.role);
-        }
-
-        const termsCheckbox = document.getElementById('terms_agree');
-        if (termsCheckbox && draft.terms_agree) {
-            termsCheckbox.checked = true;
-            toggleTermsAgreement(termsCheckbox);
-        }
-
-    } catch (e) {
-        console.warn('Unable to restore form draft:', e);
+function closeLegalModal(type) {
+    const modal = document.getElementById('modal-' + type);
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
     }
 }
 
-function clearFormDraft() {
-    try {
-        localStorage.removeItem(DRAFT_KEY);
-    } catch (e) {}
+function acceptTermsFromModal(type) {
+    closeLegalModal(type);
+    const termsCheckbox = document.getElementById('terms_agree');
+    if (termsCheckbox) {
+        termsCheckbox.checked = true;
+        toggleTermsAgreement(termsCheckbox);
+    }
 }
 
-// ─── ROLE SELECTOR ────────────────────────────────────────────────────────
+// Close modals when pressing Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeLegalModal('terms');
+        closeLegalModal('privacy');
+    }
+});
+
 function selectRole(role) {
     const radioBorrower = document.getElementById('radio-borrower');
     const radioLender = document.getElementById('radio-lender');
@@ -409,8 +474,6 @@ function selectRole(role) {
         if (iconLender) iconLender.className = 'w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center transition-colors shadow-xs';
         if (iconBorrower) iconBorrower.className = 'w-9 h-9 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center transition-colors shadow-xs';
     }
-
-    saveFormDraft();
 }
 
 function togglePass(inputId, btn) {
@@ -478,128 +541,20 @@ function toggleTermsAgreement(checkbox) {
         btnSubmit.disabled = true;
         btnSubmit.className = 'w-full py-3 rounded-xl bg-slate-300 text-slate-500 font-bold text-xs cursor-not-allowed transition-all duration-200 shadow-none border-none';
     }
-
-    saveFormDraft();
 }
 
-// ─── LEGAL INLINE MODAL VIEWER ─────────────────────────────────────────────
-const LEGAL_DOCS = {
-    terms: {
-        title: 'Terms & Conditions — LendFlow',
-        content: `
-            <section class="space-y-1.5">
-                <h4 class="font-bold text-slate-900 text-xs">1. Pendahuluan &amp; Ketentuan Umum</h4>
-                <p>Selamat datang di LendFlow. Dengan mendaftar dan menggunakan platform Peer-to-Peer (P2P) Lending LendFlow, Anda menyatakan menyetujui seluruh Syarat dan Ketentuan ini.</p>
-            </section>
-            <section class="space-y-1.5">
-                <h4 class="font-bold text-slate-900 text-xs">2. Peran Pengguna (Borrower &amp; Lender)</h4>
-                <ul class="list-disc pl-4 space-y-1">
-                    <li><strong>Borrower (Peminjam):</strong> Peminjam wajib memberikan data KYC yang asli dan valid. Peminjam bertanggung jawab penuh atas pembayaran pokok dan bunga cicilan.</li>
-                    <li><strong>Lender (Investor):</strong> Pemberi pinjaman menyadari bahwa aktivitas pendanaan memiliki risiko bisnis. LendFlow memfasilitasi penilaian kredit dan dana jaminan (collateral).</li>
-                </ul>
-            </section>
-            <section class="space-y-1.5">
-                <h4 class="font-bold text-slate-900 text-xs">3. Verifikasi Identitas (KYC &amp; AML)</h4>
-                <p>Seluruh pengguna wajib melalui prosedur Know Your Customer (KYC) dan Anti-Money Laundering (AML) sesuai regulasi yang berlaku.</p>
-            </section>
-            <section class="space-y-1.5">
-                <h4 class="font-bold text-slate-900 text-xs">4. Dompet Digital &amp; Keamanan</h4>
-                <p>Seluruh transaksi keuangan diproses melalui Virtual Account dan dompet digital IDR terenkripsi.</p>
-            </section>
-        `
-    },
-    privacy: {
-        title: 'Privacy Policy — LendFlow',
-        content: `
-            <section class="space-y-1.5">
-                <h4 class="font-bold text-slate-900 text-xs">1. Pengumpulan Informasi Pribadi</h4>
-                <p>LendFlow mengumpulkan informasi identitas diri seperti Nama Lengkap, Alamat Email, Nomor Telepon, dokumen KYC, dan data keuangan.</p>
-            </section>
-            <section class="space-y-1.5">
-                <h4 class="font-bold text-slate-900 text-xs">2. Penggunaan &amp; Perlindungan Data</h4>
-                <p>Informasi pribadi Anda hanya digunakan untuk verifikasi akun, penilaian risiko kredit (credit scoring), dan pemrosesan transaksi P2P Lending.</p>
-            </section>
-            <section class="space-y-1.5">
-                <h4 class="font-bold text-slate-900 text-xs">3. Keamanan Data Terenkripsi</h4>
-                <p>Seluruh data sensitif dan enkripsi kata sandi menggunakan standar industri SSL/TLS 256-bit &amp; BCRYPT Hashing.</p>
-            </section>
-        `
-    }
-};
-
-function openLegalModal(event, docType) {
-    saveFormDraft();
-
-    // If device width is desktop or middle click / ctrl click, allow default link tab behavior while draft is saved
-    if (event && (event.ctrlKey || event.metaKey)) {
-        return true;
-    }
-
-    if (event) {
-        event.preventDefault();
-    }
-
-    const modal = document.getElementById('legalModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalBody = document.getElementById('modalBody');
-
-    if (!modal || !modalTitle || !modalBody || !LEGAL_DOCS[docType]) return;
-
-    modalTitle.textContent = LEGAL_DOCS[docType].title;
-    modalBody.innerHTML = LEGAL_DOCS[docType].content;
-
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeLegalModal() {
-    const modal = document.getElementById('legalModal');
-    if (!modal) return;
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    document.body.style.overflow = '';
-}
-
-// Close modal on Escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeLegalModal();
-});
-
-// Attach listeners for auto-save & auto-restore
 document.addEventListener('DOMContentLoaded', function() {
-    restoreFormDraft();
-
-    // Attach input listeners
-    const inputs = ['full_name', 'email', 'country_code', 'phone'];
-    inputs.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.addEventListener('input', saveFormDraft);
-            el.addEventListener('change', saveFormDraft);
-        }
-    });
-
     const checkedRadio = document.querySelector('input[name="role"]:checked');
     if (checkedRadio) {
         selectRole(checkedRadio.value);
     }
-
     const passInput = document.getElementById('password');
     if (passInput && passInput.value) {
         checkPasswordRequirements(passInput.value);
     }
-
     const termsCheckbox = document.getElementById('terms_agree');
     if (termsCheckbox) {
         toggleTermsAgreement(termsCheckbox);
-    }
-
-    const registerForm = document.getElementById('registerForm');
-    if (registerForm) {
-        registerForm.addEventListener('submit', function() {
-            clearFormDraft();
-        });
     }
 });
 </script>

@@ -27,10 +27,19 @@ html.dark nav {
     border-color: #1e293b !important;
 }
 
+/* Sidebar Bottom User Profile Container */
+html.dark .bg-slate-50\/50,
+html.dark .bg-slate-50\/80,
+html.dark .bg-slate-100\/50,
+html.dark .bg-slate-100\/80 {
+    background-color: rgba(17, 24, 39, 0.8) !important;
+    border-color: #1e293b !important;
+}
+
 /* Sidebar Active & Inactive Navigation Links */
 html.dark nav a.bg-emerald-50,
 html.dark nav a.bg-emerald-50:hover,
-html.dark .bg-emerald-50 {
+html.dark .bg-emerald-50:not(table *):not(.rounded-2xl) {
     background-color: rgba(6, 78, 59, 0.55) !important;
     color: #34d399 !important;
     border-left-color: #10b981 !important;
@@ -54,49 +63,99 @@ html.dark nav a.text-slate-600:hover svg {
     color: #34d399 !important;
 }
 
-/* Card & Content Panels */
+/* All Card & Content Panels Overrides */
 html.dark .bg-white {
     background-color: #111827 !important;
     color: #f1f5f9 !important;
     border-color: #1e293b !important;
 }
 
-html.dark .bg-slate-50 {
+html.dark .bg-slate-50,
+html.dark .bg-gray-50,
+html.dark .bg-neutral-50 {
     background-color: #161e2e !important;
     color: #cbd5e1 !important;
     border-color: #1e293b !important;
 }
 
-html.dark .bg-slate-100 {
+html.dark .bg-slate-100,
+html.dark .bg-slate-200,
+html.dark .bg-slate-300,
+html.dark .bg-gray-100,
+html.dark .bg-gray-200,
+html.dark .bg-gray-300 {
     background-color: #1e293b !important;
-    color: #cbd5e1 !important;
+    color: #e2e8f0 !important;
     border-color: #334155 !important;
 }
 
-/* Borders & Dividers */
+html.dark .bg-slate-400,
+html.dark .bg-slate-500\/10,
+html.dark .bg-slate-500\/20 {
+    background-color: #161e2e !important;
+    color: #cbd5e1 !important;
+    border-color: #1e293b !important;
+}
+
+/* Table Headers & Rows */
+html.dark table thead,
+html.dark table th,
+html.dark table thead tr,
+html.dark div[class*="border-b"][class*="bg-slate"] {
+    background-color: #161e2e !important;
+    color: #94a3b8 !important;
+    border-color: #1e293b !important;
+}
+
+html.dark table tbody tr,
+html.dark table td {
+    border-color: #1e293b !important;
+}
+
+html.dark table tbody tr:hover {
+    background-color: rgba(30, 41, 59, 0.4) !important;
+}
+
+/* Dashed Boxes (Dropzones & Empty State Placeholder Containers) */
+html.dark [class*="border-dashed"] {
+    background-color: rgba(15, 23, 42, 0.7) !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+/* Borders & Dividers Global Override */
 html.dark .border-slate-200,
 html.dark .border-slate-100,
+html.dark .border-slate-300,
+html.dark .border-gray-200,
+html.dark .border-gray-300,
 html.dark .border-slate-200\/60 {
     border-color: #1e293b !important;
 }
 
 /* Typography Hierarchy */
-html.dark .text-slate-900 {
+html.dark .text-slate-900,
+html.dark .text-gray-900 {
     color: #f8fafc !important;
 }
 
 html.dark .text-slate-800,
-html.dark .text-slate-700 {
+html.dark .text-slate-700,
+html.dark .text-gray-800,
+html.dark .text-gray-700 {
     color: #e2e8f0 !important;
 }
 
 html.dark .text-slate-600,
-html.dark .text-slate-500 {
+html.dark .text-slate-500,
+html.dark .text-gray-600,
+html.dark .text-gray-500 {
     color: #94a3b8 !important;
 }
 
-html.dark .text-slate-400 {
-    color: #64748b !important;
+html.dark .text-slate-400,
+html.dark .text-gray-400 {
+    color: #94a3b8 !important;
 }
 
 /* Brand Highlights & Interactive Colors in Dark Mode */
@@ -118,8 +177,7 @@ html.dark .bg-emerald-700:hover {
 }
 
 /* Badges & Status Pills */
-html.dark .bg-emerald-100,
-html.dark .bg-emerald-50:not(nav a) {
+html.dark .bg-emerald-100 {
     background-color: rgba(6, 78, 59, 0.4) !important;
     color: #34d399 !important;
     border-color: rgba(5, 150, 105, 0.4) !important;

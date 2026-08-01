@@ -27,4 +27,15 @@ class UpdateProfileRequest extends FormRequest
             'monthly_income' => ['nullable', 'numeric', 'min:0'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'full_name.required' => 'Nama lengkap wajib diisi.',
+            'phone.required'     => 'Nomor telepon wajib diisi untuk keamanan akun Anda.',
+            'phone.unique'       => 'Nomor telepon ini sudah terdaftar pada akun lain.',
+            'avatar.max'         => 'Ukuran foto profil maksimal 2MB.',
+            'avatar.image'       => 'File foto profil harus berupa gambar (JPG/PNG).',
+        ];
+    }
 }

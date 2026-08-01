@@ -383,12 +383,17 @@
 </div>
 
 <script>
-function openLegalModal(type) {
+function openLegalModal(type, event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
     const modal = document.getElementById('modal-' + type);
     if (modal) {
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     }
+    return false;
 }
 
 function closeLegalModal(type) {
@@ -555,6 +560,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const termsCheckbox = document.getElementById('terms_agree');
     if (termsCheckbox) {
         toggleTermsAgreement(termsCheckbox);
+    }
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('modal') === 'terms') {
+        openLegalModal('terms');
+    } else if (urlParams.get('modal') === 'privacy') {
+        openLegalModal('privacy');
     }
 });
 </script>

@@ -248,12 +248,17 @@
 </div>
 
 <script>
-function openLegalModal(type) {
+function openLegalModal(type, event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
     const modal = document.getElementById('modal-' + type);
     if (modal) {
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     }
+    return false;
 }
 
 function closeLegalModal(type) {
@@ -263,6 +268,15 @@ function closeLegalModal(type) {
         document.body.style.overflow = 'auto';
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('modal') === 'terms') {
+        openLegalModal('terms');
+    } else if (urlParams.get('modal') === 'privacy') {
+        openLegalModal('privacy');
+    }
+});
 
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {

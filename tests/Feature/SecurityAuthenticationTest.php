@@ -229,4 +229,48 @@ class SecurityAuthenticationTest extends TestCase
             'model_id'   => $wallet->id,
         ]);
     }
+
+    /**
+     * Test password reset rejects reusing the same old password.
+     */
+    public function test_password_reset_rejects_same_previous_password(): void
+    {
+        $oldPassword = 'Password123!';
+        $this->user->update([
+            'password' => \Illuminate\Support\Facades\Hash::make($oldPassword),
+        ]);
+
+        // Generate valid reset token for user
+        $token = \Illuminate\Support\Facades\Password::createToken($this->user);
+
+        // 1. Try to reset with the exact SAME old password -> Rejected with validation error
+        $response = $this->post(route('password.update'), [
+            'token'                 => $token,
+            'email'                 => $this->user->email,
+            'password'              => $oldPassword,
+            'password_confirmation' => $oldPassword,
+        ]);
+
+        $response->assertSessionHasErrors('password');
+        $errors = session('errors')->get('password');
+        $this->assertStringContainsString('Password baru tidak boleh sama dengan password sebelumnya', $errors[0]);
+
+        // 2. Try to reset with a NEW DIFFERENT password -> Success
+        $newPassword = 'NewSecretPassword456!';
+        $tokenNew = \Illuminate\Support\Facades\Password::createToken($this->user);
+
+        $response = $this->post(route('password.update'), [
+            'token'                 => $tokenNew,
+            'email'                 => $this->user->email,
+            'password'              => $newPassword,
+            'password_confirmation' => $newPassword,
+        ]);
+
+        $response->assertRedirect(route('login'));
+        $response->assertSessionHas('success');
+
+        // Verify user can login with new password
+        $this->user->refresh();
+        $this->assertTrue(\Illuminate\Support\Facades\Hash::check($newPassword, $this->user->password));
+    }
 }

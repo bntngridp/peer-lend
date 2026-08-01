@@ -115,7 +115,7 @@ class PasswordResetController extends Controller
                 'token', 'email', 'password', 'password_confirmation'
             ));
         } catch (ValidationException $e) {
-            return back()->withErrors($e->errors());
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Throwable $e) {
             Log::error('Password reset execution error: ' . $e->getMessage());
             return back()->withErrors([

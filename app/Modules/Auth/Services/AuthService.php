@@ -155,6 +155,11 @@ class AuthService
                 'token'                 => $data['token'],
             ],
             function (User $user, string $password) {
+                if (Hash::check($password, $user->password)) {
+                    throw ValidationException::withMessages([
+                        'password' => ['Password baru tidak boleh sama dengan password sebelumnya. Silakan gunakan password lain yang berbeda demi keamanan akun Anda.'],
+                    ]);
+                }
                 $user->forceFill(['password' => Hash::make($password)])->save();
             }
         );

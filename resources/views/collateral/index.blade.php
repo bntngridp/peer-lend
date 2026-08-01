@@ -77,35 +77,25 @@
             </div>
 
             <div class="space-y-3">
-                <!-- Bitcoin -->
+                @forelse($collateralDistribution as $item)
                 <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <div class="h-9 w-9 rounded-full bg-amber-500 text-white font-black flex items-center justify-center text-xs shadow-xs">₿</div>
+                        <div class="h-9 w-9 rounded-full {{ $item['code'] === 'BTC' ? 'bg-amber-500' : ($item['code'] === 'ETH' ? 'bg-indigo-600' : 'bg-emerald-600') }} text-white font-black flex items-center justify-center text-xs shadow-xs">
+                            {{ $item['code'] === 'BTC' ? '₿' : ($item['code'] === 'ETH' ? 'Ξ' : '₮') }}
+                        </div>
                         <div>
-                            <span class="font-bold text-slate-900 text-xs block">Bitcoin (BTC)</span>
-                            <span class="text-[10px] text-slate-400 font-medium block">57.5 BTC Locked</span>
+                            <span class="font-bold text-slate-900 text-xs block">{{ $item['name'] }} ({{ $item['code'] }})</span>
+                            <span class="text-[10px] text-slate-400 font-medium block">{{ number_format($item['total_locked'], $item['code'] === 'BTC' ? 4 : 2) }} {{ $item['code'] }} Locked</span>
                         </div>
                     </div>
                     <div class="text-right">
-                        <span class="font-extrabold text-slate-900 text-xs block">Rp 1.350.000.000</span>
-                        <span class="text-[10px] text-emerald-700 font-bold block">79% of Pool</span>
+                        <span class="font-extrabold text-slate-900 text-xs block">Rp {{ number_format($item['total_amount'], 0, ',', '.') }}</span>
+                        <span class="text-[10px] text-emerald-700 font-bold block">{{ $item['percentage'] }}% of Pool</span>
                     </div>
                 </div>
-
-                <!-- Ethereum -->
-                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="h-9 w-9 rounded-full bg-indigo-600 text-white font-black flex items-center justify-center text-xs shadow-xs">Ξ</div>
-                        <div>
-                            <span class="font-bold text-slate-900 text-xs block">Ethereum (ETH)</span>
-                            <span class="text-[10px] text-slate-400 font-medium block">150.0 ETH Locked</span>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <span class="font-extrabold text-slate-900 text-xs block">Rp 350.000.000</span>
-                        <span class="text-[10px] text-emerald-700 font-bold block">21% of Pool</span>
-                    </div>
-                </div>
+                @empty
+                <p class="text-xs text-slate-400 text-center py-4">Tidak ada posisi agunan crypto aktif.</p>
+                @endforelse
             </div>
         </div>
 
@@ -123,7 +113,7 @@
                         <span class="font-bold text-rose-900 block">High Risk (&gt;80% LTV)</span>
                         <span class="text-[10px] text-rose-700">{{ $atRiskCount }} Loans Affected</span>
                     </div>
-                    <span class="font-black text-rose-700">Rp 350.000.000</span>
+                    <span class="font-black text-rose-700">Rp {{ number_format($highRiskAmount, 0, ',', '.') }}</span>
                 </div>
 
                 <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between">
@@ -131,7 +121,7 @@
                         <span class="font-bold text-amber-900 block">Medium Risk (75-80% LTV)</span>
                         <span class="text-[10px] text-amber-700">{{ $warningCount }} Loans Affected</span>
                     </div>
-                    <span class="font-black text-amber-700">Rp 1.350.000.000</span>
+                    <span class="font-black text-amber-700">Rp {{ number_format($mediumRiskAmount, 0, ',', '.') }}</span>
                 </div>
 
                 <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between">
@@ -139,7 +129,7 @@
                         <span class="font-bold text-emerald-900 block">Low Risk (&lt;75% LTV)</span>
                         <span class="text-[10px] text-emerald-700">{{ $healthyCount }} Loans Healthy</span>
                     </div>
-                    <span class="font-black text-emerald-700">Rp 0</span>
+                    <span class="font-black text-emerald-700">Rp {{ number_format($lowRiskAmount, 0, ',', '.') }}</span>
                 </div>
             </div>
         </div>

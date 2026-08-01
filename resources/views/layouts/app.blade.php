@@ -29,7 +29,7 @@
         .hover\:bg-primary-green-dark:hover { background-color: #166534; }
     </style>
 </head>
-<body class="h-full bg-slate-50 text-slate-900 antialiased" x-data="{ sidebarOpen: false }">
+<body class="h-full bg-slate-50 text-slate-900 antialiased" x-data="{ sidebarOpen: false, logoutModalOpen: false }">
 
     <div class="min-h-screen flex flex-col md:flex-row">
 
@@ -151,11 +151,14 @@
                         <p class="text-xs font-bold text-slate-900 truncate">{{ Auth::user()->profile->full_name ?? 'User' }}</p>
                         <p class="text-[11px] font-medium text-slate-500 truncate capitalize">{{ Auth::user()->roles->first()?->name ?? 'Member' }}</p>
                     </div>
-                    <form method="POST" action="{{ route('logout') }}">
+                    <!-- Logout Trigger Button -->
+                    <button type="button" @click="logoutModalOpen = true" id="btn_logout_trigger"
+                            class="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors cursor-pointer" title="Sign out">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/></svg>
+                    </button>
+                    <!-- Hidden Form for actual POST logout -->
+                    <form id="app-logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
                         @csrf
-                        <button type="submit" class="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors" title="Sign out">
-                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/></svg>
-                        </button>
                     </form>
                 </div>
             </div>
@@ -249,14 +252,55 @@
             <footer class="border-t border-slate-200 bg-white py-4 px-6 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
                 <p>&copy; {{ date('Y') }} <strong>LendFlow</strong> &mdash; Institutional Grade Peer-to-Peer Lending Platform.</p>
                 <div class="flex gap-4 font-medium">
-                    <a href="#" class="hover:text-emerald-700">Privacy Policy</a>
-                    <a href="#" class="hover:text-emerald-700">Terms of Service</a>
+                    <a href="{{ route('privacy.show') }}" class="hover:text-emerald-700">Privacy Policy</a>
+                    <a href="{{ route('terms.show') }}" class="hover:text-emerald-700">Terms of Service</a>
                     <a href="#" class="hover:text-emerald-700">Support</a>
                 </div>
             </footer>
 
         </div>
     </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
+    <!-- LOGOUT CONFIRMATION MODAL OVERLAY -->
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
+    @auth
+    <div id="modal-logout-confirm" x-show="logoutModalOpen" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+         style="display: none;">
+        
+        <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-sm p-6 text-center overflow-hidden">
+            <!-- Icon Badge with Soft Warning Glow -->
+            <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 border border-rose-100 flex items-center justify-center mx-auto mb-4 shadow-xs">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                </svg>
+            </div>
+
+            <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Konfirmasi Keluar / Confirm Logout</h3>
+            <p class="text-xs font-medium text-slate-500 mt-1.5 leading-relaxed">
+                Apakah Anda yakin ingin keluar dari akun LendFlow? Anda perlu sign in kembali untuk mengakses dasbor.
+            </p>
+
+            <div class="mt-6 flex items-center justify-center gap-3">
+                <button type="button" @click="logoutModalOpen = false" id="btn_cancel_logout"
+                        class="w-1/2 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition-colors shadow-xs">
+                    Batal
+                </button>
+                <button type="button" onclick="document.getElementById('app-logout-form').submit();" id="btn_confirm_logout"
+                        class="w-1/2 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition-colors shadow-xs cursor-pointer">
+                    Ya, Keluar
+                </button>
+            </div>
+        </div>
+    </div>
+    @endauth
 
 </body>
 </html>

@@ -25,7 +25,7 @@
         }
     </style>
 </head>
-<body class="h-full flex text-gray-900 antialiased" x-data="{ sidebarOpen: false }">
+<body class="h-full flex text-gray-900 antialiased" x-data="{ sidebarOpen: false, logoutModalOpen: false }">
 
     <!-- Mobile Sidebar Backdrop -->
     <div x-show="sidebarOpen" class="fixed inset-0 z-50 bg-gray-900/80 md:hidden" @click="sidebarOpen = false" style="display: none;"></div>
@@ -88,11 +88,13 @@
                     <p class="text-[10px] text-gray-500 truncate">{{ Auth::user()->email ?? 'admin@peerlend.com' }}</p>
                 </div>
             </div>
-            <form method="POST" action="{{ route('logout') }}">
+            <!-- Trigger Logout Modal -->
+            <button type="button" @click="logoutModalOpen = true" id="btn_admin_logout_trigger"
+                    class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors cursor-pointer">
+                Log out
+            </button>
+            <form id="admin-logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
                 @csrf
-                <button type="submit" class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors">
-                    Log out
-                </button>
             </form>
         </div>
     </aside>
@@ -137,6 +139,47 @@
             @yield('content')
         </main>
     </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
+    <!-- ADMIN LOGOUT CONFIRMATION MODAL OVERLAY -->
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
+    @auth
+    <div id="modal-logout-confirm" x-show="logoutModalOpen" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+         style="display: none;">
+        
+        <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-sm p-6 text-center overflow-hidden">
+            <!-- Icon Badge with Soft Warning Glow -->
+            <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 border border-rose-100 flex items-center justify-center mx-auto mb-4 shadow-xs">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                </svg>
+            </div>
+
+            <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Konfirmasi Keluar / Confirm Logout</h3>
+            <p class="text-xs font-medium text-slate-500 mt-1.5 leading-relaxed">
+                Apakah Anda yakin ingin keluar dari Admin Panel LendFlow?
+            </p>
+
+            <div class="mt-6 flex items-center justify-center gap-3">
+                <button type="button" @click="logoutModalOpen = false" id="btn_cancel_admin_logout"
+                        class="w-1/2 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition-colors shadow-xs">
+                    Batal
+                </button>
+                <button type="button" onclick="document.getElementById('admin-logout-form').submit();" id="btn_confirm_admin_logout"
+                        class="w-1/2 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition-colors shadow-xs cursor-pointer">
+                    Ya, Keluar
+                </button>
+            </div>
+        </div>
+    </div>
+    @endauth
 
 </body>
 </html>

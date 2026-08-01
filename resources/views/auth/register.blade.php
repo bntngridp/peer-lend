@@ -16,7 +16,7 @@
         </div>
 
         <!-- Registration Form -->
-        <form class="space-y-4" action="{{ route('register') }}" method="POST">
+        <form id="registerForm" class="space-y-4" action="{{ route('register') }}" method="POST">
             @csrf
 
             <!-- Premium Visual Role Selection Cards -->
@@ -202,16 +202,16 @@
                 <p class="mt-1 text-xs text-rose-600 font-semibold">{{ $message }}</p>
             @enderror
 
-            <!-- Terms Checkbox with Legal Links -->
+            <!-- Terms Checkbox with Legal Links & Inline Modal Viewers -->
             <div class="py-1">
                 <label class="flex items-center select-none cursor-pointer">
                     <input type="checkbox" id="terms_agree" onchange="toggleTermsAgreement(this)" required
                            class="rounded border-slate-300 text-emerald-700 focus:ring-emerald-600 h-4 w-4 cursor-pointer">
                     <span class="ml-2 text-[11px] font-medium text-slate-600">
                         I agree to the 
-                        <a href="{{ route('terms.show') }}" target="_blank" class="font-bold text-emerald-700 hover:underline">Terms &amp; Conditions</a> 
+                        <a href="{{ route('terms.show') }}" target="_blank" onclick="openLegalModal(event, 'terms')" class="font-bold text-emerald-700 hover:underline">Terms &amp; Conditions</a> 
                         and 
-                        <a href="{{ route('privacy.show') }}" target="_blank" class="font-bold text-emerald-700 hover:underline">Privacy Policy</a>.
+                        <a href="{{ route('privacy.show') }}" target="_blank" onclick="openLegalModal(event, 'privacy')" class="font-bold text-emerald-700 hover:underline">Privacy Policy</a>.
                     </span>
                 </label>
             </div>
@@ -256,7 +256,101 @@
     </div>
 </div>
 
+<!-- Legal Modal Viewer (Allows reading Terms & Privacy inline without losing form data) -->
+<div id="legalModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs transition-opacity duration-200">
+    <div class="bg-white rounded-2xl max-w-xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
+        <!-- Modal Header -->
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <h3 id="modalTitle" class="text-sm font-bold text-slate-900">Legal Document</h3>
+            <button type="button" onclick="closeLegalModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-200/60 transition-colors">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <!-- Modal Content Container -->
+        <div id="modalBody" class="px-6 py-5 overflow-y-auto text-xs text-slate-600 space-y-4 leading-relaxed font-normal">
+            <!-- Dynamically Loaded -->
+        </div>
+        <!-- Modal Footer -->
+        <div class="px-6 py-3.5 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 font-medium">LendFlow Legal Agreement</span>
+            <button type="button" onclick="closeLegalModal()" class="px-4 py-2 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
+                Tutup &amp; Lanjutkan Pendaftaran
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
+// ─── FORM DRAFT PERSISTENCE (Auto-Save & Restore) ─────────────────────────
+const DRAFT_KEY = 'lendflow_register_form_draft';
+
+function saveFormDraft() {
+    const draftData = {
+        role: document.querySelector('input[name="role"]:checked')?.value || 'borrower',
+        full_name: document.getElementById('full_name')?.value || '',
+        email: document.getElementById('email')?.value || '',
+        country_code: document.getElementById('country_code')?.value || '+62',
+        phone: document.getElementById('phone')?.value || '',
+        terms_agree: document.getElementById('terms_agree')?.checked || false,
+    };
+    try {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(draftData));
+    } catch (e) {
+        console.warn('Unable to save form draft:', e);
+    }
+}
+
+function restoreFormDraft() {
+    try {
+        const saved = localStorage.getItem(DRAFT_KEY);
+        if (!saved) return;
+        const draft = JSON.parse(saved);
+
+        // Only restore if fields aren't already set by server old()
+        const fullNameInput = document.getElementById('full_name');
+        if (fullNameInput && !fullNameInput.value && draft.full_name) {
+            fullNameInput.value = draft.full_name;
+        }
+
+        const emailInput = document.getElementById('email');
+        if (emailInput && !emailInput.value && draft.email) {
+            emailInput.value = draft.email;
+        }
+
+        const countryCodeInput = document.getElementById('country_code');
+        if (countryCodeInput && draft.country_code) {
+            countryCodeInput.value = draft.country_code;
+        }
+
+        const phoneInput = document.getElementById('phone');
+        if (phoneInput && !phoneInput.value && draft.phone) {
+            phoneInput.value = draft.phone;
+        }
+
+        if (draft.role) {
+            selectRole(draft.role);
+        }
+
+        const termsCheckbox = document.getElementById('terms_agree');
+        if (termsCheckbox && draft.terms_agree) {
+            termsCheckbox.checked = true;
+            toggleTermsAgreement(termsCheckbox);
+        }
+
+    } catch (e) {
+        console.warn('Unable to restore form draft:', e);
+    }
+}
+
+function clearFormDraft() {
+    try {
+        localStorage.removeItem(DRAFT_KEY);
+    } catch (e) {}
+}
+
+// ─── ROLE SELECTOR ────────────────────────────────────────────────────────
 function selectRole(role) {
     const radioBorrower = document.getElementById('radio-borrower');
     const radioLender = document.getElementById('radio-lender');
@@ -315,6 +409,8 @@ function selectRole(role) {
         if (iconLender) iconLender.className = 'w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center transition-colors shadow-xs';
         if (iconBorrower) iconBorrower.className = 'w-9 h-9 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center transition-colors shadow-xs';
     }
+
+    saveFormDraft();
 }
 
 function togglePass(inputId, btn) {
@@ -382,20 +478,128 @@ function toggleTermsAgreement(checkbox) {
         btnSubmit.disabled = true;
         btnSubmit.className = 'w-full py-3 rounded-xl bg-slate-300 text-slate-500 font-bold text-xs cursor-not-allowed transition-all duration-200 shadow-none border-none';
     }
+
+    saveFormDraft();
 }
 
+// ─── LEGAL INLINE MODAL VIEWER ─────────────────────────────────────────────
+const LEGAL_DOCS = {
+    terms: {
+        title: 'Terms & Conditions — LendFlow',
+        content: `
+            <section class="space-y-1.5">
+                <h4 class="font-bold text-slate-900 text-xs">1. Pendahuluan &amp; Ketentuan Umum</h4>
+                <p>Selamat datang di LendFlow. Dengan mendaftar dan menggunakan platform Peer-to-Peer (P2P) Lending LendFlow, Anda menyatakan menyetujui seluruh Syarat dan Ketentuan ini.</p>
+            </section>
+            <section class="space-y-1.5">
+                <h4 class="font-bold text-slate-900 text-xs">2. Peran Pengguna (Borrower &amp; Lender)</h4>
+                <ul class="list-disc pl-4 space-y-1">
+                    <li><strong>Borrower (Peminjam):</strong> Peminjam wajib memberikan data KYC yang asli dan valid. Peminjam bertanggung jawab penuh atas pembayaran pokok dan bunga cicilan.</li>
+                    <li><strong>Lender (Investor):</strong> Pemberi pinjaman menyadari bahwa aktivitas pendanaan memiliki risiko bisnis. LendFlow memfasilitasi penilaian kredit dan dana jaminan (collateral).</li>
+                </ul>
+            </section>
+            <section class="space-y-1.5">
+                <h4 class="font-bold text-slate-900 text-xs">3. Verifikasi Identitas (KYC &amp; AML)</h4>
+                <p>Seluruh pengguna wajib melalui prosedur Know Your Customer (KYC) dan Anti-Money Laundering (AML) sesuai regulasi yang berlaku.</p>
+            </section>
+            <section class="space-y-1.5">
+                <h4 class="font-bold text-slate-900 text-xs">4. Dompet Digital &amp; Keamanan</h4>
+                <p>Seluruh transaksi keuangan diproses melalui Virtual Account dan dompet digital IDR terenkripsi.</p>
+            </section>
+        `
+    },
+    privacy: {
+        title: 'Privacy Policy — LendFlow',
+        content: `
+            <section class="space-y-1.5">
+                <h4 class="font-bold text-slate-900 text-xs">1. Pengumpulan Informasi Pribadi</h4>
+                <p>LendFlow mengumpulkan informasi identitas diri seperti Nama Lengkap, Alamat Email, Nomor Telepon, dokumen KYC, dan data keuangan.</p>
+            </section>
+            <section class="space-y-1.5">
+                <h4 class="font-bold text-slate-900 text-xs">2. Penggunaan &amp; Perlindungan Data</h4>
+                <p>Informasi pribadi Anda hanya digunakan untuk verifikasi akun, penilaian risiko kredit (credit scoring), dan pemrosesan transaksi P2P Lending.</p>
+            </section>
+            <section class="space-y-1.5">
+                <h4 class="font-bold text-slate-900 text-xs">3. Keamanan Data Terenkripsi</h4>
+                <p>Seluruh data sensitif dan enkripsi kata sandi menggunakan standar industri SSL/TLS 256-bit &amp; BCRYPT Hashing.</p>
+            </section>
+        `
+    }
+};
+
+function openLegalModal(event, docType) {
+    saveFormDraft();
+
+    // If device width is desktop or middle click / ctrl click, allow default link tab behavior while draft is saved
+    if (event && (event.ctrlKey || event.metaKey)) {
+        return true;
+    }
+
+    if (event) {
+        event.preventDefault();
+    }
+
+    const modal = document.getElementById('legalModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+
+    if (!modal || !modalTitle || !modalBody || !LEGAL_DOCS[docType]) return;
+
+    modalTitle.textContent = LEGAL_DOCS[docType].title;
+    modalBody.innerHTML = LEGAL_DOCS[docType].content;
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLegalModal() {
+    const modal = document.getElementById('legalModal');
+    if (!modal) return;
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = '';
+}
+
+// Close modal on Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLegalModal();
+});
+
+// Attach listeners for auto-save & auto-restore
 document.addEventListener('DOMContentLoaded', function() {
+    restoreFormDraft();
+
+    // Attach input listeners
+    const inputs = ['full_name', 'email', 'country_code', 'phone'];
+    inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', saveFormDraft);
+            el.addEventListener('change', saveFormDraft);
+        }
+    });
+
     const checkedRadio = document.querySelector('input[name="role"]:checked');
     if (checkedRadio) {
         selectRole(checkedRadio.value);
     }
+
     const passInput = document.getElementById('password');
     if (passInput && passInput.value) {
         checkPasswordRequirements(passInput.value);
     }
+
     const termsCheckbox = document.getElementById('terms_agree');
     if (termsCheckbox) {
         toggleTermsAgreement(termsCheckbox);
+    }
+
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', function() {
+            clearFormDraft();
+        });
     }
 });
 </script>

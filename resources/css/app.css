@@ -349,9 +349,24 @@ html.dark .hover\:bg-emerald-100:hover * {
     color: #f8fafc !important;
 }
 
-html.dark button:hover:not(.bg-emerald-700):not(.bg-rose-600):not(.bg-amber-600) {
+html.dark button:hover:not(.bg-emerald-700):not(.bg-rose-600):not(.bg-amber-600):not(.tab-btn) {
     background-color: #1e293b !important;
     color: #34d399 !important;
+}
+
+/* Underline Tab Buttons - Transparent Background without squarish boxes */
+html.dark .tab-btn,
+html.dark button.tab-btn,
+html.dark button.tab-btn:hover,
+html.dark button.tab-btn:focus,
+html.dark button.tab-btn:active {
+    background-color: transparent !important;
+}
+
+html.dark button.tab-btn[class*="text-emerald"],
+html.dark .tab-btn.text-emerald-700 {
+    color: #34d399 !important;
+    border-bottom-color: #10b981 !important;
 }
 
 /* Form Inputs & Selects */

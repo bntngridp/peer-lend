@@ -508,6 +508,18 @@
                             </label>
                         </div>
                     </div>
+
+                    <!-- Language Preference Dropdown -->
+                    <div>
+                        <label for="language_select" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Language Preference / {{ __('Language') }}</label>
+                        <select id="language_select" onchange="window.location.href='/lang/' + this.value" class="w-full sm:w-72 rounded-xl border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-800 px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-200 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 shadow-xs cursor-pointer">
+                            <option value="id" {{ app()->getLocale() === 'id' ? 'selected' : '' }}>Bahasa Indonesia (ID)</option>
+                            <option value="en" {{ app()->getLocale() === 'en' ? 'selected' : '' }}>English (EN)</option>
+                            <option value="es" {{ app()->getLocale() === 'es' ? 'selected' : '' }}>Español (ES)</option>
+                            <option value="ar" {{ app()->getLocale() === 'ar' ? 'selected' : '' }}>العربية (Arabic - RTL)</option>
+                        </select>
+                        <p class="text-[10px] text-slate-500 font-medium mt-1">Select your preferred system interface language across all pages.</p>
+                    </div>
                 </div>
             </div>
 

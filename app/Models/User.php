@@ -49,6 +49,11 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
+    public function apiTokens(): HasMany
+    {
+        return $this->hasMany(PersonalAccessToken::class);
+    }
+
     public function kyc(): HasOne
     {
         return $this->hasOne(KYC::class);

@@ -9,14 +9,14 @@
 }
 
 /* ─── Premium Institutional Dark Theme System ───────────────────────────── */
-html.dark {
-    color-scheme: dark;
-}
-
-/* Base Body & Layout */
-html.dark body {
+html.dark,
+html.dark body,
+html.dark .min-h-screen,
+html.dark main,
+html.dark div[class*="flex-1"] {
     background-color: #0b0f19 !important;
     color: #f1f5f9 !important;
+    color-scheme: dark;
 }
 
 /* Sidebar & Header Navigation Container */

@@ -346,11 +346,13 @@
                 <!-- Right Tools -->
                 <div class="flex items-center gap-3">
                     @auth
-                        <!-- Apply for New Loan Button -->
+                        <!-- Apply for New Loan Button (Borrower Only) -->
+                        @if(Auth::user()->isBorrower() || (!Auth::user()->isInternalStaff() && !Auth::user()->isLender()))
                         <a href="{{ route('loans.create') }}" class="hidden sm:inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-3.5 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition-all hover:scale-[1.01] active:scale-[0.99]">
                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
                             New Application
                         </a>
+                        @endif
 
                         <!-- Notification Bell -->
                         @php

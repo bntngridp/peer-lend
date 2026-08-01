@@ -71,7 +71,13 @@
         };
     </script>
 </head>
-<body class="h-full bg-slate-50 text-slate-900 antialiased" x-data="{ sidebarOpen: false, sidebarCollapsed: false, logoutModalOpen: false }">
+<body class="h-full bg-slate-50 text-slate-900 antialiased" 
+      x-data="{ 
+          sidebarOpen: false, 
+          sidebarCollapsed: localStorage.getItem('sidebar_collapsed') === 'true', 
+          logoutModalOpen: false 
+      }"
+      x-init="$watch('sidebarCollapsed', val => localStorage.setItem('sidebar_collapsed', val))">
 
     <div class="min-h-screen flex flex-col md:flex-row">
 
@@ -94,16 +100,6 @@
                         <span class="text-[9px] font-extrabold text-emerald-700 tracking-wider uppercase block mt-1">Institutional P2P</span>
                     </div>
                 </a>
-
-                <!-- Desktop Sidebar Collapse Toggle Button (Buka-Tutup Sidebar) -->
-                <button type="button" @click="sidebarCollapsed = !sidebarCollapsed" id="btn_toggle_sidebar_desktop"
-                        class="hidden md:flex items-center justify-center h-8 w-8 rounded-lg text-slate-400 hover:text-emerald-700 hover:bg-slate-100 transition-colors shrink-0"
-                        :class="sidebarCollapsed ? 'ml-0' : ''"
-                        :title="sidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'">
-                    <svg class="h-5 w-5 transform transition-transform duration-300" :class="sidebarCollapsed ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
-                    </svg>
-                </button>
 
                 <!-- Mobile Close Button -->
                 <button type="button" @click="sidebarOpen = false" class="md:hidden text-slate-400 hover:text-slate-600 p-1 rounded-lg">
@@ -209,6 +205,17 @@
                         </svg>
                         <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Settings &amp; Profile</span>
                     </a>
+
+                    <!-- Desktop Sidebar Collapse Toggle Button (Below Settings) -->
+                    <button type="button" @click="sidebarCollapsed = !sidebarCollapsed" id="btn_toggle_sidebar_desktop"
+                            :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                            class="w-full hidden md:flex items-center gap-3 py-2.5 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-all cursor-pointer select-none mt-2 border-t border-slate-100 pt-3"
+                            :title="sidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'">
+                        <svg class="h-5 w-5 shrink-0 text-slate-400 transform transition-transform duration-300" :class="sidebarCollapsed ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                        <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Collapse Sidebar</span>
+                    </button>
                 @else
                     <a href="{{ route('login') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-100">Sign in</a>
                     <a href="{{ route('register') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-emerald-700 text-white hover:bg-emerald-800">Get started</a>

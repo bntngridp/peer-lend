@@ -108,7 +108,17 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->hasRole('admin');
+        return $this->hasRole('admin') || $this->hasAnyRole(['admin', 'customer_service', 'collection_officer']);
+    }
+
+    public function isLender(): bool
+    {
+        return $this->hasRole('lender');
+    }
+
+    public function isBorrower(): bool
+    {
+        return $this->hasRole('borrower');
     }
 
     public function walletFor(int $currencyId): ?Wallet

@@ -86,23 +86,29 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         Route::post('/wallet/withdraw', [\App\Modules\Wallet\Controllers\WalletController::class, 'withdraw'])->name('wallet.withdraw');
     });
 
-    // 🤝 P2P Loan Marketplace Routes
-    Route::get('/marketplace', [\App\Modules\Loan\Controllers\MarketplaceController::class, 'index'])->name('marketplace.index');
-    Route::get('/marketplace/{loan}', [\App\Modules\Loan\Controllers\MarketplaceController::class, 'show'])->name('marketplace.show');
-    Route::post('/marketplace/{loan}/fund', [\App\Modules\Loan\Controllers\MarketplaceController::class, 'fund'])
-        ->middleware('kyc')
-        ->name('marketplace.fund');
+    // 🤝 P2P Loan Marketplace Routes (Lender & Admin)
+    Route::middleware('role:lender,admin')->group(function () {
+        Route::get('/marketplace', [\App\Modules\Loan\Controllers\MarketplaceController::class, 'index'])->name('marketplace.index');
+        Route::get('/marketplace/{loan}', [\App\Modules\Loan\Controllers\MarketplaceController::class, 'show'])->name('marketplace.show');
+        Route::post('/marketplace/{loan}/fund', [\App\Modules\Loan\Controllers\MarketplaceController::class, 'fund'])
+            ->middleware('kyc')
+            ->name('marketplace.fund');
 
-    // 🤖 Auto-Invest settings update
-    Route::post('/loans/auto-invest', [\App\Modules\Loan\Controllers\AutoInvestRuleController::class, 'update'])
-        ->middleware('kyc')
-        ->name('loans.auto-invest.update');
+        // 🤖 Auto-Invest settings update
+        Route::post('/loans/auto-invest', [\App\Modules\Loan\Controllers\AutoInvestRuleController::class, 'update'])
+            ->middleware('kyc')
+            ->name('loans.auto-invest.update');
+    });
 
     // 📝 Borrower Loan Applications & Installment Routes
-    Route::middleware('kyc')->group(function () {
+    Route::middleware(['role:borrower,admin', 'kyc'])->group(function () {
         Route::get('/loans', [\App\Modules\Loan\Controllers\LoanRequestController::class, 'index'])->name('loans.index');
         Route::get('/loans/create', [\App\Modules\Loan\Controllers\LoanRequestController::class, 'create'])->name('loans.create');
         Route::post('/loans', [\App\Modules\Loan\Controllers\LoanRequestController::class, 'store'])->name('loans.store');
+    });
+
+    // 🤝 Shared Loan Detail, Installments, Repayments, Chat & Contract Routes (Lender, Borrower & Admin)
+    Route::middleware(['role:borrower,lender,admin', 'kyc'])->group(function () {
         Route::get('/loans/{loan}/installments', [\App\Modules\Loan\Controllers\LoanRequestController::class, 'installments'])->name('loans.installments');
         
         // Repayments
@@ -126,7 +132,7 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
     });
 
     // 👑 Admin-Only Panel Routes
-    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
+    Route::middleware('role:admin,customer_service,collection_officer')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/kyc', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'index'])->name('kyc.index');
         Route::get('/kyc/{kyc}', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'show'])->name('kyc.show');
         Route::post('/kyc/{kyc}/approve', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'approve'])->name('kyc.approve');

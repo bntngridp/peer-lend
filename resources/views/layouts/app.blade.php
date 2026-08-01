@@ -123,7 +123,8 @@
                         <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Dashboard</span>
                     </a>
 
-                    <!-- 2. Marketplace (Shopping Bag / Storefront) -->
+                    <!-- 2. Marketplace (Lender / Investor / General Users) -->
+                    @if(Auth::user()->isLender() || (!Auth::user()->isAdmin() && !Auth::user()->isBorrower()))
                     <a href="{{ route('marketplace.index') }}" title="Marketplace"
                        :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
                        class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('marketplace.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
@@ -132,8 +133,10 @@
                         </svg>
                         <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Marketplace</span>
                     </a>
+                    @endif
 
-                    <!-- 3. My Loans (Banknotes / Money) -->
+                    <!-- 3. My Loans (Borrower Only) -->
+                    @if(Auth::user()->isBorrower() || (!Auth::user()->isAdmin() && !Auth::user()->isLender()))
                     <a href="{{ route('loans.index') }}" title="My Loans"
                        :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
                        class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('loans.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
@@ -142,8 +145,11 @@
                         </svg>
                         <span x-show="!sidebarCollapsed" class="whitespace-nowrap">My Loans</span>
                     </a>
+                    @endif
 
-                    <!-- 4. Wallet & Saldo (Real Wallet Card) -->
+                    <!-- 4. Wallet, Collateral, & Calculator (Non-Admin Users) -->
+                    @if(!Auth::user()->isAdmin())
+                    <!-- Wallet & Saldo -->
                     <a href="{{ route('wallet.index') }}" title="Wallet & Saldo"
                        :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
                        class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('wallet.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
@@ -153,7 +159,7 @@
                         <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Wallet &amp; Saldo</span>
                     </a>
 
-                    <!-- 5. Crypto Collateral (Blockchain Cube / Shield-Coin) -->
+                    <!-- Crypto Collateral -->
                     <a href="{{ route('collateral.index') }}" title="Crypto Collateral"
                        :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
                        class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('collateral.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
@@ -163,7 +169,7 @@
                         <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Crypto Collateral</span>
                     </a>
 
-                    <!-- 6. Simulasi Kalkulator (Calculator) -->
+                    <!-- Simulasi Kalkulator -->
                     <a href="{{ route('calculator.index') }}" title="Simulasi Kalkulator"
                        :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
                        class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('calculator.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
@@ -172,6 +178,7 @@
                         </svg>
                         <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Simulasi Kalkulator</span>
                     </a>
+                    @endif
 
                     <!-- Admin Menu Section -->
                     @if(Auth::user()->isAdmin())

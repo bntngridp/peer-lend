@@ -315,35 +315,13 @@
                                 </td>
                             </tr>
                             @empty
-                            <!-- Fallback Mock Display Matching Design Mockup -->
-                            <tr class="hover:bg-slate-50/80 transition-colors">
-                                <td class="py-4 px-6 font-semibold text-slate-900">Oct 15, 2026</td>
-                                <td class="py-4 px-6 font-bold text-slate-900">Rp 850.200</td>
-                                <td class="py-4 px-6">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-700 border border-rose-200">Due Soon</span>
-                                </td>
-                                <td class="py-4 px-6 text-right">
-                                    <a href="{{ route('loans.index') }}" class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-700 text-white hover:bg-emerald-800 transition-colors shadow-xs">Pay Now</a>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/80 transition-colors">
-                                <td class="py-4 px-6 font-semibold text-slate-900">Nov 15, 2026</td>
-                                <td class="py-4 px-6 font-bold text-slate-900">Rp 850.200</td>
-                                <td class="py-4 px-6">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-blue-700 border border-blue-200">Scheduled</span>
-                                </td>
-                                <td class="py-4 px-6 text-right">
-                                    <a href="{{ route('loans.index') }}" class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">Details</a>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/80 transition-colors">
-                                <td class="py-4 px-6 font-semibold text-slate-900">Dec 15, 2026</td>
-                                <td class="py-4 px-6 font-bold text-slate-900">Rp 850.200</td>
-                                <td class="py-4 px-6">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-blue-700 border border-blue-200">Scheduled</span>
-                                </td>
-                                <td class="py-4 px-6 text-right">
-                                    <a href="{{ route('loans.index') }}" class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">Details</a>
+                            <tr>
+                                <td colspan="4" class="py-8 text-center text-slate-500">
+                                    <div class="flex flex-col items-center justify-center">
+                                        <svg class="h-9 w-9 text-slate-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <p class="text-xs font-bold text-slate-700">Tidak Ada Jadwal Angsuran / No Upcoming Repayments</p>
+                                        <p class="text-[11px] text-slate-400 mt-0.5">Anda tidak memiliki tagihan angsuran pinjaman yang jatuh tempo saat ini.</p>
+                                    </div>
                                 </td>
                             </tr>
                             @endforelse
@@ -354,53 +332,65 @@
 
             <!-- Card: Active Application Progress -->
             <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
-                <h3 class="text-sm font-bold text-slate-900 mb-6">Active Application Progress</h3>
+                <h3 class="text-sm font-bold text-slate-900 mb-4">Active Application Progress</h3>
                 
                 @php
                     $app = $stats['active_application'];
-                    $pct = $app ? (int)$app->funded_percentage : 75;
+                    $pct = $app ? (int)min(100, max(0, $app->funded_percentage)) : 0;
                 @endphp
 
-                <div class="flex flex-col sm:flex-row items-center gap-8">
-                    <!-- Circular Donut Chart -->
-                    <div class="relative w-36 h-36 flex-shrink-0 flex items-center justify-center">
-                        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                            <path class="text-slate-100" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                            <path class="text-emerald-700" stroke-dasharray="{{ $pct }}, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                        </svg>
-                        <div class="absolute text-center">
-                            <span class="text-2xl font-black text-slate-900">{{ $pct }}%</span>
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Funded</span>
+                @if($app)
+                    <div class="flex flex-col sm:flex-row items-center gap-8">
+                        <!-- Circular Donut Chart -->
+                        <div class="relative w-36 h-36 flex-shrink-0 flex items-center justify-center">
+                            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                <path class="text-slate-100" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                <path class="text-emerald-700" stroke-dasharray="{{ $pct }}, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                            </svg>
+                            <div class="absolute text-center">
+                                <span class="text-2xl font-black text-slate-900">{{ $pct }}%</span>
+                                <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Funded</span>
+                            </div>
+                        </div>
+
+                        <!-- Milestone Steps -->
+                        <div class="flex-1 space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div class="h-2.5 w-2.5 rounded-full {{ $app->status !== 'pending' ? 'bg-emerald-700' : 'bg-slate-300' }} mt-1.5 flex-shrink-0"></div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-900">Application Status: <span class="capitalize text-emerald-700">{{ str_replace('_', ' ', $app->status) }}</span></p>
+                                    <p class="text-[11px] text-slate-400">Diajukan: {{ \Carbon\Carbon::parse($app->created_at)->format('M d, Y') }}</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3">
+                                <div class="h-2.5 w-2.5 rounded-full {{ $app->status === 'open_funding' ? 'bg-emerald-700 animate-pulse' : 'bg-slate-300' }} mt-1.5 flex-shrink-0"></div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-900">Marketplace Listing</p>
+                                    <p class="text-[11px] text-slate-400">Terkumpul: Rp {{ number_format($app->funded_amount, 0, ',', '.') }} / Rp {{ number_format($app->amount, 0, ',', '.') }}</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3">
+                                <div class="h-2.5 w-2.5 rounded-full {{ $app->status === 'active' ? 'bg-emerald-700' : 'bg-slate-300' }} mt-1.5 flex-shrink-0"></div>
+                                <div>
+                                    <p class="text-xs font-bold {{ $app->status === 'active' ? 'text-emerald-700' : 'text-slate-500' }}">Funds Disbursement</p>
+                                    <p class="text-[11px] text-slate-400">{{ $app->status === 'active' ? 'Pencairan Dana Berhasil' : 'Menunggu pendanaan 100% dari pendana' }}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Milestone Steps -->
-                    <div class="flex-1 space-y-4">
-                        <div class="flex items-start gap-3">
-                            <div class="h-2.5 w-2.5 rounded-full bg-emerald-700 mt-1.5 flex-shrink-0"></div>
-                            <div>
-                                <p class="text-xs font-bold text-slate-900">Application Approved</p>
-                                <p class="text-[11px] text-slate-400">{{ $app?->approved_at ? \Carbon\Carbon::parse($app->approved_at)->format('M d, Y') : 'Sept 28, 2026' }}</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start gap-3">
-                            <div class="h-2.5 w-2.5 rounded-full bg-emerald-700 mt-1.5 flex-shrink-0"></div>
-                            <div>
-                                <p class="text-xs font-bold text-slate-900">Marketplace Listing Active</p>
-                                <p class="text-[11px] text-slate-400">{{ $app?->created_at ? \Carbon\Carbon::parse($app->created_at)->format('M d, Y') : 'Sept 29, 2026' }}</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start gap-3">
-                            <div class="h-2.5 w-2.5 rounded-full bg-slate-300 mt-1.5 flex-shrink-0"></div>
-                            <div>
-                                <p class="text-xs font-bold text-slate-500">Funds Disbursement</p>
-                                <p class="text-[11px] text-slate-400">Pending 100% funding completion</p>
-                            </div>
-                        </div>
+                @else
+                    <div class="py-6 px-4 rounded-xl border border-dashed border-slate-200 bg-slate-50/60 text-center">
+                        <svg class="h-8 w-8 text-slate-400 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+                        <p class="text-xs font-bold text-slate-800">Tidak Ada Pengajuan Pinjaman Aktif</p>
+                        <p class="text-[11px] text-slate-500 mt-1 max-w-md mx-auto">Anda belum memiliki pengajuan pinjaman yang sedang berjalan di marketplace saat ini.</p>
+                        <a href="{{ route('loans.create') }}" class="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-all shadow-xs">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                            Ajukan Pinjaman Baru
+                        </a>
                     </div>
-                </div>
+                @endif
             </div>
 
         </div>

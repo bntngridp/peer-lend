@@ -67,9 +67,11 @@ class CreditScoringService
         $interestRate = $this->resolveMidpointRate($grade);
 
         $rateConfig = InterestRate::rangeForGrade($grade);
+        $numericScore = (int)round(300 + ($score * 5.5));
 
         return [
             'score'         => $score,
+            'numeric_score' => $numericScore,
             'grade'         => $grade,
             'interest_rate' => $interestRate,
             'interest_min'  => $rateConfig ? (string)$rateConfig->min_rate : $interestRate,

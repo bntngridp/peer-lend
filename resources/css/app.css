@@ -27,7 +27,24 @@ html.dark nav {
     border-color: #1e293b !important;
 }
 
+/* Footer Dark Mode Override */
+html.dark footer {
+    background-color: #0b0f19 !important;
+    border-color: #1e293b !important;
+    color: #94a3b8 !important;
+}
+
+html.dark footer a {
+    color: #94a3b8 !important;
+}
+
+html.dark footer a:hover {
+    color: #34d399 !important;
+}
+
 /* Sidebar Bottom User Profile Container */
+html.dark .bg-slate-50\/30,
+html.dark .bg-slate-50\/40,
 html.dark .bg-slate-50\/50,
 html.dark .bg-slate-50\/80,
 html.dark .bg-slate-100\/50,
@@ -95,6 +112,53 @@ html.dark .bg-slate-500\/20 {
     background-color: #161e2e !important;
     color: #cbd5e1 !important;
     border-color: #1e293b !important;
+}
+
+/* Security Score & Emerald Highlight Cards */
+html.dark .bg-emerald-50\/40,
+html.dark .bg-emerald-50\/50,
+html.dark .bg-emerald-50\/60,
+html.dark .bg-emerald-50\/80 {
+    background-color: rgba(6, 78, 59, 0.3) !important;
+    border-color: rgba(16, 185, 129, 0.4) !important;
+    color: #f8fafc !important;
+}
+
+html.dark .bg-emerald-50\/40 .text-emerald-800,
+html.dark .bg-emerald-50\/40 .text-emerald-700,
+html.dark .bg-emerald-50\/50 .text-emerald-800,
+html.dark .bg-emerald-50\/50 .text-emerald-700 {
+    color: #34d399 !important;
+}
+
+/* Native File Input Buttons in Dark Mode */
+html.dark input[type="file"]::file-selector-button {
+    background-color: rgba(6, 78, 59, 0.6) !important;
+    color: #34d399 !important;
+    border: 1px solid rgba(16, 185, 129, 0.4) !important;
+    border-radius: 0.75rem !important;
+    padding: 0.5rem 1rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+}
+
+html.dark input[type="file"] {
+    color: #cbd5e1 !important;
+}
+
+/* Wallet Funding Source Cards */
+html.dark .border-emerald-700.bg-emerald-50\/50 {
+    background-color: rgba(6, 78, 59, 0.4) !important;
+    border-color: #10b981 !important;
+}
+
+html.dark .border-slate-200.bg-slate-50\/50 {
+    background-color: #161e2e !important;
+    border-color: #1e293b !important;
+}
+
+html.dark .border-slate-200.bg-slate-50\/50 span {
+    color: #cbd5e1 !important;
 }
 
 /* Table Headers & Rows */

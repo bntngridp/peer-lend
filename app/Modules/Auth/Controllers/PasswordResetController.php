@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Modules\Auth\Services\AuthService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -33,31 +34,44 @@ class PasswordResetController extends Controller
         $dailyKey = 'reset-password-daily:' . $ip . '-' . $emailKey;
         $cooldownKey = 'reset-password-cooldown:' . $ip . '-' . $emailKey;
 
-        // 1. Check Daily Limit (Max 3x per 24 hours)
-        if (RateLimiter::tooManyAttempts($dailyKey, 3)) {
-            return back()->withErrors([
-                'email' => 'Anda telah mencapai batas maksimal 3x permintaan reset password per hari. Silakan coba lagi besok.',
-            ])->withInput();
-        }
+        try {
+            // 1. Check Daily Limit (Max 3x per 24 hours)
+            if (RateLimiter::tooManyAttempts($dailyKey, 3)) {
+                return back()->withErrors([
+                    'email' => 'Anda telah mencapai batas maksimal 3x permintaan reset password per hari. Silakan coba lagi besok.',
+                ])->withInput();
+            }
 
-        // 2. Check 60-second Cooldown Timer Limit
-        if (RateLimiter::tooManyAttempts($cooldownKey, 1)) {
-            $seconds = RateLimiter::availableIn($cooldownKey);
-            return back()
-                ->with('warning', "Tautan pemulihan baru saja dikirim. Harap tunggu {$seconds} detik untuk mengirim ulang.")
-                ->with('cooldown_seconds', $seconds)
-                ->withInput();
+            // 2. Check 60-second Cooldown Timer Limit
+            if (RateLimiter::tooManyAttempts($cooldownKey, 1)) {
+                $seconds = RateLimiter::availableIn($cooldownKey);
+                return back()
+                    ->with('warning', "Tautan pemulihan baru saja dikirim. Harap tunggu {$seconds} detik untuk mengirim ulang.")
+                    ->with('cooldown_seconds', $seconds)
+                    ->withInput();
+            }
+        } catch (\Throwable $e) {
+            Log::warning('RateLimiter check failed, proceeding with password reset link dispatch: ' . $e->getMessage());
         }
 
         try {
             $this->authService->sendResetLink($request->email);
 
-            // Record attempts
-            RateLimiter::hit($dailyKey, 86400); // 1 day decay (24 hours)
-            RateLimiter::hit($cooldownKey, 60);  // 60 seconds cooldown
+            // Record attempts safely
+            try {
+                RateLimiter::hit($dailyKey, 86400); // 1 day decay (24 hours)
+                RateLimiter::hit($cooldownKey, 60);  // 60 seconds cooldown
+            } catch (\Throwable $e) {
+                Log::warning('RateLimiter hit failed: ' . $e->getMessage());
+            }
 
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
+        } catch (\Throwable $e) {
+            Log::error('Password reset email dispatch error: ' . $e->getMessage());
+            return back()->withErrors([
+                'email' => 'Gagal mengirim email reset password: ' . $e->getMessage(),
+            ])->withInput();
         }
 
         return back()
@@ -102,6 +116,11 @@ class PasswordResetController extends Controller
             ));
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors());
+        } catch (\Throwable $e) {
+            Log::error('Password reset execution error: ' . $e->getMessage());
+            return back()->withErrors([
+                'email' => 'Gagal memperbarui password: ' . $e->getMessage(),
+            ]);
         }
 
         return redirect()->route('login')

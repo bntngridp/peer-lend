@@ -200,9 +200,18 @@
                             </div>
                             <span class="text-[10px] text-slate-500 font-medium mt-0.5 block">Google Authenticator, Authy, Microsoft Authenticator</span>
                         </div>
-                        <a href="{{ route('2fa.setup') }}" class="py-1.5 px-3.5 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 shadow-xs transition-colors">
-                            {{ Auth::user()->google2fa_enabled ? 'Manage &rarr;' : 'Setup 2FA &rarr;' }}
-                        </a>
+                        @if(Auth::user()->google2fa_enabled)
+                            <form action="{{ route('2fa.disable') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menonaktifkan Two-Factor Authentication (2FA)?');">
+                                @csrf
+                                <button type="submit" id="btn_disable_2fa" class="py-1.5 px-3.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer">
+                                    Nonaktifkan 2FA
+                                </button>
+                            </form>
+                        @else
+                            <a href="{{ route('2fa.setup') }}" id="btn_setup_2fa" class="py-1.5 px-3.5 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 shadow-xs transition-colors">
+                                Setup 2FA &rarr;
+                            </a>
+                        @endif
                     </div>
 
                     <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between opacity-60">
@@ -234,9 +243,9 @@
                                 <th class="py-2.5 px-3 text-right">ACTIONS</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
-                            <tr>
-                                <td class="py-3 px-3 font-bold text-slate-900">Trade Execution Node</td>
+                        <tbody>
+                            <tr class="border-b border-slate-100 font-medium text-slate-700">
+                                <td class="py-3 px-3 font-bold text-slate-900">Production Key</td>
                                 <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">Read / Write</span></td>
                                 <td class="py-3 px-3 text-slate-500">2 mins ago</td>
                                 <td class="py-3 px-3 text-right text-rose-600 font-bold cursor-pointer">Revoke</td>
@@ -256,9 +265,11 @@
                 <span class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block">SECURITY SCORE</span>
                 
                 <div class="flex items-baseline gap-2">
-                    <span class="text-3xl font-black text-emerald-700">92</span>
+                    <span class="text-3xl font-black text-emerald-700">{{ Auth::user()->google2fa_enabled ? '92' : '75' }}</span>
                     <span class="text-xs font-bold text-slate-400">/ 100</span>
-                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-700 text-white ml-auto">Strong Protection</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-700 text-white ml-auto">
+                        {{ Auth::user()->google2fa_enabled ? 'Strong Protection' : 'Good Protection' }}
+                    </span>
                 </div>
 
                 <div class="space-y-2 text-xs border-t border-emerald-200/60 pt-3">
@@ -268,7 +279,9 @@
                     </div>
                     <div class="flex justify-between">
                         <span class="text-slate-600">2FA Setup</span>
-                        <span class="font-bold text-emerald-800">Enabled</span>
+                        <span class="font-bold {{ Auth::user()->google2fa_enabled ? 'text-emerald-800' : 'text-amber-700' }}">
+                            {{ Auth::user()->google2fa_enabled ? 'Enabled' : 'Disabled' }}
+                        </span>
                     </div>
                 </div>
             </div>

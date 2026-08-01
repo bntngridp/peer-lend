@@ -60,6 +60,7 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
     // 🔐 2-Factor Authentication (2FA) Routes
     Route::get('/2fa/setup', [\App\Modules\Auth\Controllers\TwoFactorController::class, 'showSetup'])->name('2fa.setup');
     Route::post('/2fa/enable', [\App\Modules\Auth\Controllers\TwoFactorController::class, 'enable'])->name('2fa.enable');
+    Route::post('/2fa/disable', [\App\Modules\Auth\Controllers\TwoFactorController::class, 'disable'])->name('2fa.disable');
     Route::get('/2fa/verify', [\App\Modules\Auth\Controllers\TwoFactorController::class, 'showVerifyForm'])->name('2fa.verify');
     Route::post('/2fa/verify', [\App\Modules\Auth\Controllers\TwoFactorController::class, 'verify'])->name('2fa.verify.post');
 

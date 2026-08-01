@@ -104,13 +104,35 @@ class SecurityAuthenticationTest extends TestCase
             ->post(route('2fa.enable'), [
                 'code' => $validCode,
             ]);
-        $response->assertRedirect(route('dashboard'));
+        $response->assertRedirect(route('profile.edit', ['tab' => 'security']));
         $response->assertSessionHas('success');
 
         // Assert 2FA enabled on DB
         $this->user->refresh();
         $this->assertTrue((bool)$this->user->google2fa_enabled);
         $this->assertEquals($secret, $this->user->google2fa_secret);
+    }
+
+    /**
+     * Test disabling 2FA.
+     */
+    public function test_user_can_disable_2fa(): void
+    {
+        $this->user->update([
+            'google2fa_enabled' => true,
+            'google2fa_secret' => 'SECRETKEY1234567',
+        ]);
+
+        $response = $this->actingAs($this->user)
+            ->withSession(['google2fa_verified' => true])
+            ->post(route('2fa.disable'));
+
+        $response->assertRedirect(route('profile.edit', ['tab' => 'security']));
+        $response->assertSessionHas('success');
+
+        $this->user->refresh();
+        $this->assertFalse((bool)$this->user->google2fa_enabled);
+        $this->assertNull($this->user->google2fa_secret);
     }
 
     /**

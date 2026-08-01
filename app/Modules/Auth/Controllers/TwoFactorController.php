@@ -23,8 +23,8 @@ class TwoFactorController extends Controller
         $user = Auth::user();
 
         if ($user->google2fa_enabled) {
-            return redirect()->route('dashboard')
-                ->with('warning', 'Google Authenticator 2FA is already enabled.');
+            return redirect()->route('profile.edit', ['tab' => 'security'])
+                ->with('warning', 'Google Authenticator 2FA sudah aktif pada akun Anda.');
         }
 
         // Generate temporary secret and store in session
@@ -49,11 +49,11 @@ class TwoFactorController extends Controller
 
         if (! $secret) {
             return redirect()->route('2fa.setup')
-                ->with('error', 'Session expired. Please try setting up 2FA again.');
+                ->with('error', 'Sesi kadaluarsa. Silakan coba setup 2FA kembali.');
         }
 
         if (! $this->google2faService->verifyCode($secret, $request->code)) {
-            return back()->withErrors(['code' => 'Invalid Google Authenticator code.']);
+            return back()->withErrors(['code' => 'Kode Google Authenticator tidak valid. Silakan coba lagi.']);
         }
 
         // Enable 2FA on User model
@@ -67,8 +67,31 @@ class TwoFactorController extends Controller
         session()->forget('google2fa_temp_secret');
         session(['google2fa_verified' => true]);
 
-        return redirect()->route('dashboard')
-            ->with('success', 'Google Authenticator 2FA has been successfully enabled.');
+        return redirect()->route('profile.edit', ['tab' => 'security'])
+            ->with('success', 'Google Authenticator 2FA telah berhasil diaktifkan!');
+    }
+
+    /**
+     * Disable 2FA for authenticated user.
+     */
+    public function disable(Request $request): RedirectResponse
+    {
+        $user = Auth::user();
+
+        if (! $user->google2fa_enabled) {
+            return redirect()->route('profile.edit', ['tab' => 'security'])
+                ->with('warning', 'Two-Factor Authentication saat ini belum diaktifkan.');
+        }
+
+        $user->update([
+            'google2fa_enabled' => false,
+            'google2fa_secret'  => null,
+        ]);
+
+        session()->forget('google2fa_verified');
+
+        return redirect()->route('profile.edit', ['tab' => 'security'])
+            ->with('success', 'Two-Factor Authentication (2FA) telah berhasil dinonaktifkan.');
     }
 
     /**

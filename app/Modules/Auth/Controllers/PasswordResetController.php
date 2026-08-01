@@ -43,9 +43,10 @@ class PasswordResetController extends Controller
         // 2. Check 60-second Cooldown Timer Limit
         if (RateLimiter::tooManyAttempts($cooldownKey, 1)) {
             $seconds = RateLimiter::availableIn($cooldownKey);
-            return back()->withErrors([
-                'email' => "Harap tunggu {$seconds} detik sebelum meminta link reset password kembali.",
-            ])->with('cooldown_seconds', $seconds)->withInput();
+            return back()
+                ->with('warning', "Tautan pemulihan baru saja dikirim. Harap tunggu {$seconds} detik untuk mengirim ulang.")
+                ->with('cooldown_seconds', $seconds)
+                ->withInput();
         }
 
         try {
@@ -60,7 +61,7 @@ class PasswordResetController extends Controller
         }
 
         return back()
-            ->with('success', 'Tautan pemulihan password telah dikirimkan ke email Anda. Silakan periksa inbox atau folder spam.')
+            ->with('success', 'Tautan pemulihan password telah berhasil dikirimkan ke email Anda! Silakan periksa inbox atau folder spam.')
             ->with('cooldown_seconds', 60);
     }
 

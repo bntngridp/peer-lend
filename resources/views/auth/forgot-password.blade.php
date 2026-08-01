@@ -31,6 +31,20 @@
             </div>
         @endif
 
+        @if (session('warning'))
+            <div class="mb-5 p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs font-semibold text-amber-800 flex items-start gap-2.5">
+                <svg class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <div>
+                    <div>{{ session('warning') }}</div>
+                    <div id="cooldown-banner" class="mt-1 text-[11px] font-bold text-amber-700">
+                        Dapat meminta tautan ulang dalam: <span id="timer-count">60</span>s
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <!-- Form -->
         <form class="space-y-5" action="{{ route('password.email') }}" method="POST">
             @csrf
@@ -48,7 +62,7 @@
 
             <!-- Submit Button -->
             <button type="submit" id="btn_submit"
-                    class="w-full py-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-600/20 transition-all duration-200 shadow-xs">
+                    class="w-full py-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-600/20 transition-all duration-200 shadow-xs cursor-pointer">
                 Send Recovery Link &rarr;
             </button>
 
@@ -94,15 +108,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     btnSubmit.className = 'w-full py-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-600/20 transition-all duration-200 shadow-xs cursor-pointer';
                     btnSubmit.innerHTML = 'Send Recovery Link &rarr;';
                 }
-                const banner = document.getElementById('cooldown-banner');
-                if (banner) banner.style.display = 'none';
+                const banners = document.querySelectorAll('#cooldown-banner');
+                banners.forEach(b => b.style.display = 'none');
                 return;
             }
 
             if (timerCount) timerCount.textContent = left;
             if (btnSubmit) {
                 btnSubmit.disabled = true;
-                btnSubmit.className = 'w-full py-3 rounded-xl bg-slate-300 text-slate-500 font-bold text-xs cursor-not-allowed transition-all duration-200 shadow-none border-none';
+                btnSubmit.className = 'w-full py-3 rounded-xl bg-slate-200 text-slate-400 font-bold text-xs cursor-not-allowed transition-all duration-200 shadow-none border-none';
                 btnSubmit.innerHTML = 'Kirim Ulang Link (' + left + 's)';
             }
 

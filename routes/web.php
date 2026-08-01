@@ -69,6 +69,7 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
     Route::put('/profile', [\App\Modules\User\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [\App\Modules\User\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
     Route::put('/profile/notifications', [\App\Modules\User\Controllers\NotificationPreferenceController::class, 'update'])->name('profile.notifications.update');
+    Route::put('/profile/system', [\App\Modules\User\Controllers\SystemPreferenceController::class, 'update'])->name('profile.system.update');
     Route::post('/profile/tokens', [\App\Modules\User\Controllers\ApiTokenController::class, 'store'])->name('profile.tokens.store');
     Route::delete('/profile/tokens/{token}', [\App\Modules\User\Controllers\ApiTokenController::class, 'destroy'])->name('profile.tokens.destroy');
 

@@ -21,6 +21,7 @@ class Profile extends Model
         'occupation',
         'monthly_income',
         'notification_settings',
+        'system_preferences',
     ];
 
     protected function casts(): array
@@ -28,6 +29,7 @@ class Profile extends Model
         return [
             'monthly_income'        => 'decimal:2',
             'notification_settings' => 'array',
+            'system_preferences'     => 'array',
         ];
     }
 

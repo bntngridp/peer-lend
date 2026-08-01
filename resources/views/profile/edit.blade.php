@@ -441,7 +441,20 @@
             <p class="text-xs text-slate-500 font-medium mt-1">Manage your global application settings, appearance, and privacy controls.</p>
         </div>
 
-        <div class="space-y-6">
+        <form action="{{ route('profile.system.update') }}" method="POST" class="space-y-6">
+            @csrf
+            @method('PUT')
+
+            @php
+                $sysSettings = $user->profile?->system_preferences ?? [
+                    'color_theme'               => 'light',
+                    'data_density'              => 'comfortable',
+                    'public_profile'            => true,
+                    'data_sharing'              => false,
+                    'third_party_integrations' => true,
+                ];
+            @endphp
+
             <!-- Appearance Settings -->
             <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-6">
                 <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-2">Appearance</h4>
@@ -450,16 +463,20 @@
                     <div>
                         <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Color Theme</label>
                         <div class="flex gap-3">
-                            <button type="button" @click="colorTheme = 'light'"
-                                    :class="colorTheme === 'light' ? 'border-emerald-700 bg-white shadow-xs' : 'border-slate-200 bg-slate-100'"
-                                    class="py-2 px-6 rounded-xl border text-xs font-bold text-slate-800 flex items-center gap-2">
-                                Light Theme
-                            </button>
-                            <button type="button" @click="colorTheme = 'dark'"
-                                    :class="colorTheme === 'dark' ? 'border-emerald-700 bg-slate-900 text-white shadow-xs' : 'border-slate-200 bg-slate-100'"
-                                    class="py-2 px-6 rounded-xl border text-xs font-bold text-slate-700 flex items-center gap-2">
-                                Dark Theme
-                            </button>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="color_theme" value="light" class="sr-only" @change="colorTheme = 'light'" {{ ($sysSettings['color_theme'] ?? 'light') === 'light' ? 'checked' : '' }}>
+                                <div :class="colorTheme === 'light' ? 'border-emerald-700 bg-white shadow-xs' : 'border-slate-200 bg-slate-100'"
+                                     class="py-2.5 px-6 rounded-xl border text-xs font-bold text-slate-800 flex items-center gap-2">
+                                    Light Theme
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="color_theme" value="dark" class="sr-only" @change="colorTheme = 'dark'" {{ ($sysSettings['color_theme'] ?? 'light') === 'dark' ? 'checked' : '' }}>
+                                <div :class="colorTheme === 'dark' ? 'border-emerald-700 bg-slate-900 text-white shadow-xs' : 'border-slate-200 bg-slate-100'"
+                                     class="py-2.5 px-6 rounded-xl border text-xs font-bold text-slate-700 flex items-center gap-2">
+                                    Dark Theme
+                                </div>
+                            </label>
                         </div>
                     </div>
 
@@ -473,7 +490,7 @@
                                     <span class="font-bold text-slate-900 text-xs block">Comfortable</span>
                                     <span class="text-[10px] text-slate-500 font-medium">More whitespace, easier to read.</span>
                                 </div>
-                                <input type="radio" name="density" value="comfortable" checked class="accent-emerald-700">
+                                <input type="radio" name="data_density" value="comfortable" {{ ($sysSettings['data_density'] ?? 'comfortable') === 'comfortable' ? 'checked' : '' }} class="accent-emerald-700">
                             </label>
 
                             <label @click="density = 'compact'"
@@ -483,7 +500,7 @@
                                     <span class="font-bold text-slate-900 text-xs block">Compact</span>
                                     <span class="text-[10px] text-slate-500 font-medium">High information density for trading.</span>
                                 </div>
-                                <input type="radio" name="density" value="compact" class="accent-emerald-700">
+                                <input type="radio" name="data_density" value="compact" {{ ($sysSettings['data_density'] ?? 'comfortable') === 'compact' ? 'checked' : '' }} class="accent-emerald-700">
                             </label>
                         </div>
                     </div>
@@ -500,7 +517,7 @@
                             <span class="font-bold text-slate-800 block">Public Profile Visibility</span>
                             <span class="text-[10px] text-slate-500">Allow other institutional members to discover your profile in the directory.</span>
                         </div>
-                        <input type="checkbox" checked class="accent-emerald-700 h-4 w-4">
+                        <input type="checkbox" name="public_profile" value="1" {{ !empty($sysSettings['public_profile']) ? 'checked' : '' }} class="accent-emerald-700 h-4 w-4">
                     </div>
 
                     <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
@@ -508,7 +525,7 @@
                             <span class="font-bold text-slate-800 block">Data Sharing for Analytics</span>
                             <span class="text-[10px] text-slate-500">Share anonymized usage data to help us improve platform performance.</span>
                         </div>
-                        <input type="checkbox" class="accent-emerald-700 h-4 w-4">
+                        <input type="checkbox" name="data_sharing" value="1" {{ !empty($sysSettings['data_sharing']) ? 'checked' : '' }} class="accent-emerald-700 h-4 w-4">
                     </div>
 
                     <div class="flex items-center justify-between py-1">
@@ -516,17 +533,17 @@
                             <span class="font-bold text-slate-800 block">Third-Party Integrations</span>
                             <span class="text-[10px] text-slate-500">Allow connected API apps to read basic profile information.</span>
                         </div>
-                        <input type="checkbox" checked class="accent-emerald-700 h-4 w-4">
+                        <input type="checkbox" name="third_party_integrations" value="1" {{ !empty($sysSettings['third_party_integrations']) ? 'checked' : '' }} class="accent-emerald-700 h-4 w-4">
                     </div>
                 </div>
             </div>
 
             <div class="flex gap-3">
-                <button type="button" @click="alert('System preferences saved!')" class="py-2.5 px-6 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
+                <button type="submit" id="btn_save_system_preferences" class="py-2.5 px-6 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs cursor-pointer">
                     Save Changes &rarr;
                 </button>
             </div>
-        </div>
+        </form>
     </div>
 
     <!-- Disable 2FA Confirmation Modal -->

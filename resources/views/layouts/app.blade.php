@@ -29,110 +29,157 @@
         .hover\:bg-primary-green-dark:hover { background-color: #166534; }
     </style>
 </head>
-<body class="h-full bg-slate-50 text-slate-900 antialiased" x-data="{ sidebarOpen: false, logoutModalOpen: false }">
+<body class="h-full bg-slate-50 text-slate-900 antialiased" x-data="{ sidebarOpen: false, sidebarCollapsed: false, logoutModalOpen: false }">
 
     <div class="min-h-screen flex flex-col md:flex-row">
 
         <!-- ─── Left Sidebar Navigation ───────────────────────────────────────────── -->
-        <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 transform transition-transform duration-200 ease-in-out md:static md:translate-x-0 flex flex-col"
-               :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'">
+        <aside class="fixed inset-y-0 left-0 z-50 bg-white border-r border-slate-200 transform transition-all duration-300 ease-in-out md:static md:translate-x-0 flex flex-col"
+               :class="{
+                   'translate-x-0': sidebarOpen,
+                   '-translate-x-full md:translate-x-0': !sidebarOpen,
+                   'w-64': !sidebarCollapsed,
+                   'w-64 md:w-20': sidebarCollapsed
+               }">
             
-            <!-- Brand Logo & Header (Non-clickable static header matching welcome page logo) -->
-            <div class="h-16 flex items-center justify-between px-6 border-b border-slate-100 select-none">
-                <div class="flex items-center gap-2.5">
-                    <span class="h-8 w-8 rounded-xl bg-emerald-700 text-white font-black flex items-center justify-center text-base shadow-xs shrink-0">L</span>
-                    <div>
-                        <span class="text-base font-extrabold tracking-tight text-slate-900 block leading-none">LendFlow</span>
-                        <span class="text-[9px] font-bold text-emerald-700 tracking-wider uppercase block mt-1">Institutional Grade P2P</span>
+            <!-- Brand Logo & Header -->
+            <div class="h-16 flex items-center justify-between px-4 border-b border-slate-100 select-none overflow-hidden shrink-0">
+                <a href="{{ route('home') }}" class="flex items-center gap-3 min-w-0 group" title="LendFlow Home">
+                    <!-- Premium Logo Icon Emblem -->
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-800 via-emerald-600 to-teal-400 p-1.5 shadow-md shadow-emerald-700/20 shrink-0 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                        <img src="{{ asset('images/persegi-nobg.png') }}" alt="LendFlow Logo" class="w-full h-full object-contain filter drop-shadow-sm">
                     </div>
-                </div>
-                <button @click="sidebarOpen = false" class="md:hidden text-slate-400 hover:text-slate-600">
+                    <!-- Brand Typography & Subtitle (Hidden when collapsed) -->
+                    <div x-show="!sidebarCollapsed" x-transition.opacity class="min-w-0">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-base font-black tracking-tight text-slate-900 leading-none">LendFlow</span>
+                            <span class="px-1.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-extrabold text-[9px] uppercase tracking-wider">P2P</span>
+                        </div>
+                        <span class="text-[9px] font-bold text-emerald-700 tracking-wider uppercase block mt-1">Institutional P2P</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Collapse/Expand Toggle Button -->
+                <button type="button" @click="sidebarCollapsed = !sidebarCollapsed" id="btn_toggle_sidebar"
+                        class="hidden md:flex items-center justify-center p-1.5 text-slate-400 hover:text-emerald-700 rounded-xl hover:bg-slate-100 transition-colors shrink-0"
+                        :title="sidebarCollapsed ? 'Buka Sidebar / Expand' : 'Tutup Sidebar / Collapse'">
+                    <svg class="w-5 h-5 transform transition-transform duration-300" :class="sidebarCollapsed ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                    </svg>
+                </button>
+
+                <!-- Mobile Close Button -->
+                <button @click="sidebarOpen = false" class="md:hidden text-slate-400 hover:text-slate-600 p-1 rounded-lg">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
 
             <!-- Navigation Links -->
-            <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-1.5">
+            <nav class="flex-1 overflow-y-auto px-3 py-6 space-y-1.5 scrollbar-thin">
                 @auth
-                    <!-- Main Menu -->
-                    <div class="px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Main Navigation</div>
+                    <!-- Main Menu Section Header -->
+                    <div x-show="!sidebarCollapsed" class="px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Main Navigation</div>
 
+                    <!-- Dashboard -->
                     <a href="{{ route('dashboard') }}" 
-                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('dashboard') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                        <svg class="h-5 w-5 {{ request()->routeIs('dashboard') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                       :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all relative group {{ request()->routeIs('dashboard') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}"
+                       :title="sidebarCollapsed ? 'Dashboard' : ''">
+                        <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('dashboard') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>
                         </svg>
-                        Dashboard
+                        <span x-show="!sidebarCollapsed" class="truncate">Dashboard</span>
                     </a>
 
+                    <!-- Marketplace -->
                     <a href="{{ route('marketplace.index') }}" 
-                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('marketplace.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                        <svg class="h-5 w-5 {{ request()->routeIs('marketplace.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                       :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all relative group {{ request()->routeIs('marketplace.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}"
+                       :title="sidebarCollapsed ? 'Marketplace' : ''">
+                        <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('marketplace.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36rem-3.75 0h16.5m-16.5 0a2.25 2.25 0 01-2.25-2.25V6.75A2.25 2.25 0 013.75 4.5h16.5a2.25 2.25 0 012.25 2.25v12a2.25 2.25 0 01-2.25 2.25H3.75z"/>
                         </svg>
-                        Marketplace
+                        <span x-show="!sidebarCollapsed" class="truncate">Marketplace</span>
                     </a>
 
+                    <!-- My Loans -->
                     <a href="{{ route('loans.index') }}" 
-                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('loans.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                        <svg class="h-5 w-5 {{ request()->routeIs('loans.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                       :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all relative group {{ request()->routeIs('loans.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}"
+                       :title="sidebarCollapsed ? 'My Loans' : ''">
+                        <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('loans.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
-                        My Loans
+                        <span x-show="!sidebarCollapsed" class="truncate">My Loans</span>
                     </a>
 
+                    <!-- Wallet -->
                     <a href="{{ route('wallet.index') }}" 
-                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('wallet.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                        <svg class="h-5 w-5 {{ request()->routeIs('wallet.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                       :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all relative group {{ request()->routeIs('wallet.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}"
+                       :title="sidebarCollapsed ? 'Wallet & Saldo' : ''">
+                        <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('wallet.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0zM15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z"/>
                         </svg>
-                        Wallet &amp; Saldo
+                        <span x-show="!sidebarCollapsed" class="truncate">Wallet &amp; Saldo</span>
                     </a>
 
+                    <!-- Collateral -->
                     <a href="{{ route('collateral.index') }}" 
-                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('collateral.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                        <svg class="h-5 w-5 {{ request()->routeIs('collateral.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                       :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all relative group {{ request()->routeIs('collateral.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}"
+                       :title="sidebarCollapsed ? 'Crypto Collateral' : ''">
+                        <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('collateral.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-6h6m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        Crypto Collateral
+                        <span x-show="!sidebarCollapsed" class="truncate">Crypto Collateral</span>
                     </a>
 
+                    <!-- Calculator -->
                     <a href="{{ route('calculator.index') }}" 
-                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('calculator.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                        <svg class="h-5 w-5 {{ request()->routeIs('calculator.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                       :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all relative group {{ request()->routeIs('calculator.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}"
+                       :title="sidebarCollapsed ? 'Simulasi Kalkulator' : ''">
+                        <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('calculator.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm3.75-6h.008v.008H12v-.008zm0 3h.008v.008H12v-.008zm0 3h.008v.008H12v-.008zm3.75-6h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zM3.75 6A2.25 2.25 0 016 3.75h12A2.25 2.25 0 0120.25 6v12A2.25 2.25 0 0118 20.25H6A2.25 2.25 0 013.75 18V6z"/>
                         </svg>
-                        Simulasi Kalkulator
+                        <span x-show="!sidebarCollapsed" class="truncate">Simulasi Kalkulator</span>
                     </a>
 
                     <!-- Admin Menu Section -->
                     @if(Auth::user()->isAdmin())
-                        <div class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Administration</div>
+                        <div x-show="!sidebarCollapsed" class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Administration</div>
                         <a href="{{ route('admin.kyc.index') }}" 
-                           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.kyc.*') ? 'bg-amber-50 text-amber-800 border-l-4 border-amber-600 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                            <svg class="h-5 w-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                           :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                           class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all relative group {{ request()->routeIs('admin.kyc.*') ? 'bg-amber-50 text-amber-800 border-l-4 border-amber-600 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}"
+                           :title="sidebarCollapsed ? 'Review KYC' : ''">
+                            <svg class="h-5 w-5 text-amber-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
                             </svg>
-                            Review KYC
+                            <span x-show="!sidebarCollapsed" class="truncate">Review KYC</span>
                         </a>
                         <a href="{{ route('admin.loans.index') }}" 
-                           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.loans.*') ? 'bg-amber-50 text-amber-800 border-l-4 border-amber-600 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                            <svg class="h-5 w-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                           :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                           class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all relative group {{ request()->routeIs('admin.loans.*') ? 'bg-amber-50 text-amber-800 border-l-4 border-amber-600 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}"
+                           :title="sidebarCollapsed ? 'Review Loans' : ''">
+                            <svg class="h-5 w-5 text-amber-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
                             </svg>
-                            Review Loans
+                            <span x-show="!sidebarCollapsed" class="truncate">Review Loans</span>
                         </a>
                     @endif
 
                     <!-- Account & Settings -->
-                    <div class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Account Settings</div>
+                    <div x-show="!sidebarCollapsed" class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Account Settings</div>
                     <a href="{{ route('profile.edit') }}" 
-                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('profile.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
-                        <svg class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                       :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all relative group {{ request()->routeIs('profile.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}"
+                       :title="sidebarCollapsed ? 'Settings & Profile' : ''">
+                        <svg class="h-5 w-5 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527a1.125 1.125 0 01-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.149-.894z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
-                        Settings &amp; Profile
+                        <span x-show="!sidebarCollapsed" class="truncate">Settings &amp; Profile</span>
                     </a>
                 @else
                     <a href="{{ route('login') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-100">Sign in</a>
@@ -142,18 +189,20 @@
 
             <!-- Bottom Profile Summary -->
             @auth
-            <div class="p-4 border-t border-slate-100 bg-slate-50/50">
-                <div class="flex items-center gap-3">
-                    <div class="h-9 w-9 rounded-xl bg-emerald-700 text-white font-bold flex items-center justify-center text-xs shadow-xs">
+            <div class="p-3 border-t border-slate-100 bg-slate-50/50 shrink-0">
+                <div class="flex items-center" :class="sidebarCollapsed ? 'justify-center' : 'gap-3'">
+                    <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-emerald-800 to-emerald-600 text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0"
+                         :title="sidebarCollapsed ? '{{ Auth::user()->profile->full_name ?? Auth::user()->email }}' : ''">
                         {{ strtoupper(substr(Auth::user()->profile->full_name ?? Auth::user()->email, 0, 2)) }}
                     </div>
-                    <div class="flex-1 min-w-0">
+                    <div x-show="!sidebarCollapsed" class="flex-1 min-w-0">
                         <p class="text-xs font-bold text-slate-900 truncate">{{ Auth::user()->profile->full_name ?? 'User' }}</p>
                         <p class="text-[11px] font-medium text-slate-500 truncate capitalize">{{ Auth::user()->roles->first()?->name ?? 'Member' }}</p>
                     </div>
                     <!-- Logout Trigger Button -->
                     <button type="button" @click="logoutModalOpen = true" id="btn_logout_trigger"
-                            class="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors cursor-pointer" title="Sign out">
+                            :class="sidebarCollapsed ? 'hidden' : 'block'"
+                            class="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors cursor-pointer shrink-0" title="Sign out">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/></svg>
                     </button>
                     <!-- Hidden Form for actual POST logout -->

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-slate-50">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}" class="h-full bg-slate-50">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -370,6 +370,36 @@
                                 </span>
                             @endif
                         </a>
+
+                        <!-- 🌐 Multi-Language Selector Dropdown -->
+                        <div class="relative" x-data="{ langOpen: false }">
+                            <button @click="langOpen = !langOpen" type="button" class="flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer">
+                                @if(app()->getLocale() === 'id')
+                                    <span class="text-sm">🇮🇩</span> <span class="hidden sm:inline">ID</span>
+                                @elseif(app()->getLocale() === 'en')
+                                    <span class="text-sm">🇬🇧</span> <span class="hidden sm:inline">EN</span>
+                                @elseif(app()->getLocale() === 'es')
+                                    <span class="text-sm">🇪🇸</span> <span class="hidden sm:inline">ES</span>
+                                @elseif(app()->getLocale() === 'ar')
+                                    <span class="text-sm">🇸🇦</span> <span class="hidden sm:inline">AR</span>
+                                @endif
+                                <svg class="h-3.5 w-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+                            </button>
+                            <div x-show="langOpen" @click.away="langOpen = false" x-cloak class="absolute right-0 mt-2 w-44 rounded-2xl bg-white dark:bg-slate-900 shadow-xl ring-1 ring-black/5 dark:ring-slate-800 z-50 py-1.5">
+                                <a href="{{ route('lang.switch', 'id') }}" class="flex items-center gap-2.5 px-4 py-2 text-xs font-medium {{ app()->getLocale() === 'id' ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                    <span class="text-base">🇮🇩</span> Bahasa Indonesia
+                                </a>
+                                <a href="{{ route('lang.switch', 'en') }}" class="flex items-center gap-2.5 px-4 py-2 text-xs font-medium {{ app()->getLocale() === 'en' ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                    <span class="text-base">🇬🇧</span> English
+                                </a>
+                                <a href="{{ route('lang.switch', 'es') }}" class="flex items-center gap-2.5 px-4 py-2 text-xs font-medium {{ app()->getLocale() === 'es' ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                    <span class="text-base">🇪🇸</span> Español
+                                </a>
+                                <a href="{{ route('lang.switch', 'ar') }}" class="flex items-center gap-2.5 px-4 py-2 text-xs font-medium {{ app()->getLocale() === 'ar' ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                    <span class="text-base">🇸🇦</span> العربية (Arabic)
+                                </a>
+                            </div>
+                        </div>
                     @endauth
                 </div>
             </header>

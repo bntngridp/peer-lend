@@ -15,6 +15,7 @@ Route::post('/api/payment/webhook', [\App\Modules\Wallet\Controllers\PaymentCont
 Route::post('/api/payment/xendit/webhook', [\App\Modules\Wallet\Controllers\PaymentController::class, 'xenditWebhook'])->name('payment.xendit.webhook');
 Route::post('/api/payment/nowpayments/ipn', [\App\Modules\Wallet\Controllers\PaymentController::class, 'nowpaymentsIpn'])->name('payment.nowpayments.ipn');
 Route::get('/api/docs', fn () => view('docs.swagger'))->name('api.docs');
+Route::get('/lang/{locale}', [\App\Modules\Shared\Controllers\LanguageController::class, 'switch'])->name('lang.switch');
 
 // ─── 🧮 Loan Calculator (Public — No Auth Required) ──────────────────────────
 Route::get('/calculator', [\App\Modules\Loan\Controllers\LoanCalculatorController::class, 'index'])->name('calculator.index');

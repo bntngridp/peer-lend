@@ -9,12 +9,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Modules\Wallet\Services\XenditService;
+use App\Modules\Wallet\Services\NowPaymentsService;
 
 class PaymentController extends Controller
 {
     public function __construct(
         private readonly PaymentService $paymentService,
-        private readonly XenditService $xenditService
+        private readonly XenditService $xenditService,
+        private readonly NowPaymentsService $nowPaymentsService
     ) {}
 
     /**
@@ -37,6 +39,39 @@ class PaymentController extends Controller
             return response()->json([
                 'status'  => 'success',
                 'message' => 'Deposit initiated successfully.',
+                'data'    => $data,
+            ]);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    /**
+     * Initiate Crypto Deposit via NOWPayments.
+     * 
+     * POST /wallet/crypto/deposit/initiate
+     */
+    public function initiateCryptoDeposit(Request $request): JsonResponse
+    {
+        $request->validate([
+            'amount'       => ['required', 'numeric', 'min:5', 'max:100000'],
+            'pay_currency' => ['required', 'string', 'max:20'],
+        ]);
+
+        try {
+            $data = $this->nowPaymentsService->createInvoice(
+                user: Auth::user(),
+                amount: (float) $request->amount,
+                payCurrency: $request->pay_currency
+            );
+
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Crypto deposit invoice created via NOWPayments.',
                 'data'    => $data,
             ]);
 
@@ -74,6 +109,41 @@ class PaymentController extends Controller
             return response()->json([
                 'status'  => 'success',
                 'message' => 'Penarikan dana via Xendit berhasil diajukan.',
+                'data'    => $data,
+            ]);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    /**
+     * Initiate Instant Crypto Withdrawal via NOWPayments.
+     * 
+     * POST /wallet/crypto/withdraw/initiate
+     */
+    public function initiateCryptoWithdrawal(Request $request): JsonResponse
+    {
+        $request->validate([
+            'amount'   => ['required', 'numeric', 'min:10', 'max:100000'],
+            'address'  => ['required', 'string', 'max:120'],
+            'currency' => ['required', 'string', 'max:20'],
+        ]);
+
+        try {
+            $data = $this->nowPaymentsService->createPayout(
+                user: Auth::user(),
+                amount: (float) $request->amount,
+                address: $request->address,
+                currency: $request->currency
+            );
+
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Crypto payout initiated via NOWPayments.',
                 'data'    => $data,
             ]);
 
@@ -126,6 +196,38 @@ class PaymentController extends Controller
         return response()->json([
             'status'  => 'success',
             'message' => 'Xendit Webhook processed successfully.',
+        ]);
+    }
+
+    /**
+     * Process NOWPayments IPN webhook notification callback.
+     * 
+     * POST /api/payment/nowpayments/ipn
+     */
+    public function nowpaymentsIpn(Request $request): JsonResponse
+    {
+        $signature = $request->header('x-nowpayments-sig');
+        
+        $valid = $this->nowPaymentsService->verifyIpnSignature($request->all(), $signature ?? '');
+        if (!$valid) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Invalid IPN HMAC signature.',
+            ], 400);
+        }
+
+        $processed = $this->nowPaymentsService->handleIpnCallback($request->all(), $signature);
+
+        if (!$processed) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'NOWPayments IPN processing failed.',
+            ], 400);
+        }
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'NOWPayments IPN processed successfully.',
         ]);
     }
 }

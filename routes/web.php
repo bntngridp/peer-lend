@@ -13,6 +13,7 @@ Route::get('/terms', fn () => redirect()->route('register', ['modal' => 'terms']
 Route::get('/privacy', fn () => redirect()->route('register', ['modal' => 'privacy']))->name('privacy.show');
 Route::post('/api/payment/webhook', [\App\Modules\Wallet\Controllers\PaymentController::class, 'webhook'])->name('payment.webhook');
 Route::post('/api/payment/xendit/webhook', [\App\Modules\Wallet\Controllers\PaymentController::class, 'xenditWebhook'])->name('payment.xendit.webhook');
+Route::post('/api/payment/nowpayments/ipn', [\App\Modules\Wallet\Controllers\PaymentController::class, 'nowpaymentsIpn'])->name('payment.nowpayments.ipn');
 Route::get('/api/docs', fn () => view('docs.swagger'))->name('api.docs');
 
 // ─── 🧮 Loan Calculator (Public — No Auth Required) ──────────────────────────
@@ -86,6 +87,8 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         Route::post('/wallet/deposit/initiate', [\App\Modules\Wallet\Controllers\PaymentController::class, 'initiateDeposit'])->name('wallet.deposit.initiate');
         Route::post('/wallet/withdraw', [\App\Modules\Wallet\Controllers\WalletController::class, 'withdraw'])->name('wallet.withdraw');
         Route::post('/wallet/withdraw/initiate', [\App\Modules\Wallet\Controllers\PaymentController::class, 'initiateWithdrawal'])->name('wallet.withdraw.initiate');
+        Route::post('/wallet/crypto/deposit/initiate', [\App\Modules\Wallet\Controllers\PaymentController::class, 'initiateCryptoDeposit'])->name('wallet.crypto.deposit.initiate');
+        Route::post('/wallet/crypto/withdraw/initiate', [\App\Modules\Wallet\Controllers\PaymentController::class, 'initiateCryptoWithdrawal'])->name('wallet.crypto.withdraw.initiate');
     });
 
     // 🤝 P2P Loan Marketplace Routes (Lender & Admin)

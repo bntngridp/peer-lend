@@ -39,12 +39,10 @@
                'w-20': sidebarCollapsed
            }">
         
-        <!-- Sidebar Header (Logo Image + Collapsible Toggle) -->
+        <!-- Sidebar Header (Matching Welcome Page 'L' Logo Badge) -->
         <div class="flex h-16 items-center px-4 border-b border-gray-100 justify-between select-none">
             <div class="flex items-center gap-3 overflow-hidden">
-                <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-900 p-1.5 shadow-xs ring-2 ring-emerald-500/20 flex items-center justify-center shrink-0">
-                    <img src="{{ asset('images/persegi-nobg.png') }}" alt="LendFlow Logo" class="h-full w-full object-contain filter drop-shadow">
-                </div>
+                <span class="h-9 w-9 rounded-xl bg-emerald-700 text-white font-black flex items-center justify-center text-lg shadow-xs shrink-0 select-none">L</span>
                 <div x-show="!sidebarCollapsed" class="whitespace-nowrap transition-opacity duration-200">
                     <span class="text-base font-extrabold tracking-tight text-slate-900 block leading-none">LendFlow</span>
                     <span class="text-[9px] font-bold text-indigo-600 tracking-wider uppercase block mt-1">ADMIN CONTROL</span>

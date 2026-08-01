@@ -42,14 +42,12 @@
                    'w-20': sidebarCollapsed
                }">
             
-            <!-- Brand Logo & Header with Modern Logo Image & Toggle Button -->
+            <!-- Brand Logo & Header (Matching Welcome Page 'L' Logo) -->
             <div class="h-16 flex items-center justify-between px-4 border-b border-slate-100 select-none">
                 <div class="flex items-center gap-3 overflow-hidden">
-                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-900 p-1.5 shadow-xs ring-2 ring-emerald-500/20 flex items-center justify-center shrink-0">
-                        <img src="{{ asset('images/persegi-nobg.png') }}" alt="LendFlow Logo" class="h-full w-full object-contain filter drop-shadow">
-                    </div>
+                    <span class="h-9 w-9 rounded-xl bg-emerald-700 text-white font-black flex items-center justify-center text-lg shadow-xs shrink-0 select-none">L</span>
                     <div x-show="!sidebarCollapsed" class="whitespace-nowrap transition-opacity duration-200">
-                        <span class="text-base font-black tracking-tight text-slate-900 block leading-none">LendFlow</span>
+                        <span class="text-base font-extrabold tracking-tight text-slate-900 block leading-none">LendFlow</span>
                         <span class="text-[9px] font-extrabold text-emerald-700 tracking-wider uppercase block mt-1">Institutional P2P</span>
                     </div>
                 </div>

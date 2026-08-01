@@ -10,25 +10,25 @@
     </div>
 
     <!-- Navigation Tabs Header -->
-    <div class="border-b border-slate-200 flex gap-6 text-xs font-bold text-slate-500 overflow-x-auto select-none">
-        <button type="button" @click="profileTab = 'personal'" 
+    <div class="border-b border-slate-200 dark:border-slate-800 flex gap-6 text-xs font-bold text-slate-500 overflow-x-auto select-none">
+        <button type="button" @click="profileTab = 'personal'" id="tab_btn_personal"
                 class="tab-btn pb-3 transition-colors outline-none focus:outline-none bg-transparent cursor-pointer"
-                :class="profileTab === 'personal' ? 'text-emerald-700 border-b-2 border-emerald-700 dark:text-emerald-400 dark:border-emerald-400 font-extrabold' : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'">
+                :class="profileTab === 'personal' ? 'text-emerald-700 border-b-2 border-emerald-700 dark:text-emerald-400 dark:border-emerald-400 font-extrabold' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'">
             Personal Information
         </button>
         <button type="button" @click="profileTab = 'security'" id="tab_btn_security"
                 class="tab-btn pb-3 transition-colors outline-none focus:outline-none bg-transparent cursor-pointer"
-                :class="profileTab === 'security' ? 'text-emerald-700 border-b-2 border-emerald-700 dark:text-emerald-400 dark:border-emerald-400 font-extrabold' : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'">
+                :class="profileTab === 'security' ? 'text-emerald-700 border-b-2 border-emerald-700 dark:text-emerald-400 dark:border-emerald-400 font-extrabold' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'">
             Security &amp; Access
         </button>
-        <button type="button" @click="profileTab = 'notifications'" 
+        <button type="button" @click="profileTab = 'notifications'" id="tab_btn_notifications"
                 class="tab-btn pb-3 transition-colors outline-none focus:outline-none bg-transparent cursor-pointer"
-                :class="profileTab === 'notifications' ? 'text-emerald-700 border-b-2 border-emerald-700 dark:text-emerald-400 dark:border-emerald-400 font-extrabold' : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'">
+                :class="profileTab === 'notifications' ? 'text-emerald-700 border-b-2 border-emerald-700 dark:text-emerald-400 dark:border-emerald-400 font-extrabold' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'">
             Notification Preferences
         </button>
         <button type="button" @click="profileTab = 'system'" id="tab_btn_system"
                 class="tab-btn pb-3 transition-colors outline-none focus:outline-none bg-transparent cursor-pointer"
-                :class="profileTab === 'system' ? 'text-emerald-700 border-b-2 border-emerald-700 dark:text-emerald-400 dark:border-emerald-400 font-extrabold' : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'">
+                :class="profileTab === 'system' ? 'text-emerald-700 border-b-2 border-emerald-700 dark:text-emerald-400 dark:border-emerald-400 font-extrabold' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'">
             System Preferences
         </button>
     </div>

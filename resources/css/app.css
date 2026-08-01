@@ -354,17 +354,34 @@ html.dark button:hover:not(.bg-emerald-700):not(.bg-rose-600):not(.bg-amber-600)
     color: #34d399 !important;
 }
 
-/* Underline Tab Buttons - Transparent Background without squarish boxes */
-html.dark .tab-btn,
-html.dark button.tab-btn,
-html.dark button.tab-btn:hover,
-html.dark button.tab-btn:focus,
-html.dark button.tab-btn:active {
+/* Underline Tab Buttons - High Contrast Hover & Active State */
+.tab-btn {
     background-color: transparent !important;
+    transition: color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.tab-btn:hover {
+    color: #0f172a !important; /* Sharp slate-900 on hover in Light mode */
+}
+
+.tab-btn.text-emerald-700,
+.tab-btn.text-emerald-700:hover {
+    color: #047857 !important;
+    border-bottom-color: #047857 !important;
+}
+
+html.dark .tab-btn {
+    background-color: transparent !important;
+    color: #94a3b8 !important;
+}
+
+html.dark .tab-btn:hover {
+    color: #f8fafc !important; /* Bright slate-50 on hover in Dark mode */
 }
 
 html.dark button.tab-btn[class*="text-emerald"],
-html.dark .tab-btn.text-emerald-700 {
+html.dark .tab-btn.text-emerald-700,
+html.dark .tab-btn.text-emerald-400 {
     color: #34d399 !important;
     border-bottom-color: #10b981 !important;
 }

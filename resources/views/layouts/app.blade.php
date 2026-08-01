@@ -85,18 +85,20 @@
                }">
             
             <!-- Brand Logo & Header (Matching Welcome Page 'L' Logo) -->
-            <div class="h-16 flex items-center justify-between px-4 border-b border-slate-100 select-none">
-                <div class="flex items-center gap-3 overflow-hidden">
+            <div class="h-16 flex items-center px-4 border-b border-slate-100 select-none transition-all"
+                 :class="sidebarCollapsed ? 'justify-center px-2' : 'justify-between px-4'">
+                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 overflow-hidden shrink-0">
                     <span class="h-9 w-9 rounded-xl bg-emerald-700 text-white font-black flex items-center justify-center text-lg shadow-xs shrink-0 select-none">L</span>
                     <div x-show="!sidebarCollapsed" class="whitespace-nowrap transition-opacity duration-200">
                         <span class="text-base font-extrabold tracking-tight text-slate-900 block leading-none">LendFlow</span>
                         <span class="text-[9px] font-extrabold text-emerald-700 tracking-wider uppercase block mt-1">Institutional P2P</span>
                     </div>
-                </div>
+                </a>
 
                 <!-- Desktop Sidebar Collapse Toggle Button (Buka-Tutup Sidebar) -->
                 <button type="button" @click="sidebarCollapsed = !sidebarCollapsed" id="btn_toggle_sidebar_desktop"
                         class="hidden md:flex items-center justify-center h-8 w-8 rounded-lg text-slate-400 hover:text-emerald-700 hover:bg-slate-100 transition-colors shrink-0"
+                        :class="sidebarCollapsed ? 'ml-0' : ''"
                         :title="sidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'">
                     <svg class="h-5 w-5 transform transition-transform duration-300" :class="sidebarCollapsed ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
@@ -110,14 +112,15 @@
             </div>
 
             <!-- Navigation Links -->
-            <nav class="flex-1 overflow-y-auto px-3 py-6 space-y-1.5">
+            <nav class="flex-1 overflow-y-auto px-3 py-6 space-y-1.5" :class="sidebarCollapsed ? 'px-2' : 'px-3'">
                 @auth
                     <!-- Main Menu Section Header -->
                     <div x-show="!sidebarCollapsed" class="px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">Main Navigation</div>
 
                     <!-- 1. Dashboard -->
                     <a href="{{ route('dashboard') }}" title="Dashboard"
-                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('dashboard') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                       :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('dashboard') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
                         <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('dashboard') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>
                         </svg>
@@ -126,7 +129,8 @@
 
                     <!-- 2. Marketplace (Shopping Bag / Storefront) -->
                     <a href="{{ route('marketplace.index') }}" title="Marketplace"
-                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('marketplace.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                       :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('marketplace.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
                         <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('marketplace.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119.993z"/>
                         </svg>
@@ -135,7 +139,8 @@
 
                     <!-- 3. My Loans (Banknotes / Money) -->
                     <a href="{{ route('loans.index') }}" title="My Loans"
-                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('loans.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                       :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('loans.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
                         <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('loans.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5h16.5A2.25 2.25 0 0122.5 6.75v10.5a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 17.25V6.75A2.25 2.25 0 013.75 4.5zM12 12a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5zM6 8.25h.008v.008H6V8.25zm12 0h.008v.008H18V8.25z"/>
                         </svg>
@@ -144,7 +149,8 @@
 
                     <!-- 4. Wallet & Saldo (Real Wallet Card) -->
                     <a href="{{ route('wallet.index') }}" title="Wallet & Saldo"
-                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('wallet.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                       :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('wallet.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
                         <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('wallet.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"/>
                         </svg>
@@ -153,7 +159,8 @@
 
                     <!-- 5. Crypto Collateral (Blockchain Cube / Shield-Coin) -->
                     <a href="{{ route('collateral.index') }}" title="Crypto Collateral"
-                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('collateral.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                       :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('collateral.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
                         <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('collateral.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"/>
                         </svg>
@@ -162,7 +169,8 @@
 
                     <!-- 6. Simulasi Kalkulator (Calculator) -->
                     <a href="{{ route('calculator.index') }}" title="Simulasi Kalkulator"
-                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('calculator.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                       :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('calculator.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
                         <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('calculator.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm3.75-6h.008v.008H12v-.008zm0 3h.008v.008H12v-.008zm0 3h.008v.008H12v-.008zm3.75-6h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zM3.75 6A2.25 2.25 0 016 3.75h12A2.25 2.25 0 0120.25 6v12A2.25 2.25 0 0118 20.25H6A2.25 2.25 0 013.75 18V6z"/>
                         </svg>
@@ -173,14 +181,16 @@
                     @if(Auth::user()->isAdmin())
                         <div x-show="!sidebarCollapsed" class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">Administration</div>
                         <a href="{{ route('admin.kyc.index') }}" title="Review KYC"
-                           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.kyc.*') ? 'bg-amber-50 text-amber-800 border-l-4 border-amber-600 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                           :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                           class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.kyc.*') ? 'bg-amber-50 text-amber-800 border-l-4 border-amber-600 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
                             <svg class="h-5 w-5 shrink-0 text-amber-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
                             </svg>
                             <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Review KYC</span>
                         </a>
                         <a href="{{ route('admin.loans.index') }}" title="Review Loans"
-                           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.loans.*') ? 'bg-amber-50 text-amber-800 border-l-4 border-amber-600 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                           :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                           class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.loans.*') ? 'bg-amber-50 text-amber-800 border-l-4 border-amber-600 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
                             <svg class="h-5 w-5 shrink-0 text-amber-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
                             </svg>
@@ -191,7 +201,8 @@
                     <!-- Account & Settings -->
                     <div x-show="!sidebarCollapsed" class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">Account Settings</div>
                     <a href="{{ route('profile.edit') }}" title="Settings & Profile"
-                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('profile.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                       :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
+                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('profile.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
                         <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('profile.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h3.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.796 3.111a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.798 3.111a1.125 1.125 0 01-1.37.491l-1.216-.456c-.356-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-3.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.797-3.111a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.797-3.111a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -206,12 +217,12 @@
 
             <!-- Bottom Profile Summary -->
             @auth
-            <div class="p-3 border-t border-slate-100 bg-slate-50/50">
-                <div class="flex items-center gap-3">
+            <div class="p-3 border-t border-slate-100 bg-slate-50/50" :class="sidebarCollapsed ? 'px-2 text-center' : 'p-3'">
+                <div class="flex items-center gap-3" :class="sidebarCollapsed ? 'flex-col justify-center' : 'flex-row'">
                     @if(Auth::user()->profile && Auth::user()->profile->avatar_path)
-                        <img class="h-9 w-9 rounded-xl object-cover border border-slate-200 shadow-xs shrink-0" src="{{ asset('storage/' . Auth::user()->profile->avatar_path) }}" alt="Avatar">
+                        <img class="h-9 w-9 rounded-xl object-cover border border-slate-200 shadow-xs shrink-0" src="{{ asset('storage/' . Auth::user()->profile->avatar_path) }}" alt="Avatar" title="{{ Auth::user()->profile->full_name }}">
                     @else
-                        <div class="h-9 w-9 rounded-xl bg-emerald-700 text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0 select-none">
+                        <div class="h-9 w-9 rounded-xl bg-emerald-700 text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0 select-none" title="{{ Auth::user()->profile->full_name ?? Auth::user()->email }}">
                             {{ strtoupper(substr(Auth::user()->profile->full_name ?? Auth::user()->email, 0, 2)) }}
                         </div>
                     @endif
@@ -245,15 +256,6 @@
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
                     </button>
 
-                    <!-- Desktop Toggle Button in Top Navbar (Buka-Tutup Sidebar) -->
-                    <button type="button" @click="sidebarCollapsed = !sidebarCollapsed" id="btn_header_toggle_sidebar"
-                            class="hidden md:flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-emerald-700 px-3 py-1.5 rounded-xl hover:bg-slate-100 transition-colors border border-slate-200/80"
-                            :title="sidebarCollapsed ? 'Buka Sidebar' : 'Tutup Sidebar'">
-                        <svg class="h-4 w-4 transform transition-transform duration-300" :class="sidebarCollapsed ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
-                        </svg>
-                        <span x-text="sidebarCollapsed ? 'Buka Menu' : 'Tutup Menu'">Tutup Menu</span>
-                    </button>
                     
                     <!-- Search Input -->
                     <div class="relative hidden sm:block w-56 md:w-72">

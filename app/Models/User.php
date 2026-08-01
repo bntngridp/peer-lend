@@ -108,7 +108,22 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->hasRole('admin') || $this->hasAnyRole(['admin', 'customer_service', 'collection_officer']);
+        return $this->hasRole('admin');
+    }
+
+    public function isCustomerService(): bool
+    {
+        return $this->hasRole('customer_service');
+    }
+
+    public function isCollectionOfficer(): bool
+    {
+        return $this->hasRole('collection_officer');
+    }
+
+    public function isInternalStaff(): bool
+    {
+        return $this->hasAnyRole(['admin', 'customer_service', 'collection_officer']);
     }
 
     public function isLender(): bool

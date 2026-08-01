@@ -124,7 +124,7 @@
                     </a>
 
                     <!-- 2. Marketplace (Lender / Investor / General Users) -->
-                    @if(Auth::user()->isLender() || (!Auth::user()->isAdmin() && !Auth::user()->isBorrower()))
+                    @if(Auth::user()->isLender() || (!Auth::user()->isInternalStaff() && !Auth::user()->isBorrower()))
                     <a href="{{ route('marketplace.index') }}" title="Marketplace"
                        :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
                        class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('marketplace.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
@@ -136,7 +136,7 @@
                     @endif
 
                     <!-- 3. My Loans (Borrower Only) -->
-                    @if(Auth::user()->isBorrower() || (!Auth::user()->isAdmin() && !Auth::user()->isLender()))
+                    @if(Auth::user()->isBorrower() || (!Auth::user()->isInternalStaff() && !Auth::user()->isLender()))
                     <a href="{{ route('loans.index') }}" title="My Loans"
                        :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
                        class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('loans.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
@@ -147,8 +147,8 @@
                     </a>
                     @endif
 
-                    <!-- 4. Wallet, Collateral, & Calculator (Non-Admin Users) -->
-                    @if(!Auth::user()->isAdmin())
+                    <!-- 4. Wallet, Collateral, & Calculator (Non-Internal Users) -->
+                    @if(!Auth::user()->isInternalStaff())
                     <!-- Wallet & Saldo -->
                     <a href="{{ route('wallet.index') }}" title="Wallet & Saldo"
                        :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
@@ -180,9 +180,13 @@
                     </a>
                     @endif
 
-                    <!-- Admin Menu Section -->
-                    @if(Auth::user()->isAdmin())
-                        <div x-show="!sidebarCollapsed" class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">Approvals</div>
+                    <!-- Internal Staff Menu Section (Admin, Customer Service, Collection Officer) -->
+                    @if(Auth::user()->isInternalStaff())
+                        <!-- Approvals Group -->
+                        @if(Auth::user()->isAdmin() || Auth::user()->isCustomerService() || Auth::user()->isCollectionOfficer())
+                        <div x-show="!sidebarCollapsed" class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">Approvals &amp; Review</div>
+                        
+                        @if(Auth::user()->isAdmin() || Auth::user()->isCustomerService())
                         <a href="{{ route('admin.kyc.index') }}" title="Review KYC"
                            :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
                            class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.kyc.*') ? 'bg-amber-50 text-amber-800 border-l-4 border-amber-600 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
@@ -191,15 +195,20 @@
                             </svg>
                             <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Review KYC</span>
                         </a>
+                        @endif
+
                         <a href="{{ route('admin.loans.index') }}" title="Review Loans"
                            :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
                            class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.loans.*') ? 'bg-amber-50 text-amber-800 border-l-4 border-amber-600 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
                             <svg class="h-5 w-5 shrink-0 text-amber-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
                             </svg>
-                            <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Review Loans</span>
+                            <span x-show="!sidebarCollapsed" class="whitespace-nowrap">{{ Auth::user()->isCollectionOfficer() ? 'Loan Overdue Review' : 'Review Loans' }}</span>
                         </a>
+                        @endif
 
+                        <!-- Governance Group (Admin & CS) -->
+                        @if(Auth::user()->isAdmin() || Auth::user()->isCustomerService())
                         <div x-show="!sidebarCollapsed" class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">Governance</div>
                         <a href="{{ route('admin.users.index') }}" title="User Management"
                            :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
@@ -209,6 +218,9 @@
                             </svg>
                             <span x-show="!sidebarCollapsed" class="whitespace-nowrap">User Management</span>
                         </a>
+                        @endif
+
+                        @if(Auth::user()->isAdmin())
                         <a href="{{ route('admin.financials.index') }}" title="Financial Configuration"
                            :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
                            class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.financials.*') ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-600 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
@@ -225,7 +237,10 @@
                             </svg>
                             <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Role Management</span>
                         </a>
+                        @endif
 
+                        <!-- Monitoring Group (Admin & Collection Officer) -->
+                        @if(Auth::user()->isAdmin() || Auth::user()->isCollectionOfficer())
                         <div x-show="!sidebarCollapsed" class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">Monitoring</div>
                         <a href="{{ route('admin.transactions.index') }}" title="Transaction Monitoring"
                            :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
@@ -233,8 +248,11 @@
                             <svg class="h-5 w-5 shrink-0 text-slate-500" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"/>
                             </svg>
-                            <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Transactions</span>
+                            <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Transactions Audit</span>
                         </a>
+                        @endif
+
+                        @if(Auth::user()->isAdmin())
                         <a href="{{ route('admin.analytics.index') }}" title="Platform Analytics"
                            :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
                            class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.analytics.*') ? 'bg-slate-100 text-slate-800 border-l-4 border-slate-600 shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
@@ -243,6 +261,7 @@
                             </svg>
                             <span x-show="!sidebarCollapsed" class="whitespace-nowrap">Platform Analytics</span>
                         </a>
+                        @endif
                     @endif
 
                     <!-- Account & Settings -->

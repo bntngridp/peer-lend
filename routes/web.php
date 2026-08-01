@@ -131,27 +131,36 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         });
     });
 
-    // 👑 Admin-Only Panel Routes
-    Route::middleware('role:admin,customer_service,collection_officer')->prefix('admin')->name('admin.')->group(function () {
-        Route::get('/kyc', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'index'])->name('kyc.index');
-        Route::get('/kyc/{kyc}', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'show'])->name('kyc.show');
-        Route::post('/kyc/{kyc}/approve', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'approve'])->name('kyc.approve');
-        Route::post('/kyc/{kyc}/reject', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'reject'])->name('kyc.reject');
-        
-        // Secured streaming endpoint for private documents
-        Route::get('/kyc/document/{document}', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'streamDocument'])->name('kyc.document');
+    // 👑 Internal Staff Panel Routes (Admin, Customer Service, Collection Officer)
+    Route::prefix('admin')->name('admin.')->group(function () {
+        // KYC Verification & User Directory (Admin & CS)
+        Route::middleware('role:admin,customer_service')->group(function () {
+            Route::get('/kyc', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'index'])->name('kyc.index');
+            Route::get('/kyc/{kyc}', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'show'])->name('kyc.show');
+            Route::post('/kyc/{kyc}/approve', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'approve'])->name('kyc.approve');
+            Route::post('/kyc/{kyc}/reject', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'reject'])->name('kyc.reject');
+            Route::get('/kyc/document/{document}', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'streamDocument'])->name('kyc.document');
+            Route::get('/users', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'users'])->name('users.index');
+        });
 
-        // Admin Loan Review & Disbursement
-        Route::get('/loans', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'index'])->name('loans.index');
-        Route::get('/loans/{loan}', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'show'])->name('loans.show');
-        Route::post('/loans/{loan}/approve', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'approve'])->name('loans.approve');
-        Route::post('/loans/{loan}/disburse', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'disburse'])->name('loans.disburse');
+        // Admin Loan Review (Admin, CS & Collection Officer)
+        Route::middleware('role:admin,customer_service,collection_officer')->group(function () {
+            Route::get('/loans', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'index'])->name('loans.index');
+            Route::get('/loans/{loan}', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'show'])->name('loans.show');
+            Route::post('/loans/{loan}/approve', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'approve'])->name('loans.approve');
+            Route::post('/loans/{loan}/disburse', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'disburse'])->name('loans.disburse');
+        });
 
-        // Governance Suite Routes
-        Route::get('/users', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'users'])->name('users.index');
-        Route::get('/financials', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'financials'])->name('financials.index');
-        Route::get('/roles', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'roles'])->name('roles.index');
-        Route::get('/transactions', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'transactions'])->name('transactions.index');
-        Route::get('/analytics', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'analytics'])->name('analytics.index');
+        // Transaction Audit (Admin & Collection Officer)
+        Route::middleware('role:admin,collection_officer')->group(function () {
+            Route::get('/transactions', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'transactions'])->name('transactions.index');
+        });
+
+        // Superadmin Governance & Financial Suite (Admin Only)
+        Route::middleware('role:admin')->group(function () {
+            Route::get('/financials', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'financials'])->name('financials.index');
+            Route::get('/roles', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'roles'])->name('roles.index');
+            Route::get('/analytics', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'analytics'])->name('analytics.index');
+        });
     });
 });

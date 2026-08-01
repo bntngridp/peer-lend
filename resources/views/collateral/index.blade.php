@@ -26,9 +26,9 @@
             </div>
             <div class="mt-3">
                 <p class="text-3xl font-black text-slate-900 tracking-tight">
-                    $142,550,000
+                    Rp {{ number_format($totalPledgedValue ?? 1700000000, 0, ',', '.') }}
                 </p>
-                <p class="text-[11px] text-slate-400 font-medium mt-0.5">Across 1,245 active collateral positions</p>
+                <p class="text-[11px] text-slate-400 font-medium mt-0.5">Across {{ $cryptoLoans->count() }} active collateral positions</p>
             </div>
         </div>
 
@@ -36,13 +36,13 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">WEIGHTED AVG LTV</span>
-                <span class="text-xs font-bold text-emerald-700">Target &lt;45%</span>
+                <span class="text-xs font-bold text-emerald-700">Target &lt;65%</span>
             </div>
             <div class="mt-3">
                 <p class="text-3xl font-black text-slate-900 tracking-tight">
-                    42.8% <span class="text-xs font-bold text-slate-400 font-normal">(+1.2%)</span>
+                    {{ number_format($weightedAvgLtv ?? 78.0, 1) }}%
                 </p>
-                <p class="text-[11px] text-slate-400 font-medium mt-0.5">Margin Call Threshold: 65%</p>
+                <p class="text-[11px] text-slate-400 font-medium mt-0.5">Margin Call Threshold: 75%</p>
             </div>
         </div>
 
@@ -54,13 +54,13 @@
             </div>
             <div class="mt-3 space-y-1 text-xs font-semibold">
                 <div class="flex items-center gap-1.5 text-rose-600">
-                    <span class="h-2 w-2 rounded-full bg-rose-600"></span> 3 Loans in Liquidation Zone
+                    <span class="h-2 w-2 rounded-full bg-rose-600"></span> {{ $atRiskCount }} Loans in Liquidation Zone
                 </div>
                 <div class="flex items-center gap-1.5 text-amber-600">
-                    <span class="h-2 w-2 rounded-full bg-amber-500"></span> 12 Loans near Margin Call
+                    <span class="h-2 w-2 rounded-full bg-amber-500"></span> {{ $warningCount }} Loans near Margin Call
                 </div>
                 <div class="flex items-center gap-1.5 text-emerald-700">
-                    <span class="h-2 w-2 rounded-full bg-emerald-600"></span> 1,230 Healthy Positions
+                    <span class="h-2 w-2 rounded-full bg-emerald-600"></span> {{ $healthyCount }} Healthy Positions
                 </div>
             </div>
         </div>
@@ -83,12 +83,12 @@
                         <div class="h-9 w-9 rounded-full bg-amber-500 text-white font-black flex items-center justify-center text-xs shadow-xs">₿</div>
                         <div>
                             <span class="font-bold text-slate-900 text-xs block">Bitcoin (BTC)</span>
-                            <span class="text-[10px] text-slate-400 font-medium block">1,253.4 BTC Locked</span>
+                            <span class="text-[10px] text-slate-400 font-medium block">57.5 BTC Locked</span>
                         </div>
                     </div>
                     <div class="text-right">
-                        <span class="font-extrabold text-slate-900 text-xs block">$75,450,000</span>
-                        <span class="text-[10px] text-emerald-700 font-bold block">53% of Pool</span>
+                        <span class="font-extrabold text-slate-900 text-xs block">Rp 1.350.000.000</span>
+                        <span class="text-[10px] text-emerald-700 font-bold block">79% of Pool</span>
                     </div>
                 </div>
 
@@ -98,27 +98,12 @@
                         <div class="h-9 w-9 rounded-full bg-indigo-600 text-white font-black flex items-center justify-center text-xs shadow-xs">Ξ</div>
                         <div>
                             <span class="font-bold text-slate-900 text-xs block">Ethereum (ETH)</span>
-                            <span class="text-[10px] text-slate-400 font-medium block">14,220 ETH Locked</span>
+                            <span class="text-[10px] text-slate-400 font-medium block">150.0 ETH Locked</span>
                         </div>
                     </div>
                     <div class="text-right">
-                        <span class="font-extrabold text-slate-900 text-xs block">$42,100,000</span>
-                        <span class="text-[10px] text-emerald-700 font-bold block">30% of Pool</span>
-                    </div>
-                </div>
-
-                <!-- Tether -->
-                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="h-9 w-9 rounded-full bg-emerald-600 text-white font-black flex items-center justify-center text-xs shadow-xs">₮</div>
-                        <div>
-                            <span class="font-bold text-slate-900 text-xs block">Tether (USDT)</span>
-                            <span class="text-[10px] text-slate-400 font-medium block">25,050,000 USDT</span>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <span class="font-extrabold text-slate-900 text-xs block">$25,050,000</span>
-                        <span class="text-[10px] text-emerald-700 font-bold block">17% of Pool</span>
+                        <span class="font-extrabold text-slate-900 text-xs block">Rp 350.000.000</span>
+                        <span class="text-[10px] text-emerald-700 font-bold block">21% of Pool</span>
                     </div>
                 </div>
             </div>
@@ -135,43 +120,26 @@
             <div class="space-y-3 text-xs font-medium">
                 <div class="p-3 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-between">
                     <div>
-                        <span class="font-bold text-rose-900 block">High Risk (&gt;75% LTV)</span>
-                        <span class="text-[10px] text-rose-700">14 Loans Affected</span>
+                        <span class="font-bold text-rose-900 block">High Risk (&gt;80% LTV)</span>
+                        <span class="text-[10px] text-rose-700">{{ $atRiskCount }} Loans Affected</span>
                     </div>
-                    <span class="font-black text-rose-700">$12.4M Exposed</span>
+                    <span class="font-black text-rose-700">Rp 350.000.000</span>
                 </div>
 
                 <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between">
                     <div>
-                        <span class="font-bold text-amber-900 block">Medium Risk (60-75% LTV)</span>
-                        <span class="text-[10px] text-amber-700">64 Loans Affected</span>
+                        <span class="font-bold text-amber-900 block">Medium Risk (75-80% LTV)</span>
+                        <span class="text-[10px] text-amber-700">{{ $warningCount }} Loans Affected</span>
                     </div>
-                    <span class="font-black text-amber-700">$34.1M Exposed</span>
+                    <span class="font-black text-amber-700">Rp 1.350.000.000</span>
                 </div>
 
                 <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between">
                     <div>
-                        <span class="font-bold text-emerald-900 block">Low Risk (&lt;60% LTV)</span>
-                        <span class="text-[10px] text-emerald-700">1,167 Loans Healthy</span>
+                        <span class="font-bold text-emerald-900 block">Low Risk (&lt;75% LTV)</span>
+                        <span class="text-[10px] text-emerald-700">{{ $healthyCount }} Loans Healthy</span>
                     </div>
-                    <span class="font-black text-emerald-700">$96.0M Exposed</span>
-                </div>
-            </div>
-
-            <!-- Stress Test Scenarios Box -->
-            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
-                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">STRESS TEST SCENARIOS</span>
-                <div class="flex justify-between text-slate-600">
-                    <span>BTC drops 20%</span>
-                    <span class="font-bold text-rose-600">-$12.8M Impact</span>
-                </div>
-                <div class="flex justify-between text-slate-600">
-                    <span>ETH drops 15%</span>
-                    <span class="font-bold text-rose-600">-$6.4M Impact</span>
-                </div>
-                <div class="flex justify-between text-slate-600">
-                    <span>Stablecoin Depeg (5%)</span>
-                    <span class="font-bold text-rose-600">-$1.0M Impact</span>
+                    <span class="font-black text-emerald-700">Rp 0</span>
                 </div>
             </div>
         </div>
@@ -185,7 +153,7 @@
                 <span class="text-rose-600 text-sm"></span>
                 <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Liquidation Warnings &amp; Margin Calls</h3>
             </div>
-            <span class="text-xs font-bold text-rose-700">Action Required</span>
+            <span class="text-xs font-bold text-rose-700">Live API Feeds</span>
         </div>
 
         <div class="overflow-x-auto">
@@ -202,59 +170,46 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
+                    @forelse($cryptoLoans as $loan)
                     <tr class="hover:bg-slate-50/80 transition-colors">
-                        <td class="py-4 px-6 font-bold text-slate-900">#LN-8842</td>
-                        <td class="py-4 px-6 font-semibold text-slate-800">Genesis Block Partners</td>
-                        <td class="py-4 px-6 font-bold text-indigo-700">Ξ ETH (150 ETH)</td>
-                        <td class="py-4 px-6 font-extrabold text-rose-600">82.4%</td>
-                        <td class="py-4 px-6 font-semibold text-slate-900">$2,840.00</td>
+                        <td class="py-4 px-6 font-bold text-slate-900">#LN-{{ substr($loan->id, 0, 6) }}</td>
+                        <td class="py-4 px-6 font-semibold text-slate-800">
+                            {{ $loan->borrower?->profile?->full_name ?? 'Borrower' }}
+                        </td>
+                        <td class="py-4 px-6 font-bold text-indigo-700">
+                            {{ $loan->collateralCurrency?->code ?? 'CRYPTO' }} ({{ number_format($loan->collateral_amount, 4) }})
+                        </td>
+                        <td class="py-4 px-6 font-extrabold {{ $loan->current_ltv >= 80 ? 'text-rose-600' : 'text-amber-600' }}">
+                            {{ number_format($loan->current_ltv, 1) }}%
+                        </td>
+                        <td class="py-4 px-6 font-semibold text-slate-900">
+                            Rp {{ number_format($loan->liquidation_price ?? 0, 0, ',', '.') }}
+                        </td>
                         <td class="py-4 px-6">
-                            <span class="px-2.5 py-0.5 rounded text-[10px] font-extrabold bg-rose-100 text-rose-800 border border-rose-200">
-                                Margin Call Sent
-                            </span>
+                            @if($loan->current_ltv >= 80)
+                                <span class="px-2.5 py-0.5 rounded text-[10px] font-extrabold bg-rose-100 text-rose-800 border border-rose-200">
+                                    Margin Call Sent
+                                </span>
+                            @else
+                                <span class="px-2.5 py-0.5 rounded text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200">
+                                    Warning Active
+                                </span>
+                            @endif
                         </td>
                         <td class="py-4 px-6 text-right">
-                            <button class="py-1.5 px-3 rounded-xl bg-rose-600 text-white font-bold text-xs hover:bg-rose-700 shadow-xs">
+                            <a href="{{ route('loans.installments', $loan->id) }}" 
+                               class="py-1.5 px-3 rounded-xl {{ $loan->current_ltv >= 80 ? 'bg-rose-600 hover:bg-rose-700' : 'bg-emerald-700 hover:bg-emerald-800' }} text-white font-bold text-xs shadow-xs inline-block">
                                 Manage &rarr;
-                            </button>
+                            </a>
                         </td>
                     </tr>
-
-                    <tr class="hover:bg-slate-50/80 transition-colors">
-                        <td class="py-4 px-6 font-bold text-slate-900">#LN-9011</td>
-                        <td class="py-4 px-6 font-semibold text-slate-800">Apex Capital Ltd.</td>
-                        <td class="py-4 px-6 font-bold text-amber-600">₿ BTC (12.5 BTC)</td>
-                        <td class="py-4 px-6 font-extrabold text-amber-600">76.1%</td>
-                        <td class="py-4 px-6 font-semibold text-slate-900">$59,200.00</td>
-                        <td class="py-4 px-6">
-                            <span class="px-2.5 py-0.5 rounded text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200">
-                                Warning Active
-                            </span>
-                        </td>
-                        <td class="py-4 px-6 text-right">
-                            <button class="py-1.5 px-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 shadow-xs">
-                                Manage &rarr;
-                            </button>
+                    @empty
+                    <tr>
+                        <td colspan="7" class="py-8 text-center text-slate-400 font-medium">
+                            No active crypto collateral positions found.
                         </td>
                     </tr>
-
-                    <tr class="hover:bg-slate-50/80 transition-colors">
-                        <td class="py-4 px-6 font-bold text-slate-900">#LN-7722</td>
-                        <td class="py-4 px-6 font-semibold text-slate-800">Meridian Yield Fund</td>
-                        <td class="py-4 px-6 font-bold text-amber-600">₿ BTC (45.0 BTC)</td>
-                        <td class="py-4 px-6 font-extrabold text-amber-600">75.5%</td>
-                        <td class="py-4 px-6 font-semibold text-slate-900">$58,100.00</td>
-                        <td class="py-4 px-6">
-                            <span class="px-2.5 py-0.5 rounded text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200">
-                                Warning Active
-                            </span>
-                        </td>
-                        <td class="py-4 px-6 text-right">
-                            <button class="py-1.5 px-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 shadow-xs">
-                                Manage &rarr;
-                            </button>
-                        </td>
-                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

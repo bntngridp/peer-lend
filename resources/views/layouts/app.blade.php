@@ -166,9 +166,13 @@
             @auth
             <div class="p-3 border-t border-slate-100 bg-slate-50/50">
                 <div class="flex items-center gap-3">
-                    <div class="h-9 w-9 rounded-xl bg-emerald-700 text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0">
-                        {{ strtoupper(substr(Auth::user()->profile->full_name ?? Auth::user()->email, 0, 2)) }}
-                    </div>
+                    @if(Auth::user()->profile && Auth::user()->profile->avatar_path)
+                        <img class="h-9 w-9 rounded-xl object-cover border border-slate-200 shadow-xs shrink-0" src="{{ asset('storage/' . Auth::user()->profile->avatar_path) }}" alt="Avatar">
+                    @else
+                        <div class="h-9 w-9 rounded-xl bg-emerald-700 text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0 select-none">
+                            {{ strtoupper(substr(Auth::user()->profile->full_name ?? Auth::user()->email, 0, 2)) }}
+                        </div>
+                    @endif
                     <div x-show="!sidebarCollapsed" class="flex-1 min-w-0">
                         <p class="text-xs font-bold text-slate-900 truncate">{{ Auth::user()->profile->full_name ?? 'User' }}</p>
                         <p class="text-[11px] font-medium text-slate-500 truncate capitalize">{{ Auth::user()->roles->first()?->name ?? 'Member' }}</p>

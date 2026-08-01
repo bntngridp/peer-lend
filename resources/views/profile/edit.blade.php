@@ -50,26 +50,40 @@
             @method('PUT')
 
             <!-- Profile Photo -->
-            <div>
+            <div x-data="{ avatarPreview: null }">
                 <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Profile Photo</label>
                 <div class="flex items-center gap-5">
-                    @if($user->profile && $user->profile->avatar_path)
-                        <img class="h-16 w-16 rounded-2xl object-cover border border-slate-200 shadow-xs"
-                             src="{{ asset('storage/' . $user->profile->avatar_path) }}" alt="Avatar">
-                    @elseif($user->avatar)
-                        <img class="h-16 w-16 rounded-2xl object-cover border border-slate-200 shadow-xs"
-                             src="{{ $user->avatar }}" alt="Google Avatar">
-                    @else
-                        <div class="h-16 w-16 rounded-2xl bg-emerald-700 text-white font-black text-xl flex items-center justify-center shadow-xs">
-                            {{ strtoupper(substr($user->profile->full_name ?? $user->email, 0, 2)) }}
+                    <template x-if="avatarPreview">
+                        <img :src="avatarPreview" class="h-16 w-16 rounded-2xl object-cover border border-slate-200 shadow-xs">
+                    </template>
+                    <template x-if="!avatarPreview">
+                        <div>
+                            @if($user->profile && $user->profile->avatar_path)
+                                <img class="h-16 w-16 rounded-2xl object-cover border border-slate-200 shadow-xs"
+                                     src="{{ asset('storage/' . $user->profile->avatar_path) }}" alt="Avatar">
+                            @else
+                                <div class="h-16 w-16 rounded-2xl bg-emerald-700 text-white font-black text-xl flex items-center justify-center shadow-xs select-none">
+                                    {{ strtoupper(substr($user->profile->full_name ?? $user->email, 0, 2)) }}
+                                </div>
+                            @endif
                         </div>
-                    @endif
+                    </template>
+
                     <div>
-                        <input type="file" name="avatar" id="avatar" class="hidden" accept="image/*">
+                        <input type="file" name="avatar" id="avatar" class="hidden" accept="image/*"
+                               @change="
+                                   const file = $event.target.files[0];
+                                   if (file) {
+                                       avatarPreview = URL.createObjectURL(file);
+                                   }
+                               ">
                         <label for="avatar" class="cursor-pointer inline-flex items-center py-2 px-4 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors shadow-xs">
                             Change Photo
                         </label>
                         <p class="text-[10px] text-slate-400 font-medium mt-1">JPG or PNG. Max 2MB.</p>
+                        @error('avatar')
+                            <p class="text-[11px] font-bold text-rose-600 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
             </div>

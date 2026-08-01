@@ -18,14 +18,14 @@
             <!-- Sub-navigation Links -->
             <div class="space-y-1 text-xs font-semibold text-slate-600">
                 <button @click="notifTab = 'all'"
-                        :class="notifTab === 'all' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'hover:bg-slate-50 hover:text-slate-900'"
+                        :class="notifTab === 'all' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'"
                         class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all text-left">
                     <span>All Notifications</span>
                     <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">{{ $notifications->count() }}</span>
                 </button>
 
                 <button @click="notifTab = 'unread'"
-                        :class="notifTab === 'unread' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'hover:bg-slate-50 hover:text-slate-900'"
+                        :class="notifTab === 'unread' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'"
                         class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all text-left">
                     <span>Unread</span>
                     @if($unreadCount > 0)
@@ -34,19 +34,19 @@
                 </button>
 
                 <button @click="notifTab = 'loan'"
-                        :class="notifTab === 'loan' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'hover:bg-slate-50 hover:text-slate-900'"
+                        :class="notifTab === 'loan' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'"
                         class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all text-left">
                     <span>Loan Alerts</span>
                 </button>
 
                 <button @click="notifTab = 'wallet'"
-                        :class="notifTab === 'wallet' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'hover:bg-slate-50 hover:text-slate-900'"
+                        :class="notifTab === 'wallet' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'"
                         class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all text-left">
                     <span>Wallet Updates</span>
                 </button>
 
                 <button @click="notifTab = 'security'"
-                        :class="notifTab === 'security' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'hover:bg-slate-50 hover:text-slate-900'"
+                        :class="notifTab === 'security' ? 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'"
                         class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all text-left">
                     <span>Security</span>
                 </button>

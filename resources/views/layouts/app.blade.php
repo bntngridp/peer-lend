@@ -28,6 +28,48 @@
         .border-primary-green { border-color: #15803D; }
         .hover\:bg-primary-green-dark:hover { background-color: #166534; }
     </style>
+    @php
+        $sysTheme = auth()->user()?->profile?->system_preferences['color_theme'] ?? 'light';
+        $sysDensity = auth()->user()?->profile?->system_preferences['data_density'] ?? 'comfortable';
+    @endphp
+    <script>
+        (function() {
+            const serverTheme = @json($sysTheme);
+            const serverDensity = @json($sysDensity);
+            const theme = localStorage.getItem('lendflow_theme') || serverTheme;
+            const density = localStorage.getItem('lendflow_density') || serverDensity;
+            
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+
+            if (density === 'compact') {
+                document.documentElement.classList.add('density-compact');
+            } else {
+                document.documentElement.classList.remove('density-compact');
+            }
+        })();
+
+        window.applyTheme = function(t) {
+            localStorage.setItem('lendflow_theme', t);
+            if (t === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        };
+
+        window.applyDensity = function(d) {
+            localStorage.setItem('lendflow_density', d);
+            if (d === 'compact') {
+                document.documentElement.classList.add('density-compact');
+            } else {
+                document.documentElement.classList.remove('density-compact');
+            }
+        };
+    </script>
 </head>
 <body class="h-full bg-slate-50 text-slate-900 antialiased" x-data="{ sidebarOpen: false, sidebarCollapsed: false, logoutModalOpen: false }">
 

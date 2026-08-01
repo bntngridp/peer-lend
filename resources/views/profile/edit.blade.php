@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-6 max-w-6xl mx-auto" x-data="{ profileTab: '{{ session('tab') ?? request('tab') ?? 'personal' }}', colorTheme: 'light', density: 'comfortable', disable2faModalOpen: false, generateTokenModalOpen: false }">
+<div class="space-y-6 max-w-6xl mx-auto" x-data="{ profileTab: '{{ session('tab') ?? request('tab') ?? 'personal' }}', colorTheme: localStorage.getItem('lendflow_theme') || '{{ $user->profile?->system_preferences['color_theme'] ?? 'light' }}', density: localStorage.getItem('lendflow_density') || '{{ $user->profile?->system_preferences['data_density'] ?? 'comfortable' }}', disable2faModalOpen: false, generateTokenModalOpen: false }">
     
     <!-- Top Header Bar -->
     <div>
@@ -23,7 +23,7 @@
                 :class="profileTab === 'notifications' ? 'text-emerald-700 border-b-2 border-emerald-700 pb-3' : 'hover:text-slate-800 pb-3'">
             Notification Preferences
         </button>
-        <button @click="profileTab = 'system'" 
+        <button @click="profileTab = 'system'" id="tab_btn_system"
                 :class="profileTab === 'system' ? 'text-emerald-700 border-b-2 border-emerald-700 pb-3' : 'hover:text-slate-800 pb-3'">
             System Preferences
         </button>
@@ -464,14 +464,14 @@
                         <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Color Theme</label>
                         <div class="flex gap-3">
                             <label class="cursor-pointer">
-                                <input type="radio" name="color_theme" value="light" class="sr-only" @change="colorTheme = 'light'" {{ ($sysSettings['color_theme'] ?? 'light') === 'light' ? 'checked' : '' }}>
+                                <input type="radio" id="radio_theme_light" name="color_theme" value="light" class="sr-only" @change="colorTheme = 'light'; applyTheme('light')" {{ ($sysSettings['color_theme'] ?? 'light') === 'light' ? 'checked' : '' }}>
                                 <div :class="colorTheme === 'light' ? 'border-emerald-700 bg-white shadow-xs' : 'border-slate-200 bg-slate-100'"
                                      class="py-2.5 px-6 rounded-xl border text-xs font-bold text-slate-800 flex items-center gap-2">
                                     Light Theme
                                 </div>
                             </label>
                             <label class="cursor-pointer">
-                                <input type="radio" name="color_theme" value="dark" class="sr-only" @change="colorTheme = 'dark'" {{ ($sysSettings['color_theme'] ?? 'light') === 'dark' ? 'checked' : '' }}>
+                                <input type="radio" id="radio_theme_dark" name="color_theme" value="dark" class="sr-only" @change="colorTheme = 'dark'; applyTheme('dark')" {{ ($sysSettings['color_theme'] ?? 'light') === 'dark' ? 'checked' : '' }}>
                                 <div :class="colorTheme === 'dark' ? 'border-emerald-700 bg-slate-900 text-white shadow-xs' : 'border-slate-200 bg-slate-100'"
                                      class="py-2.5 px-6 rounded-xl border text-xs font-bold text-slate-700 flex items-center gap-2">
                                     Dark Theme
@@ -483,24 +483,24 @@
                     <div>
                         <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Data Density</label>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <label @click="density = 'comfortable'"
+                            <label @click="density = 'comfortable'; applyDensity('comfortable')"
                                    :class="density === 'comfortable' ? 'border-emerald-700 bg-white' : 'border-slate-200 bg-slate-100'"
                                    class="p-3.5 rounded-xl border flex items-center justify-between cursor-pointer">
                                 <div>
                                     <span class="font-bold text-slate-900 text-xs block">Comfortable</span>
                                     <span class="text-[10px] text-slate-500 font-medium">More whitespace, easier to read.</span>
                                 </div>
-                                <input type="radio" name="data_density" value="comfortable" {{ ($sysSettings['data_density'] ?? 'comfortable') === 'comfortable' ? 'checked' : '' }} class="accent-emerald-700">
+                                <input type="radio" id="radio_density_comfortable" name="data_density" value="comfortable" @change="density = 'comfortable'; applyDensity('comfortable')" {{ ($sysSettings['data_density'] ?? 'comfortable') === 'comfortable' ? 'checked' : '' }} class="accent-emerald-700">
                             </label>
 
-                            <label @click="density = 'compact'"
+                            <label @click="density = 'compact'; applyDensity('compact')"
                                    :class="density === 'compact' ? 'border-emerald-700 bg-white' : 'border-slate-200 bg-slate-100'"
                                    class="p-3.5 rounded-xl border flex items-center justify-between cursor-pointer">
                                 <div>
                                     <span class="font-bold text-slate-900 text-xs block">Compact</span>
                                     <span class="text-[10px] text-slate-500 font-medium">High information density for trading.</span>
                                 </div>
-                                <input type="radio" name="data_density" value="compact" {{ ($sysSettings['data_density'] ?? 'comfortable') === 'compact' ? 'checked' : '' }} class="accent-emerald-700">
+                                <input type="radio" id="radio_density_compact" name="data_density" value="compact" @change="density = 'compact'; applyDensity('compact')" {{ ($sysSettings['data_density'] ?? 'comfortable') === 'compact' ? 'checked' : '' }} class="accent-emerald-700">
                             </label>
                         </div>
                     </div>

@@ -37,15 +37,15 @@ class Google2FAService
     }
 
     /**
-     * Generate Google Authenticator compatible QR Code URL via Google Chart API.
+     * Generate Google Authenticator compatible QR Code URL.
      */
     public function getQRCodeUrl(string $email, string $secret): string
     {
-        $issuer = 'Peer-Lend';
+        $issuer = 'LendFlow';
         $label = rawurlencode($issuer . ':' . $email);
-        $qrUrl = "otpauth://totp/{$label}?secret={$secret}&issuer=" . rawurlencode($issuer);
+        $otpUrl = "otpauth://totp/{$label}?secret={$secret}&issuer=" . rawurlencode($issuer);
 
-        return "https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=" . urlencode($qrUrl);
+        return "https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=0&data=" . urlencode($otpUrl);
     }
 
     /**

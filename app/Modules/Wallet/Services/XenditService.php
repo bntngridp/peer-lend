@@ -78,18 +78,20 @@ class XenditService
             ]);
 
             // Deduct user wallet balance
+            $idr = \App\Models\Currency::where('code', 'IDR')->firstOrFail();
             $this->walletService->withdraw(
                 user: $user,
-                currencyCode: 'IDR',
-                amount: $amount,
-                paymentGatewayRefId: $mockResponse['id']
+                currencyId: $idr->id,
+                amount: (string) $amount,
+                description: "Xendit payout: {$mockResponse['id']}"
             );
 
             // Send notification
             $this->notificationService->send(
-                userId: $user->id,
-                title: 'Penarikan Dana Berhasil / Withdrawal Completed',
-                message: "Penarikan sebesar Rp " . number_format($amount, 0, ',', '.') . " ke rekening {$bankCode} - {$accountNumber} berhasil diproses via Xendit."
+                $user,
+                'wallet_withdrawal',
+                'Penarikan Dana Berhasil / Withdrawal Completed',
+                "Penarikan sebesar Rp " . number_format($amount, 0, ',', '.') . " ke rekening {$bankCode} - {$accountNumber} berhasil diproses via Xendit."
             );
 
             return [
@@ -179,12 +181,14 @@ class XenditService
             $user = $payment->user;
 
             if ($user) {
-                $this->walletService->withdraw($user, 'IDR', (float) $payment->amount, $disbursementId);
+                $idr = \App\Models\Currency::where('code', 'IDR')->firstOrFail();
+                $this->walletService->withdraw($user, $idr->id, (string) $payment->amount, "Xendit withdrawal: {$disbursementId}");
 
                 $this->notificationService->send(
-                    userId: $user->id,
-                    title: 'Penarikan Dana Berhasil / Withdrawal Confirmed',
-                    message: "Penarikan sebesar Rp " . number_format($payment->amount, 0, ',', '.') . " telah sukses ditransfer ke rekening bank Anda."
+                    $user,
+                    'wallet_withdrawal',
+                    'Penarikan Dana Berhasil / Withdrawal Confirmed',
+                    "Penarikan sebesar Rp " . number_format($payment->amount, 0, ',', '.') . " telah sukses ditransfer ke rekening bank Anda."
                 );
             }
 

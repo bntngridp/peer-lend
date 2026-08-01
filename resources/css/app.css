@@ -19,12 +19,39 @@ html.dark body {
     color: #f1f5f9 !important;
 }
 
-/* Sidebar & Header Navigation */
+/* Sidebar & Header Navigation Container */
 html.dark aside,
 html.dark header,
 html.dark nav {
     background-color: #111827 !important;
     border-color: #1e293b !important;
+}
+
+/* Sidebar Active & Inactive Navigation Links */
+html.dark nav a.bg-emerald-50,
+html.dark nav a.bg-emerald-50:hover,
+html.dark .bg-emerald-50 {
+    background-color: rgba(6, 78, 59, 0.55) !important;
+    color: #34d399 !important;
+    border-left-color: #10b981 !important;
+}
+
+html.dark nav a.bg-emerald-50 svg,
+html.dark nav a.bg-emerald-50 span {
+    color: #34d399 !important;
+}
+
+html.dark nav a.text-slate-600 {
+    color: #94a3b8 !important;
+}
+
+html.dark nav a.text-slate-600:hover {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+}
+
+html.dark nav a.text-slate-600:hover svg {
+    color: #34d399 !important;
 }
 
 /* Card & Content Panels */
@@ -92,7 +119,7 @@ html.dark .bg-emerald-700:hover {
 
 /* Badges & Status Pills */
 html.dark .bg-emerald-100,
-html.dark .bg-emerald-50 {
+html.dark .bg-emerald-50:not(nav a) {
     background-color: rgba(6, 78, 59, 0.4) !important;
     color: #34d399 !important;
     border-color: rgba(5, 150, 105, 0.4) !important;

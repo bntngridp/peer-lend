@@ -95,7 +95,7 @@
     </div>
 
     <!-- ─── Tab 1: Deposit Funds ─────────────────────────────────────────── -->
-    <div x-show="activeTab === 'deposit'" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <div x-show="activeTab === 'deposit'" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start" x-data="{ depMethod: 'midtrans' }">
         
         <!-- Form Left Side (Spans 8 Cols) -->
         <div class="lg:col-span-8 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6">
@@ -103,25 +103,31 @@
 
             <!-- 1. Funding Source Cards -->
             <div class="space-y-2">
-                <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">1. Funding Source</label>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div class="p-3.5 rounded-xl border border-emerald-700 bg-emerald-50/50 flex flex-col justify-between cursor-pointer">
-                        <span class="text-xs font-bold text-slate-900 block">Bank Transfer</span>
-                        <span class="text-[10px] text-emerald-800 font-semibold mt-1">Midtrans / Virtual Account</span>
+                <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">1. Funding Gateway Method</label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div @click="depMethod = 'midtrans'"
+                         :class="depMethod === 'midtrans' ? 'border-emerald-700 bg-emerald-50/50 text-emerald-900' : 'border-slate-200 bg-slate-50/50 text-slate-600 hover:border-slate-300'"
+                         class="p-3.5 rounded-xl border flex flex-col justify-between cursor-pointer transition-all">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold block">Midtrans VA / QRIS</span>
+                            <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-emerald-100 text-emerald-800">Fiat IDR</span>
+                        </div>
+                        <span class="text-[10px] font-semibold mt-1.5 opacity-80">BCA, Mandiri, BNI, BRI Virtual Account &amp; QRIS</span>
                     </div>
-                    <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 opacity-60 flex flex-col justify-between cursor-pointer">
-                        <span class="text-xs font-bold text-slate-700 block">Wire Transfer</span>
-                        <span class="text-[10px] text-slate-400 font-medium mt-1">Domestic / Intl</span>
-                    </div>
-                    <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 opacity-60 flex flex-col justify-between cursor-pointer">
-                        <span class="text-xs font-bold text-slate-700 block">Crypto Deposit</span>
-                        <span class="text-[10px] text-slate-400 font-medium mt-1">USDC / USDT</span>
+                    <div @click="depMethod = 'nowpayments'"
+                         :class="depMethod === 'nowpayments' ? 'border-emerald-700 bg-emerald-50/50 text-emerald-900' : 'border-slate-200 bg-slate-50/50 text-slate-600 hover:border-slate-300'"
+                         class="p-3.5 rounded-xl border flex flex-col justify-between cursor-pointer transition-all">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold block">NOWPayments Crypto</span>
+                            <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-indigo-100 text-indigo-800">300+ Crypto</span>
+                        </div>
+                        <span class="text-[10px] font-semibold mt-1.5 opacity-80">USDT (TRC20/ERC20), USDC, BTC, ETH, SOL</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 2. Deposit Amount Form -->
-            <form id="deposit-form" action="{{ route('wallet.deposit') }}" method="POST" class="space-y-4 pt-2">
+            <!-- 2. Midtrans Deposit Form -->
+            <form x-show="depMethod === 'midtrans'" id="deposit-form" action="{{ route('wallet.deposit') }}" method="POST" class="space-y-4 pt-2">
                 @csrf
                 <div>
                     <label for="dep_currency_id" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Select Currency</label>
@@ -133,7 +139,7 @@
                 </div>
 
                 <div>
-                    <label for="dep_amount" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">2. Amount to Deposit (IDR)</label>
+                    <label for="dep_amount" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Deposit Amount (IDR)</label>
                     <input type="number" name="amount" id="dep_amount" required min="10000" step="50000"
                            class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                            placeholder="e.g. 500000">
@@ -141,7 +147,35 @@
 
                 <button type="submit" id="submit-deposit-btn"
                         class="w-full py-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
-                    Submit Deposit &rarr;
+                    Pay via Midtrans Snap &rarr;
+                </button>
+            </form>
+
+            <!-- 3. NOWPayments Crypto Deposit Form -->
+            <form x-show="depMethod === 'nowpayments'" id="crypto-deposit-form" style="display: none;" class="space-y-4 pt-2">
+                @csrf
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Select Crypto Currency</label>
+                    <select id="crypto_dep_currency" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none">
+                        <option value="usdttrc20">USDT (TRC-20)</option>
+                        <option value="usdterc20">USDT (ERC-20)</option>
+                        <option value="usdc">USDC (USD Coin)</option>
+                        <option value="btc">Bitcoin (BTC)</option>
+                        <option value="eth">Ethereum (ETH)</option>
+                        <option value="sol">Solana (SOL)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Amount (USD equivalent)</label>
+                    <input type="number" id="crypto_dep_amount" required min="5" step="10" value="100"
+                           class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
+                           placeholder="e.g. 100">
+                </div>
+
+                <button type="submit" id="submit-crypto-dep-btn"
+                        class="w-full py-3 rounded-xl bg-indigo-700 text-white font-bold text-xs hover:bg-indigo-800 transition-colors shadow-xs">
+                    Generate NOWPayments Invoice &rarr;
                 </button>
             </form>
         </div>
@@ -150,21 +184,21 @@
         <div class="lg:col-span-4 space-y-4">
             <!-- Deposit Limits Box -->
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-3">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">DEPOSIT LIMITS</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">GATEWAY SPECS</span>
                 
                 <div class="space-y-2 text-xs">
                     <div class="flex justify-between py-1 border-b border-slate-100 font-medium">
-                        <span class="text-slate-500">Daily Limit</span>
-                        <span class="font-bold text-slate-900">Rp 100.000.000</span>
+                        <span class="text-slate-500">Fiat Gateway</span>
+                        <span class="font-bold text-emerald-800">Midtrans Snap</span>
                     </div>
                     <div class="flex justify-between py-1 border-b border-slate-100 font-medium">
-                        <span class="text-slate-500">Monthly Limit</span>
-                        <span class="font-bold text-slate-900">Rp 500.000.000</span>
+                        <span class="text-slate-500">Crypto Gateway</span>
+                        <span class="font-bold text-indigo-800">NOWPayments IPN</span>
                     </div>
                 </div>
 
                 <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-[11px] text-emerald-900 font-medium">
-                    <strong>Expected Processing Time:</strong> Instant settlement for Bank Transfer via Midtrans Virtual Account.
+                    <strong>Expected Settlement:</strong> Instant settlement via Virtual Account / Webhook IPN Callback.
                 </div>
             </div>
         </div>
@@ -172,47 +206,115 @@
     </div>
 
     <!-- ─── Tab 2: Withdraw Funds ───────────────────────────────────────── -->
-    <div x-show="activeTab === 'withdraw'" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start" style="display: none;">
+    <div x-show="activeTab === 'withdraw'" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start" style="display: none;" x-data="{ wdMethod: 'xendit' }">
         
         <!-- Form Left Side (Spans 8 Cols) -->
         <div class="lg:col-span-8 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6">
-            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">Transfer available balance to connected bank account</h3>
+            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">Automated Withdrawal &amp; Instant Payout</h3>
 
-            <form action="{{ route('wallet.withdraw') }}" method="POST" class="space-y-6">
+            <!-- Method Selection Cards -->
+            <div class="space-y-2">
+                <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">Withdrawal Gateway</label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div @click="wdMethod = 'xendit'"
+                         :class="wdMethod === 'xendit' ? 'border-emerald-700 bg-emerald-50/50 text-emerald-900' : 'border-slate-200 bg-slate-50/50 text-slate-600 hover:border-slate-300'"
+                         class="p-3.5 rounded-xl border flex flex-col justify-between cursor-pointer transition-all">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold block">Xendit Instan Bank Payout</span>
+                            <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-emerald-100 text-emerald-800">140+ Bank IDR</span>
+                        </div>
+                        <span class="text-[10px] font-semibold mt-1.5 opacity-80">BCA, Mandiri, BNI, BRI, Permata 24/7 Transfer</span>
+                    </div>
+                    <div @click="wdMethod = 'nowpayments'"
+                         :class="wdMethod === 'nowpayments' ? 'border-emerald-700 bg-emerald-50/50 text-emerald-900' : 'border-slate-200 bg-slate-50/50 text-slate-600 hover:border-slate-300'"
+                         class="p-3.5 rounded-xl border flex flex-col justify-between cursor-pointer transition-all">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold block">NOWPayments Crypto Payout</span>
+                            <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-indigo-100 text-indigo-800">Crypto Address</span>
+                        </div>
+                        <span class="text-[10px] font-semibold mt-1.5 opacity-80">Instant Payout to USDT, USDC, BTC, ETH Wallet</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Xendit Bank Withdrawal Form -->
+            <form x-show="wdMethod === 'xendit'" id="xendit-withdraw-form" class="space-y-4 pt-2">
                 @csrf
-                
-                <!-- 1. Destination Bank Account -->
-                <div class="space-y-2">
-                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">1. Destination Bank Account</label>
-                    <select name="bank_account" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none">
-                        <option value="bca">Bank BCA (**** 8492) - Bintang Ridwan</option>
-                        <option value="mandiri">Bank Mandiri (**** 1204) - Bintang Ridwan</option>
-                    </select>
-                    <p class="text-[11px] text-slate-400 font-medium">Standard ACH/Bank transfers typically take 1-3 business days.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Destination Bank</label>
+                        <select id="wd_bank_code" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none">
+                            <option value="BCA">Bank BCA</option>
+                            <option value="MANDIRI">Bank Mandiri</option>
+                            <option value="BNI">Bank BNI</option>
+                            <option value="BRI">Bank BRI</option>
+                            <option value="PERMATA">Bank Permata</option>
+                            <option value="CIMB">Bank CIMB Niaga</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Account Number</label>
+                        <input type="text" id="wd_account_number" required value="8492019482"
+                               class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none"
+                               placeholder="e.g. 8492019482">
+                    </div>
                 </div>
 
-                <!-- 2. Withdrawal Details -->
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between">
-                        <label for="wd_amount" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">2. Withdrawal Details</label>
-                        <span class="text-xs font-bold text-emerald-700 cursor-pointer" onclick="document.getElementById('wd_amount').value = '{{ (int)$availableBalance }}'">
-                            Withdraw Max: Rp {{ number_format($availableBalance, 0, ',', '.') }}
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Account Holder Name</label>
+                    <input type="text" id="wd_account_holder_name" required value="{{ Auth::user()->profile?->full_name ?? Auth::user()->email }}"
+                           class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none"
+                           placeholder="Full Name as registered in Bank">
+                </div>
+
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Amount (IDR)</label>
+                        <span class="text-xs font-bold text-emerald-700 cursor-pointer" onclick="document.getElementById('wd_xendit_amount').value = '{{ (int)$availableBalance }}'">
+                            Max: Rp {{ number_format($availableBalance, 0, ',', '.') }}
                         </span>
                     </div>
-                    
-                    <select name="currency_id" class="w-full rounded-xl border border-slate-200 px-3.5 py-2 text-xs font-semibold text-slate-800 outline-none mb-2">
-                        @foreach($currencies as $curr)
-                            <option value="{{ $curr->id }}">{{ $curr->code }} - {{ $curr->name }}</option>
-                        @endforeach
-                    </select>
-
-                    <input type="number" name="amount" id="wd_amount" required min="10000" step="50000"
-                           class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
-                           placeholder="Enter amount to withdraw...">
+                    <input type="number" id="wd_xendit_amount" required min="50000" step="50000" value="100000"
+                           class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none"
+                           placeholder="Min. Rp 50.000">
                 </div>
 
-                <button type="submit" class="w-full py-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
-                    Continue to Verification &rarr;
+                <button type="submit" id="submit-xendit-wd-btn" class="w-full py-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
+                    Process Xendit Instant Transfer &rarr;
+                </button>
+            </form>
+
+            <!-- NOWPayments Crypto Withdrawal Form -->
+            <form x-show="wdMethod === 'nowpayments'" id="crypto-withdraw-form" style="display: none;" class="space-y-4 pt-2">
+                @csrf
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Crypto Asset</label>
+                    <select id="wd_crypto_currency" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none">
+                        <option value="usdttrc20">USDT (TRC-20)</option>
+                        <option value="usdterc20">USDT (ERC-20)</option>
+                        <option value="usdc">USDC (USD Coin)</option>
+                        <option value="btc">Bitcoin (BTC)</option>
+                        <option value="eth">Ethereum (ETH)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Wallet Destination Address</label>
+                    <input type="text" id="wd_crypto_address" required
+                           class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none font-mono text-xs"
+                           placeholder="e.g. TTYx8492019482910482910...">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Amount (USD Equivalent)</label>
+                    <input type="number" id="wd_crypto_amount" required min="10" value="50"
+                           class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none"
+                           placeholder="Min $10">
+                </div>
+
+                <button type="submit" id="submit-crypto-wd-btn" class="w-full py-3 rounded-xl bg-indigo-700 text-white font-bold text-xs hover:bg-indigo-800 transition-colors shadow-xs">
+                    Process NOWPayments Instant Payout &rarr;
                 </button>
             </form>
         </div>
@@ -220,7 +322,7 @@
         <!-- Withdraw Summary Right Side (Spans 4 Cols) -->
         <div class="lg:col-span-4 space-y-4">
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-4">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">SUMMARY</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">DISBURSEMENT SUMMARY</span>
 
                 <div class="space-y-2.5 text-xs font-medium">
                     <div class="flex justify-between py-1 border-b border-slate-100">
@@ -228,14 +330,14 @@
                         <span class="font-bold text-slate-900">Rp {{ number_format($availableBalance, 0, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between py-1 border-b border-slate-100">
-                        <span class="text-slate-500">Processing Fee (ACH)</span>
-                        <span class="font-bold text-emerald-700">Rp 0 (Free)</span>
+                        <span class="text-slate-500">Xendit / NOWPayments Fee</span>
+                        <span class="font-bold text-emerald-700">Rp 0 (Covered by Platform)</span>
                     </div>
                 </div>
 
                 <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px]">
-                    <span class="text-slate-400 font-bold uppercase tracking-wider block mb-1">ESTIMATED ARRIVAL</span>
-                    <span class="font-bold text-slate-900 block">1-3 Business Days</span>
+                    <span class="text-slate-400 font-bold uppercase tracking-wider block mb-1">ESTIMATED TRANSFER TIME</span>
+                    <span class="font-bold text-slate-900 block">Instant (24/7 Real-Time Payout)</span>
                 </div>
             </div>
         </div>
@@ -309,22 +411,23 @@
 
 </div>
 
-<!-- Deposit Midtrans Integration JS -->
+<!-- Midtrans, Xendit & NOWPayments Integration JS -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('deposit-form');
-    const submitBtn = document.getElementById('submit-deposit-btn');
+    // 1. Midtrans Deposit Form
+    const depositForm = document.getElementById('deposit-form');
+    const submitDepositBtn = document.getElementById('submit-deposit-btn');
 
-    if (form) {
-        form.addEventListener('submit', async (e) => {
+    if (depositForm) {
+        depositForm.addEventListener('submit', async (e) => {
             const selectEl = document.getElementById('dep_currency_id');
             const selectedOption = selectEl.options[selectEl.selectedIndex];
             const currencyCode = selectedOption.getAttribute('data-code');
 
             if (currencyCode === 'IDR') {
                 e.preventDefault();
-                submitBtn.disabled = true;
-                submitBtn.innerText = 'Initiating payment...';
+                submitDepositBtn.disabled = true;
+                submitDepositBtn.innerText = 'Initiating Midtrans payment...';
 
                 const amount = document.getElementById('dep_amount').value;
 
@@ -354,21 +457,162 @@ document.addEventListener('DOMContentLoaded', () => {
                                 window.location.href = '{{ route("wallet.index") }}?status=error&msg=Payment failed.';
                             },
                             onClose: function() {
-                                submitBtn.disabled = false;
-                                submitBtn.innerText = 'Submit Deposit →';
+                                submitDepositBtn.disabled = false;
+                                submitDepositBtn.innerText = 'Pay via Midtrans Snap →';
                             }
                         });
                     } else {
                         alert('Error: ' + resData.message);
-                        submitBtn.disabled = false;
-                        submitBtn.innerText = 'Submit Deposit →';
+                        submitDepositBtn.disabled = false;
+                        submitDepositBtn.innerText = 'Pay via Midtrans Snap →';
                     }
                 } catch (err) {
                     console.error(err);
                     alert('An unexpected error occurred. Please try again.');
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = 'Submit Deposit →';
+                    submitDepositBtn.disabled = false;
+                    submitDepositBtn.innerText = 'Pay via Midtrans Snap →';
                 }
+            }
+        });
+    }
+
+    // 2. NOWPayments Crypto Deposit Form
+    const cryptoDepForm = document.getElementById('crypto-deposit-form');
+    const submitCryptoDepBtn = document.getElementById('submit-crypto-dep-btn');
+
+    if (cryptoDepForm) {
+        cryptoDepForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitCryptoDepBtn.disabled = true;
+            submitCryptoDepBtn.innerText = 'Creating NOWPayments Invoice...';
+
+            const payCurrency = document.getElementById('crypto_dep_currency').value;
+            const amount = document.getElementById('crypto_dep_amount').value;
+
+            try {
+                const response = await fetch('{{ route("wallet.crypto.deposit.initiate") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ amount: amount, pay_currency: payCurrency })
+                });
+
+                const resData = await response.json();
+
+                if (resData.status === 'success') {
+                    if (resData.data.invoice_url) {
+                        window.open(resData.data.invoice_url, '_blank');
+                    }
+                    alert('NOWPayments Invoice Created Successfully! Payment Link: ' + resData.data.invoice_url);
+                    window.location.reload();
+                } else {
+                    alert('Error: ' + resData.message);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Failed to connect to NOWPayments.');
+            } finally {
+                submitCryptoDepBtn.disabled = false;
+                submitCryptoDepBtn.innerText = 'Generate NOWPayments Invoice →';
+            }
+        });
+    }
+
+    // 3. Xendit Bank Withdrawal Form
+    const xenditWdForm = document.getElementById('xendit-withdraw-form');
+    const submitXenditWdBtn = document.getElementById('submit-xendit-wd-btn');
+
+    if (xenditWdForm) {
+        xenditWdForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitXenditWdBtn.disabled = true;
+            submitXenditWdBtn.innerText = 'Processing Xendit Transfer...';
+
+            const bankCode = document.getElementById('wd_bank_code').value;
+            const accountNumber = document.getElementById('wd_account_number').value;
+            const accountHolderName = document.getElementById('wd_account_holder_name').value;
+            const amount = document.getElementById('wd_xendit_amount').value;
+
+            try {
+                const response = await fetch('{{ route("wallet.withdraw.initiate") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        bank_code: bankCode,
+                        account_number: accountNumber,
+                        account_holder_name: accountHolderName,
+                        amount: amount
+                    })
+                });
+
+                const resData = await response.json();
+
+                if (resData.status === 'success') {
+                    alert('Penarikan dana via Xendit sebesar Rp ' + Number(amount).toLocaleString('id-ID') + ' sukses diajukan!');
+                    window.location.reload();
+                } else {
+                    alert('Error: ' + resData.message);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Terjadi kesalahan saat memproses penarikan Xendit.');
+            } finally {
+                submitXenditWdBtn.disabled = false;
+                submitXenditWdBtn.innerText = 'Process Xendit Instant Transfer →';
+            }
+        });
+    }
+
+    // 4. NOWPayments Crypto Withdrawal Form
+    const cryptoWdForm = document.getElementById('crypto-withdraw-form');
+    const submitCryptoWdBtn = document.getElementById('submit-crypto-wd-btn');
+
+    if (cryptoWdForm) {
+        cryptoWdForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitCryptoWdBtn.disabled = true;
+            submitCryptoWdBtn.innerText = 'Processing NOWPayments Payout...';
+
+            const currency = document.getElementById('wd_crypto_currency').value;
+            const address = document.getElementById('wd_crypto_address').value;
+            const amount = document.getElementById('wd_crypto_amount').value;
+
+            try {
+                const response = await fetch('{{ route("wallet.crypto.withdraw.initiate") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        currency: currency,
+                        address: address,
+                        amount: amount
+                    })
+                });
+
+                const resData = await response.json();
+
+                if (resData.status === 'success') {
+                    alert('Penarikan Kripto via NOWPayments sebesar ' + amount + ' ' + currency.toUpperCase() + ' berhasil diajukan!');
+                    window.location.reload();
+                } else {
+                    alert('Error: ' + resData.message);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Terjadi kesalahan saat memproses penarikan kripto.');
+            } finally {
+                submitCryptoWdBtn.disabled = false;
+                submitCryptoWdBtn.innerText = 'Process NOWPayments Instant Payout →';
             }
         });
     }

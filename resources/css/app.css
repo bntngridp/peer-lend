@@ -124,13 +124,6 @@ html.dark .bg-emerald-50\/80 {
     color: #f8fafc !important;
 }
 
-html.dark .bg-emerald-50\/40 .text-emerald-800,
-html.dark .bg-emerald-50\/40 .text-emerald-700,
-html.dark .bg-emerald-50\/50 .text-emerald-800,
-html.dark .bg-emerald-50\/50 .text-emerald-700 {
-    color: #34d399 !important;
-}
-
 /* Native File Input Buttons in Dark Mode */
 html.dark input[type="file"]::file-selector-button {
     background-color: rgba(6, 78, 59, 0.6) !important;
@@ -222,10 +215,37 @@ html.dark .text-gray-400 {
     color: #94a3b8 !important;
 }
 
-/* Brand Highlights & Interactive Colors in Dark Mode */
+/* Brand Highlights & High-Contrast Colors in Dark Mode */
+html.dark .text-emerald-900,
+html.dark .text-emerald-800,
 html.dark .text-emerald-700,
-html.dark .text-emerald-600 {
+html.dark .text-emerald-600,
+html.dark .text-emerald-500,
+html.dark .text-green-900,
+html.dark .text-green-800,
+html.dark .text-green-700,
+html.dark .text-green-600,
+html.dark .text-green-500 {
     color: #34d399 !important;
+}
+
+html.dark .text-rose-900,
+html.dark .text-rose-800,
+html.dark .text-rose-700,
+html.dark .text-rose-600,
+html.dark .text-red-800,
+html.dark .text-red-700,
+html.dark .text-red-600 {
+    color: #f87171 !important;
+}
+
+html.dark .text-amber-900,
+html.dark .text-amber-800,
+html.dark .text-amber-700,
+html.dark .text-amber-600,
+html.dark .text-yellow-800,
+html.dark .text-yellow-700 {
+    color: #fbbf24 !important;
 }
 
 html.dark .border-emerald-700 {

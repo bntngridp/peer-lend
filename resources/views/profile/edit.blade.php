@@ -5,8 +5,8 @@
     
     <!-- Top Header Bar -->
     <div>
-        <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Account &amp; System Settings</h1>
-        <p class="text-xs font-medium text-slate-500 mt-1">Manage your personal profile, security methods, active sessions, and system preferences.</p>
+        <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ __('Account Settings') }}</h1>
+        <p class="text-xs font-medium text-slate-500 mt-1">{{ __('Manage your personal profile, security methods, active sessions, and system preferences.') }}</p>
     </div>
 
     <!-- Navigation Tabs Header -->
@@ -14,22 +14,22 @@
         <button type="button" @click="profileTab = 'personal'" id="tab_btn_personal"
                 class="tab-btn pb-3 transition-colors outline-none focus:outline-none bg-transparent cursor-pointer"
                 :class="profileTab === 'personal' ? 'text-emerald-700 border-b-2 border-emerald-700 dark:text-emerald-400 dark:border-emerald-400 font-extrabold' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'">
-            Personal Information
+            {{ __('Personal Information') }}
         </button>
         <button type="button" @click="profileTab = 'security'" id="tab_btn_security"
                 class="tab-btn pb-3 transition-colors outline-none focus:outline-none bg-transparent cursor-pointer"
                 :class="profileTab === 'security' ? 'text-emerald-700 border-b-2 border-emerald-700 dark:text-emerald-400 dark:border-emerald-400 font-extrabold' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'">
-            Security &amp; Access
+            {{ __('Security & Access') }}
         </button>
         <button type="button" @click="profileTab = 'notifications'" id="tab_btn_notifications"
                 class="tab-btn pb-3 transition-colors outline-none focus:outline-none bg-transparent cursor-pointer"
                 :class="profileTab === 'notifications' ? 'text-emerald-700 border-b-2 border-emerald-700 dark:text-emerald-400 dark:border-emerald-400 font-extrabold' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'">
-            Notification Preferences
+            {{ __('Notification Preferences') }}
         </button>
         <button type="button" @click="profileTab = 'system'" id="tab_btn_system"
                 class="tab-btn pb-3 transition-colors outline-none focus:outline-none bg-transparent cursor-pointer"
                 :class="profileTab === 'system' ? 'text-emerald-700 border-b-2 border-emerald-700 dark:text-emerald-400 dark:border-emerald-400 font-extrabold' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'">
-            System Preferences
+            {{ __('System Preferences') }}
         </button>
     </div>
 

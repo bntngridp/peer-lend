@@ -6,12 +6,12 @@
     <!-- Top Header Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Crypto Collateral Overview</h1>
-            <p class="text-xs font-medium text-slate-500 mt-1">Institutional monitoring of pledged digital assets and liquidation thresholds.</p>
+            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ __('Crypto Collateral') }}</h1>
+            <p class="text-xs font-medium text-slate-500 mt-1">{{ __('Institutional monitoring of pledged digital assets and liquidation thresholds.') }}</p>
         </div>
         <div class="flex items-center gap-3">
             <button onclick="window.print()" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition-all">
-                Export Report
+                {{ __('Export Report') }}
             </button>
         </div>
     </div>
@@ -21,7 +21,7 @@
         <!-- Card 1: TOTAL PLEDGED VALUE -->
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">TOTAL PLEDGED VALUE</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('TOTAL PLEDGED VALUE') }}</span>
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">+2.4%</span>
             </div>
             <div class="mt-3">
@@ -35,7 +35,7 @@
         <!-- Card 2: WEIGHTED AVG LTV -->
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">WEIGHTED AVG LTV</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('WEIGHTED AVG LTV') }}</span>
                 <span class="text-xs font-bold text-emerald-700">Target &lt;65%</span>
             </div>
             <div class="mt-3">
@@ -49,7 +49,7 @@
         <!-- Card 3: PORTFOLIO RISK STATUS -->
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">PORTFOLIO RISK STATUS</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('PORTFOLIO RISK STATUS') }}</span>
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">Monitor</span>
             </div>
             <div class="mt-3 space-y-1 text-xs font-semibold">

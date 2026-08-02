@@ -6,30 +6,30 @@
     <!-- Top Header Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">My Loans &amp; Applications</h1>
-            <p class="text-xs font-medium text-slate-500 mt-1">Track verification approvals, funding percentage progress, and manage active installments.</p>
+            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ __('My Loans') }} &amp; {{ __('New Application') }}</h1>
+            <p class="text-xs font-medium text-slate-500 mt-1">{{ __('Overview of your current loans and upcoming obligations.') }}</p>
         </div>
         <a href="{{ route('loans.create') }}" class="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition-all">
-            <span></span> Apply for Loan
+            <span></span> {{ __('Apply for New Loan') }}
         </a>
     </div>
 
     <!-- Loan List Card Table -->
     <div class="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
         <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50/50">
-            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Loan Applications</h3>
-            <span class="text-xs font-medium text-slate-500">Total: {{ $loans->total() }} Applications</span>
+            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ __('My Loans') }}</h3>
+            <span class="text-xs font-medium text-slate-500">Total: {{ $loans->total() }}</span>
         </div>
 
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                        <th class="py-3.5 px-6">LOAN DETAILS</th>
-                        <th class="py-3.5 px-6">AMOUNT &amp; INTEREST</th>
-                        <th class="py-3.5 px-6">STATUS</th>
-                        <th class="py-3.5 px-6">FUNDING PROGRESS</th>
-                        <th class="py-3.5 px-6 text-right">ACTION</th>
+                        <th class="py-3.5 px-6">{{ __('LOAN DETAILS') }}</th>
+                        <th class="py-3.5 px-6">{{ __('AMOUNT') }}</th>
+                        <th class="py-3.5 px-6">{{ __('STATUS') }}</th>
+                        <th class="py-3.5 px-6">{{ __('FUNDING PROGRESS') }}</th>
+                        <th class="py-3.5 px-6 text-right">{{ __('ACTION') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
@@ -44,7 +44,7 @@
                                 <div>
                                     <span class="font-bold text-slate-900 block text-xs line-clamp-1">{{ $loan->purpose }}</span>
                                     <span class="text-[11px] text-slate-400 font-medium block">
-                                        Category: {{ $loan->category->name }} • {{ $loan->duration }} Months
+                                        {{ $loan->category->name }} • {{ $loan->duration }} {{ __('Months') }}
                                     </span>
                                 </div>
                             </div>
@@ -64,7 +64,7 @@
                                 @elseif($loan->status === 'active') bg-emerald-100 text-emerald-800 border border-emerald-200
                                 @elseif($loan->status === 'completed') bg-slate-100 text-slate-700 border border-slate-200
                                 @else bg-rose-100 text-rose-800 border border-rose-200 @endif">
-                                {{ str_replace('_', ' ', $loan->status) }}
+                                {{ __(str_replace('_', ' ', $loan->status)) }}
                             </span>
                         </td>
 
@@ -72,7 +72,7 @@
                         <td class="py-4 px-6 min-w-[180px]">
                             <div class="space-y-1">
                                 <div class="flex items-center justify-between text-[11px]">
-                                    <span class="font-bold text-slate-900">{{ (int)$loan->funded_percentage }}% funded</span>
+                                    <span class="font-bold text-slate-900">{{ (int)$loan->funded_percentage }}% {{ __('Funded') }}</span>
                                 </div>
                                 <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
                                     <div class="bg-emerald-700 h-1.5 rounded-full" style="width: {{ min(100, $loan->funded_percentage) }}%"></div>
@@ -85,17 +85,17 @@
                             @if($loan->status === 'active' || $loan->status === 'completed')
                                 <a href="{{ route('loans.installments', $loan->id) }}" 
                                    class="inline-flex items-center gap-1 py-1.5 px-3 rounded-xl bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800 transition-colors shadow-xs">
-                                    View Installments &rarr;
+                                    {{ __('View Schedule') }} &rarr;
                                 </a>
                             @else
-                                <span class="text-slate-400 font-medium text-xs">Processing</span>
+                                <span class="text-slate-400 font-medium text-xs">{{ __('Processing') }}</span>
                             @endif
                         </td>
                     </tr>
                     @empty
                     <tr>
                         <td colspan="5" class="py-10 text-center text-slate-400 text-xs font-medium">
-                            You have not submitted any loan applications yet.
+                            {{ __('You have not submitted any loan applications yet.') }}
                         </td>
                     </tr>
                     @endforelse

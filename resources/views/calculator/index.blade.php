@@ -6,11 +6,11 @@
         <!-- Header Banner -->
         <div class="text-center max-w-2xl mx-auto space-y-2">
             <span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200 uppercase tracking-wider">
-                Real-time Loan Simulation
+                {{ __('Calculator') }}
             </span>
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Kalkulator Pinjaman Institusional</h1>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">{{ __('Calculator') }}</h1>
             <p class="text-xs text-slate-500 font-medium leading-relaxed">
-                Simulasikan estimasi cicilan bulanan, total bunga, dan rincian jadwal amortisasi secara real-time.
+                {{ __('Real-time Loan Simulation') }}
             </p>
         </div>
 
@@ -19,7 +19,7 @@
             
             <!-- Left Input Form (Spans 5 Cols) -->
             <div class="lg:col-span-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-6">
-                <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-3">Parameter Pinjaman</h3>
+                <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-3">{{ __('Calculator') }}</h3>
 
                 <form id="calculatorForm" class="space-y-5">
                     @csrf

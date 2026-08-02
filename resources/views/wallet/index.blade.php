@@ -79,18 +79,18 @@
     </div>
 
     <!-- Operation Tabs Header -->
-    <div class="border-b border-slate-200 flex gap-6 text-xs font-bold text-slate-500">
+    <div class="border-b border-slate-200 flex gap-6 text-xs font-bold text-slate-500 select-none">
         <button @click="activeTab = 'deposit'" 
                 :class="activeTab === 'deposit' ? 'text-emerald-700 border-b-2 border-emerald-700 pb-3' : 'hover:text-slate-800 pb-3'">
-            Deposit Funds
+            {{ __('Deposit Funds') }}
         </button>
         <button @click="activeTab = 'withdraw'" 
                 :class="activeTab === 'withdraw' ? 'text-emerald-700 border-b-2 border-emerald-700 pb-3' : 'hover:text-slate-800 pb-3'">
-            Withdraw Funds
+            {{ __('Withdraw Funds') }}
         </button>
         <button @click="activeTab = 'history'" 
                 :class="activeTab === 'history' ? 'text-emerald-700 border-b-2 border-emerald-700 pb-3' : 'hover:text-slate-800 pb-3'">
-            Transaction History
+            {{ __('Transaction History') }}
         </button>
     </div>
 
@@ -99,11 +99,11 @@
         
         <!-- Form Left Side (Spans 8 Cols) -->
         <div class="lg:col-span-8 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6">
-            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">Select Funding Source &amp; Amount</h3>
+            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">{{ __('Select Funding Source & Amount') }}</h3>
 
             <!-- 1. Funding Source Cards -->
             <div class="space-y-2">
-                <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">1. Funding Gateway Method</label>
+                <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">1. {{ __('Funding Gateway Method') }}</label>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div @click="depMethod = 'midtrans'"
                          :class="depMethod === 'midtrans' ? 'border-emerald-700 bg-emerald-50/50 text-emerald-900' : 'border-slate-200 bg-slate-50/50 text-slate-600 hover:border-slate-300'"
@@ -130,7 +130,7 @@
             <form x-show="depMethod === 'midtrans'" id="deposit-form" action="{{ route('wallet.deposit') }}" method="POST" class="space-y-4 pt-2">
                 @csrf
                 <div>
-                    <label for="dep_currency_id" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Select Currency</label>
+                    <label for="dep_currency_id" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('Select Currency') }}</label>
                     <select name="currency_id" id="dep_currency_id" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none">
                         @foreach($currencies as $curr)
                             <option value="{{ $curr->id }}" data-code="{{ $curr->code }}">{{ $curr->code }} - {{ $curr->name }}</option>
@@ -139,15 +139,15 @@
                 </div>
 
                 <div>
-                    <label for="dep_amount" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Deposit Amount (IDR)</label>
+                    <label for="dep_amount" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('Deposit Amount (IDR)') }}</label>
                     <input type="number" name="amount" id="dep_amount" required min="10000" step="50000"
                            class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
-                           placeholder="e.g. 500000">
+                           placeholder="500000">
                 </div>
 
                 <button type="submit" id="submit-deposit-btn"
                         class="w-full py-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
-                    Pay via Midtrans Snap &rarr;
+                    {{ __('Pay via Midtrans Snap') }} &rarr;
                 </button>
             </form>
 
@@ -155,7 +155,7 @@
             <form x-show="depMethod === 'nowpayments'" id="crypto-deposit-form" style="display: none;" class="space-y-4 pt-2">
                 @csrf
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Select Crypto Currency</label>
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('Select Crypto Currency') }}</label>
                     <select id="crypto_dep_currency" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none">
                         <option value="usdttrc20">USDT (TRC-20)</option>
                         <option value="usdterc20">USDT (ERC-20)</option>
@@ -167,15 +167,15 @@
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Amount (USD equivalent)</label>
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('Amount (USD equivalent)') }}</label>
                     <input type="number" id="crypto_dep_amount" required min="5" step="10" value="100"
                            class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
-                           placeholder="e.g. 100">
+                           placeholder="100">
                 </div>
 
                 <button type="submit" id="submit-crypto-dep-btn"
                         class="w-full py-3 rounded-xl bg-indigo-700 text-white font-bold text-xs hover:bg-indigo-800 transition-colors shadow-xs">
-                    Generate NOWPayments Invoice &rarr;
+                    {{ __('Generate NOWPayments Invoice') }} &rarr;
                 </button>
             </form>
         </div>
@@ -184,21 +184,21 @@
         <div class="lg:col-span-4 space-y-4">
             <!-- Deposit Limits Box -->
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-3">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">GATEWAY SPECS</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">{{ __('GATEWAY SPECS') }}</span>
                 
                 <div class="space-y-2 text-xs">
                     <div class="flex justify-between py-1 border-b border-slate-100 font-medium">
-                        <span class="text-slate-500">Fiat Gateway</span>
+                        <span class="text-slate-500">{{ __('Fiat Gateway') }}</span>
                         <span class="font-bold text-emerald-800">Midtrans Snap</span>
                     </div>
                     <div class="flex justify-between py-1 border-b border-slate-100 font-medium">
-                        <span class="text-slate-500">Crypto Gateway</span>
+                        <span class="text-slate-500">{{ __('Crypto Gateway') }}</span>
                         <span class="font-bold text-indigo-800">NOWPayments IPN</span>
                     </div>
                 </div>
 
                 <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-[11px] text-emerald-900 font-medium">
-                    <strong>Expected Settlement:</strong> Instant settlement via Virtual Account / Webhook IPN Callback.
+                    <strong>{{ __('Expected Settlement:') }}</strong> {{ __('Instant settlement via Virtual Account / Webhook IPN Callback.') }}
                 </div>
             </div>
         </div>
@@ -210,11 +210,11 @@
         
         <!-- Form Left Side (Spans 8 Cols) -->
         <div class="lg:col-span-8 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6">
-            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">Automated Withdrawal &amp; Instant Payout</h3>
+            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">{{ __('Automated Withdrawal & Instant Payout') }}</h3>
 
             <!-- Method Selection Cards -->
             <div class="space-y-2">
-                <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">Withdrawal Gateway</label>
+                <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('Withdrawal Gateway') }}</label>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div @click="wdMethod = 'xendit'"
                          :class="wdMethod === 'xendit' ? 'border-emerald-700 bg-emerald-50/50 text-emerald-900' : 'border-slate-200 bg-slate-50/50 text-slate-600 hover:border-slate-300'"
@@ -242,7 +242,7 @@
                 @csrf
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Destination Bank</label>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('Destination Bank') }}</label>
                         <select id="wd_bank_code" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none">
                             <option value="BCA">Bank BCA</option>
                             <option value="MANDIRI">Bank Mandiri</option>
@@ -254,23 +254,23 @@
                     </div>
 
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Account Number</label>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('Account Number') }}</label>
                         <input type="text" id="wd_account_number" required value="8492019482"
                                class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none"
-                               placeholder="e.g. 8492019482">
+                               placeholder="8492019482">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Account Holder Name</label>
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('Account Holder Name') }}</label>
                     <input type="text" id="wd_account_holder_name" required value="{{ Auth::user()->profile?->full_name ?? Auth::user()->email }}"
                            class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none"
-                           placeholder="Full Name as registered in Bank">
+                           placeholder="Full Name">
                 </div>
 
                 <div>
                     <div class="flex justify-between mb-1">
-                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Amount (IDR)</label>
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('Amount (IDR)') }}</label>
                         <span class="text-xs font-bold text-emerald-700 cursor-pointer" onclick="document.getElementById('wd_xendit_amount').value = '{{ (int)$availableBalance }}'">
                             Max: Rp {{ number_format($availableBalance, 0, ',', '.') }}
                         </span>
@@ -281,7 +281,7 @@
                 </div>
 
                 <button type="submit" id="submit-xendit-wd-btn" class="w-full py-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
-                    Process Xendit Instant Transfer &rarr;
+                    {{ __('Process Xendit Instant Transfer') }} &rarr;
                 </button>
             </form>
 
@@ -289,7 +289,7 @@
             <form x-show="wdMethod === 'nowpayments'" id="crypto-withdraw-form" style="display: none;" class="space-y-4 pt-2">
                 @csrf
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Crypto Asset</label>
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('Crypto Asset') }}</label>
                     <select id="wd_crypto_currency" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none">
                         <option value="usdttrc20">USDT (TRC-20)</option>
                         <option value="usdterc20">USDT (ERC-20)</option>
@@ -300,21 +300,21 @@
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Wallet Destination Address</label>
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('Wallet Destination Address') }}</label>
                     <input type="text" id="wd_crypto_address" required
                            class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none font-mono text-xs"
-                           placeholder="e.g. TTYx8492019482910482910...">
+                           placeholder="TTYx8492019482910482910...">
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Amount (USD Equivalent)</label>
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('Amount (USD Equivalent)') }}</label>
                     <input type="number" id="wd_crypto_amount" required min="10" value="50"
                            class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none"
                            placeholder="Min $10">
                 </div>
 
                 <button type="submit" id="submit-crypto-wd-btn" class="w-full py-3 rounded-xl bg-indigo-700 text-white font-bold text-xs hover:bg-indigo-800 transition-colors shadow-xs">
-                    Process NOWPayments Instant Payout &rarr;
+                    {{ __('Process NOWPayments Instant Payout') }} &rarr;
                 </button>
             </form>
         </div>
@@ -322,22 +322,22 @@
         <!-- Withdraw Summary Right Side (Spans 4 Cols) -->
         <div class="lg:col-span-4 space-y-4">
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-4">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">DISBURSEMENT SUMMARY</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">{{ __('DISBURSEMENT SUMMARY') }}</span>
 
                 <div class="space-y-2.5 text-xs font-medium">
                     <div class="flex justify-between py-1 border-b border-slate-100">
-                        <span class="text-slate-500">Current Balance</span>
+                        <span class="text-slate-500">{{ __('Current Balance') }}</span>
                         <span class="font-bold text-slate-900">Rp {{ number_format($availableBalance, 0, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between py-1 border-b border-slate-100">
-                        <span class="text-slate-500">Xendit / NOWPayments Fee</span>
-                        <span class="font-bold text-emerald-700">Rp 0 (Covered by Platform)</span>
+                        <span class="text-slate-500">{{ __('Fee') }}</span>
+                        <span class="font-bold text-emerald-700">Rp 0 ({{ __('Covered by Platform') }})</span>
                     </div>
                 </div>
 
                 <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px]">
-                    <span class="text-slate-400 font-bold uppercase tracking-wider block mb-1">ESTIMATED TRANSFER TIME</span>
-                    <span class="font-bold text-slate-900 block">Instant (24/7 Real-Time Payout)</span>
+                    <span class="text-slate-400 font-bold uppercase tracking-wider block mb-1">{{ __('ESTIMATED TRANSFER TIME') }}</span>
+                    <span class="font-bold text-slate-900 block">{{ __('Instant (24/7 Real-Time Payout)') }}</span>
                 </div>
             </div>
         </div>
@@ -347,18 +347,19 @@
     <!-- ─── Tab 3: Transaction History ──────────────────────────────────── -->
     <div x-show="activeTab === 'history'" class="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden" style="display: none;">
         <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50/50">
-            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Transaction Ledger</h3>
-            <span class="text-xs font-medium text-slate-500">Total: {{ $transactions->total() }} Records</span>
+            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ __('Transaction Ledger') }}</h3>
+            <span class="text-xs font-medium text-slate-500">Total: {{ $transactions->total() }}</span>
         </div>
 
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                        <th class="py-3.5 px-6">Transaction</th>
-                        <th class="py-3.5 px-6">Amount</th>
-                        <th class="py-3.5 px-6">Balances (Before / After)</th>
-                        <th class="py-3.5 px-6 text-right">Date</th>
+                        <th class="py-3.5 px-6">{{ __('Transaction') }}</th>
+                        <th class="py-3.5 px-6">{{ __('TYPE & METHOD') }}</th>
+                        <th class="py-3.5 px-6">{{ __('AMOUNT') }}</th>
+                        <th class="py-3.5 px-6">{{ __('STATUS') }}</th>
+                        <th class="py-3.5 px-6 text-right">{{ __('DATE & TIME') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">

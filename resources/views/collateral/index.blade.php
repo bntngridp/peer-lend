@@ -72,8 +72,8 @@
         <!-- Left: Collateral Distribution (Spans 6 Cols) -->
         <div class="lg:col-span-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Collateral Distribution</h3>
-                <span class="text-xs font-bold text-emerald-700">3 Currencies</span>
+                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ __('Collateral Distribution') }}</h3>
+                <span class="text-xs font-bold text-emerald-700">3 {{ __('Currencies') }}</span>
             </div>
 
             <div class="space-y-3">
@@ -85,16 +85,16 @@
                         </div>
                         <div>
                             <span class="font-bold text-slate-900 text-xs block">{{ $item['name'] }} ({{ $item['code'] }})</span>
-                            <span class="text-[10px] text-slate-400 font-medium block">{{ number_format($item['total_locked'], $item['code'] === 'BTC' ? 4 : 2) }} {{ $item['code'] }} Locked</span>
+                            <span class="text-[10px] text-slate-400 font-medium block">{{ number_format($item['total_locked'], $item['code'] === 'BTC' ? 4 : 2) }} {{ $item['code'] }} {{ __('Locked') }}</span>
                         </div>
                     </div>
                     <div class="text-right">
                         <span class="font-extrabold text-slate-900 text-xs block">Rp {{ number_format($item['total_amount'], 0, ',', '.') }}</span>
-                        <span class="text-[10px] text-emerald-700 font-bold block">{{ $item['percentage'] }}% of Pool</span>
+                        <span class="text-[10px] text-emerald-700 font-bold block">{{ $item['percentage'] }}% {{ __('of Pool') }}</span>
                     </div>
                 </div>
                 @empty
-                <p class="text-xs text-slate-400 text-center py-4">Tidak ada posisi agunan crypto aktif.</p>
+                <p class="text-xs text-slate-400 text-center py-4">{{ __('No active collateral positions.') }}</p>
                 @endforelse
             </div>
         </div>
@@ -102,32 +102,32 @@
         <!-- Right: LTV Monitoring & Stress Test (Spans 6 Cols) -->
         <div class="lg:col-span-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">LTV Monitoring &amp; Stress Test</h3>
-                <span class="text-[10px] font-bold text-slate-400 uppercase">Live Thresholds</span>
+                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ __('LTV Monitoring & Stress Test') }}</h3>
+                <span class="text-[10px] font-bold text-slate-400 uppercase">{{ __('Live Thresholds') }}</span>
             </div>
 
             <!-- Risk Tiers -->
             <div class="space-y-3 text-xs font-medium">
                 <div class="p-3 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-between">
                     <div>
-                        <span class="font-bold text-rose-900 block">High Risk (&gt;80% LTV)</span>
-                        <span class="text-[10px] text-rose-700">{{ $atRiskCount }} Loans Affected</span>
+                        <span class="font-bold text-rose-900 block">{{ __('High Risk') }} (&gt;80% LTV)</span>
+                        <span class="text-[10px] text-rose-700">{{ $atRiskCount }} {{ __('Loans Affected') }}</span>
                     </div>
                     <span class="font-black text-rose-700">Rp {{ number_format($highRiskAmount, 0, ',', '.') }}</span>
                 </div>
 
                 <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between">
                     <div>
-                        <span class="font-bold text-amber-900 block">Medium Risk (75-80% LTV)</span>
-                        <span class="text-[10px] text-amber-700">{{ $warningCount }} Loans Affected</span>
+                        <span class="font-bold text-amber-900 block">{{ __('Medium Risk') }} (75-80% LTV)</span>
+                        <span class="text-[10px] text-amber-700">{{ $warningCount }} {{ __('Loans Affected') }}</span>
                     </div>
                     <span class="font-black text-amber-700">Rp {{ number_format($mediumRiskAmount, 0, ',', '.') }}</span>
                 </div>
 
                 <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between">
                     <div>
-                        <span class="font-bold text-emerald-900 block">Low Risk (&lt;75% LTV)</span>
-                        <span class="text-[10px] text-emerald-700">{{ $healthyCount }} Loans Healthy</span>
+                        <span class="font-bold text-emerald-900 block">{{ __('Low Risk') }} (&lt;75% LTV)</span>
+                        <span class="text-[10px] text-emerald-700">{{ $healthyCount }} {{ __('Loans Healthy') }}</span>
                     </div>
                     <span class="font-black text-emerald-700">Rp {{ number_format($lowRiskAmount, 0, ',', '.') }}</span>
                 </div>
@@ -141,22 +141,22 @@
         <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50/50">
             <div class="flex items-center gap-2">
                 <span class="text-rose-600 text-sm"></span>
-                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Liquidation Warnings &amp; Margin Calls</h3>
+                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ __('Liquidation Warnings & Margin Calls') }}</h3>
             </div>
-            <span class="text-xs font-bold text-rose-700">Live API Feeds</span>
+            <span class="text-xs font-bold text-rose-700">{{ __('Live API Feeds') }}</span>
         </div>
 
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                        <th class="py-3.5 px-6">LOAN ID</th>
-                        <th class="py-3.5 px-6">BORROWER</th>
-                        <th class="py-3.5 px-6">COLLATERAL ASSET</th>
-                        <th class="py-3.5 px-6">CURRENT LTV</th>
-                        <th class="py-3.5 px-6">LIQ. PRICE</th>
-                        <th class="py-3.5 px-6">STATUS</th>
-                        <th class="py-3.5 px-6 text-right">ACTION</th>
+                        <th class="py-3.5 px-6">{{ __('LOAN ID') }}</th>
+                        <th class="py-3.5 px-6">{{ __('BORROWER') }}</th>
+                        <th class="py-3.5 px-6">{{ __('COLLATERAL ASSET') }}</th>
+                        <th class="py-3.5 px-6">{{ __('CURRENT LTV') }}</th>
+                        <th class="py-3.5 px-6">{{ __('LIQ. PRICE') }}</th>
+                        <th class="py-3.5 px-6">{{ __('STATUS') }}</th>
+                        <th class="py-3.5 px-6 text-right">{{ __('ACTION') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
@@ -164,7 +164,7 @@
                     <tr class="hover:bg-slate-50/80 transition-colors">
                         <td class="py-4 px-6 font-bold text-slate-900">#LN-{{ substr($loan->id, 0, 6) }}</td>
                         <td class="py-4 px-6 font-semibold text-slate-800">
-                            {{ $loan->borrower?->profile?->full_name ?? 'Borrower' }}
+                            {{ $loan->borrower?->profile?->full_name ?? __('Borrower') }}
                         </td>
                         <td class="py-4 px-6 font-bold text-indigo-700">
                             {{ $loan->collateralCurrency?->code ?? 'CRYPTO' }} ({{ number_format($loan->collateral_amount, 4) }})
@@ -178,25 +178,25 @@
                         <td class="py-4 px-6">
                             @if($loan->current_ltv >= 80)
                                 <span class="px-2.5 py-0.5 rounded text-[10px] font-extrabold bg-rose-100 text-rose-800 border border-rose-200">
-                                    Margin Call Sent
+                                    {{ __('Margin Call Sent') }}
                                 </span>
                             @else
                                 <span class="px-2.5 py-0.5 rounded text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200">
-                                    Warning Active
+                                    {{ __('Warning Active') }}
                                 </span>
                             @endif
                         </td>
                         <td class="py-4 px-6 text-right">
                             <a href="{{ route('loans.installments', $loan->id) }}" 
-                               class="py-1.5 px-3 rounded-xl {{ $loan->current_ltv >= 80 ? 'bg-rose-600 hover:bg-rose-700' : 'bg-emerald-700 hover:bg-emerald-800' }} text-white font-bold text-xs shadow-xs inline-block">
-                                Manage &rarr;
+                               class="inline-flex items-center gap-1 py-1.5 px-3 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition-colors shadow-xs">
+                                {{ __('Manage') }} &rarr;
                             </a>
                         </td>
                     </tr>
                     @empty
                     <tr>
                         <td colspan="7" class="py-8 text-center text-slate-400 font-medium">
-                            No active crypto collateral positions found.
+                            {{ __('No active crypto collateral positions found.') }}
                         </td>
                     </tr>
                     @endforelse

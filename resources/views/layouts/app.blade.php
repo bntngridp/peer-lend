@@ -339,7 +339,7 @@
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
                         </span>
-                        <input type="text" placeholder="Search marketplace, loans..." class="w-full pl-9 pr-4 py-1.5 text-xs font-medium bg-slate-100/70 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition-all">
+                        <input type="text" placeholder="{{ __('Search...') }}" class="w-full pl-9 pr-4 py-1.5 text-xs font-medium bg-slate-100/70 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition-all">
                     </div>
                 </div>
 
@@ -350,7 +350,7 @@
                         @if(Auth::user()->isBorrower() || (!Auth::user()->isInternalStaff() && !Auth::user()->isLender()))
                         <a href="{{ route('loans.create') }}" class="hidden sm:inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-3.5 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition-all hover:scale-[1.01] active:scale-[0.99]">
                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-                            New Application
+                            {{ __('New Application') }}
                         </a>
                         @endif
 
@@ -403,7 +403,7 @@
                         <div class="flex gap-3">
                             <svg class="h-5 w-5 text-emerald-700 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             <div>
-                                <p class="text-xs font-bold uppercase tracking-wider text-emerald-800">Success</p>
+                                <p class="text-xs font-bold uppercase tracking-wider text-emerald-800">{{ __('Success') }}</p>
                                 <p class="text-sm font-medium mt-0.5">{{ session('success') }}</p>
                             </div>
                         </div>
@@ -416,7 +416,7 @@
                         <div class="flex gap-3">
                             <svg class="h-5 w-5 text-rose-600 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             <div>
-                                <p class="text-xs font-bold uppercase tracking-wider text-rose-800">Error</p>
+                                <p class="text-xs font-bold uppercase tracking-wider text-rose-800">{{ __('Error') }}</p>
                                 <p class="text-sm font-medium mt-0.5">{{ session('error') }}</p>
                             </div>
                         </div>
@@ -432,11 +432,11 @@
 
             <!-- Footer -->
             <footer class="border-t border-slate-200 bg-white py-4 px-6 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
-                <p>&copy; {{ date('Y') }} <strong>LendFlow</strong> &mdash; Institutional Grade Peer-to-Peer Lending Platform.</p>
+                <p>&copy; {{ date('Y') }} <strong>LendFlow</strong> &mdash; {{ __('Institutional Grade Peer-to-Peer Lending Platform.') }}</p>
                 <div class="flex gap-4 font-medium">
-                    <a href="{{ route('privacy.show') }}" class="hover:text-emerald-700">Privacy Policy</a>
-                    <a href="{{ route('terms.show') }}" class="hover:text-emerald-700">Terms of Service</a>
-                    <a href="#" class="hover:text-emerald-700">Support</a>
+                    <a href="{{ route('privacy.show') }}" class="hover:text-emerald-700">{{ __('Privacy Policy') }}</a>
+                    <a href="{{ route('terms.show') }}" class="hover:text-emerald-700">{{ __('Terms of Service') }}</a>
+                    <a href="#" class="hover:text-emerald-700">{{ __('Support') }}</a>
                 </div>
             </footer>
 
@@ -465,19 +465,19 @@
                 </svg>
             </div>
 
-            <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Konfirmasi Keluar / Confirm Logout</h3>
+            <h3 class="text-base font-extrabold text-slate-900 tracking-tight">{{ __('Confirm Logout') }}</h3>
             <p class="text-xs font-medium text-slate-500 mt-1.5 leading-relaxed">
-                Apakah Anda yakin ingin keluar dari akun LendFlow? Anda perlu sign in kembali untuk mengakses dasbor.
+                {{ __('Are you sure you want to sign out? You will need to sign in again to access your dashboard.') }}
             </p>
 
             <div class="mt-6 flex items-center justify-center gap-3">
                 <button type="button" @click="logoutModalOpen = false" id="btn_cancel_logout"
                         class="w-1/2 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition-colors shadow-xs">
-                    Batal
+                    {{ __('Cancel') }}
                 </button>
                 <button type="button" onclick="document.getElementById('app-logout-form').submit();" id="btn_confirm_logout"
                         class="w-1/2 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition-colors shadow-xs cursor-pointer">
-                    Ya, Keluar
+                    {{ __('Yes, Sign Out') }}
                 </button>
             </div>
         </div>

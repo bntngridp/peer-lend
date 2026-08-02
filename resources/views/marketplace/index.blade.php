@@ -6,8 +6,8 @@
     <!-- Top Header Bar with Filter Form -->
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Marketplace</h1>
-            <p class="text-xs font-medium text-slate-500 mt-1">Browse institutional-grade P2P loan opportunities</p>
+            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ __('Marketplace') }}</h1>
+            <p class="text-xs font-medium text-slate-500 mt-1">{{ __('Browse institutional-grade P2P loan opportunities') }}</p>
         </div>
 
         <!-- Filter Form -->
@@ -15,15 +15,15 @@
             <!-- Search Bar -->
             <div class="relative min-w-[220px]">
                 <input type="text" name="search" value="{{ request('search') }}" 
-                       placeholder="Search marketplace..." 
+                       placeholder="{{ __('Search marketplace...') }}" 
                        class="w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 py-2 text-xs font-medium text-slate-700 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 shadow-xs">
-                <span class="absolute left-3 top-2.5 text-slate-400 text-xs"></span>
+                <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
             </div>
 
             <!-- Filter: Risk Grade -->
             <select name="risk_grade" onchange="this.form.submit()" 
                     class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 outline-none focus:border-emerald-600 shadow-xs">
-                <option value="">Risk Grade (All)</option>
+                <option value="">{{ __('Risk Grade (All)') }}</option>
                 @foreach(['A', 'B', 'C', 'D'] as $g)
                     <option value="{{ $g }}" {{ request('risk_grade') === $g ? 'selected' : '' }}>Grade {{ $g }}</option>
                 @endforeach
@@ -32,20 +32,20 @@
             <!-- Filter: Term -->
             <select name="term" onchange="this.form.submit()" 
                     class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 outline-none focus:border-emerald-600 shadow-xs">
-                <option value="">Term (All)</option>
-                <option value="6" {{ request('term') == '6' ? 'selected' : '' }}>6 Months</option>
-                <option value="12" {{ request('term') == '12' ? 'selected' : '' }}>12 Months</option>
-                <option value="18" {{ request('term') == '18' ? 'selected' : '' }}>18 Months</option>
-                <option value="24" {{ request('term') == '24' ? 'selected' : '' }}>24 Months</option>
-                <option value="36" {{ request('term') == '36' ? 'selected' : '' }}>36 Months</option>
+                <option value="">{{ __('Term (All)') }}</option>
+                <option value="6" {{ request('term') == '6' ? 'selected' : '' }}>6 {{ __('Months') }}</option>
+                <option value="12" {{ request('term') == '12' ? 'selected' : '' }}>12 {{ __('Months') }}</option>
+                <option value="18" {{ request('term') == '18' ? 'selected' : '' }}>18 {{ __('Months') }}</option>
+                <option value="24" {{ request('term') == '24' ? 'selected' : '' }}>24 {{ __('Months') }}</option>
+                <option value="36" {{ request('term') == '36' ? 'selected' : '' }}>36 {{ __('Months') }}</option>
             </select>
 
             <!-- Sort By -->
             <select name="sort" onchange="this.form.submit()" 
                     class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 outline-none focus:border-emerald-600 shadow-xs">
-                <option value="">Sort: Latest</option>
-                <option value="interest_desc" {{ request('sort') === 'interest_desc' ? 'selected' : '' }}>Interest Rate (High to Low)</option>
-                <option value="amount_desc" {{ request('sort') === 'amount_desc' ? 'selected' : '' }}>Amount (High to Low)</option>
+                <option value="">{{ __('Sort: Latest') }}</option>
+                <option value="interest_desc" {{ request('sort') === 'interest_desc' ? 'selected' : '' }}>{{ __('Interest Rate (High to Low)') }}</option>
+                <option value="amount_desc" {{ request('sort') === 'amount_desc' ? 'selected' : '' }}>{{ __('Amount (High to Low)') }}</option>
             </select>
 
             @if(request()->anyFilled(['search', 'risk_grade', 'term', 'sort']))

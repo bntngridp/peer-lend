@@ -210,13 +210,13 @@
     <!-- Header Section -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Borrower Dashboard — Welcome back, {{ Auth::user()->profile?->full_name ?? 'Borrower' }}! </h1>
-            <p class="text-xs font-medium text-slate-500 mt-1">Overview of your current loans and upcoming obligations.</p>
+            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ __('Borrower Dashboard') }} — {{ __('Welcome back') }}, {{ Auth::user()->profile?->full_name ?? 'Borrower' }}! </h1>
+            <p class="text-xs font-medium text-slate-500 mt-1">{{ __('Overview of your current loans and upcoming obligations.') }}</p>
         </div>
         <div class="flex items-center gap-3">
             <a href="{{ route('loans.create') }}" class="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition-all">
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-                Apply for New Loan
+                {{ __('Apply for New Loan') }}
             </a>
         </div>
     </div>
@@ -225,7 +225,7 @@
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Card 1: OUTSTANDING LOAN -->
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">OUTSTANDING LOAN</span>
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('OUTSTANDING LOAN') }}</span>
             <p class="text-2xl font-extrabold text-slate-900 mt-3">
                 Rp {{ number_format($stats['outstanding_amount'], 0, ',', '.') }}
             </p>
@@ -233,7 +233,7 @@
 
         <!-- Card 2: MONTHLY INSTALLMENT -->
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">MONTHLY INSTALLMENT</span>
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('MONTHLY INSTALLMENT') }}</span>
             <p class="text-2xl font-extrabold text-slate-900 mt-3">
                 Rp {{ number_format($stats['monthly_installment_amount'], 0, ',', '.') }}
             </p>
@@ -241,7 +241,7 @@
 
         <!-- Card 3: WALLET BALANCE -->
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">WALLET BALANCE</span>
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('WALLET BALANCE') }}</span>
             <p class="text-2xl font-extrabold text-slate-900 mt-3">
                 Rp {{ number_format($stats['wallet_balance'], 0, ',', '.') }}
             </p>
@@ -249,7 +249,7 @@
 
         <!-- Card 4: CREDIT SCORE -->
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">CREDIT SCORE</span>
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('CREDIT SCORE') }}</span>
             <div class="flex items-baseline gap-2 mt-3">
                 <span class="text-2xl font-extrabold text-emerald-700">{{ $stats['credit_score'] }}</span>
                 <span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">Grade {{ $stats['credit_grade'] }}</span>
@@ -266,18 +266,18 @@
             <!-- Card: Upcoming Repayments Table -->
             <div class="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
                 <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
-                    <h3 class="text-sm font-bold text-slate-900">Upcoming Repayments</h3>
-                    <a href="{{ route('loans.index') }}" class="text-xs font-bold text-emerald-700 hover:text-emerald-800">View All Schedule &rarr;</a>
+                    <h3 class="text-sm font-bold text-slate-900">{{ __('Upcoming Repayments') }}</h3>
+                    <a href="{{ route('loans.index') }}" class="text-xs font-bold text-emerald-700 hover:text-emerald-800">{{ __('View All Schedule') }} &rarr;</a>
                 </div>
 
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-50/80 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                                <th class="py-3 px-6">DATE</th>
-                                <th class="py-3 px-6">AMOUNT</th>
-                                <th class="py-3 px-6">STATUS</th>
-                                <th class="py-3 px-6 text-right">ACTION</th>
+                                <th class="py-3 px-6">{{ __('DATE') }}</th>
+                                <th class="py-3 px-6">{{ __('AMOUNT') }}</th>
+                                <th class="py-3 px-6">{{ __('STATUS') }}</th>
+                                <th class="py-3 px-6 text-right">{{ __('ACTION') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
@@ -295,15 +295,15 @@
                                 <td class="py-4 px-6">
                                     @if($inst->status === 'paid')
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">
-                                            Paid
+                                            {{ __('Paid') }}
                                         </span>
                                     @elseif($isOverdue)
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-700 border border-rose-200">
-                                            Due Soon / Overdue
+                                            {{ __('Due Soon / Overdue') }}
                                         </span>
                                     @else
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-blue-700 border border-blue-200">
-                                            Scheduled
+                                            {{ __('Scheduled') }}
                                         </span>
                                     @endif
                                 </td>
@@ -311,12 +311,12 @@
                                     @if($inst->status !== 'paid')
                                         <a href="{{ route('loans.installments', $inst->loan_id) }}" 
                                            class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-700 text-white hover:bg-emerald-800 transition-colors shadow-xs">
-                                            Pay Now
+                                            {{ __('Pay Now') }}
                                         </a>
                                     @else
                                         <a href="{{ route('loans.installments', $inst->loan_id) }}" 
                                            class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
-                                            Details
+                                            {{ __('Details') }}
                                         </a>
                                     @endif
                                 </td>
@@ -326,8 +326,8 @@
                                 <td colspan="4" class="py-8 text-center text-slate-500">
                                     <div class="flex flex-col items-center justify-center">
                                         <svg class="h-9 w-9 text-slate-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                        <p class="text-xs font-bold text-slate-700">Tidak Ada Jadwal Angsuran / No Upcoming Repayments</p>
-                                        <p class="text-[11px] text-slate-400 mt-0.5">Anda tidak memiliki tagihan angsuran pinjaman yang jatuh tempo saat ini.</p>
+                                        <p class="text-xs font-bold text-slate-700">{{ __('No Upcoming Repayments') }}</p>
+                                        <p class="text-[11px] text-slate-400 mt-0.5">{{ __('You have no active loan installments due at this time.') }}</p>
                                     </div>
                                 </td>
                             </tr>
@@ -339,7 +339,7 @@
 
             <!-- Card: Active Application Progress -->
             <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
-                <h3 class="text-sm font-bold text-slate-900 mb-4">Active Application Progress</h3>
+                <h3 class="text-sm font-bold text-slate-900 mb-4">{{ __('Active Application Progress') }}</h3>
                 
                 @php
                     $app = $stats['active_application'];
@@ -356,7 +356,7 @@
                             </svg>
                             <div class="absolute text-center">
                                 <span class="text-2xl font-black text-slate-900">{{ $pct }}%</span>
-                                <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Funded</span>
+                                <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('Funded') }}</span>
                             </div>
                         </div>
 
@@ -365,7 +365,7 @@
                             <div class="flex items-start gap-3">
                                 <div class="h-2.5 w-2.5 rounded-full {{ $app->status !== 'pending' ? 'bg-emerald-700' : 'bg-slate-300' }} mt-1.5 flex-shrink-0"></div>
                                 <div>
-                                    <p class="text-xs font-bold text-slate-900">Application Status: <span class="capitalize text-emerald-700">{{ str_replace('_', ' ', $app->status) }}</span></p>
+                                    <p class="text-xs font-bold text-slate-900">{{ __('Application Status') }}: <span class="capitalize text-emerald-700">{{ str_replace('_', ' ', $app->status) }}</span></p>
                                     <p class="text-[11px] text-slate-400">Diajukan: {{ \Carbon\Carbon::parse($app->created_at)->format('M d, Y') }}</p>
                                 </div>
                             </div>
@@ -373,7 +373,7 @@
                             <div class="flex items-start gap-3">
                                 <div class="h-2.5 w-2.5 rounded-full {{ $app->status === 'open_funding' ? 'bg-emerald-700 animate-pulse' : 'bg-slate-300' }} mt-1.5 flex-shrink-0"></div>
                                 <div>
-                                    <p class="text-xs font-bold text-slate-900">Marketplace Listing</p>
+                                    <p class="text-xs font-bold text-slate-900">{{ __('Marketplace Listing') }}</p>
                                     <p class="text-[11px] text-slate-400">Terkumpul: Rp {{ number_format($app->funded_amount, 0, ',', '.') }} / Rp {{ number_format($app->amount, 0, ',', '.') }}</p>
                                 </div>
                             </div>
@@ -381,7 +381,7 @@
                             <div class="flex items-start gap-3">
                                 <div class="h-2.5 w-2.5 rounded-full {{ $app->status === 'active' ? 'bg-emerald-700' : 'bg-slate-300' }} mt-1.5 flex-shrink-0"></div>
                                 <div>
-                                    <p class="text-xs font-bold {{ $app->status === 'active' ? 'text-emerald-700' : 'text-slate-500' }}">Funds Disbursement</p>
+                                    <p class="text-xs font-bold {{ $app->status === 'active' ? 'text-emerald-700' : 'text-slate-500' }}">{{ __('Funds Disbursement') }}</p>
                                     <p class="text-[11px] text-slate-400">{{ $app->status === 'active' ? 'Pencairan Dana Berhasil' : 'Menunggu pendanaan 100% dari pendana' }}</p>
                                 </div>
                             </div>
@@ -394,7 +394,7 @@
                         <p class="text-[11px] text-slate-500 mt-1 max-w-md mx-auto">Anda belum memiliki pengajuan pinjaman yang sedang berjalan di marketplace saat ini.</p>
                         <a href="{{ route('loans.create') }}" class="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-all shadow-xs">
                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-                            Ajukan Pinjaman Baru
+                            {{ __('Apply for New Loan') }}
                         </a>
                     </div>
                 @endif
@@ -407,21 +407,21 @@
 
             <!-- Card: Quick Actions -->
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-3">QUICK ACTIONS</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-3">{{ __('QUICK ACTIONS') }}</span>
                 
                 <div class="space-y-2">
                     <a href="{{ route('loans.create') }}" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-emerald-600 hover:bg-emerald-50/50 transition-all group">
-                        <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-800">Apply for New Loan</span>
+                        <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-800">{{ __('Apply for New Loan') }}</span>
                         <svg class="h-4 w-4 text-slate-400 group-hover:text-emerald-700 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
                     </a>
 
                     <a href="{{ route('wallet.index') }}" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-emerald-600 hover:bg-emerald-50/50 transition-all group">
-                        <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-800">Deposit Funds</span>
+                        <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-800">{{ __('Deposit Funds') }}</span>
                         <svg class="h-4 w-4 text-slate-400 group-hover:text-emerald-700 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
                     </a>
 
                     <a href="{{ route('loans.index') }}" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-emerald-600 hover:bg-emerald-50/50 transition-all group">
-                        <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-800">View Schedule</span>
+                        <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-800">{{ __('View Schedule') }}</span>
                         <svg class="h-4 w-4 text-slate-400 group-hover:text-emerald-700 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
                     </a>
                 </div>
@@ -432,11 +432,11 @@
                 @if($stats['kyc_status'] === 'approved')
                     <div class="flex items-start gap-3">
                         <div class="h-8 w-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0 font-bold text-sm">
-                            
+                            ✓
                         </div>
                         <div>
-                            <p class="text-xs font-bold text-slate-900">KYC Status: Verified</p>
-                            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Your identity verification is complete. You have full access to marketplace features.</p>
+                            <p class="text-xs font-bold text-slate-900">{{ __('KYC Status: Verified') }}</p>
+                            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">{{ __('Your identity verification is complete. You have full access to marketplace features.') }}</p>
                         </div>
                     </div>
                 @else
@@ -445,9 +445,9 @@
                             !
                         </div>
                         <div>
-                            <p class="text-xs font-bold text-slate-900">KYC Verification Required</p>
-                            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Complete your KYC verification to unlock full loan borrowing &amp; deposit features.</p>
-                            <a href="{{ route('kyc.index') }}" class="mt-2 inline-block text-xs font-bold text-emerald-700 hover:text-emerald-800">Verify Identity Now &rarr;</a>
+                            <p class="text-xs font-bold text-slate-900">{{ __('KYC Verification Required') }}</p>
+                            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">{{ __('Complete your KYC verification to unlock full loan borrowing &amp; deposit features.') }}</p>
+                            <a href="{{ route('kyc.index') }}" class="mt-2 inline-block text-xs font-bold text-emerald-700 hover:text-emerald-800">{{ __('Verify Identity Now') }} &rarr;</a>
                         </div>
                     </div>
                 @endif
@@ -456,10 +456,10 @@
             <!-- Card: Automate Repayments Banner (Dark Neutral #111827) -->
             <div class="rounded-2xl bg-slate-900 text-white p-6 shadow-md relative overflow-hidden">
                 <div class="relative z-10 space-y-3">
-                    <h4 class="text-sm font-bold text-white tracking-tight">Automate Repayments</h4>
-                    <p class="text-xs text-slate-300 leading-relaxed">Set up auto-pay and get a 0.25% rate reduction on your next eligible loan.</p>
+                    <h4 class="text-sm font-bold text-white tracking-tight">{{ __('Automate Repayments') }}</h4>
+                    <p class="text-xs text-slate-300 leading-relaxed">{{ __('Set up auto-pay and get a 0.25% rate reduction on your next eligible loan.') }}</p>
                     <a href="{{ route('loans.index') }}" class="inline-block rounded-xl bg-emerald-700 px-4 py-2.5 text-xs font-bold text-white hover:bg-emerald-800 transition-all shadow-xs">
-                        Configure Auto-Pay
+                        {{ __('Configure Auto-Pay') }}
                     </a>
                 </div>
             </div>

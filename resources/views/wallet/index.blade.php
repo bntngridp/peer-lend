@@ -16,15 +16,15 @@
     <!-- Top Header Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Wallet Overview</h1>
-            <p class="text-xs font-medium text-slate-500 mt-1">Manage your funds, track cash flow, and review recent transactions.</p>
+            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ __('Wallet Overview') }}</h1>
+            <p class="text-xs font-medium text-slate-500 mt-1">{{ __('Manage your funds, track cash flow, and review recent transactions.') }}</p>
         </div>
         <div class="flex items-center gap-3">
             <button @click="activeTab = 'deposit'" class="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition-all">
-                <span></span> Deposit Funds
+                <span></span> {{ __('Deposit Funds') }}
             </button>
             <button @click="activeTab = 'withdraw'" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition-all">
-                <span></span> Withdraw Funds
+                <span></span> {{ __('Withdraw Funds') }}
             </button>
         </div>
     </div>
@@ -34,22 +34,22 @@
         <!-- Card 1: TOTAL BALANCE -->
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">TOTAL BALANCE</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('TOTAL BALANCE') }}</span>
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">+2.4%</span>
             </div>
             <div class="mt-3">
                 <p class="text-3xl font-black text-slate-900 tracking-tight">
                     Rp {{ number_format($totalBalance, 0, ',', '.') }}
                 </p>
-                <p class="text-[11px] text-slate-400 font-medium mt-0.5">Updated 5 mins ago</p>
+                <p class="text-[11px] text-slate-400 font-medium mt-0.5">{{ __('Updated 5 mins ago') }}</p>
             </div>
         </div>
 
         <!-- Card 2: AVAILABLE FUNDS -->
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">AVAILABLE FUNDS</span>
-                <span class="text-xs font-bold text-emerald-700">Ready to invest</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('AVAILABLE FUNDS') }}</span>
+                <span class="text-xs font-bold text-emerald-700">{{ __('Ready to invest') }}</span>
             </div>
             <div class="mt-3">
                 <p class="text-3xl font-black text-slate-900 tracking-tight">
@@ -57,10 +57,10 @@
                 </p>
                 <div class="flex gap-2 mt-2">
                     <button @click="activeTab = 'deposit'" class="py-1 px-3 rounded-lg bg-emerald-700 text-white text-[11px] font-bold hover:bg-emerald-800">
-                        Deposit
+                        {{ __('Deposit') }}
                     </button>
                     <button @click="activeTab = 'withdraw'" class="py-1 px-3 rounded-lg border border-slate-200 bg-white text-slate-700 text-[11px] font-bold hover:bg-slate-50">
-                        Withdraw
+                        {{ __('Withdraw') }}
                     </button>
                 </div>
             </div>
@@ -68,12 +68,12 @@
 
         <!-- Card 3: FUNDS ON HOLD -->
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">FUNDS ON HOLD</span>
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('FUNDS ON HOLD') }}</span>
             <div class="mt-3">
                 <p class="text-3xl font-black text-slate-900 tracking-tight">
                     Rp {{ number_format($holdBalance, 0, ',', '.') }}
                 </p>
-                <p class="text-[11px] text-slate-400 font-medium mt-0.5">Pending escrows &amp; reserves</p>
+                <p class="text-[11px] text-slate-400 font-medium mt-0.5">{{ __('Pending escrows & reserves') }}</p>
             </div>
         </div>
     </div>

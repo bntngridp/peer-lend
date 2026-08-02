@@ -441,8 +441,8 @@
     <!-- ─── Tab 4: System Preferences & Appearance ───────────────────────── -->
     <div x-show="profileTab === 'system'" class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6" style="display: none;">
         <div>
-            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-2">System Preferences</h3>
-            <p class="text-xs text-slate-500 font-medium mt-1">Manage your global application settings, appearance, and privacy controls.</p>
+            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-2">{{ __('System Preferences') }}</h3>
+            <p class="text-xs text-slate-500 font-medium mt-1">{{ __('Manage your global application settings, appearance, and privacy controls.') }}</p>
         </div>
 
         <form action="{{ route('profile.system.update') }}" method="POST" class="space-y-6">
@@ -461,38 +461,38 @@
 
             <!-- Appearance Settings -->
             <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-6">
-                <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-2">Appearance</h4>
+                <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-2">{{ __('Appearance') }}</h4>
 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Color Theme</label>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">{{ __('Color Theme') }}</label>
                         <div class="flex gap-3">
                             <label class="cursor-pointer">
                                 <input type="radio" id="radio_theme_light" name="color_theme" value="light" class="sr-only" @change="colorTheme = 'light'; applyTheme('light')" {{ ($sysSettings['color_theme'] ?? 'light') === 'light' ? 'checked' : '' }}>
                                 <div :class="colorTheme === 'light' ? 'border-emerald-700 bg-white shadow-xs' : 'border-slate-200 bg-slate-100'"
                                      class="py-2.5 px-6 rounded-xl border text-xs font-bold text-slate-800 flex items-center gap-2">
-                                    Light Theme
+                                    {{ __('Light Theme') }}
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" id="radio_theme_dark" name="color_theme" value="dark" class="sr-only" @change="colorTheme = 'dark'; applyTheme('dark')" {{ ($sysSettings['color_theme'] ?? 'light') === 'dark' ? 'checked' : '' }}>
                                 <div :class="colorTheme === 'dark' ? 'border-emerald-700 bg-slate-900 text-white shadow-xs' : 'border-slate-200 bg-slate-100'"
                                      class="py-2.5 px-6 rounded-xl border text-xs font-bold text-slate-700 flex items-center gap-2">
-                                    Dark Theme
+                                    {{ __('Dark Theme') }}
                                 </div>
                             </label>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Data Density</label>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">{{ __('Data Density') }}</label>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <label @click="density = 'comfortable'; applyDensity('comfortable')"
                                    :class="density === 'comfortable' ? 'border-emerald-700 bg-white' : 'border-slate-200 bg-slate-100'"
                                    class="p-3.5 rounded-xl border flex items-center justify-between cursor-pointer">
                                 <div>
-                                    <span class="font-bold text-slate-900 text-xs block">Comfortable</span>
-                                    <span class="text-[10px] text-slate-500 font-medium">More whitespace, easier to read.</span>
+                                    <span class="font-bold text-slate-900 text-xs block">{{ __('Comfortable') }}</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">{{ __('More whitespace, easier to read.') }}</span>
                                 </div>
                                 <input type="radio" id="radio_density_comfortable" name="data_density" value="comfortable" @change="density = 'comfortable'; applyDensity('comfortable')" {{ ($sysSettings['data_density'] ?? 'comfortable') === 'comfortable' ? 'checked' : '' }} class="accent-emerald-700">
                             </label>
@@ -501,8 +501,8 @@
                                    :class="density === 'compact' ? 'border-emerald-700 bg-white' : 'border-slate-200 bg-slate-100'"
                                    class="p-3.5 rounded-xl border flex items-center justify-between cursor-pointer">
                                 <div>
-                                    <span class="font-bold text-slate-900 text-xs block">Compact</span>
-                                    <span class="text-[10px] text-slate-500 font-medium">High information density for trading.</span>
+                                    <span class="font-bold text-slate-900 text-xs block">{{ __('Compact') }}</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">{{ __('High information density for trading.') }}</span>
                                 </div>
                                 <input type="radio" id="radio_density_compact" name="data_density" value="compact" @change="density = 'compact'; applyDensity('compact')" {{ ($sysSettings['data_density'] ?? 'comfortable') === 'compact' ? 'checked' : '' }} class="accent-emerald-700">
                             </label>
@@ -511,43 +511,43 @@
 
                     <!-- Language Preference Dropdown -->
                     <div>
-                        <label for="language_select" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Language Preference / {{ __('Language') }}</label>
+                        <label for="language_select" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">{{ __('Language Preference') }}</label>
                         <select id="language_select" onchange="window.location.href='/lang/' + this.value" class="w-full sm:w-72 rounded-xl border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-800 px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-200 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 shadow-xs cursor-pointer">
                             <option value="id" {{ app()->getLocale() === 'id' ? 'selected' : '' }}>Bahasa Indonesia (ID)</option>
                             <option value="en" {{ app()->getLocale() === 'en' ? 'selected' : '' }}>English (EN)</option>
                             <option value="es" {{ app()->getLocale() === 'es' ? 'selected' : '' }}>Español (ES)</option>
-                            <option value="ar" {{ app()->getLocale() === 'ar' ? 'selected' : '' }}>العربية (Arabic - RTL)</option>
+                            <option value="ar" {{ app()->getLocale() === 'ar' ? 'selected' : '' }}>العربية (Arabic)</option>
                         </select>
-                        <p class="text-[10px] text-slate-500 font-medium mt-1">Select your preferred system interface language across all pages.</p>
+                        <p class="text-[10px] text-slate-500 font-medium mt-1">{{ __('Select your preferred system interface language across all pages.') }}</p>
                     </div>
                 </div>
             </div>
 
             <!-- Privacy & Data -->
             <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
-                <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-2">Privacy &amp; Data Controls</h4>
+                <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-2">{{ __('Privacy & Data Controls') }}</h4>
 
                 <div class="space-y-3 text-xs font-medium">
                     <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
                         <div>
-                            <span class="font-bold text-slate-800 block">Public Profile Visibility</span>
-                            <span class="text-[10px] text-slate-500">Allow other institutional members to discover your profile in the directory.</span>
+                            <span class="font-bold text-slate-800 block">{{ __('Public Profile Visibility') }}</span>
+                            <span class="text-[10px] text-slate-500">{{ __('Allow other institutional members to discover your profile in the directory.') }}</span>
                         </div>
                         <input type="checkbox" name="public_profile" value="1" {{ !empty($sysSettings['public_profile']) ? 'checked' : '' }} class="accent-emerald-700 h-4 w-4">
                     </div>
 
                     <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
                         <div>
-                            <span class="font-bold text-slate-800 block">Data Sharing for Analytics</span>
-                            <span class="text-[10px] text-slate-500">Share anonymized usage data to help us improve platform performance.</span>
+                            <span class="font-bold text-slate-800 block">{{ __('Data Sharing for Analytics') }}</span>
+                            <span class="text-[10px] text-slate-500">{{ __('Share anonymized usage data to help us improve platform performance.') }}</span>
                         </div>
                         <input type="checkbox" name="data_sharing" value="1" {{ !empty($sysSettings['data_sharing']) ? 'checked' : '' }} class="accent-emerald-700 h-4 w-4">
                     </div>
 
                     <div class="flex items-center justify-between py-1">
                         <div>
-                            <span class="font-bold text-slate-800 block">Third-Party Integrations</span>
-                            <span class="text-[10px] text-slate-500">Allow connected API apps to read basic profile information.</span>
+                            <span class="font-bold text-slate-800 block">{{ __('Third-Party Integrations') }}</span>
+                            <span class="text-[10px] text-slate-500">{{ __('Allow connected API apps to read basic profile information.') }}</span>
                         </div>
                         <input type="checkbox" name="third_party_integrations" value="1" {{ !empty($sysSettings['third_party_integrations']) ? 'checked' : '' }} class="accent-emerald-700 h-4 w-4">
                     </div>
@@ -556,7 +556,7 @@
 
             <div class="flex gap-3">
                 <button type="submit" id="btn_save_system_preferences" class="py-2.5 px-6 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs cursor-pointer">
-                    Save Changes &rarr;
+                    {{ __('Save Changes') }} &rarr;
                 </button>
             </div>
         </form>

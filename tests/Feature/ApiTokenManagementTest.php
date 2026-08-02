@@ -23,7 +23,7 @@ class ApiTokenManagementTest extends TestCase
 
         $this->user->profile()->create([
             'full_name' => 'Test User',
-            'phone'     => '081234567890',
+            'phone'     => '0812' . rand(10000000, 99999999),
         ]);
     }
 

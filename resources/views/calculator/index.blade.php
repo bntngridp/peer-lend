@@ -69,7 +69,7 @@
                         </div>
                         <input type="hidden" id="gradeInput" value="A">
                         <p id="gradeDescription" class="mt-2 text-[11px] text-slate-500 font-medium">
-                            Grade A: Suku bunga 8–10% / thn. Profil risiko sangat rendah.
+                            {{ __('Grade A: Interest rate 8–10% / yr. Very low risk profile.') }}
                         </p>
                     </div>
 
@@ -88,22 +88,22 @@
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         <div class="rounded-2xl bg-emerald-700 text-white p-4 shadow-xs">
                             <span class="text-[10px] font-bold text-emerald-100 uppercase tracking-wider block">{{ __('MONTHLY INSTALLMENT') }}</span>
-                            <span id="res_monthly" class="text-lg font-black text-white mt-1 block truncate">Rp 916.667</span>
+                            <span id="res_monthly" class="text-lg font-black text-white mt-1 block truncate">Rp {{ __n('916.667') }}</span>
                         </div>
 
                         <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
                             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">{{ __('TOTAL REPAYMENT') }}</span>
-                            <span id="res_total" class="text-base font-extrabold text-slate-900 mt-1 block truncate">Rp 11.000.000</span>
+                            <span id="res_total" class="text-base font-extrabold text-slate-900 mt-1 block truncate">Rp {{ __n('11.000.000') }}</span>
                         </div>
 
                         <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
                             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">{{ __('TOTAL INTEREST') }}</span>
-                            <span id="res_interest" class="text-base font-extrabold text-emerald-700 mt-1 block truncate">Rp 1.000.000</span>
+                            <span id="res_interest" class="text-base font-extrabold text-emerald-700 mt-1 block truncate">Rp {{ __n('1.000.000') }}</span>
                         </div>
 
                         <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
                             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">{{ __('PROVISION FEE') }} (1%)</span>
-                            <span id="res_fee" class="text-base font-extrabold text-slate-900 mt-1 block truncate">Rp 100.000</span>
+                            <span id="res_fee" class="text-base font-extrabold text-slate-900 mt-1 block truncate">Rp {{ __n('100.000') }}</span>
                         </div>
                     </div>
 
@@ -111,7 +111,7 @@
                     <div class="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
                         <div class="p-4 border-b border-slate-100 flex items-center justify-between">
                             <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ __('Amortization Schedule') }}</h3>
-                            <span id="res_duration_badge" class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">12 {{ __('Months') }}</span>
+                            <span id="res_duration_badge" class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">{{ __n('12') }} {{ __('Months') }}</span>
                         </div>
 
                         <div class="overflow-x-auto">
@@ -140,22 +140,30 @@
     <!-- JavaScript Calculation Engine -->
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const amountRange  = document.getElementById('amountRange');
-        const amountInput  = document.getElementById('amountInput');
+        const amountRange   = document.getElementById('amountRange');
+        const amountInput   = document.getElementById('amountInput');
         const amountDisplay = document.getElementById('amountDisplay');
         const durationInput = document.getElementById('durationInput');
         const gradeInput    = document.getElementById('gradeInput');
         const gradeDesc     = document.getElementById('gradeDescription');
+        const currentLocale = '{{ app()->getLocale() }}';
+
+        function convertToArabicNumerals(str) {
+            if (currentLocale !== 'ar') return str;
+            const westernDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            const arabicDigits  = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+            return String(str).replace(/[0-9]/g, d => arabicDigits[d]);
+        }
 
         const gradeDescriptions = {
-            A: 'Grade A: Suku bunga 8–10% / thn. Profil risiko sangat rendah.',
-            B: 'Grade B: Suku bunga 11–14% / thn. Profil risiko sedang.',
-            C: 'Grade C: Suku bunga 15–18% / thn. Profil risiko tinggi.',
-            D: 'Grade D: Suku bunga 19–24% / thn. Profil risiko sangat tinggi.',
+            A: "{{ __('Grade A: Interest rate 8–10% / yr. Very low risk profile.') }}",
+            B: "{{ __('Grade B: Interest rate 11–14% / yr. Medium risk profile.') }}",
+            C: "{{ __('Grade C: Interest rate 15–18% / yr. High risk profile.') }}",
+            D: "{{ __('Grade D: Interest rate 19–24% / yr. Very high risk profile.') }}",
         };
 
         function formatRupiah(num) {
-            return 'Rp ' + Math.floor(num).toLocaleString('id-ID');
+            return convertToArabicNumerals('Rp ' + Math.floor(num).toLocaleString('id-ID'));
         }
 
         amountRange.addEventListener('input', () => {
@@ -195,7 +203,7 @@
             e.preventDefault();
 
             const btnText = document.getElementById('btnText');
-            btnText.textContent = 'Menghitung...';
+            btnText.textContent = "{{ __('Calculating...') }}";
 
             try {
                 const response = await fetch('{{ route("calculator.calculate") }}', {
@@ -215,11 +223,11 @@
                 const data = await response.json();
                 if (!data.success) throw new Error(data.error || 'Terjadi kesalahan');
 
-                document.getElementById('res_monthly').textContent   = data.monthly_payment;
-                document.getElementById('res_total').textContent     = data.total_payment;
-                document.getElementById('res_interest').textContent  = data.total_interest;
-                document.getElementById('res_fee').textContent       = data.origination_fee;
-                document.getElementById('res_duration_badge').textContent = data.duration + ' Bulan';
+                document.getElementById('res_monthly').textContent   = convertToArabicNumerals(data.monthly_payment);
+                document.getElementById('res_total').textContent     = convertToArabicNumerals(data.total_payment);
+                document.getElementById('res_interest').textContent  = convertToArabicNumerals(data.total_interest);
+                document.getElementById('res_fee').textContent       = convertToArabicNumerals(data.provision_fee);
+                document.getElementById('res_duration_badge').textContent = convertToArabicNumerals(durationInput.value) + " {{ __('Months') }}";
 
                 const tbody = document.getElementById('scheduleBody');
                 tbody.innerHTML = '';
@@ -227,11 +235,11 @@
                     const tr = document.createElement('tr');
                     tr.className = 'hover:bg-slate-50/80 transition-colors';
                     tr.innerHTML = `
-                        <td class="py-3 px-4 font-bold text-slate-900">${row.month}</td>
-                        <td class="py-3 px-4 text-right font-bold text-emerald-700">${row.payment}</td>
-                        <td class="py-3 px-4 text-right text-slate-700">${row.principal}</td>
-                        <td class="py-3 px-4 text-right text-slate-600">${row.interest}</td>
-                        <td class="py-3 px-4 text-right text-slate-500 font-mono">${row.remaining}</td>
+                        <td class="py-3 px-4 font-bold text-slate-900">${convertToArabicNumerals(row.month)}</td>
+                        <td class="py-3 px-4 text-right font-extrabold text-slate-900">${convertToArabicNumerals(row.installment)}</td>
+                        <td class="py-3 px-4 text-right font-semibold text-slate-700">${convertToArabicNumerals(row.principal)}</td>
+                        <td class="py-3 px-4 text-right font-semibold text-emerald-700">${convertToArabicNumerals(row.interest)}</td>
+                        <td class="py-3 px-4 text-right font-semibold text-slate-400">${convertToArabicNumerals(row.remaining)}</td>
                     `;
                     tbody.appendChild(tr);
                 });
@@ -239,7 +247,7 @@
             } catch (err) {
                 console.error(err);
             } finally {
-                btnText.textContent = 'Hitung Simpul Pinjaman →';
+                btnText.textContent = '{{ __('Calculate Loan') }} →';
             }
         });
 

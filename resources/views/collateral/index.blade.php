@@ -22,13 +22,13 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('TOTAL PLEDGED VALUE') }}</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">+2.4%</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">+{{ __n('2.4%') }}</span>
             </div>
             <div class="mt-3">
                 <p class="text-3xl font-black text-slate-900 tracking-tight">
-                    Rp {{ number_format($totalPledgedValue ?? 1700000000, 0, ',', '.') }}
+                    Rp {{ __n(number_format($totalPledgedValue ?? 1700000000, 0, ',', '.')) }}
                 </p>
-                <p class="text-[11px] text-slate-400 font-medium mt-0.5">Across {{ $cryptoLoans->count() }} active collateral positions</p>
+                <p class="text-[11px] text-slate-400 font-medium mt-0.5">{{ __('Across') }} {{ __n($cryptoLoans->count()) }} {{ __('active collateral positions') }}</p>
             </div>
         </div>
 
@@ -36,13 +36,13 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('WEIGHTED AVG LTV') }}</span>
-                <span class="text-xs font-bold text-emerald-700">Target &lt;65%</span>
+                <span class="text-xs font-bold text-emerald-700">{{ __('Target') }} &lt;{{ __n('65%') }}</span>
             </div>
             <div class="mt-3">
                 <p class="text-3xl font-black text-slate-900 tracking-tight">
-                    {{ number_format($weightedAvgLtv ?? 78.0, 1) }}%
+                    {{ __n(number_format($weightedAvgLtv ?? 78.0, 1)) }}%
                 </p>
-                <p class="text-[11px] text-slate-400 font-medium mt-0.5">Margin Call Threshold: 75%</p>
+                <p class="text-[11px] text-slate-400 font-medium mt-0.5">{{ __('Margin Call Threshold:') }} {{ __n('75%') }}</p>
             </div>
         </div>
 
@@ -50,17 +50,17 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('PORTFOLIO RISK STATUS') }}</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">Monitor</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">{{ __('Monitor') }}</span>
             </div>
             <div class="mt-3 space-y-1 text-xs font-semibold">
                 <div class="flex items-center gap-1.5 text-rose-600">
-                    <span class="h-2 w-2 rounded-full bg-rose-600"></span> {{ $atRiskCount }} Loans in Liquidation Zone
+                    <span class="h-2 w-2 rounded-full bg-rose-600"></span> {{ __n($atRiskCount) }} {{ __('Loans in Liquidation Zone') }}
                 </div>
                 <div class="flex items-center gap-1.5 text-amber-600">
-                    <span class="h-2 w-2 rounded-full bg-amber-500"></span> {{ $warningCount }} Loans near Margin Call
+                    <span class="h-2 w-2 rounded-full bg-amber-500"></span> {{ __n($warningCount) }} {{ __('Loans near Margin Call') }}
                 </div>
                 <div class="flex items-center gap-1.5 text-emerald-700">
-                    <span class="h-2 w-2 rounded-full bg-emerald-600"></span> {{ $healthyCount }} Healthy Positions
+                    <span class="h-2 w-2 rounded-full bg-emerald-600"></span> {{ __n($healthyCount) }} {{ __('Healthy Positions') }}
                 </div>
             </div>
         </div>
@@ -73,7 +73,7 @@
         <div class="lg:col-span-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                 <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ __('Collateral Distribution') }}</h3>
-                <span class="text-xs font-bold text-emerald-700">3 {{ __('Currencies') }}</span>
+                <span class="text-xs font-bold text-emerald-700">{{ __n('3') }} {{ __('Currencies') }}</span>
             </div>
 
             <div class="space-y-3">
@@ -85,12 +85,12 @@
                         </div>
                         <div>
                             <span class="font-bold text-slate-900 text-xs block">{{ $item['name'] }} ({{ $item['code'] }})</span>
-                            <span class="text-[10px] text-slate-400 font-medium block">{{ number_format($item['total_locked'], $item['code'] === 'BTC' ? 4 : 2) }} {{ $item['code'] }} {{ __('Locked') }}</span>
+                            <span class="text-[10px] text-slate-400 font-medium block">{{ __n(number_format($item['total_locked'], $item['code'] === 'BTC' ? 4 : 2)) }} {{ $item['code'] }} {{ __('Locked') }}</span>
                         </div>
                     </div>
                     <div class="text-right">
-                        <span class="font-extrabold text-slate-900 text-xs block">Rp {{ number_format($item['total_amount'], 0, ',', '.') }}</span>
-                        <span class="text-[10px] text-emerald-700 font-bold block">{{ $item['percentage'] }}% {{ __('of Pool') }}</span>
+                        <span class="font-extrabold text-slate-900 text-xs block">Rp {{ __n(number_format($item['total_amount'], 0, ',', '.')) }}</span>
+                        <span class="text-[10px] text-emerald-700 font-bold block">{{ __n($item['percentage']) }}% {{ __('of Pool') }}</span>
                     </div>
                 </div>
                 @empty
@@ -110,26 +110,26 @@
             <div class="space-y-3 text-xs font-medium">
                 <div class="p-3 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-between">
                     <div>
-                        <span class="font-bold text-rose-900 block">{{ __('High Risk') }} (&gt;80% LTV)</span>
-                        <span class="text-[10px] text-rose-700">{{ $atRiskCount }} {{ __('Loans Affected') }}</span>
+                        <span class="font-bold text-rose-900 block">{{ __('High Risk') }} (&gt;{{ __n('80%') }} LTV)</span>
+                        <span class="text-[10px] text-rose-700">{{ __n($atRiskCount) }} {{ __('Loans Affected') }}</span>
                     </div>
-                    <span class="font-black text-rose-700">Rp {{ number_format($highRiskAmount, 0, ',', '.') }}</span>
+                    <span class="font-black text-rose-700">Rp {{ __n(number_format($highRiskAmount, 0, ',', '.')) }}</span>
                 </div>
 
                 <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between">
                     <div>
-                        <span class="font-bold text-amber-900 block">{{ __('Medium Risk') }} (75-80% LTV)</span>
-                        <span class="text-[10px] text-amber-700">{{ $warningCount }} {{ __('Loans Affected') }}</span>
+                        <span class="font-bold text-amber-900 block">{{ __('Medium Risk') }} ({{ __n('75-80%') }} LTV)</span>
+                        <span class="text-[10px] text-amber-700">{{ __n($warningCount) }} {{ __('Loans Affected') }}</span>
                     </div>
-                    <span class="font-black text-amber-700">Rp {{ number_format($mediumRiskAmount, 0, ',', '.') }}</span>
+                    <span class="font-black text-amber-700">Rp {{ __n(number_format($mediumRiskAmount, 0, ',', '.')) }}</span>
                 </div>
 
                 <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between">
                     <div>
-                        <span class="font-bold text-emerald-900 block">{{ __('Low Risk') }} (&lt;75% LTV)</span>
-                        <span class="text-[10px] text-emerald-700">{{ $healthyCount }} {{ __('Loans Healthy') }}</span>
+                        <span class="font-bold text-emerald-900 block">{{ __('Low Risk') }} (&lt;{{ __n('75%') }} LTV)</span>
+                        <span class="text-[10px] text-emerald-700">{{ __n($healthyCount) }} {{ __('Loans Healthy') }}</span>
                     </div>
-                    <span class="font-black text-emerald-700">Rp {{ number_format($lowRiskAmount, 0, ',', '.') }}</span>
+                    <span class="font-black text-emerald-700">Rp {{ __n(number_format($lowRiskAmount, 0, ',', '.')) }}</span>
                 </div>
             </div>
         </div>
@@ -167,13 +167,13 @@
                             {{ $loan->borrower?->profile?->full_name ?? __('Borrower') }}
                         </td>
                         <td class="py-4 px-6 font-bold text-indigo-700">
-                            {{ $loan->collateralCurrency?->code ?? 'CRYPTO' }} ({{ number_format($loan->collateral_amount, 4) }})
+                            {{ $loan->collateralCurrency?->code ?? 'CRYPTO' }} ({{ __n(number_format($loan->collateral_amount, 4)) }})
                         </td>
                         <td class="py-4 px-6 font-extrabold {{ $loan->current_ltv >= 80 ? 'text-rose-600' : 'text-amber-600' }}">
-                            {{ number_format($loan->current_ltv, 1) }}%
+                            {{ __n(number_format($loan->current_ltv, 1)) }}%
                         </td>
                         <td class="py-4 px-6 font-semibold text-slate-900">
-                            Rp {{ number_format($loan->liquidation_price ?? 0, 0, ',', '.') }}
+                            Rp {{ __n(number_format($loan->liquidation_price ?? 0, 0, ',', '.')) }}
                         </td>
                         <td class="py-4 px-6">
                             @if($loan->current_ltv >= 80)

@@ -41,14 +41,14 @@ class Phase8And9AutoInvestApiTest extends TestCase
         // Borrower Setup
         $this->borrower = User::factory()->create();
         $this->borrower->roles()->attach(Role::where('name', 'borrower')->firstOrFail()->id);
-        Profile::create(['user_id' => $this->borrower->id, 'full_name' => 'Borrower Satu', 'phone' => '081234567891']);
+        Profile::create(['user_id' => $this->borrower->id, 'full_name' => 'Borrower Satu', 'phone' => '0819' . rand(10000000, 99999999)]);
         KYC::create(['user_id' => $this->borrower->id, 'status' => 'approved']);
         Wallet::create(['user_id' => $this->borrower->id, 'currency_id' => $this->idr->id]);
 
         // Lender Setup (with Rp 10.000.000 balance)
         $this->lender = User::factory()->create();
         $this->lender->roles()->attach(Role::where('name', 'lender')->firstOrFail()->id);
-        Profile::create(['user_id' => $this->lender->id, 'full_name' => 'Lender Automatik', 'phone' => '081234567892']);
+        Profile::create(['user_id' => $this->lender->id, 'full_name' => 'Lender Auto', 'phone' => '0818' . rand(10000000, 99999999)]);
         KYC::create(['user_id' => $this->lender->id, 'status' => 'approved']);
         Wallet::create([
             'user_id'           => $this->lender->id,
@@ -115,6 +115,9 @@ class Phase8And9AutoInvestApiTest extends TestCase
 
     public function test_auto_invest_funds_matching_loan_automatically(): void
     {
+        LoanRequest::query()->update(['status' => LoanRequest::STATUS_COMPLETED]);
+        AutoInvestRule::truncate();
+
         // 1. Lender configures auto-invest: Grade B to A, LTV max 80%, allocation Rp 2.000.000
         AutoInvestRule::create([
             'lender_id'               => $this->lender->id,
@@ -150,7 +153,7 @@ class Phase8And9AutoInvestApiTest extends TestCase
         $this->assertEquals(40.00, (float) $loan->funded_percentage); // 2jt / 5jt = 40%
 
         // 5. Verify Lender's wallet available balance reduced by Rp 2.000.000 and hold balance is Rp 2.000.000
-        $lenderWallet = $this->lender->walletFor($this->idr->id);
+        $lenderWallet = Wallet::where('user_id', $this->lender->id)->where('currency_id', $this->idr->id)->first();
         $this->assertEquals(8000000.00, (float) $lenderWallet->available_balance);
         $this->assertEquals(2000000.00, (float) $lenderWallet->hold_balance);
     }

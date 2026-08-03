@@ -4,8 +4,8 @@ namespace App\Modules\KYC\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\WalletTransaction;
 use App\Modules\Loan\Models\Loan;
-use App\Modules\Wallet\Models\Transaction;
 use Illuminate\Http\Request;
 
 class AdminGovernanceController extends Controller
@@ -28,7 +28,7 @@ class AdminGovernanceController extends Controller
 
     public function transactions()
     {
-        $transactions = Transaction::with('wallet.user')->latest()->paginate(15);
+        $transactions = WalletTransaction::with('wallet.user')->latest('created_at')->paginate(15);
         return view('admin.transactions.index', compact('transactions'));
     }
 

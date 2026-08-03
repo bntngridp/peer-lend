@@ -5,8 +5,8 @@
     
     <!-- Top Header Bar -->
     <div>
-        <h1 class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">{{ __('Account Settings') }}</h1>
-        <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">{{ __('Manage your personal profile, security methods, active sessions, and system preferences.') }}</p>
+        <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ __('Account Settings') }}</h1>
+        <p class="text-xs font-medium text-slate-500 mt-1">{{ __('Manage your personal profile, security methods, active sessions, and system preferences.') }}</p>
     </div>
 
     <!-- Navigation Tabs Header -->
@@ -312,25 +312,25 @@
             
             <!-- Security Score Card -->
             <div class="rounded-2xl border border-emerald-200 bg-emerald-50/40 p-5 shadow-xs space-y-3">
-                <span class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block">{{ __('SECURITY SCORE') }}</span>
+                <span class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block">SECURITY SCORE</span>
                 
                 <div class="flex items-baseline gap-2">
-                    <span class="text-3xl font-black text-emerald-700">{{ Auth::user()->google2fa_enabled ? __n('92') : __n('75') }}</span>
-                    <span class="text-xs font-bold text-slate-400">/ {{ __n('100') }}</span>
+                    <span class="text-3xl font-black text-emerald-700">{{ Auth::user()->google2fa_enabled ? '92' : '75' }}</span>
+                    <span class="text-xs font-bold text-slate-400">/ 100</span>
                     <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-700 text-white ml-auto">
-                        {{ Auth::user()->google2fa_enabled ? __('Strong Protection') : __('Good Protection') }}
+                        {{ Auth::user()->google2fa_enabled ? 'Strong Protection' : 'Good Protection' }}
                     </span>
                 </div>
 
                 <div class="space-y-2 text-xs border-t border-emerald-200/60 pt-3">
                     <div class="flex justify-between">
-                        <span class="text-slate-600">{{ __('Password Strength') }}</span>
-                        <span class="font-bold text-emerald-800">{{ __('Strong') }}</span>
+                        <span class="text-slate-600">Password Strength</span>
+                        <span class="font-bold text-emerald-800">Strong</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-slate-600">{{ __('2FA Setup') }}</span>
+                        <span class="text-slate-600">2FA Setup</span>
                         <span class="font-bold {{ Auth::user()->google2fa_enabled ? 'text-emerald-800' : 'text-amber-700' }}">
-                            {{ Auth::user()->google2fa_enabled ? __('Enabled') : __('Disabled') }}
+                            {{ Auth::user()->google2fa_enabled ? 'Enabled' : 'Disabled' }}
                         </span>
                     </div>
                 </div>
@@ -338,7 +338,7 @@
 
             <!-- Active Sessions Card -->
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-3">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">{{ __('Active Sessions') }}</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Active Sessions</span>
 
                 <div class="space-y-3 text-xs">
                     <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
@@ -346,20 +346,20 @@
                             <span class="font-bold text-slate-900 block text-xs">Mac OS • Safari</span>
                             <span class="text-[10px] text-slate-400 font-medium block">Jakarta, ID • 182.1.22.4</span>
                         </div>
-                        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 text-emerald-800">{{ __('CURRENT') }}</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 text-emerald-800">CURRENT</span>
                     </div>
 
                     <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between opacity-70">
                         <div>
                             <span class="font-bold text-slate-800 block text-xs">iOS • LendFlow App</span>
-                            <span class="text-[10px] text-slate-400 font-medium block">{{ __('Active 2 hours ago') }}</span>
+                            <span class="text-[10px] text-slate-400 font-medium block">Active 2 hours ago</span>
                         </div>
-                        <button type="button" @click="alert('Session revoked!')" class="text-[10px] font-bold text-rose-600 hover:underline">{{ __('Revoke') }}</button>
+                        <button type="button" @click="alert('Session revoked!')" class="text-[10px] font-bold text-rose-600 hover:underline">Revoke</button>
                     </div>
                 </div>
 
-                <button type="button" @click="alert('All other sessions signed out!')" class="w-full py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 cursor-pointer">
-                    {{ __('Sign out all other sessions') }}
+                <button type="button" @click="alert('All other sessions signed out!')" class="w-full py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50">
+                    Sign out all other sessions
                 </button>
             </div>
 
@@ -370,8 +370,8 @@
     <!-- ─── Tab 3: Notification Preferences ──────────────────────────────── -->
     <div x-show="profileTab === 'notifications'" class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6" style="display: none;">
         <div>
-            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-2">{{ __('Notification Preferences') }}</h3>
-            <p class="text-xs text-slate-500 font-medium mt-1">{{ __('Manage how LendFlow communicates important updates, alerts, and marketing information to you.') }}</p>
+            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-2">Notification Preferences</h3>
+            <p class="text-xs text-slate-500 font-medium mt-1">Manage how LendFlow communicates important updates, alerts, and marketing information to you.</p>
         </div>
 
         <form action="{{ route('profile.notifications.update') }}" method="POST" class="space-y-6">
@@ -390,42 +390,42 @@
             @endphp
 
             <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
-                <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-2">{{ __('Security Alerts') }}</h4>
+                <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-2">Security Alerts</h4>
                 <div class="flex items-center justify-between text-xs">
-                    <span class="font-bold text-slate-800">{{ __('Unrecognized Logins & Password Changes') }}</span>
+                    <span class="font-bold text-slate-800">Unrecognized Logins &amp; Password Changes</span>
                     <div class="flex gap-4">
                         <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                            <input type="checkbox" name="security_email" value="1" {{ !empty($settings['security_email']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Email') }}
+                            <input type="checkbox" name="security_email" value="1" {{ !empty($settings['security_email']) ? 'checked' : '' }} class="accent-emerald-700"> Email
                         </label>
                         <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                            <input type="checkbox" name="security_push" value="1" {{ !empty($settings['security_push']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Push') }}
+                            <input type="checkbox" name="security_push" value="1" {{ !empty($settings['security_push']) ? 'checked' : '' }} class="accent-emerald-700"> Push
                         </label>
                     </div>
                 </div>
             </div>
 
             <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
-                <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-2">{{ __('Financial Activity') }}</h4>
+                <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-2">Financial Activity</h4>
                 <div class="space-y-3 text-xs">
                     <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
-                        <span class="font-bold text-slate-800">{{ __('Loan Approvals & Updates') }}</span>
+                        <span class="font-bold text-slate-800">Loan Approvals &amp; Updates</span>
                         <div class="flex gap-4">
                             <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                                <input type="checkbox" name="financial_email" value="1" {{ !empty($settings['financial_email']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Email') }}
+                                <input type="checkbox" name="financial_email" value="1" {{ !empty($settings['financial_email']) ? 'checked' : '' }} class="accent-emerald-700"> Email
                             </label>
                             <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                                <input type="checkbox" name="financial_push" value="1" {{ !empty($settings['financial_push']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Push') }}
+                                <input type="checkbox" name="financial_push" value="1" {{ !empty($settings['financial_push']) ? 'checked' : '' }} class="accent-emerald-700"> Push
                             </label>
                         </div>
                     </div>
                     <div class="flex items-center justify-between py-1">
-                        <span class="font-bold text-slate-800">{{ __('Investment Milestones & Returns') }}</span>
+                        <span class="font-bold text-slate-800">Investment Milestones &amp; Returns</span>
                         <div class="flex gap-4">
                             <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                                <input type="checkbox" name="investment_email" value="1" {{ !empty($settings['investment_email']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Email') }}
+                                <input type="checkbox" name="investment_email" value="1" {{ !empty($settings['investment_email']) ? 'checked' : '' }} class="accent-emerald-700"> Email
                             </label>
                             <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                                <input type="checkbox" name="investment_push" value="1" {{ !empty($settings['investment_push']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Push') }}
+                                <input type="checkbox" name="investment_push" value="1" {{ !empty($settings['investment_push']) ? 'checked' : '' }} class="accent-emerald-700"> Push
                             </label>
                         </div>
                     </div>
@@ -433,7 +433,7 @@
             </div>
 
             <button type="submit" id="btn_save_notification_preferences" class="py-2.5 px-6 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs cursor-pointer">
-                {{ __('Save Preferences') }} &rarr;
+                Save Preferences &rarr;
             </button>
         </form>
     </div>
@@ -460,7 +460,7 @@
             @endphp
 
             <!-- Appearance Settings -->
-            <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 space-y-6">
+            <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-6">
                 <h4 class="text-xs font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">{{ __('Appearance') }}</h4>
 
                 <div class="space-y-6">
@@ -469,7 +469,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <label @click="colorTheme = 'light'; applyTheme('light')"
                                    :class="colorTheme === 'light' 
-                                       ? 'border-emerald-600 dark:border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/30 ring-2 ring-emerald-600/20 dark:ring-emerald-500/20' 
+                                       ? 'border-emerald-600 dark:border-emerald-500 bg-emerald-50/60 dark:bg-emerald-950/40 ring-2 ring-emerald-600/20 dark:ring-emerald-500/20' 
                                        : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'"
                                    class="p-3.5 rounded-xl border flex items-center justify-between cursor-pointer transition-all select-none">
                                 <div class="flex items-center gap-3">
@@ -488,7 +488,7 @@
 
                             <label @click="colorTheme = 'dark'; applyTheme('dark')"
                                    :class="colorTheme === 'dark' 
-                                       ? 'border-emerald-600 dark:border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/30 ring-2 ring-emerald-600/20 dark:ring-emerald-500/20' 
+                                       ? 'border-emerald-600 dark:border-emerald-500 bg-emerald-50/60 dark:bg-emerald-950/40 ring-2 ring-emerald-600/20 dark:ring-emerald-500/20' 
                                        : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'"
                                    class="p-3.5 rounded-xl border flex items-center justify-between cursor-pointer transition-all select-none">
                                 <div class="flex items-center gap-3">
@@ -512,7 +512,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <label @click="density = 'comfortable'; applyDensity('comfortable')"
                                    :class="density === 'comfortable' 
-                                       ? 'border-emerald-600 dark:border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/30 ring-2 ring-emerald-600/20 dark:ring-emerald-500/20' 
+                                       ? 'border-emerald-600 dark:border-emerald-500 bg-emerald-50/60 dark:bg-emerald-950/40 ring-2 ring-emerald-600/20 dark:ring-emerald-500/20' 
                                        : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'"
                                    class="p-3.5 rounded-xl border flex items-center justify-between cursor-pointer transition-all select-none">
                                 <div>
@@ -524,7 +524,7 @@
 
                             <label @click="density = 'compact'; applyDensity('compact')"
                                    :class="density === 'compact' 
-                                       ? 'border-emerald-600 dark:border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/30 ring-2 ring-emerald-600/20 dark:ring-emerald-500/20' 
+                                       ? 'border-emerald-600 dark:border-emerald-500 bg-emerald-50/60 dark:bg-emerald-950/40 ring-2 ring-emerald-600/20 dark:ring-emerald-500/20' 
                                        : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'"
                                    class="p-3.5 rounded-xl border flex items-center justify-between cursor-pointer transition-all select-none">
                                 <div>
@@ -551,7 +551,7 @@
             </div>
 
             <!-- Privacy & Data -->
-            <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 space-y-4">
+            <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-4">
                 <h4 class="text-xs font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">{{ __('Privacy & Data Controls') }}</h4>
 
                 <div class="space-y-3 text-xs font-medium">

@@ -24,9 +24,12 @@ Route::post('/calculator/calculate', [\App\Modules\Loan\Controllers\LoanCalculat
 
 // ─── Auth Routes (Guest only) ─────────────────────────────────────────────────
 Route::middleware('guest')->group(function () {
-    // Register
+    // Register & OTP Verification
     Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
     Route::post('/register', [RegisterController::class, 'register']);
+    Route::get('/register/verify-otp', [RegisterController::class, 'showOtpForm'])->name('register.otp');
+    Route::post('/register/verify-otp', [RegisterController::class, 'verifyOtp'])->name('register.otp.verify');
+    Route::post('/register/resend-otp', [RegisterController::class, 'resendOtp'])->name('register.otp.resend');
 
     // Login
     Route::get('/login', [LoginController::class, 'showForm'])->name('login');

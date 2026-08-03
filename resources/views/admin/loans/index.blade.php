@@ -6,8 +6,8 @@
     <!-- Header -->
     <div class="sm:flex sm:items-center sm:justify-between mb-8">
         <div>
-            <h1 class="text-2xl font-bold tracking-tight text-gray-900">Loan Applications Control Queue</h1>
-            <p class="mt-2 text-sm text-gray-700">Review pending borrowers' applications to approve them into the marketplace, or trigger funding disbursements.</p>
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900">{{ __('Loan Applications Control Queue') }}</h1>
+            <p class="mt-2 text-sm text-gray-700">{{ __("Review pending borrowers' applications to approve them into the marketplace, or trigger funding disbursements.") }}</p>
         </div>
     </div>
 
@@ -16,13 +16,13 @@
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50/70">
                 <tr>
-                    <th scope="col" class="py-3.5 pl-6 pr-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500">Applicant</th>
-                    <th scope="col" class="px-3 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500">Target amount</th>
-                    <th scope="col" class="px-3 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500">Collateral</th>
-                    <th scope="col" class="px-3 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500">Funding Progress</th>
-                    <th scope="col" class="px-3 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500">Status</th>
+                    <th scope="col" class="py-3.5 pl-6 pr-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500">{{ __('Applicant') }}</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500">{{ __('Target amount') }}</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500">{{ __('Collateral') }}</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500">{{ __('Funding Progress') }}</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500">{{ __('Status') }}</th>
                     <th scope="col" class="relative py-3.5 pl-3 pr-6 text-right">
-                        <span class="sr-only">Actions</span>
+                        <span class="sr-only">{{ __('Actions') }}</span>
                     </th>
                 </tr>
             </thead>
@@ -35,14 +35,14 @@
                                     {{ strtoupper(substr($loan->borrower->profile->full_name ?? $loan->borrower->email, 0, 2)) }}
                                 </div>
                                 <div>
-                                    <div class="text-sm font-bold text-gray-900">{{ $loan->borrower->profile->full_name ?? 'Applicant' }}</div>
+                                    <div class="text-sm font-bold text-gray-900">{{ $loan->borrower->profile->full_name ?? __('Applicant') }}</div>
                                     <div class="text-xs text-gray-500">{{ $loan->purpose }}</div>
                                 </div>
                             </div>
                         </td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm">
-                            <div class="font-bold text-gray-900">Rp {{ number_format($loan->amount, 0, ',', '.') }}</div>
-                            <div class="text-xs text-gray-500">{{ $loan->interest_rate }}% APR (Grade {{ $loan->risk_grade }})</div>
+                            <div class="font-bold text-gray-900">Rp {{ __n(number_format($loan->amount, 0, ',', '.')) }}</div>
+                            <div class="text-xs text-gray-500">{{ __n($loan->interest_rate) }}% APR (Grade {{ $loan->risk_grade }})</div>
                         </td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                             @if($loan->isCryptoLoan())
@@ -50,7 +50,7 @@
                                     {{ number_format($loan->collateral_amount, $loan->collateralCurrency->decimal_places) }} {{ $loan->collateralCurrency->code }}
                                 </span>
                             @else
-                                <span class="text-xs text-gray-400">Unsecured / Fiat</span>
+                                <span class="text-xs text-gray-400">{{ __('Unsecured / Fiat') }}</span>
                             @endif
                         </td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
@@ -58,7 +58,7 @@
                                 <div class="w-24 bg-gray-100 rounded-full h-1.5 overflow-hidden">
                                     <div class="bg-indigo-600 h-1.5 rounded-full" style="width: {{ min(100, $loan->funded_percentage) }}%"></div>
                                 </div>
-                                <span class="text-xs font-semibold text-gray-700">{{ $loan->funded_percentage }}%</span>
+                                <span class="text-xs font-semibold text-gray-700">{{ __n($loan->funded_percentage) }}%</span>
                             </div>
                         </td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm">
@@ -68,31 +68,28 @@
                                 @elseif($loan->status === 'active') bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/10
                                 @elseif($loan->status === 'completed') bg-gray-50 text-gray-700 ring-1 ring-gray-600/10
                                 @else bg-red-50 text-red-700 ring-1 ring-red-600/10 @endif">
-                                {{ str_replace('_', ' ', $loan->status) }}
+                                {{ __(str_replace('_', ' ', $loan->status)) }}
                             </span>
                         </td>
                         <td class="relative whitespace-nowrap py-4 pl-3 pr-6 text-right text-sm font-semibold">
                             <a href="{{ route('admin.loans.show', $loan->id) }}" class="text-indigo-600 hover:text-indigo-900">
-                                Review Application
+                                {{ __('Review Application') }}
                             </a>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="py-10 text-center text-sm text-gray-500">
-                            No loan applications in the queue.
-                        </td>
+                        <td colspan="6" class="py-12 text-center text-gray-400">{{ __('No loan applications found.') }}</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
-
-        @if($loans->hasPages())
-            <div class="border-t border-gray-150 px-6 py-3">
-                {{ $loans->links() }}
-            </div>
-        @endif
     </div>
 
+    @if($loans->hasPages())
+        <div class="mt-6">
+            {{ $loans->links() }}
+        </div>
+    @endif
 </div>
 @endsection

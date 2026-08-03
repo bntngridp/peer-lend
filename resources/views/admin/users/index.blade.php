@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'User Management - Admin Terminal')
+@section('title', __('User Management') . ' - Admin Terminal')
 
 @section('content')
 <div class="space-y-6 max-w-7xl mx-auto">
@@ -8,15 +8,15 @@
     <!-- Top Header Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">User Management</h1>
-            <p class="text-xs font-medium text-slate-500 mt-1">Manage institutional and retail participants across all roles &amp; onboarding states.</p>
+            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ __('User Management') }}</h1>
+            <p class="text-xs font-medium text-slate-500 mt-1">{{ __('Manage institutional and retail participants across all roles & onboarding states.') }}</p>
         </div>
         <div class="flex items-center gap-3">
             <button type="button" @click="alert('Downloading User Export CSV...')" class="py-2 px-3.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-bold text-xs hover:bg-slate-50 shadow-xs">
-                Download Export CSV
+                {{ __('Download Export CSV') }}
             </button>
             <button type="button" @click="alert('Add New User dialog opened.')" class="py-2 px-4 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
-                + Add New User
+                {{ __('+ Add New User') }}
             </button>
         </div>
     </div>
@@ -27,21 +27,21 @@
         <!-- Table Filters & Search -->
         <div class="p-4 border-b border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="w-full sm:w-80">
-                <input type="text" placeholder="Search user ID, name, email..."
+                <input type="text" placeholder="{{ __('Search user ID, name, email...') }}"
                        class="w-full rounded-xl border border-slate-200 px-3.5 py-2 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600">
             </div>
             <div class="flex items-center gap-3 w-full sm:w-auto">
                 <select class="rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 outline-none">
-                    <option value="">All Roles</option>
-                    <option value="borrower">Borrower</option>
-                    <option value="lender">Lender</option>
-                    <option value="admin">Admin</option>
+                    <option value="">{{ __('All Roles') }}</option>
+                    <option value="borrower">{{ __('Borrower') }}</option>
+                    <option value="lender">{{ __('Lender') }}</option>
+                    <option value="admin">{{ __('Admin') }}</option>
                 </select>
                 <select class="rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 outline-none">
-                    <option value="">All Statuses</option>
-                    <option value="active">Active</option>
-                    <option value="pending_kyc">Pending KYC</option>
-                    <option value="suspended">Suspended</option>
+                    <option value="">{{ __('All Statuses') }}</option>
+                    <option value="active">{{ __('Active') }}</option>
+                    <option value="pending_kyc">{{ __('Pending KYC') }}</option>
+                    <option value="suspended">{{ __('Suspended') }}</option>
                 </select>
             </div>
         </div>
@@ -51,13 +51,13 @@
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                        <th class="py-3.5 px-6">USER ID</th>
-                        <th class="py-3.5 px-6">NAME</th>
-                        <th class="py-3.5 px-6">ROLE</th>
-                        <th class="py-3.5 px-6">STATUS</th>
-                        <th class="py-3.5 px-6">ONBOARDING</th>
-                        <th class="py-3.5 px-6">LAST LOGIN</th>
-                        <th class="py-3.5 px-6 text-right">ACTIONS</th>
+                        <th class="py-3.5 px-6">{{ __('USER ID') }}</th>
+                        <th class="py-3.5 px-6">{{ __('NAME') }}</th>
+                        <th class="py-3.5 px-6">{{ __('ROLE') }}</th>
+                        <th class="py-3.5 px-6">{{ __('STATUS') }}</th>
+                        <th class="py-3.5 px-6">{{ __('ONBOARDING') }}</th>
+                        <th class="py-3.5 px-6">{{ __('LAST LOGIN') }}</th>
+                        <th class="py-3.5 px-6 text-right">{{ __('ACTIONS') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
@@ -79,23 +79,23 @@
                         <td class="py-4 px-6">
                             @if($usr->kyc && $usr->kyc->status === 'approved')
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">
-                                    Active
+                                    {{ __('Active') }}
                                 </span>
                             @elseif($usr->kyc && $usr->kyc->status === 'pending')
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">
-                                    Pending KYC
+                                    {{ __('Pending KYC') }}
                                 </span>
                             @else
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600">
-                                    Unverified
+                                    {{ __('Unverified') }}
                                 </span>
                             @endif
                         </td>
                         <td class="py-4 px-6">
                             <div class="w-28 space-y-1">
                                 <div class="flex justify-between text-[10px] font-bold text-slate-500">
-                                    <span>Progress</span>
-                                    <span>{{ $usr->kyc && $usr->kyc->status === 'approved' ? '100%' : '45%' }}</span>
+                                    <span>{{ __('Progress') }}</span>
+                                    <span>{{ __n($usr->kyc && $usr->kyc->status === 'approved' ? '100' : '45') }}%</span>
                                 </div>
                                 <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
                                     <div class="h-full bg-emerald-600 rounded-full" style="width: {{ $usr->kyc && $usr->kyc->status === 'approved' ? '100%' : '45%' }}"></div>
@@ -107,13 +107,13 @@
                         </td>
                         <td class="py-4 px-6 text-right">
                             <button type="button" @click="alert('User details dialog opened for {{ $usr->email }}')" class="font-bold text-emerald-700 hover:underline">
-                                View Details
+                                {{ __('View Details') }}
                             </button>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="py-12 text-center text-slate-400 font-medium">No user records found.</td>
+                        <td colspan="7" class="py-12 text-center text-slate-400 font-medium">{{ __('No user records found.') }}</td>
                     </tr>
                     @endforelse
                 </tbody>

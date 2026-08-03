@@ -226,7 +226,7 @@
                 document.getElementById('res_monthly').textContent   = convertToArabicNumerals(data.monthly_payment);
                 document.getElementById('res_total').textContent     = convertToArabicNumerals(data.total_payment);
                 document.getElementById('res_interest').textContent  = convertToArabicNumerals(data.total_interest);
-                document.getElementById('res_fee').textContent       = convertToArabicNumerals(data.provision_fee);
+                document.getElementById('res_fee').textContent       = convertToArabicNumerals(data.origination_fee || data.provision_fee);
                 document.getElementById('res_duration_badge').textContent = convertToArabicNumerals(durationInput.value) + " {{ __('Months') }}";
 
                 const tbody = document.getElementById('scheduleBody');
@@ -236,7 +236,7 @@
                     tr.className = 'hover:bg-slate-50/80 transition-colors';
                     tr.innerHTML = `
                         <td class="py-3 px-4 font-bold text-slate-900">${convertToArabicNumerals(row.month)}</td>
-                        <td class="py-3 px-4 text-right font-extrabold text-slate-900">${convertToArabicNumerals(row.installment)}</td>
+                        <td class="py-3 px-4 text-right font-extrabold text-slate-900">${convertToArabicNumerals(row.payment || row.installment)}</td>
                         <td class="py-3 px-4 text-right font-semibold text-slate-700">${convertToArabicNumerals(row.principal)}</td>
                         <td class="py-3 px-4 text-right font-semibold text-emerald-700">${convertToArabicNumerals(row.interest)}</td>
                         <td class="py-3 px-4 text-right font-semibold text-slate-400">${convertToArabicNumerals(row.remaining)}</td>

@@ -102,6 +102,6 @@ class LoanCalculatorController extends Controller
      */
     private function formatRupiah(mixed $value): string
     {
-        return 'Rp ' . number_format((float)$value, 0, ',', '.');
+        return 'Rp ' . __n(number_format((float)$value, 0, ',', '.'));
     }
 }

@@ -265,7 +265,7 @@
                     <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('Account Holder Name') }}</label>
                     <input type="text" id="wd_account_holder_name" required value="{{ Auth::user()->profile?->full_name ?? Auth::user()->email }}"
                            class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none"
-                           placeholder="Full Name">
+                           placeholder="{{ __('Full Name') }}">
                 </div>
 
                 <div>
@@ -277,7 +277,7 @@
                     </div>
                     <input type="number" id="wd_xendit_amount" required min="50000" step="50000" value="100000"
                            class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none"
-                           placeholder="Min. Rp 50.000">
+                           placeholder="{{ __('Min. Rp 50.000') }}">
                 </div>
 
                 <button type="submit" id="submit-xendit-wd-btn" class="w-full py-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
@@ -310,7 +310,7 @@
                     <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('Amount (USD Equivalent)') }}</label>
                     <input type="number" id="wd_crypto_amount" required min="10" value="50"
                            class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none"
-                           placeholder="Min $10">
+                           placeholder="{{ __('Min $10') }}">
                 </div>
 
                 <button type="submit" id="submit-crypto-wd-btn" class="w-full py-3 rounded-xl bg-indigo-700 text-white font-bold text-xs hover:bg-indigo-800 transition-colors shadow-xs">
@@ -348,7 +348,7 @@
     <div x-show="activeTab === 'history'" class="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden" style="display: none;">
         <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50/50">
             <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ __('Transaction Ledger') }}</h3>
-            <span class="text-xs font-medium text-slate-500">Total: {{ $transactions->total() }}</span>
+            <span class="text-xs font-medium text-slate-500">{{ __('Total') }}: {{ __n($transactions->total()) }}</span>
         </div>
 
         <div class="overflow-x-auto">

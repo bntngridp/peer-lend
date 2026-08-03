@@ -25,7 +25,7 @@
                     class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 outline-none focus:border-emerald-600 shadow-xs">
                 <option value="">{{ __('Risk Grade (All)') }}</option>
                 @foreach(['A', 'B', 'C', 'D'] as $g)
-                    <option value="{{ $g }}" {{ request('risk_grade') === $g ? 'selected' : '' }}>Grade {{ $g }}</option>
+                    <option value="{{ $g }}" {{ request('risk_grade') === $g ? 'selected' : '' }}>{{ __('Grade') }} {{ $g }}</option>
                 @endforeach
             </select>
 
@@ -33,11 +33,11 @@
             <select name="term" onchange="this.form.submit()" 
                     class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 outline-none focus:border-emerald-600 shadow-xs">
                 <option value="">{{ __('Term (All)') }}</option>
-                <option value="6" {{ request('term') == '6' ? 'selected' : '' }}>6 {{ __('Months') }}</option>
-                <option value="12" {{ request('term') == '12' ? 'selected' : '' }}>12 {{ __('Months') }}</option>
-                <option value="18" {{ request('term') == '18' ? 'selected' : '' }}>18 {{ __('Months') }}</option>
-                <option value="24" {{ request('term') == '24' ? 'selected' : '' }}>24 {{ __('Months') }}</option>
-                <option value="36" {{ request('term') == '36' ? 'selected' : '' }}>36 {{ __('Months') }}</option>
+                <option value="6" {{ request('term') == '6' ? 'selected' : '' }}>{{ __n(6) }} {{ __('Months') }}</option>
+                <option value="12" {{ request('term') == '12' ? 'selected' : '' }}>{{ __n(12) }} {{ __('Months') }}</option>
+                <option value="18" {{ request('term') == '18' ? 'selected' : '' }}>{{ __n(18) }} {{ __('Months') }}</option>
+                <option value="24" {{ request('term') == '24' ? 'selected' : '' }}>{{ __n(24) }} {{ __('Months') }}</option>
+                <option value="36" {{ request('term') == '36' ? 'selected' : '' }}>{{ __n(36) }} {{ __('Months') }}</option>
             </select>
 
             <!-- Sort By -->
@@ -50,7 +50,7 @@
 
             @if(request()->anyFilled(['search', 'risk_grade', 'term', 'sort']))
                 <a href="{{ route('marketplace.index') }}" class="rounded-xl border border-slate-200 bg-slate-100 px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-200">
-                    Reset
+                    {{ __('Reset') }}
                 </a>
             @endif
         </form>
@@ -62,14 +62,14 @@
         <!-- Table Sub-header Bar -->
         <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50/50">
             <span class="text-xs font-bold text-slate-500">
-                Showing 1-{{ $loans->count() }} of {{ $loans->total() }} opportunities
+                {{ __('Showing :from-:to of :total opportunities', ['from' => __n(1), 'to' => __n($loans->count()), 'total' => __n($loans->total())]) }}
             </span>
             <div class="flex items-center gap-2">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Sort by:</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('SORT BY:') }}</span>
                 <span class="text-xs font-bold text-slate-800">
-                    @if(request('sort') === 'interest_desc') Interest Rate (High to Low)
-                    @elseif(request('sort') === 'amount_desc') Loan Amount (High to Low)
-                    @else Latest Listings
+                    @if(request('sort') === 'interest_desc') {{ __('Interest Rate (High to Low)') }}
+                    @elseif(request('sort') === 'amount_desc') {{ __('Loan Amount (High to Low)') }}
+                    @else {{ __('Latest Listings') }}
                     @endif
                 </span>
             </div>
@@ -80,13 +80,13 @@
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                        <th class="py-3.5 px-6">BORROWER</th>
-                        <th class="py-3.5 px-6">LOAN AMOUNT</th>
-                        <th class="py-3.5 px-6">INTEREST RATE</th>
-                        <th class="py-3.5 px-6">TERM</th>
-                        <th class="py-3.5 px-6">RISK GRADE</th>
-                        <th class="py-3.5 px-6">FUNDING PROGRESS</th>
-                        <th class="py-3.5 px-6 text-right">ACTION</th>
+                        <th class="py-3.5 px-6">{{ __('BORROWER') }}</th>
+                        <th class="py-3.5 px-6">{{ __('LOAN AMOUNT') }}</th>
+                        <th class="py-3.5 px-6">{{ __('INTEREST RATE') }}</th>
+                        <th class="py-3.5 px-6">{{ __('TERM') }}</th>
+                        <th class="py-3.5 px-6">{{ __('RISK GRADE') }}</th>
+                        <th class="py-3.5 px-6">{{ __('FUNDING PROGRESS') }}</th>
+                        <th class="py-3.5 px-6 text-right">{{ __('ACTION') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
@@ -100,7 +100,7 @@
                                 </div>
                                 <div>
                                     <span class="font-bold text-slate-900 block text-xs line-clamp-1">
-                                        {{ $loan->purpose ?: ($loan->borrower?->profile?->full_name ?? 'Institutional Borrower') }}
+                                        {{ $loan->purpose ?: ($loan->borrower?->profile?->full_name ?? __('Institutional Borrower')) }}
                                     </span>
                                     <span class="text-[11px] text-slate-400 font-medium block">
                                         ID: LN-{{ substr($loan->id, 0, 6) }}
@@ -111,17 +111,17 @@
 
                         <!-- Loan Amount -->
                         <td class="py-4 px-6 font-extrabold text-slate-900 text-sm">
-                            Rp {{ number_format($loan->amount, 0, ',', '.') }}
+                            Rp {{ __n(number_format($loan->amount, 0, ',', '.')) }}
                         </td>
 
                         <!-- Interest Rate -->
                         <td class="py-4 px-6">
-                            <span class="text-emerald-700 font-extrabold text-sm">{{ $loan->interest_rate }}%</span>
+                            <span class="text-emerald-700 font-extrabold text-sm">{{ __n($loan->interest_rate) }}%</span>
                         </td>
 
                         <!-- Term -->
                         <td class="py-4 px-6 text-slate-600 font-semibold">
-                            {{ $loan->duration }} months
+                            {{ __n($loan->duration) }} {{ __('Months') }}
                         </td>
 
                         <!-- Risk Grade -->
@@ -149,8 +149,8 @@
                         <td class="py-4 px-6 min-w-[200px]">
                             <div class="space-y-1.5">
                                 <div class="flex items-center justify-between text-[11px]">
-                                    <span class="font-bold text-slate-900">{{ (int)$loan->funded_percentage }}%</span>
-                                    <span class="text-slate-400 font-semibold">Rp {{ number_format($loan->fundings()->sum('amount'), 0, ',', '.') }} rem</span>
+                                    <span class="font-bold text-slate-900">{{ __n((int)$loan->funded_percentage) }}%</span>
+                                    <span class="text-slate-400 font-semibold">Rp {{ __n(number_format($loan->fundings()->sum('amount'), 0, ',', '.')) }} {{ __('raised') }}</span>
                                 </div>
                                 <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
                                     <div class="bg-emerald-700 h-1.5 rounded-full" style="width: {{ min(100, $loan->funded_percentage) }}%"></div>
@@ -162,14 +162,14 @@
                         <td class="py-4 px-6 text-right">
                             <a href="{{ route('marketplace.show', $loan->id) }}" 
                                class="inline-flex items-center gap-1 py-1.5 px-3 rounded-xl bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800 transition-colors shadow-xs">
-                                Invest &rarr;
+                                {{ __('Invest') }} &rarr;
                             </a>
                         </td>
                     </tr>
                     @empty
                     <tr>
                         <td colspan="7" class="py-12 text-center text-slate-400 font-medium">
-                            No loan funding opportunities match your search criteria.
+                            {{ __('No loan funding opportunities match your search criteria.') }}
                         </td>
                     </tr>
                     @endforelse

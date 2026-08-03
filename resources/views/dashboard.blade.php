@@ -210,7 +210,7 @@
     <!-- Header Section -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ __('Borrower Dashboard') }} — {{ __('Welcome back') }}, {{ Auth::user()->profile?->full_name ?? 'Borrower' }}! </h1>
+            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ __('Welcome back, :name!', ['name' => Auth::user()->profile?->full_name ?? __('Borrower')]) }}</h1>
             <p class="text-xs font-medium text-slate-500 mt-1">{{ __('Overview of your current loans and upcoming obligations.') }}</p>
         </div>
         <div class="flex items-center gap-3">
@@ -227,7 +227,7 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('OUTSTANDING LOAN') }}</span>
             <p class="text-2xl font-extrabold text-slate-900 mt-3">
-                Rp {{ number_format($stats['outstanding_amount'], 0, ',', '.') }}
+                Rp {{ __n(number_format($stats['outstanding_amount'], 0, ',', '.')) }}
             </p>
         </div>
 
@@ -235,7 +235,7 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('MONTHLY INSTALLMENT') }}</span>
             <p class="text-2xl font-extrabold text-slate-900 mt-3">
-                Rp {{ number_format($stats['monthly_installment_amount'], 0, ',', '.') }}
+                Rp {{ __n(number_format($stats['monthly_installment_amount'], 0, ',', '.')) }}
             </p>
         </div>
 
@@ -243,7 +243,7 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('WALLET BALANCE') }}</span>
             <p class="text-2xl font-extrabold text-slate-900 mt-3">
-                Rp {{ number_format($stats['wallet_balance'], 0, ',', '.') }}
+                Rp {{ __n(number_format($stats['wallet_balance'], 0, ',', '.')) }}
             </p>
         </div>
 
@@ -251,8 +251,8 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('CREDIT SCORE') }}</span>
             <div class="flex items-baseline gap-2 mt-3">
-                <span class="text-2xl font-extrabold text-emerald-700">{{ $stats['credit_score'] }}</span>
-                <span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">Grade {{ $stats['credit_grade'] }}</span>
+                <span class="text-2xl font-extrabold text-emerald-700">{{ __n($stats['credit_score']) }}</span>
+                <span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">{{ __('Grade') }} {{ $stats['credit_grade'] }}</span>
             </div>
         </div>
     </div>
@@ -290,7 +290,7 @@
                                     {{ \Carbon\Carbon::parse($inst->due_date)->format('M d, Y') }}
                                 </td>
                                 <td class="py-4 px-6 font-bold text-slate-900">
-                                    Rp {{ number_format($inst->total_amount, 0, ',', '.') }}
+                                    Rp {{ __n(number_format($inst->total_amount, 0, ',', '.')) }}
                                 </td>
                                 <td class="py-4 px-6">
                                     @if($inst->status === 'paid')
@@ -355,7 +355,7 @@
                                 <path class="text-emerald-700" stroke-dasharray="{{ $pct }}, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
                             </svg>
                             <div class="absolute text-center">
-                                <span class="text-2xl font-black text-slate-900">{{ $pct }}%</span>
+                                <span class="text-2xl font-black text-slate-900">{{ __n($pct) }}%</span>
                                 <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('Funded') }}</span>
                             </div>
                         </div>
@@ -365,8 +365,8 @@
                             <div class="flex items-start gap-3">
                                 <div class="h-2.5 w-2.5 rounded-full {{ $app->status !== 'pending' ? 'bg-emerald-700' : 'bg-slate-300' }} mt-1.5 flex-shrink-0"></div>
                                 <div>
-                                    <p class="text-xs font-bold text-slate-900">{{ __('Application Status') }}: <span class="capitalize text-emerald-700">{{ str_replace('_', ' ', $app->status) }}</span></p>
-                                    <p class="text-[11px] text-slate-400">Diajukan: {{ \Carbon\Carbon::parse($app->created_at)->format('M d, Y') }}</p>
+                                    <p class="text-xs font-bold text-slate-900">{{ __('Application Status') }}: <span class="capitalize text-emerald-700">{{ __(ucwords(str_replace('_', ' ', $app->status))) }}</span></p>
+                                    <p class="text-[11px] text-slate-400">{{ __('Submitted') }}: {{ \Carbon\Carbon::parse($app->created_at)->format('M d, Y') }}</p>
                                 </div>
                             </div>
 
@@ -374,15 +374,15 @@
                                 <div class="h-2.5 w-2.5 rounded-full {{ $app->status === 'open_funding' ? 'bg-emerald-700 animate-pulse' : 'bg-slate-300' }} mt-1.5 flex-shrink-0"></div>
                                 <div>
                                     <p class="text-xs font-bold text-slate-900">{{ __('Marketplace Listing') }}</p>
-                                    <p class="text-[11px] text-slate-400">Terkumpul: Rp {{ number_format($app->funded_amount, 0, ',', '.') }} / Rp {{ number_format($app->amount, 0, ',', '.') }}</p>
+                                    <p class="text-[11px] text-slate-400">{{ __('Raised') }}: Rp {{ __n(number_format($app->funded_amount, 0, ',', '.')) }} / Rp {{ __n(number_format($app->amount, 0, ',', '.')) }}</p>
                                 </div>
                             </div>
 
                             <div class="flex items-start gap-3">
-                                <div class="h-2.5 w-2.5 rounded-full {{ $app->status === 'active' ? 'bg-emerald-700' : 'bg-slate-300' }} mt-1.5 flex-shrink-0"></div>
+                                <div class="h-2.5 w-2.5 rounded-full {{ $app->status === 'active' || $app->status === 'funded' ? 'bg-emerald-700' : 'bg-slate-300' }} mt-1.5 flex-shrink-0"></div>
                                 <div>
                                     <p class="text-xs font-bold {{ $app->status === 'active' ? 'text-emerald-700' : 'text-slate-500' }}">{{ __('Funds Disbursement') }}</p>
-                                    <p class="text-[11px] text-slate-400">{{ $app->status === 'active' ? 'Pencairan Dana Berhasil' : 'Menunggu pendanaan 100% dari pendana' }}</p>
+                                    <p class="text-[11px] text-slate-400">{{ $app->status === 'active' ? __('Funds Disbursed Successfully') : __('Waiting for 100% funding from lenders.') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -390,8 +390,8 @@
                 @else
                     <div class="py-6 px-4 rounded-xl border border-dashed border-slate-200 bg-slate-50/60 text-center">
                         <svg class="h-8 w-8 text-slate-400 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
-                        <p class="text-xs font-bold text-slate-800">Tidak Ada Pengajuan Pinjaman Aktif</p>
-                        <p class="text-[11px] text-slate-500 mt-1 max-w-md mx-auto">Anda belum memiliki pengajuan pinjaman yang sedang berjalan di marketplace saat ini.</p>
+                        <p class="text-xs font-bold text-slate-800">{{ __('No Active Loan Application') }}</p>
+                        <p class="text-[11px] text-slate-500 mt-1 max-w-md mx-auto">{{ __('You currently have no active loan application running in the marketplace.') }}</p>
                         <a href="{{ route('loans.create') }}" class="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-all shadow-xs">
                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
                             {{ __('Apply for New Loan') }}

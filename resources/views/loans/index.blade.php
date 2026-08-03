@@ -18,7 +18,7 @@
     <div class="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
         <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50/50">
             <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ __('My Loans') }}</h3>
-            <span class="text-xs font-medium text-slate-500">Total: {{ $loans->total() }}</span>
+            <span class="text-xs font-medium text-slate-500">{{ __('Total:') }} {{ __n($loans->total()) }}</span>
         </div>
 
         <div class="overflow-x-auto">
@@ -44,7 +44,7 @@
                                 <div>
                                     <span class="font-bold text-slate-900 block text-xs line-clamp-1">{{ $loan->purpose }}</span>
                                     <span class="text-[11px] text-slate-400 font-medium block">
-                                        {{ $loan->category->name }} • {{ $loan->duration }} {{ __('Months') }}
+                                        {{ __($loan->category?->name ?? 'Loan') }} • {{ __n($loan->duration) }} {{ __('Months') }}
                                     </span>
                                 </div>
                             </div>
@@ -52,8 +52,8 @@
 
                         <!-- Amount -->
                         <td class="py-4 px-6">
-                            <span class="font-extrabold text-slate-900 text-sm block">Rp {{ number_format($loan->amount, 0, ',', '.') }}</span>
-                            <span class="text-[11px] text-emerald-700 font-bold block mt-0.5">Rate: {{ $loan->interest_rate }}% (Grade {{ $loan->risk_grade }})</span>
+                            <span class="font-extrabold text-slate-900 text-sm block">Rp {{ __n(number_format($loan->amount, 0, ',', '.')) }}</span>
+                            <span class="text-[11px] text-emerald-700 font-bold block mt-0.5">{{ __('Rate:') }} {{ __n($loan->interest_rate) }}% ({{ __('Grade') }} {{ $loan->risk_grade }})</span>
                         </td>
 
                         <!-- Status -->
@@ -64,7 +64,7 @@
                                 @elseif($loan->status === 'active') bg-emerald-100 text-emerald-800 border border-emerald-200
                                 @elseif($loan->status === 'completed') bg-slate-100 text-slate-700 border border-slate-200
                                 @else bg-rose-100 text-rose-800 border border-rose-200 @endif">
-                                {{ __(str_replace('_', ' ', $loan->status)) }}
+                                {{ __(ucwords(str_replace('_', ' ', $loan->status))) }}
                             </span>
                         </td>
 
@@ -72,7 +72,7 @@
                         <td class="py-4 px-6 min-w-[180px]">
                             <div class="space-y-1">
                                 <div class="flex items-center justify-between text-[11px]">
-                                    <span class="font-bold text-slate-900">{{ (int)$loan->funded_percentage }}% {{ __('Funded') }}</span>
+                                    <span class="font-bold text-slate-900">{{ __('Funded') }} {{ __n((int)$loan->funded_percentage) }}%</span>
                                 </div>
                                 <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
                                     <div class="bg-emerald-700 h-1.5 rounded-full" style="width: {{ min(100, $loan->funded_percentage) }}%"></div>

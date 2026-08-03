@@ -128,6 +128,12 @@
                            class="w-full rounded-r-xl bg-transparent text-xs font-medium text-slate-800 placeholder-slate-400 outline-none border-none px-3.5 py-2.5 focus:ring-0"
                            placeholder="81575971998">
                 </div>
+                <p class="mt-1 text-[11px] font-medium text-slate-400 flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <span>Nomor telepon akan diverifikasi via kode OTP 6 digit.</span>
+                </p>
                 @error('phone')
                     <p class="mt-1 text-xs text-rose-600 font-semibold">{{ $message }}</p>
                 @enderror
@@ -243,14 +249,14 @@
                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                 </svg>
-                <span>Sign up with Google</span>
+                <span>{{ __('Sign up with Google') }}</span>
             </a>
 
             <!-- Footer link to Login -->
             <div class="text-center pt-2">
                 <p class="text-xs text-slate-500 font-medium">
-                    Already have an account? 
-                    <a href="{{ route('login') }}" class="font-bold text-emerald-700 hover:text-emerald-800 hover:underline">Log in here</a>
+                    {{ __('Already have an account?') }} 
+                    <a href="{{ route('login') }}" class="font-bold text-emerald-700 hover:text-emerald-800 hover:underline">{{ __('Log in here') }}</a>
                 </p>
             </div>
         </form>

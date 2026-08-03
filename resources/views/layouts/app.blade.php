@@ -71,7 +71,7 @@
         };
     </script>
 </head>
-<body class="h-full bg-slate-50 text-slate-900 antialiased" 
+<body class="h-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased" 
       x-data="{ 
           sidebarOpen: false, 
           sidebarCollapsed: localStorage.getItem('sidebar_collapsed') === 'true', 

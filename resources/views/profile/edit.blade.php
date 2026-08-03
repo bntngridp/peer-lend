@@ -467,17 +467,23 @@
                     <div>
                         <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">{{ __('Color Theme') }}</label>
                         <div class="flex gap-3">
-                            <label class="cursor-pointer">
+                            <label @click="colorTheme = 'light'; applyTheme('light')" class="cursor-pointer">
                                 <input type="radio" id="radio_theme_light" name="color_theme" value="light" class="sr-only" @change="colorTheme = 'light'; applyTheme('light')" {{ ($sysSettings['color_theme'] ?? 'light') === 'light' ? 'checked' : '' }}>
-                                <div :class="colorTheme === 'light' ? 'border-emerald-700 bg-white shadow-xs' : 'border-slate-200 bg-slate-100'"
-                                     class="py-2.5 px-6 rounded-xl border text-xs font-bold text-slate-800 flex items-center gap-2">
+                                <div :class="colorTheme === 'light' ? 'border-emerald-700 bg-white text-slate-900 shadow-xs ring-2 ring-emerald-600/20' : 'border-slate-200 bg-slate-100 text-slate-600 hover:border-slate-300'"
+                                     class="py-2.5 px-6 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all select-none">
+                                    <svg class="h-4 w-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m0 13.5V21m8.966-8.966h-2.25m-13.5 0h-2.25m15.364-6.364l-1.591 1.591M6.758 17.242l-1.591 1.591m12.728 0l-1.591-1.591M6.758 6.758L5.167 5.167M12 8.25a3.75 3.75 0 100 7.5 3.75 3.75 0 000-7.5z" />
+                                    </svg>
                                     {{ __('Light Theme') }}
                                 </div>
                             </label>
-                            <label class="cursor-pointer">
+                            <label @click="colorTheme = 'dark'; applyTheme('dark')" class="cursor-pointer">
                                 <input type="radio" id="radio_theme_dark" name="color_theme" value="dark" class="sr-only" @change="colorTheme = 'dark'; applyTheme('dark')" {{ ($sysSettings['color_theme'] ?? 'light') === 'dark' ? 'checked' : '' }}>
-                                <div :class="colorTheme === 'dark' ? 'border-emerald-700 bg-slate-900 text-white shadow-xs' : 'border-slate-200 bg-slate-100'"
-                                     class="py-2.5 px-6 rounded-xl border text-xs font-bold text-slate-700 flex items-center gap-2">
+                                <div :class="colorTheme === 'dark' ? 'border-emerald-700 bg-slate-900 text-white shadow-xs ring-2 ring-emerald-600/20' : 'border-slate-200 bg-slate-100 text-slate-600 hover:border-slate-300'"
+                                     class="py-2.5 px-6 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all select-none">
+                                    <svg class="h-4 w-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+                                    </svg>
                                     {{ __('Dark Theme') }}
                                 </div>
                             </label>

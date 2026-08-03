@@ -371,6 +371,23 @@
                             @endif
                         </a>
 
+                        <!-- ☀️ / 🌙 Quick Dark/Light Mode Toggle Button -->
+                        <button type="button" 
+                                x-data="{ isDark: document.documentElement.classList.contains('dark') }"
+                                @click="isDark = !isDark; applyTheme(isDark ? 'dark' : 'light')" 
+                                id="btn_header_theme_toggle"
+                                class="rounded-xl p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:text-slate-300 transition-colors cursor-pointer"
+                                :title="isDark ? '{{ __('Switch to Light Mode') }}' : '{{ __('Switch to Dark Mode') }}'">
+                            <!-- Sun Icon (shown in dark mode) -->
+                            <svg x-show="isDark" class="h-5 w-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m0 13.5V21m8.966-8.966h-2.25m-13.5 0h-2.25m15.364-6.364l-1.591 1.591M6.758 17.242l-1.591 1.591m12.728 0l-1.591-1.591M6.758 6.758L5.167 5.167M12 8.25a3.75 3.75 0 100 7.5 3.75 3.75 0 000-7.5z" />
+                            </svg>
+                            <!-- Moon Icon (shown in light mode) -->
+                            <svg x-show="!isDark" class="h-5 w-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+                            </svg>
+                        </button>
+
                         <!-- 🌐 Multi-Language Selector Dropdown (Clean Text) -->
                         <div class="relative" x-data="{ langOpen: false }">
                             <button @click="langOpen = !langOpen" type="button" class="flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer">

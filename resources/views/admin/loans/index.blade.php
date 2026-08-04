@@ -58,20 +58,20 @@
                     @forelse($loans as $loan)
                         @php
                             $statusClass = match($loan->status) {
-                                'pending'      => 'bg-amber-500/15 text-amber-400 border-amber-500/30',
-                                'open_funding' => 'bg-indigo-500/15 text-indigo-400 border-indigo-500/30',
-                                'funded'       => 'bg-purple-500/15 text-purple-400 border-purple-500/30',
-                                'active'       => 'bg-green-500/15 text-green-400 border-green-500/30',
-                                'completed'    => 'bg-slate-500/15 text-slate-400 border-slate-500/30',
-                                'rejected'     => 'bg-rose-500/15 text-rose-400 border-rose-500/30',
-                                default        => 'bg-slate-500/15 text-slate-400 border-slate-500/30',
+                                'pending'      => 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800/80',
+                                'open_funding' => 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800/80',
+                                'funded'       => 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800/80',
+                                'active'       => 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/80',
+                                'completed'    => 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700',
+                                'rejected'     => 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800/80',
+                                default        => 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700',
                             };
                             $gradeClass = match($loan->risk_grade ?? '') {
-                                'A' => 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
-                                'B' => 'bg-blue-500/15 text-blue-400 border-blue-500/30',
-                                'C' => 'bg-amber-500/15 text-amber-400 border-amber-500/30',
-                                'D' => 'bg-rose-500/15 text-rose-400 border-rose-500/30',
-                                default => 'bg-slate-500/15 text-slate-400 border-slate-500/30',
+                                'A' => 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/80',
+                                'B' => 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800/80',
+                                'C' => 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800/80',
+                                'D' => 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800/80',
+                                default => 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700',
                             };
                             $currencyCode = strtoupper($loan->collateralCurrency->code ?? '');
                             $collateralStyle = match($currencyCode) {

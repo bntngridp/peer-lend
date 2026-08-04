@@ -16,12 +16,12 @@
     <!-- Header Section -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">System Administration</h1>
-            <p class="text-xs font-medium text-slate-500 mt-1">Global platform oversight and operational health. &mdash; Platform Overview</p>
+            <h1 class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">System Administration</h1>
+            <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Global platform oversight and operational health. &mdash; Platform Overview</p>
         </div>
         <div class="flex items-center gap-3">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                <span class="h-2 w-2 rounded-full bg-emerald-600 animate-pulse"></span>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/80">
+                <span class="h-2 w-2 rounded-full bg-emerald-600 dark:bg-emerald-400 animate-pulse"></span>
                 System Status: Operational
             </span>
         </div>
@@ -30,39 +30,39 @@
     <!-- 4 High-Density Stat Cards Row -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Card 1: Total Users -->
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Users</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">+2.4%</span>
+                <span class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Total Users</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/80">+2.4%</span>
             </div>
-            <p class="text-2xl font-extrabold text-slate-900 mt-3">{{ number_format($stats['total_users']) }}</p>
+            <p class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mt-3">{{ number_format($stats['total_users']) }}</p>
         </div>
 
         <!-- Card 2: Pending KYC -->
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Pending KYC</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">Action Req.</span>
+                <span class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Pending KYC</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800/80">Action Req.</span>
             </div>
-            <p class="text-2xl font-extrabold text-slate-900 mt-3">{{ number_format($stats['kyc_pending']) }}</p>
+            <p class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mt-3">{{ number_format($stats['kyc_pending']) }}</p>
         </div>
 
         <!-- Card 3: Total Volume -->
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Volume</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">30 Days</span>
+                <span class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Total Volume</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">30 Days</span>
             </div>
-            <p class="text-2xl font-extrabold text-slate-900 mt-3">Rp {{ number_format($stats['total_disbursed'], 0, ',', '.') }}</p>
+            <p class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mt-3">Rp {{ number_format($stats['total_disbursed'], 0, ',', '.') }}</p>
         </div>
 
         <!-- Card 4: System Health -->
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">System Health</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">Stable</span>
+                <span class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">System Health</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/80">Stable</span>
             </div>
-            <p class="text-2xl font-extrabold text-emerald-700 mt-3">99.9%</p>
+            <p class="text-2xl font-extrabold text-emerald-700 dark:text-emerald-400 mt-3">99.9%</p>
         </div>
     </div>
 
@@ -73,10 +73,10 @@
         <div class="lg:col-span-2 space-y-6">
 
             <!-- Card: Platform Statistics (Line Chart) -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-sm font-bold text-slate-900">Platform Statistics</h3>
-                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">Last 30 Days</span>
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100">Platform Statistics</h3>
+                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">Last 30 Days</span>
                 </div>
                 <div class="h-[250px]">
                     <canvas id="adminPlatformChart"></canvas>
@@ -107,12 +107,12 @@
                                 <td class="py-3.5 px-6">
                                     @php
                                         $statusBadge = match($loan->status) {
-                                            'pending'      => 'bg-amber-500/15 text-amber-400 border border-amber-500/30',
-                                            'open_funding' => 'bg-indigo-500/15 text-indigo-400 border border-indigo-500/30',
-                                            'funded'       => 'bg-purple-500/15 text-purple-400 border border-purple-500/30',
-                                            'active'       => 'bg-green-500/450 text-green-400 border border-green-500/30',
-                                            'completed'    => 'bg-slate-500/15 text-slate-300 border border-slate-500/30',
-                                            'default'      => 'bg-slate-500/15 text-slate-400 border border-slate-500/30',
+                                            'pending'      => 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800/80',
+                                            'open_funding' => 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800/80',
+                                            'funded'       => 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800/80',
+                                            'active'       => 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/80',
+                                            'completed'    => 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700',
+                                            default        => 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700',
                                         };
                                     @endphp
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-bold border {{ $statusBadge }}">

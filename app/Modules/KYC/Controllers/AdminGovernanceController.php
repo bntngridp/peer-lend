@@ -63,8 +63,43 @@ class AdminGovernanceController extends Controller
         return view('admin.transactions.index', compact('transactions'));
     }
 
-    public function analytics()
+    public function analytics(Request $request)
     {
-        return view('admin.analytics.index');
+        $days = in_array((int) $request->input('days'), [30, 90, 365]) ? (int) $request->input('days') : 30;
+
+        $timeframeLabel = match($days) {
+            90 => __('Last 90 Days'),
+            365 => __('Last 1 Year'),
+            default => __('Last 30 Days'),
+        };
+
+        $disbursementData = match($days) {
+            90 => [
+                'labels' => [__('Month 1'), __('Month 2'), __('Month 3')],
+                'disbursements' => [48.2, 56.4, 62.8],
+                'repayments' => [42.1, 50.8, 58.3],
+            ],
+            365 => [
+                'labels' => [__('Q1'), __('Q2'), __('Q3'), __('Q4')],
+                'disbursements' => [142.5, 185.2, 210.8, 245.0],
+                'repayments' => [128.0, 164.5, 192.3, 228.4],
+            ],
+            default => [
+                'labels' => [__('Week 1'), __('Week 2'), __('Week 3'), __('Week 4')],
+                'disbursements' => [12.4, 18.2, 15.6, 22.4],
+                'repayments' => [10.1, 14.5, 13.8, 19.1],
+            ],
+        };
+
+        $totalDisbursement = number_format(array_sum($disbursementData['disbursements']), 1);
+        $totalRepayment = number_format(array_sum($disbursementData['repayments']), 1);
+
+        return view('admin.analytics.index', compact(
+            'days',
+            'timeframeLabel',
+            'disbursementData',
+            'totalDisbursement',
+            'totalRepayment'
+        ));
     }
 }

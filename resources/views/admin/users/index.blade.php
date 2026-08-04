@@ -199,12 +199,9 @@
 
                             {{-- Actions --}}
                             <td class="whitespace-nowrap py-4 pl-4 pr-6 text-right">
-                                <a href="{{ route('admin.kyc.index') }}" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 hover:border-slate-400 dark:hover:border-slate-600 transition-all">
-                                    <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12c.077-.19.183-.37.313-.54C3.957 9.07 7.247 6 12 6c4.753 0 8.043 3.07 9.651 5.46.13.17.236.35.313.54-.077.19-.183.37-.313.54C20.043 14.93 16.753 18 12 18c-4.753 0-8.043-3.07-9.651-5.46a2.535 2.535 0 0 1-.313-.54Z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                    </svg>
-                                    {{ __('View Profile') }}
+                                <a href="{{ route('admin.kyc.index') }}" class="inline-flex items-center gap-1.5 rounded-xl bg-emerald-700 dark:bg-emerald-600 hover:bg-emerald-800 dark:hover:bg-emerald-500 text-white px-3 py-1.5 text-xs font-bold transition-colors shadow-xs">
+                                    <span>{{ __('View Profile') }}</span>
+                                    <span>&rarr;</span>
                                 </a>
                             </td>
                         </tr>

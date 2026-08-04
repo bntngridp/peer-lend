@@ -3,6 +3,7 @@
 namespace App\Modules\User\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +11,38 @@ use Illuminate\Support\Facades\Auth;
 class SystemPreferenceController extends Controller
 {
     /**
-     * Update user system preferences and appearance settings.
+     * Quick theme toggle via AJAX — only updates color_theme.
+     * Called by the navbar ☀️/🌙 button and profile page theme cards.
+     */
+    public function toggleTheme(Request $request): JsonResponse
+    {
+        $request->validate([
+            'theme' => ['required', 'string', 'in:light,dark'],
+        ]);
+
+        $user    = Auth::user();
+        $profile = $user->profile ?? $user->profile()->create([
+            'full_name' => $user->name ?? 'User',
+            'phone'     => '',
+        ]);
+
+        // Merge theme into existing preferences (don't overwrite other fields)
+        $current = $profile->system_preferences ?? [];
+        $current['color_theme'] = $request->theme;
+
+        $profile->update([
+            'system_preferences' => $current,
+        ]);
+
+        return response()->json([
+            'status'  => 'success',
+            'theme'   => $request->theme,
+            'message' => 'Theme updated successfully',
+        ]);
+    }
+
+    /**
+     * Full system preferences update (form PUT from profile settings tab).
      */
     public function update(Request $request): RedirectResponse
     {
@@ -19,9 +51,9 @@ class SystemPreferenceController extends Controller
             'data_density' => ['required', 'string', 'in:comfortable,compact'],
         ]);
 
-        $user = Auth::user();
+        $user    = Auth::user();
         $profile = $user->profile ?? $user->profile()->create([
-            'full_name' => 'User',
+            'full_name' => $user->name ?? 'User',
             'phone'     => '',
         ]);
 
@@ -30,20 +62,12 @@ class SystemPreferenceController extends Controller
             'data_density'              => $request->data_density,
             'public_profile'            => $request->boolean('public_profile'),
             'data_sharing'              => $request->boolean('data_sharing'),
-            'third_party_integrations' => $request->boolean('third_party_integrations'),
+            'third_party_integrations'  => $request->boolean('third_party_integrations'),
         ];
 
         $profile->update([
             'system_preferences' => $settings,
         ]);
-
-        if ($request->wantsJson() || $request->ajax() || $request->expectsJson()) {
-            return response()->json([
-                'status'  => 'success',
-                'message' => 'Preferensi sistem berhasil diperbarui',
-                'settings' => $settings,
-            ]);
-        }
 
         return redirect()->route('profile.edit', ['tab' => 'system'])
             ->with('tab', 'system')

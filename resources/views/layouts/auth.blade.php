@@ -91,7 +91,7 @@
     </style>
     <script>
         (function() {
-            const theme = localStorage.getItem('lendflow_theme') || localStorage.getItem('theme') || 'light';
+            const theme = localStorage.getItem('lendflow_theme') ?? 'light';
             if (theme === 'dark') {
                 document.documentElement.classList.add('dark');
             } else {

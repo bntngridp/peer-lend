@@ -36,10 +36,11 @@
         (function() {
             const serverTheme = @json($sysTheme);
             const serverDensity = @json($sysDensity);
-            let storedTheme = localStorage.getItem('lendflow_theme') || localStorage.getItem('theme');
-            let theme = storedTheme || serverTheme;
-            const density = localStorage.getItem('lendflow_density') || serverDensity;
-            
+            // Prioritize localStorage → then server DB value
+            const storedTheme = localStorage.getItem('lendflow_theme');
+            const theme = storedTheme ?? serverTheme;
+            const density = localStorage.getItem('lendflow_density') ?? serverDensity;
+
             if (theme === 'dark') {
                 document.documentElement.classList.add('dark');
             } else {
@@ -51,28 +52,42 @@
             } else {
                 document.documentElement.classList.remove('density-compact');
             }
+
+            // Sync localStorage with authoritative server value if no local override
+            if (!storedTheme) {
+                localStorage.setItem('lendflow_theme', serverTheme);
+            }
         })();
 
         window.applyTheme = function(t) {
-            localStorage.setItem('lendflow_theme', t);
-            localStorage.setItem('theme', t);
+            // 1. Immediately apply to DOM (instant visual feedback)
             if (t === 'dark') {
                 document.documentElement.classList.add('dark');
             } else {
                 document.documentElement.classList.remove('dark');
             }
+
+            // 2. Persist to localStorage
+            localStorage.setItem('lendflow_theme', t);
+
+            // 3. Persist to server DB via dedicated theme toggle endpoint
             const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
             if (token) {
-                fetch('/profile/system-preferences', {
+                fetch('/theme/toggle', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': token,
                         'Accept': 'application/json'
                     },
-                    body: JSON.stringify({ color_theme: t, data_density: localStorage.getItem('lendflow_density') || 'comfortable' })
-                }).catch(() => {});
+                    body: JSON.stringify({ theme: t })
+                })
+                .then(res => res.json())
+                .catch(() => {}); // fail silently — localStorage already applied
             }
+
+            // 4. Sync all Alpine components that watch isDarkMode
+            document.dispatchEvent(new CustomEvent('theme-changed', { detail: { theme: t } }));
         };
 
         window.applyDensity = function(d) {
@@ -92,12 +107,15 @@
           logoutModalOpen: false,
           isDarkMode: document.documentElement.classList.contains('dark'),
           toggleHeaderTheme() {
+              const newTheme = this.isDarkMode ? 'light' : 'dark';
               this.isDarkMode = !this.isDarkMode;
-              const t = this.isDarkMode ? 'dark' : 'light';
-              window.applyTheme(t);
+              window.applyTheme(newTheme);
           }
       }"
-      x-init="$watch('sidebarCollapsed', val => localStorage.setItem('sidebar_collapsed', val))">
+      x-init="
+          $watch('sidebarCollapsed', val => localStorage.setItem('sidebar_collapsed', val));
+          document.addEventListener('theme-changed', (e) => { isDarkMode = e.detail.theme === 'dark'; });
+      ">
 
     <div class="min-h-screen flex flex-col md:flex-row bg-slate-50 dark:bg-slate-950">
 

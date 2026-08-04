@@ -1,5 +1,11 @@
 @import 'tailwindcss';
 
+/* ─── Tailwind v4: Switch dark: variant from OS media query → .dark class ──
+   By default, Tailwind v4 uses @media (prefers-color-scheme: dark) for dark:.
+   We override it here to use the .dark class on <html> instead, so our
+   JS/PHP theme toggle fully controls dark mode regardless of OS preference. */
+@variant dark (.dark &);
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 

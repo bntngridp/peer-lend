@@ -63,11 +63,11 @@
                         </td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm">
                             <span class="inline-flex items-center rounded-lg px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider
-                                @if($loan->status === 'pending') bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800
-                                @elseif($loan->status === 'open_funding') bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800
-                                @elseif($loan->status === 'active') bg-teal-50 dark:bg-teal-950 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800
+                                @if($loan->status === 'pending') bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-700/80
+                                @elseif($loan->status === 'open_funding') bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700/80
+                                @elseif($loan->status === 'active') bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700/80
                                 @elseif($loan->status === 'completed') bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700
-                                @else bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 @endif">
+                                @else bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-700/80 @endif">
                                 {{ __(str_replace('_', ' ', $loan->status)) }}
                             </span>
                         </td>

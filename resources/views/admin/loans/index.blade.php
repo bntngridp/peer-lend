@@ -63,11 +63,11 @@
                         </td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm">
                             <span class="inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-semibold uppercase tracking-wider
-                                @if($loan->status === 'pending') bg-amber-50 text-amber-700 ring-1 ring-amber-600/10
-                                @elseif($loan->status === 'open_funding') bg-indigo-50 text-indigo-700 ring-1 ring-indigo-600/10
-                                @elseif($loan->status === 'active') bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/10
-                                @elseif($loan->status === 'completed') bg-gray-50 text-gray-700 ring-1 ring-gray-600/10
-                                @else bg-red-50 text-red-700 ring-1 ring-red-600/10 @endif">
+                                @if($loan->status === 'pending') bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 ring-1 ring-amber-600/20
+                                @elseif($loan->status === 'open_funding') bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 ring-1 ring-indigo-600/20
+                                @elseif($loan->status === 'active') bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-600/20
+                                @elseif($loan->status === 'completed') bg-gray-50 dark:bg-slate-800 text-gray-700 dark:text-slate-300 ring-1 ring-gray-600/20
+                                @else bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-300 ring-1 ring-red-600/20 @endif">
                                 {{ __(str_replace('_', ' ', $loan->status)) }}
                             </span>
                         </td>

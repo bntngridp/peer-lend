@@ -266,11 +266,36 @@
                         {{ __('Permission Template') }}
                     </label>
                     <select x-model="newRoleAccess" class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 font-semibold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
-                        <option value="custom">{{ __('Custom Permissions') }}</option>
+                        <option value="custom">{{ __('Custom Multi-Permission Preset') }}</option>
                         <option value="customer_service">{{ __('Customer Service Base') }}</option>
                         <option value="risk_officer">{{ __('Risk Officer Base') }}</option>
                         <option value="collection_officer">{{ __('Collection Officer Base') }}</option>
                     </select>
+                </div>
+
+                {{-- Multiple Access Checkboxes --}}
+                <div class="pt-1 space-y-2">
+                    <label class="block text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                        {{ __('Module Access Grants (Multiple Access)') }}
+                    </label>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800">
+                            <input type="checkbox" checked class="accent-emerald-600 h-4 w-4 rounded">
+                            <span class="font-bold text-slate-800 dark:text-slate-200">{{ __('User Management') }}</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800">
+                            <input type="checkbox" checked class="accent-emerald-600 h-4 w-4 rounded">
+                            <span class="font-bold text-slate-800 dark:text-slate-200">{{ __('Loan Approvals') }}</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800">
+                            <input type="checkbox" class="accent-emerald-600 h-4 w-4 rounded">
+                            <span class="font-bold text-slate-800 dark:text-slate-200">{{ __('Financial Config') }}</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800">
+                            <input type="checkbox" checked class="accent-emerald-600 h-4 w-4 rounded">
+                            <span class="font-bold text-slate-800 dark:text-slate-200">{{ __('System Audit Logs') }}</span>
+                        </label>
+                    </div>
                 </div>
             </div>
 

@@ -156,7 +156,7 @@
 
                             {{-- Status Badge --}}
                             <td class="whitespace-nowrap px-4 py-4">
-                                <span class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider {{ $statusClass }}">
+                                <span class="inline-flex items-center justify-center text-center rounded-full border px-3 py-0.5 text-[11px] font-bold uppercase tracking-wider {{ $statusClass }}">
                                     {{ __(str_replace('_', ' ', $loan->status)) }}
                                 </span>
                             </td>

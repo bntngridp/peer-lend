@@ -166,18 +166,15 @@
                             {{-- Status Column --}}
                             <td class="whitespace-nowrap px-4 py-4">
                                 @if($isKycApproved)
-                                    <span class="inline-flex items-center gap-1 rounded-full border border-green-500/30 bg-green-500/15 px-2.5 py-0.5 text-xs font-bold text-green-400">
-                                        <span class="h-1.5 w-1.5 rounded-full bg-green-400"></span>
+                                    <span class="inline-flex items-center justify-center text-center rounded-full border border-green-500/30 bg-green-500/15 px-3 py-0.5 text-xs font-bold text-green-400 min-w-[84px]">
                                         {{ __('Active') }}
                                     </span>
                                 @elseif($isKycPending)
-                                    <span class="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/15 px-2.5 py-0.5 text-xs font-bold text-amber-400">
-                                        <span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+                                    <span class="inline-flex items-center justify-center text-center rounded-full border border-amber-500/30 bg-amber-500/15 px-3 py-0.5 text-xs font-bold text-amber-400 min-w-[84px]">
                                         {{ __('Pending KYC') }}
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-1 rounded-full border border-slate-500/30 bg-slate-500/15 px-2.5 py-0.5 text-xs font-medium text-slate-400">
-                                        <span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span>
+                                    <span class="inline-flex items-center justify-center text-center rounded-full border border-slate-500/30 bg-slate-500/15 px-3 py-0.5 text-xs font-medium text-slate-400 min-w-[84px]">
                                         {{ __('Unverified') }}
                                     </span>
                                 @endif

@@ -84,42 +84,42 @@
             </div>
 
             <!-- Recent Loan Applications Table -->
-            <div class="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
-                <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
-                    <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Recent Loan Applications</h3>
-                    <a href="{{ route('admin.loans.index') }}" class="text-xs font-bold text-emerald-700 hover:text-emerald-800">View All Applications &rarr;</a>
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs overflow-hidden">
+                <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 px-6 py-4">
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">Recent Loan Applications</h3>
+                    <a href="{{ route('admin.loans.index') }}" class="text-xs font-bold text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300">View All Applications &rarr;</a>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                            <tr class="bg-slate-50 dark:bg-slate-950/60 border-b border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
                                 <th class="py-3 px-6">Borrower</th>
                                 <th class="py-3 px-6">Amount</th>
                                 <th class="py-3 px-6">Status</th>
                                 <th class="py-3 px-6">Applied Date</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300">
                             @forelse($stats['recent_loans'] as $loan)
-                            <tr class="hover:bg-slate-50/80 transition-colors">
-                                <td class="py-3.5 px-6 font-bold text-slate-900">{{ $loan->borrower?->profile?->full_name ?? 'N/A' }}</td>
-                                <td class="py-3.5 px-6 font-semibold text-slate-900">Rp {{ number_format($loan->amount, 0, ',', '.') }}</td>
+                            <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
+                                <td class="py-3.5 px-6 font-bold text-slate-900 dark:text-slate-100">{{ $loan->borrower?->profile?->full_name ?? 'N/A' }}</td>
+                                <td class="py-3.5 px-6 font-semibold text-slate-900 dark:text-slate-100">Rp {{ number_format($loan->amount, 0, ',', '.') }}</td>
                                 <td class="py-3.5 px-6">
                                     @php
                                         $statusBadge = match($loan->status) {
-                                            'pending'      => 'bg-amber-50 text-amber-700 border-amber-200',
-                                            'open_funding' => 'bg-blue-50 text-blue-700 border-blue-200',
-                                            'funded'       => 'bg-purple-50 text-purple-700 border-purple-200',
-                                            'active'       => 'bg-emerald-50 text-emerald-700 border-emerald-200',
-                                            'completed'    => 'bg-slate-100 text-slate-700 border-slate-200',
-                                            default        => 'bg-slate-100 text-slate-600 border-slate-200',
+                                            'pending'      => 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800/80',
+                                            'open_funding' => 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800/80',
+                                            'funded'       => 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800/80',
+                                            'active'       => 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/80',
+                                            'completed'    => 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700',
+                                            default        => 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700',
                                         };
                                     @endphp
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-bold border {{ $statusBadge }}">
                                         {{ ucfirst(str_replace('_', ' ', $loan->status)) }}
                                     </span>
                                 </td>
-                                <td class="py-3.5 px-6 text-slate-400">{{ $loan->created_at->diffForHumans() }}</td>
+                                <td class="py-3.5 px-6 text-slate-400 dark:text-slate-400">{{ $loan->created_at->diffForHumans() }}</td>
                             </tr>
                             @empty
                             <tr><td colspan="4" class="py-8 text-center text-slate-400">No applications recorded.</td></tr>
@@ -148,51 +148,51 @@
 
                 <div class="space-y-3">
                     <!-- Alert 1: Large Withdrawal -->
-                    <div class="p-3.5 rounded-xl bg-rose-50/80 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 space-y-1">
+                    <div class="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/70 space-y-1">
                         <div class="flex items-center gap-2">
                             <svg class="h-3.5 w-3.5 text-rose-600 dark:text-rose-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                             </svg>
-                            <p class="text-xs font-bold text-rose-900 dark:text-rose-300">Large Withdrawal Detected</p>
+                            <p class="text-xs font-bold text-rose-900 dark:text-rose-200">Large Withdrawal Detected</p>
                         </div>
-                        <p class="text-[11px] text-rose-700 dark:text-rose-400 leading-relaxed font-medium">Unusual outbound transfer of Rp 50.000.000 initiated by Account #8492.</p>
-                        <p class="text-[10px] font-semibold text-rose-500 dark:text-rose-400">2 mins ago</p>
+                        <p class="text-[11px] text-rose-700 dark:text-rose-300/90 leading-relaxed font-medium">Unusual outbound transfer of Rp 50.000.000 initiated by Account #8492.</p>
+                        <p class="text-[10px] font-semibold text-rose-600 dark:text-rose-400">2 mins ago</p>
                     </div>
 
                     <!-- Alert 2: API Latency Spike -->
-                    <div class="p-3.5 rounded-xl bg-sky-50/80 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-900/60 space-y-1">
+                    <div class="p-3.5 rounded-xl bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-900/70 space-y-1">
                         <div class="flex items-center gap-2">
                             <svg class="h-3.5 w-3.5 text-sky-600 dark:text-sky-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <p class="text-xs font-bold text-sky-900 dark:text-sky-300">API Latency Spike</p>
+                            <p class="text-xs font-bold text-sky-900 dark:text-sky-200">API Latency Spike</p>
                         </div>
-                        <p class="text-[11px] text-sky-700 dark:text-sky-400 leading-relaxed font-medium">Payment gateway response times exceeded 2000ms for 30 seconds.</p>
-                        <p class="text-[10px] font-semibold text-sky-500 dark:text-sky-400">15 mins ago</p>
+                        <p class="text-[11px] text-sky-700 dark:text-sky-300/90 leading-relaxed font-medium">Payment gateway response times exceeded 2000ms for 30 seconds.</p>
+                        <p class="text-[10px] font-semibold text-sky-600 dark:text-sky-400">15 mins ago</p>
                     </div>
                 </div>
             </div>
 
             <!-- Card: Quick Management -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">QUICK MANAGEMENT</span>
-                <p class="text-xs font-medium text-slate-500 mb-4">Global platform parameters and approvals.</p>
+                <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mb-4">Global platform parameters and approvals.</p>
 
                 <div class="space-y-2">
-                    <a href="{{ route('admin.kyc.index') }}" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-emerald-600 hover:bg-emerald-50/50 transition-all group">
+                    <a href="{{ route('admin.kyc.index') }}" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-600 dark:hover:border-emerald-500 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-all group">
                         <div class="flex items-center gap-2.5">
                             <span class="text-sm"></span>
-                            <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-800">Review Pending KYC</span>
+                            <span class="text-xs font-bold text-slate-900 dark:text-slate-100 group-hover:text-emerald-800 dark:group-hover:text-emerald-400">Review Pending KYC</span>
                         </div>
-                        <span class="text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">{{ $stats['kyc_pending'] }}</span>
+                        <span class="text-xs font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded-md border border-amber-200 dark:border-amber-800/80">{{ $stats['kyc_pending'] }}</span>
                     </a>
 
-                    <a href="{{ route('admin.loans.index') }}" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-emerald-600 hover:bg-emerald-50/50 transition-all group">
+                    <a href="{{ route('admin.loans.index') }}" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-600 dark:hover:border-emerald-500 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-all group">
                         <div class="flex items-center gap-2.5">
                             <span class="text-sm"></span>
-                            <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-800">Review Loan Applications</span>
+                            <span class="text-xs font-bold text-slate-900 dark:text-slate-100 group-hover:text-emerald-800 dark:group-hover:text-emerald-400">Review Loan Applications</span>
                         </div>
-                        <span class="text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">{{ $stats['loans_pending'] }}</span>
+                        <span class="text-xs font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md border border-blue-200 dark:border-blue-800/80">{{ $stats['loans_pending'] }}</span>
                     </a>
                 </div>
             </div>

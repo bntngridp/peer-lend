@@ -469,9 +469,9 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <label @click="colorTheme = 'light'; applyTheme('light')"
                                    :class="colorTheme === 'light' 
-                                       ? 'border-emerald-600 dark:border-emerald-500 bg-emerald-50/60 dark:bg-emerald-950/40 ring-2 ring-emerald-600/20 dark:ring-emerald-500/20' 
-                                       : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'"
-                                   class="p-3.5 rounded-xl border flex items-center justify-between cursor-pointer transition-all select-none">
+                                       ? 'border-2 border-emerald-600 dark:border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/40 shadow-xs' 
+                                       : 'border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'"
+                                   class="p-3.5 rounded-xl flex items-center justify-between cursor-pointer transition-all select-none">
                                 <div class="flex items-center gap-3">
                                     <div class="p-2 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-500 border border-amber-200/80 dark:border-amber-900/50">
                                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -488,9 +488,9 @@
 
                             <label @click="colorTheme = 'dark'; applyTheme('dark')"
                                    :class="colorTheme === 'dark' 
-                                       ? 'border-emerald-600 dark:border-emerald-500 bg-emerald-50/60 dark:bg-emerald-950/40 ring-2 ring-emerald-600/20 dark:ring-emerald-500/20' 
-                                       : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'"
-                                   class="p-3.5 rounded-xl border flex items-center justify-between cursor-pointer transition-all select-none">
+                                       ? 'border-2 border-emerald-600 dark:border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/40 shadow-xs' 
+                                       : 'border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'"
+                                   class="p-3.5 rounded-xl flex items-center justify-between cursor-pointer transition-all select-none">
                                 <div class="flex items-center gap-3">
                                     <div class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-500 border border-indigo-200/80 dark:border-indigo-900/50">
                                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -512,9 +512,9 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <label @click="density = 'comfortable'; applyDensity('comfortable')"
                                    :class="density === 'comfortable' 
-                                       ? 'border-emerald-600 dark:border-emerald-500 bg-emerald-50/60 dark:bg-emerald-950/40 ring-2 ring-emerald-600/20 dark:ring-emerald-500/20' 
-                                       : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'"
-                                   class="p-3.5 rounded-xl border flex items-center justify-between cursor-pointer transition-all select-none">
+                                       ? 'border-2 border-emerald-600 dark:border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/40 shadow-xs' 
+                                       : 'border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'"
+                                   class="p-3.5 rounded-xl flex items-center justify-between cursor-pointer transition-all select-none">
                                 <div>
                                     <span class="font-bold text-slate-900 dark:text-slate-100 text-xs block">{{ __('Comfortable') }}</span>
                                     <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">{{ __('More whitespace, easier to read.') }}</span>
@@ -524,9 +524,9 @@
 
                             <label @click="density = 'compact'; applyDensity('compact')"
                                    :class="density === 'compact' 
-                                       ? 'border-emerald-600 dark:border-emerald-500 bg-emerald-50/60 dark:bg-emerald-950/40 ring-2 ring-emerald-600/20 dark:ring-emerald-500/20' 
-                                       : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'"
-                                   class="p-3.5 rounded-xl border flex items-center justify-between cursor-pointer transition-all select-none">
+                                       ? 'border-2 border-emerald-600 dark:border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/40 shadow-xs' 
+                                       : 'border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'"
+                                   class="p-3.5 rounded-xl flex items-center justify-between cursor-pointer transition-all select-none">
                                 <div>
                                     <span class="font-bold text-slate-900 dark:text-slate-100 text-xs block">{{ __('Compact') }}</span>
                                     <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">{{ __('High information density for trading.') }}</span>

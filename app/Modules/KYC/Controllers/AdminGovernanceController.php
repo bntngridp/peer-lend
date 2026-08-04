@@ -14,11 +14,17 @@ class AdminGovernanceController extends Controller
     {
         $query = User::with(['profile', 'roles', 'kyc']);
 
-        if ($search = $request->input('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('email', 'like', "%{$search}%")
+        if ($search = trim((string) $request->input('search'))) {
+            $searchLower = strtolower($search);
+            $query->where(function ($q) use ($search, $searchLower) {
+                $q->where('email', 'ilike', "%{$search}%")
+                  ->orWhere('id', 'ilike', "%{$search}%")
                   ->orWhereHas('profile', function ($pq) use ($search) {
-                      $pq->where('full_name', 'like', "%{$search}%");
+                      $pq->where('full_name', 'ilike', "%{$search}%")
+                        ->orWhere('phone', 'ilike', "%{$search}%");
+                  })
+                  ->orWhereHas('kyc', function ($kq) use ($search) {
+                      $kq->where('nik', 'ilike', "%{$search}%");
                   });
             });
         }

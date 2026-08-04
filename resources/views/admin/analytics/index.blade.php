@@ -5,40 +5,7 @@
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<div x-data="{ 
-    showExportModal: false,
-    exportFormat: 'csv',
-    toastMessage: '',
-    showToast: false,
-    triggerToast(msg) {
-        this.toastMessage = msg;
-        this.showToast = true;
-        setTimeout(() => { this.showToast = false; }, 4000);
-    },
-    downloadReport() {
-        this.showExportModal = false;
-        
-        // Generate CSV file Blob for client download
-        const headers = ['Metric / Period', 'Disbursement ($M)', 'Repayment ($M)', 'Default Rate (%)', 'LCR (%)'];
-        const rows = [
-            ['{{ $timeframeLabel }} Total', '{{ $totalDisbursement }}', '{{ $totalRepayment }}', '1.24%', '145%'],
-            @foreach($disbursementData['labels'] as $idx => $label)
-            ['{{ $label }}', '{{ $disbursementData['disbursements'][$idx] }}', '{{ $disbursementData['repayments'][$idx] }}', '1.24%', '145%'],
-            @endforeach
-        ];
-        
-        let csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-        let encodedUri = encodeURI(csvContent);
-        let link = document.createElement('a');
-        link.setAttribute('href', encodedUri);
-        link.setAttribute('download', `platform_analytics_report_${this.exportFormat}_{{ $days }}_days.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        this.triggerToast(__('Institutional Analytics Report exported successfully!'));
-    }
-}" class="px-4 sm:px-6 lg:px-8 space-y-6 max-w-7xl mx-auto relative">
+<div x-data="platformAnalyticsApp()" class="px-4 sm:px-6 lg:px-8 space-y-6 max-w-7xl mx-auto relative">
     
     {{-- ─── Toast Notification Popup ────────────────────────────────────────── --}}
     <div x-show="showToast" 
@@ -106,115 +73,189 @@
         
         {{-- Stat 1: Total Liquidity Pool --}}
         <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs">
-            <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">
-                {{ __('Total Liquidity Pool') }}
-            </span>
-            <p class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-2">
-                ${{ $days == 365 ? '2.84' : ($days == 90 ? '1.42' : '842.5') }}{{ $days == 30 ? 'M' : 'B' }}
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    {{ __('Liquidity Pool') }}
+                </span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400">
+                    +14.2%
+                </span>
+            </div>
+            <div class="mt-3 flex items-baseline justify-between">
+                <span class="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
+                    ${{ $days == 365 ? '2.84B' : ($days == 90 ? '1.42B' : '842.5M') }}
+                </span>
+                <span class="text-xs font-semibold text-slate-400 dark:text-slate-500">
+                    {{ __('IDR Equiv.') }}
+                </span>
+            </div>
+            <p class="mt-2 text-[11px] text-slate-500 dark:text-slate-400">
+                {{ __('Available capital for institutional disbursement') }}
             </p>
-            <span class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 mt-1 block">
-                +6.3% {{ __('from previous period') }}
-            </span>
         </div>
 
         {{-- Stat 2: Platform Default Rate --}}
         <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs">
-            <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">
-                {{ __('Platform Default Rate') }}
-            </span>
-            <p class="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-2">
-                1.24%
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    {{ __('Default Rate (NPL)') }}
+                </span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400">
+                    -0.18%
+                </span>
+            </div>
+            <div class="mt-3 flex items-baseline justify-between">
+                <span class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">
+                    1.24%
+                </span>
+                <span class="text-xs font-semibold text-slate-400 dark:text-slate-500">
+                    Target &lt; 2.5%
+                </span>
+            </div>
+            <p class="mt-2 text-[11px] text-slate-500 dark:text-slate-400">
+                {{ __('Maintained well below risk limit thresholds') }}
             </p>
-            <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1 block">
-                {{ __('Stable vs benchmark (1.5%)') }}
-            </span>
         </div>
 
-        {{-- Stat 3: Liquidity Coverage (LCR) --}}
+        {{-- Stat 3: Liquidity Coverage Ratio (LCR) --}}
         <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs">
-            <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">
-                {{ __('Liquidity Coverage (LCR)') }}
-            </span>
-            <p class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-2">
-                145%
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    {{ __('LCR Ratio') }}
+                </span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400">
+                    Healthy
+                </span>
+            </div>
+            <div class="mt-3 flex items-baseline justify-between">
+                <span class="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
+                    145.8%
+                </span>
+                <span class="text-xs font-semibold text-slate-400 dark:text-slate-500">
+                    Min 100%
+                </span>
+            </div>
+            <p class="mt-2 text-[11px] text-slate-500 dark:text-slate-400">
+                {{ __('High-quality liquid assets vs 30-day net cash outflow') }}
             </p>
-            <span class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 mt-1 block">
-                {{ __('Exceeds 100% Basel target') }}
-            </span>
         </div>
 
         {{-- Stat 4: Net Stable Funding (NSFR) --}}
         <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs">
-            <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">
-                {{ __('Net Stable Funding (NSFR)') }}
-            </span>
-            <p class="text-2xl font-black text-slate-900 dark:text-slate-100 mt-2">
-                118%
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    {{ __('NSFR Ratio') }}
+                </span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400">
+                    Optimal
+                </span>
+            </div>
+            <div class="mt-3 flex items-baseline justify-between">
+                <span class="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
+                    118.2%
+                </span>
+                <span class="text-xs font-semibold text-slate-400 dark:text-slate-500">
+                    Min 100%
+                </span>
+            </div>
+            <p class="mt-2 text-[11px] text-slate-500 dark:text-slate-400">
+                {{ __('Available stable funding vs required stable funding') }}
             </p>
-            <span class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 mt-1 block">
-                {{ __('Fully Compliant') }}
-            </span>
         </div>
 
     </div>
 
-    {{-- ─── Charts Row ───────────────────────────────────────────────────────── --}}
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    {{-- ─── Main Content Grid: Chart & Risk Breakdown ────────────────────────── --}}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        {{-- Loan Disbursement vs Repayment Chart (Spans 8 Cols) --}}
-        <div class="lg:col-span-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
-                    {{ __('Loan Disbursement vs. Repayment') }}
-                </h3>
-                <span class="text-xs font-bold text-slate-500 dark:text-slate-400">
-                    {{ $timeframeLabel }} (Total: ${{ $totalDisbursement }}M)
-                </span>
+        {{-- Chart Section (2 Columns) --}}
+        <div class="lg:col-span-2 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="text-base font-bold text-slate-900 dark:text-slate-100">
+                        {{ __('Disbursement vs Repayment Trend') }}
+                    </h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                        {{ __('Historical performance metrics for scope:') }} <span class="font-bold text-slate-700 dark:text-slate-300">{{ $timeframeLabel }}</span>
+                    </p>
+                </div>
+                <div class="flex items-center gap-4 text-xs font-semibold">
+                    <span class="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                        {{ __('Disbursement') }} (${{ $totalDisbursement }}M)
+                    </span>
+                    <span class="flex items-center gap-1.5 text-blue-600 dark:text-blue-400">
+                        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                        {{ __('Repayment') }} (${{ $totalRepayment }}M)
+                    </span>
+                </div>
             </div>
-            
-            <div class="h-[300px]">
+
+            <div class="h-72 w-full relative">
                 <canvas id="disbursementChart"></canvas>
             </div>
         </div>
 
-        {{-- Liquidity & Risk Ratios (Spans 4 Cols) --}}
-        <div class="lg:col-span-4 space-y-4">
-            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-4">
-                <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-3">
-                    {{ __('Liquidity Ratios Summary') }}
-                </h3>
-                
-                <div class="space-y-4">
-                    <div class="grid grid-cols-3 gap-2">
-                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 text-center">
-                            <span class="text-lg font-black text-emerald-600 dark:text-emerald-400 block">75%</span>
-                            <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase block mt-0.5">{{ __('LCR Ratio') }}</span>
-                        </div>
-                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 text-center">
-                            <span class="text-lg font-black text-emerald-600 dark:text-emerald-400 block">90%</span>
-                            <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase block mt-0.5">{{ __('NSFR') }}</span>
-                        </div>
-                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 text-center">
-                            <span class="text-lg font-black text-emerald-600 dark:text-emerald-400 block">40%</span>
-                            <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase block mt-0.5">{{ __('Cash Reserve') }}</span>
-                        </div>
-                    </div>
+        {{-- Risk Tier & Asset Quality (1 Column) --}}
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-5">
+            <div>
+                <h2 class="text-base font-bold text-slate-900 dark:text-slate-100">
+                    {{ __('Credit Risk Tier Distribution') }}
+                </h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400">
+                    {{ __('Portfolio composition across institutional risk classes') }}
+                </p>
+            </div>
 
-                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 text-xs space-y-2">
-                        <div class="flex justify-between font-medium">
-                            <span class="text-slate-500 dark:text-slate-400">{{ __('Timeframe Filter:') }}</span>
-                            <span class="font-bold text-slate-900 dark:text-slate-100">{{ $timeframeLabel }}</span>
-                        </div>
-                        <div class="flex justify-between font-medium">
-                            <span class="text-slate-500 dark:text-slate-400">{{ __('Disbursement Volume:') }}</span>
-                            <span class="font-bold text-emerald-600 dark:text-emerald-400">${{ $totalDisbursement }}M</span>
-                        </div>
-                        <div class="flex justify-between font-medium">
-                            <span class="text-slate-500 dark:text-slate-400">{{ __('Repayment Received:') }}</span>
-                            <span class="font-bold text-blue-600 dark:text-blue-400">${{ $totalRepayment }}M</span>
-                        </div>
+            <div class="space-y-4 text-xs">
+                <div>
+                    <div class="flex justify-between font-bold text-slate-700 dark:text-slate-300 mb-1">
+                        <span>Tier AAA (Low Risk)</span>
+                        <span>54.2%</span>
+                    </div>
+                    <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                        <div class="h-full bg-emerald-500 rounded-full" style="width: 54.2%"></div>
                     </div>
                 </div>
+
+                <div>
+                    <div class="flex justify-between font-bold text-slate-700 dark:text-slate-300 mb-1">
+                        <span>Tier AA (Moderate Risk)</span>
+                        <span>28.6%</span>
+                    </div>
+                    <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                        <div class="h-full bg-indigo-500 rounded-full" style="width: 28.6%"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between font-bold text-slate-700 dark:text-slate-300 mb-1">
+                        <span>Tier A (Balanced Risk)</span>
+                        <span>12.4%</span>
+                    </div>
+                    <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                        <div class="h-full bg-amber-500 rounded-full" style="width: 12.4%"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between font-bold text-slate-700 dark:text-slate-300 mb-1">
+                        <span>Tier B (High Yield / Subprime)</span>
+                        <span>4.8%</span>
+                    </div>
+                    <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                        <div class="h-full bg-rose-500 rounded-full" style="width: 4.8%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 space-y-2">
+                <span class="text-xs font-bold text-slate-900 dark:text-slate-100">
+                    {{ __('Asset Quality Summary') }}
+                </span>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400">
+                    {{ __('Over 82.8% of portfolio assets are rated AA or higher. Collateral coverage ratio stands firm at 142.5%.') }}
+                </p>
             </div>
         </div>
 
@@ -308,6 +349,172 @@
 </div>
 
 <script>
+    function platformAnalyticsApp() {
+        return {
+            showExportModal: false,
+            exportFormat: 'csv',
+            toastMessage: '',
+            showToast: false,
+            triggerToast(msg) {
+                this.toastMessage = msg;
+                this.showToast = true;
+                setTimeout(() => { this.showToast = false; }, 4000);
+            },
+            downloadReport() {
+                this.showExportModal = false;
+                const timeframe = {!! json_encode($timeframeLabel) !!};
+                const days = {!! json_encode((string)$days) !!};
+                const totalDisbursement = {!! json_encode((string)$totalDisbursement) !!};
+                const totalRepayment = {!! json_encode((string)$totalRepayment) !!};
+                
+                const periodData = [
+                    @foreach($disbursementData['labels'] as $idx => $label)
+                    {
+                        period: {!! json_encode($label) !!},
+                        disbursement: {{ (float) $disbursementData['disbursements'][$idx] }},
+                        repayment: {{ (float) $disbursementData['repayments'][$idx] }},
+                        defaultRate: '1.24%',
+                        lcr: '145%'
+                    },
+                    @endforeach
+                ];
+
+                if (this.exportFormat === 'csv') {
+                    const headers = ['Period / Metric', 'Disbursement ($M)', 'Repayment ($M)', 'Default Rate (%)', 'LCR (%)'];
+                    const rows = [
+                        headers.join(','),
+                        `"Summary (${timeframe})","${totalDisbursement}","${totalRepayment}","1.24%","145%"`,
+                        ...periodData.map(r => `"${r.period}","${r.disbursement}","${r.repayment}","${r.defaultRate}","${r.lcr}"`)
+                    ];
+                    const blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.setAttribute('href', url);
+                    link.setAttribute('download', `lendflow_analytics_${days}_days.csv`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    this.triggerToast({!! json_encode(__('Platform Analytics CSV Report exported successfully!')) !!});
+                } 
+                else if (this.exportFormat === 'json') {
+                    const jsonOutput = {
+                        report_title: 'LendFlow Institutional Platform Analytics Report',
+                        generated_at: new Date().toISOString(),
+                        timeframe_scope: timeframe,
+                        timeframe_days: parseInt(days),
+                        summary_metrics: {
+                            total_liquidity_pool: '$' + (days == '365' ? '2.84B' : (days == '90' ? '1.42B' : '842.5M')),
+                            platform_default_rate: '1.24%',
+                            liquidity_coverage_ratio_lcr: '145%',
+                            net_stable_funding_ratio_nsfr: '118%',
+                            total_disbursement_millions: parseFloat(totalDisbursement),
+                            total_repayment_millions: parseFloat(totalRepayment)
+                        },
+                        period_breakdown: periodData
+                    };
+                    const blob = new Blob([JSON.stringify(jsonOutput, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.setAttribute('href', url);
+                    link.setAttribute('download', `lendflow_analytics_${days}_days.json`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    this.triggerToast({!! json_encode(__('Platform Analytics JSON Stream exported successfully!')) !!});
+                } 
+                else if (this.exportFormat === 'pdf') {
+                    const printWindow = window.open('', '_blank');
+                    const printContent = `
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <title>LendFlow Platform Analytics Report (${timeframe})</title>
+                            <style>
+                                body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: #0f172a; margin: 0; padding: 40px; background: #fff; }
+                                .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #10b981; padding-bottom: 20px; margin-bottom: 30px; }
+                                .brand { font-size: 24px; font-weight: 900; color: #0f172a; letter-spacing: -0.5px; }
+                                .brand span { color: #10b981; }
+                                .title { text-align: right; }
+                                .title h1 { font-size: 18px; margin: 0; color: #0f172a; text-transform: uppercase; letter-spacing: 1px; }
+                                .title p { font-size: 12px; color: #64748b; margin: 4px 0 0 0; }
+                                .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 30px; }
+                                .card { border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; background: #f8fafc; }
+                                .card-label { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; }
+                                .card-val { font-size: 20px; font-weight: 900; color: #0f172a; margin-top: 6px; }
+                                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                                th { background: #0f172a; color: #fff; font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 10px 14px; text-align: left; }
+                                td { border-bottom: 1px solid #e2e8f0; font-size: 12px; padding: 12px 14px; color: #334155; }
+                                tr:nth-child(even) { background: #f8fafc; }
+                                .footer { margin-top: 50px; border-top: 1px solid #e2e8f0; padding-top: 16px; font-size: 11px; color: #94a3b8; text-align: center; }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="header">
+                                <div class="brand">Lend<span>Flow</span></div>
+                                <div class="title">
+                                    <h1>Institutional Platform Analytics</h1>
+                                    <p>Timeframe: ${timeframe} | Exported: ${new Date().toLocaleString()}</p>
+                                </div>
+                            </div>
+
+                            <div class="grid">
+                                <div class="card">
+                                    <div class="card-label">Liquidity Pool</div>
+                                    <div class="card-val">${days == '365' ? '$2.84B' : (days == '90' ? '$1.42B' : '$842.5M')}</div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-label">Default Rate</div>
+                                    <div class="card-val" style="color:#10b981">1.24%</div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-label">Total Disbursement</div>
+                                    <div class="card-val">$${totalDisbursement}M</div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-label">Total Repayments</div>
+                                    <div class="card-val" style="color:#3b82f6">$${totalRepayment}M</div>
+                                </div>
+                            </div>
+
+                            <h3>Period-by-Period Breakdown</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Period</th>
+                                        <th>Disbursement ($M)</th>
+                                        <th>Repayment ($M)</th>
+                                        <th>Default Rate</th>
+                                        <th>LCR</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${periodData.map(r => `
+                                        <tr>
+                                            <td><strong>${r.period}</strong></td>
+                                            <td>$${r.disbursement}M</td>
+                                            <td>$${r.repayment}M</td>
+                                            <td>${r.defaultRate}</td>
+                                            <td>${r.lcr}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+
+                            <div class="footer">
+                                Confidential Report — LendFlow Institutional P2P Lending Platform &copy; ${new Date().getFullYear()}
+                            </div>
+                        </body>
+                        </html>
+                    `;
+                    printWindow.document.write(printContent);
+                    printWindow.document.close();
+                    printWindow.print();
+                    this.triggerToast({!! json_encode(__('PDF Executive Analytics Report generated!')) !!});
+                }
+            }
+        };
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
         const isDark = document.documentElement.classList.contains('dark');
         const gridColor = isDark ? 'rgba(51, 65, 85, 0.4)' : '#f1f5f9';

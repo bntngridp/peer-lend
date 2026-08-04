@@ -66,7 +66,8 @@ class AdminGovernanceController extends Controller
     public function transactions()
     {
         $transactions = WalletTransaction::with('wallet.user')->latest('created_at')->paginate(15);
-        return view('admin.transactions.index', compact('transactions'));
+        $exportTransactions = WalletTransaction::with('wallet.user')->latest('created_at')->take(100)->get();
+        return view('admin.transactions.index', compact('transactions', 'exportTransactions'));
     }
 
     public function analytics(Request $request)

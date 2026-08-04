@@ -1,5 +1,10 @@
+@php
+    $sysPref    = auth()->user()?->profile?->system_preferences ?? [];
+    $sysTheme   = $sysPref['color_theme']  ?? 'light';
+    $sysDensity = $sysPref['data_density'] ?? 'comfortable';
+@endphp
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-slate-50 dark:bg-slate-950">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full {{ $sysTheme === 'dark' ? 'dark' : '' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,11 +33,7 @@
         .border-primary-green { border-color: #15803D; }
         .hover\:bg-primary-green-dark:hover { background-color: #166534; }
     </style>
-    @php
-        $sysPref    = auth()->user()?->profile?->system_preferences ?? [];
-        $sysTheme   = $sysPref['color_theme']  ?? 'light';
-        $sysDensity = $sysPref['data_density'] ?? 'comfortable';
-    @endphp
+    {{-- $sysPref / $sysTheme / $sysDensity already computed at top of file --}}
     <script>
         (function() {
             // ── Server DB is the SINGLE SOURCE OF TRUTH ──────────────────────

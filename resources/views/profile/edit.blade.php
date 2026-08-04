@@ -483,7 +483,7 @@
                                         <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">{{ __('Clean bright layout.') }}</span>
                                     </div>
                                 </div>
-                                <input type="radio" id="radio_theme_light" name="color_theme" value="light" @change="colorTheme = 'light'; applyTheme('light')" {{ ($sysSettings['color_theme'] ?? 'light') === 'light' ? 'checked' : '' }} class="accent-emerald-700 h-4 w-4">
+                                <input type="radio" id="radio_theme_light" name="color_theme" value="light" {{ ($sysSettings['color_theme'] ?? 'light') === 'light' ? 'checked' : '' }} class="accent-emerald-700 h-4 w-4">
                             </label>
 
                             <label @click="colorTheme = 'dark'; applyTheme('dark')"
@@ -502,7 +502,7 @@
                                         <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">{{ __('Sleek dark mode for low light.') }}</span>
                                     </div>
                                 </div>
-                                <input type="radio" id="radio_theme_dark" name="color_theme" value="dark" @change="colorTheme = 'dark'; applyTheme('dark')" {{ ($sysSettings['color_theme'] ?? 'light') === 'dark' ? 'checked' : '' }} class="accent-emerald-700 h-4 w-4">
+                                <input type="radio" id="radio_theme_dark" name="color_theme" value="dark" {{ ($sysSettings['color_theme'] ?? 'light') === 'dark' ? 'checked' : '' }} class="accent-emerald-700 h-4 w-4">
                             </label>
                         </div>
                     </div>

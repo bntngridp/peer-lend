@@ -25,3 +25,12 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Scratch/temp files
+scratch_test_*.js
+*.scratch.js
+arabic_*.png
+lang_*.png
+wallet_initial_view.png
+wallet_after_*.png
+scratch/

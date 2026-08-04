@@ -34,12 +34,18 @@
     @endphp
     <script>
         (function() {
-            const serverTheme = @json($sysTheme);
+            // ── Server DB is the SINGLE SOURCE OF TRUTH ──────────────────────
+            // Nilai dari server (DB) selalu menang. localStorage hanya dipakai
+            // sebagai cache untuk in-session toggle SEBELUM page reload.
+            const serverTheme   = @json($sysTheme);
             const serverDensity = @json($sysDensity);
-            // Prioritize localStorage → then server DB value
-            const storedTheme = localStorage.getItem('lendflow_theme');
-            const theme = storedTheme ?? serverTheme;
-            const density = localStorage.getItem('lendflow_density') ?? serverDensity;
+
+            // Selalu apply & sync localStorage dengan server value
+            const theme   = serverTheme;
+            const density = serverDensity;
+
+            localStorage.setItem('lendflow_theme',   theme);
+            localStorage.setItem('lendflow_density', density);
 
             if (theme === 'dark') {
                 document.documentElement.classList.add('dark');
@@ -51,11 +57,6 @@
                 document.documentElement.classList.add('density-compact');
             } else {
                 document.documentElement.classList.remove('density-compact');
-            }
-
-            // Sync localStorage with authoritative server value if no local override
-            if (!storedTheme) {
-                localStorage.setItem('lendflow_theme', serverTheme);
             }
         })();
 

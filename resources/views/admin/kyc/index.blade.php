@@ -189,7 +189,7 @@
                             {{-- User / Entity Name --}}
                             <td class="py-4 px-6">
                                 <div class="flex items-center gap-3">
-                                    <div class="h-9 w-9 rounded-full bg-slate-900 dark:bg-slate-800 text-white font-black flex items-center justify-center text-xs border border-slate-700 shrink-0">
+                                    <div class="h-9 w-9 flex-shrink-0 rounded-xl bg-slate-200 dark:bg-slate-700 flex items-center justify-center border border-slate-300 dark:border-slate-600 text-xs font-bold text-slate-700 dark:text-slate-100 shrink-0">
                                         {{ strtoupper(substr($kyc->user->profile->full_name ?? $kyc->user->email ?? 'US', 0, 2)) }}
                                     </div>
                                     <div>

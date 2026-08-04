@@ -27,6 +27,21 @@ class AdminKYCController extends Controller
     {
         $query = KYC::with(['user.profile', 'documents']);
 
+        // 0. Search Filter (Name, Email, NIK, Phone, Application ID)
+        if ($search = trim((string) $request->input('search'))) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nik', 'ilike', "%{$search}%")
+                  ->orWhere('id', 'ilike', "%{$search}%")
+                  ->orWhereHas('user', function ($uq) use ($search) {
+                      $uq->where('email', 'ilike', "%{$search}%")
+                         ->orWhereHas('profile', function ($pq) use ($search) {
+                             $pq->where('full_name', 'ilike', "%{$search}%")
+                               ->orWhere('phone', 'ilike', "%{$search}%");
+                         });
+                  });
+            });
+        }
+
         // 1. Risk Level Filter
         if ($risk = $request->input('risk')) {
             if ($risk === 'high') {

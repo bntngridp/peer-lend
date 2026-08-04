@@ -12,7 +12,38 @@ class AdminGovernanceController extends Controller
 {
     public function users(Request $request)
     {
-        $users = User::with('profile')->paginate(10);
+        $query = User::with(['profile', 'roles', 'kyc']);
+
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('email', 'like', "%{$search}%")
+                  ->orWhereHas('profile', function ($pq) use ($search) {
+                      $pq->where('full_name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        if ($role = $request->input('role')) {
+            $query->whereHas('roles', function ($rq) use ($role) {
+                $rq->where('name', $role);
+            });
+        }
+
+        if ($status = $request->input('status')) {
+            if ($status === 'active') {
+                $query->whereHas('kyc', fn($kq) => $kq->where('status', 'approved'));
+            } elseif ($status === 'pending_kyc') {
+                $query->whereHas('kyc', fn($kq) => $kq->where('status', 'pending'));
+            } elseif ($status === 'unverified') {
+                $query->where(function ($uq) {
+                    $uq->whereDoesntHave('kyc')
+                       ->orWhereHas('kyc', fn($kq) => $kq->where('status', 'unverified'));
+                });
+            }
+        }
+
+        $users = $query->latest('created_at')->paginate(10)->withQueryString();
+
         return view('admin.users.index', compact('users'));
     }
 

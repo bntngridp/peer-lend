@@ -35,10 +35,10 @@
                 <div>
                     <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ __('Current Status') }}</span>
                     <span class="inline-flex items-center rounded-lg px-2.5 py-0.5 text-xs font-bold mt-1 uppercase tracking-wider
-                        @if($loan->status === 'pending') bg-amber-50 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/30
-                        @elseif($loan->status === 'open_funding') bg-indigo-50 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30
-                        @elseif($loan->status === 'active') bg-emerald-50 dark:bg-green-500/15 text-emerald-700 dark:text-green-400 border border-emerald-200 dark:border-green-500/30
-                        @else bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 @endif">
+                        @if($loan->status === 'pending') bg-amber-950 text-amber-300 border border-amber-800
+                        @elseif($loan->status === 'open_funding') bg-indigo-950 text-indigo-300 border border-indigo-800
+                        @elseif($loan->status === 'active') bg-green-950 text-green-400 border border-green-800
+                        @else bg-slate-800 text-slate-300 border border-slate-700 @endif">
                         {{ __(str_replace('_', ' ', $loan->status)) }}
                     </span>
                 </div>

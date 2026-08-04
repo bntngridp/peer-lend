@@ -107,12 +107,12 @@
                                 <td class="py-3.5 px-6">
                                     @php
                                         $statusBadge = match($loan->status) {
-                                            'pending'      => 'bg-amber-950 text-amber-300 border border-amber-800',
-                                            'open_funding' => 'bg-indigo-950 text-indigo-300 border border-indigo-800',
-                                            'funded'       => 'bg-purple-950 text-purple-300 border border-purple-800',
-                                            'active'       => 'bg-green-950 text-green-400 border border-green-800',
-                                            'completed'    => 'bg-slate-800 text-slate-300 border border-slate-700',
-                                            default        => 'bg-slate-800 text-slate-400 border border-slate-700',
+                                            'pending'      => 'bg-amber-500/15 text-amber-400 border border-amber-500/30',
+                                            'open_funding' => 'bg-indigo-500/15 text-indigo-400 border border-indigo-500/30',
+                                            'funded'       => 'bg-purple-500/15 text-purple-400 border border-purple-500/30',
+                                            'active'       => 'bg-green-500/450 text-green-400 border border-green-500/30',
+                                            'completed'    => 'bg-slate-500/15 text-slate-300 border border-slate-500/30',
+                                            'default'      => 'bg-slate-500/15 text-slate-400 border border-slate-500/30',
                                         };
                                     @endphp
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-bold border {{ $statusBadge }}">

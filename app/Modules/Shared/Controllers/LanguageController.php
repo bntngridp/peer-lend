@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class LanguageController extends Controller
 {
     /**
-     * Switch application language and stay on the exact page & tab.
+     * Switch application language.
      */
     public function switch(Request $request, string $locale): RedirectResponse
     {
@@ -20,10 +20,6 @@ class LanguageController extends Controller
             session(['locale' => $targetLocale]);
         }
 
-        $redirectUrl = $request->query('redirect')
-            ?: $request->headers->get('referer')
-            ?: url()->previous();
-
-        return redirect()->to($redirectUrl);
+        return redirect()->back();
     }
 }

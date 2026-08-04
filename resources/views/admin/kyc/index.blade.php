@@ -1,73 +1,115 @@
 @extends('layouts.admin')
 
+@section('title', __('Review KYC Queue') . ' - Admin Terminal')
+
 @section('content')
-<div class="space-y-6">
+<div class="px-4 sm:px-6 lg:px-8 space-y-6 max-w-7xl mx-auto">
     
-    <!-- Top Header Bar -->
+    {{-- ─── Top Header Bar ─────────────────────────────────────────────────── --}}
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ __('KYC Review Queue') }}</h1>
-            <p class="text-xs font-medium text-slate-500 mt-1">{{ __('Manage and verify pending institutional and retail client applications.') }}</p>
+            <h1 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+                {{ __('KYC Review Queue') }}
+            </h1>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                {{ __('Manage and verify pending institutional and retail client identity applications.') }}
+            </p>
         </div>
-        <button onclick="window.print()" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition-all">
-            <span></span> {{ __('Export CSV') }}
-        </button>
+        <div class="flex items-center gap-3">
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                {{ $kycs->total() }} {{ __('Total Applications') }}
+            </span>
+        </div>
     </div>
 
-    <!-- 2 Top Summary & Filter Cards Row -->
+    {{-- ─── 2 Summary & Filter Cards Row ──────────────────────────────────────── --}}
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <!-- Card 1: QUEUE OVERVIEW (Spans 4 Cols) -->
-        <div class="lg:col-span-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('QUEUE OVERVIEW') }}</span>
+        {{-- Card 1: QUEUE OVERVIEW (Spans 4 Cols) --}}
+        <div class="lg:col-span-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
+            <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">
+                {{ __('QUEUE OVERVIEW') }}
+            </span>
             <div class="grid grid-cols-2 gap-4 mt-3">
                 <div>
-                    <span class="text-3xl font-extrabold text-slate-900 block leading-tight">{{ __n($kycs->total() > 0 ? $kycs->total() : 142) }}</span>
-                    <span class="text-[11px] font-medium text-slate-500">{{ __('Pending Reviews') }}</span>
+                    <span class="text-3xl font-black text-slate-900 dark:text-slate-100 block leading-tight">
+                        {{ $kycs->total() }}
+                    </span>
+                    <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 block mt-0.5">
+                        {{ __('Matching Applications') }}
+                    </span>
                 </div>
                 <div>
-                    <span class="text-3xl font-extrabold text-rose-600 block leading-tight">{{ __n(12) }}</span>
-                    <span class="text-[11px] font-medium text-slate-500">{{ __('High Risk Flagged') }}</span>
+                    <span class="text-3xl font-black text-rose-600 dark:text-rose-400 block leading-tight">
+                        {{ $kycs->getCollection()->filter(fn($k) => $k->isRejected())->count() }}
+                    </span>
+                    <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 block mt-0.5">
+                        {{ __('High Risk / Rejected') }}
+                    </span>
                 </div>
             </div>
-            <div class="pt-3 mt-3 border-t border-slate-100 text-[11px] font-bold text-emerald-700">
-                ↑ {{ __n(5) }}% {{ __('from yesterday') }}
+            <div class="pt-3 mt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                &uarr; {{ __('Real-time queue synchronized') }}
             </div>
         </div>
 
-        <!-- Card 2: FILTER PARAMETERS (Spans 8 Cols) -->
-        <div class="lg:col-span-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-3">{{ __('FILTER PARAMETERS') }}</span>
+        {{-- Card 2: FILTER PARAMETERS (Spans 8 Cols) --}}
+        <div class="lg:col-span-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs">
+            <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-3">
+                {{ __('FILTER PARAMETERS') }}
+            </span>
+            
             <form method="GET" action="{{ route('admin.kyc.index') }}" class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                {{-- 1. Risk Level --}}
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">{{ __('Risk Level') }}</label>
-                    <select name="risk" class="w-full rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 outline-none">
+                    <label class="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase mb-1">
+                        {{ __('RISK LEVEL') }}
+                    </label>
+                    <select name="risk" 
+                            onchange="this.form.submit()" 
+                            class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-800 dark:text-slate-200 outline-none focus:border-indigo-500 cursor-pointer">
                         <option value="">{{ __('All Risk Levels') }}</option>
-                        <option value="high">{{ __('High Risk') }}</option>
-                        <option value="medium">{{ __('Medium Risk') }}</option>
-                        <option value="low">{{ __('Low Risk') }}</option>
+                        <option value="high" {{ request('risk') === 'high' ? 'selected' : '' }}>{{ __('High Risk') }}</option>
+                        <option value="medium" {{ request('risk') === 'medium' ? 'selected' : '' }}>{{ __('Medium Risk') }}</option>
+                        <option value="low" {{ request('risk') === 'low' ? 'selected' : '' }}>{{ __('Low Risk') }}</option>
                     </select>
                 </div>
 
+                {{-- 2. Document Type --}}
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">{{ __('Document Type') }}</label>
-                    <select name="type" class="w-full rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 outline-none">
+                    <label class="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase mb-1">
+                        {{ __('DOCUMENT TYPE') }}
+                    </label>
+                    <select name="type" 
+                            onchange="this.form.submit()" 
+                            class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-800 dark:text-slate-200 outline-none focus:border-indigo-500 cursor-pointer">
                         <option value="">{{ __('All Types') }}</option>
-                        <option value="ktp">{{ __('Identity Card (KTP)') }}</option>
-                        <option value="passport">{{ __('Passport') }}</option>
+                        <option value="ktp" {{ request('type') === 'ktp' ? 'selected' : '' }}>{{ __('National ID (KTP)') }}</option>
+                        <option value="passport" {{ request('type') === 'passport' ? 'selected' : '' }}>{{ __('Passport') }}</option>
+                        <option value="sim" {{ request('type') === 'sim' ? 'selected' : '' }}>{{ __('Driver License (SIM)') }}</option>
                     </select>
                 </div>
 
+                {{-- 3. Submission Date --}}
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">{{ __('Submission Date') }}</label>
-                    <select name="date" class="w-full rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 outline-none">
-                        <option value="">{{ __('Last 7 Days') }}</option>
-                        <option value="30">{{ __('Last 30 Days') }}</option>
+                    <label class="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase mb-1">
+                        {{ __('SUBMISSION DATE') }}
+                    </label>
+                    <select name="date" 
+                            onchange="this.form.submit()" 
+                            class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-800 dark:text-slate-200 outline-none focus:border-indigo-500 cursor-pointer">
+                        <option value="">{{ __('All Dates') }}</option>
+                        <option value="7" {{ request('date') == '7' ? 'selected' : '' }}>{{ __('Last 7 Days') }}</option>
+                        <option value="30" {{ request('date') == '30' ? 'selected' : '' }}>{{ __('Last 30 Days') }}</option>
+                        <option value="90" {{ request('date') == '90' ? 'selected' : '' }}>{{ __('Last 90 Days') }}</option>
                     </select>
                 </div>
 
+                {{-- Clear Filters Action Button --}}
                 <div class="flex items-end">
-                    <a href="{{ route('admin.kyc.index') }}" class="w-full text-center py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors">
+                    <a href="{{ route('admin.kyc.index') }}" 
+                       class="w-full text-center py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
                         {{ __('Clear Filters') }}
                     </a>
                 </div>
@@ -76,129 +118,150 @@
 
     </div>
 
-    <!-- Application Queue Table Card -->
-    <div class="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
-        <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50/50">
-            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ __('Application Queue') }}</h3>
-            <span class="text-xs font-medium text-slate-500">{{ __n('Showing 1-:count of :total', ['count' => $kycs->count(), 'total' => $kycs->total()]) ?? ('Showing 1-' . __n($kycs->count()) . ' of ' . __n($kycs->total())) }}</span>
+    {{-- ─── Application Queue Table Card ────────────────────────────────────── --}}
+    <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs dark:shadow-none overflow-hidden">
+        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-6 py-4 bg-slate-50/50 dark:bg-slate-950/40">
+            <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+                {{ __('Application Queue') }}
+            </h3>
+            <span class="text-xs font-medium text-slate-500 dark:text-slate-400">
+                Showing {{ $kycs->firstItem() ?? 0 }}-{{ $kycs->lastItem() ?? 0 }} of {{ $kycs->total() }}
+            </span>
         </div>
 
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
+            <table class="w-full text-left border-collapse text-xs">
                 <thead>
-                    <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                        <th class="py-3.5 px-6">{{ __('User / Entity Name') }}</th>
-                        <th class="py-3.5 px-6">{{ __('Submission Date') }}</th>
-                        <th class="py-3.5 px-6">{{ __('Document Type') }}</th>
-                        <th class="py-3.5 px-6">{{ __('Risk Level') }}</th>
-                        <th class="py-3.5 px-6">{{ __('Status') }}</th>
-                        <th class="py-3.5 px-6 text-right">{{ __('Actions') }}</th>
+                    <tr class="bg-slate-50/80 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                        <th class="py-3.5 px-6">{{ __('USER / ENTITY NAME') }}</th>
+                        <th class="py-3.5 px-6">{{ __('SUBMISSION DATE') }}</th>
+                        <th class="py-3.5 px-6">{{ __('DOCUMENT TYPE') }}</th>
+                        <th class="py-3.5 px-6">{{ __('RISK LEVEL') }}</th>
+                        <th class="py-3.5 px-6">{{ __('STATUS') }}</th>
+                        <th class="py-3.5 px-6 text-right">{{ __('ACTIONS') }}</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 font-semibold text-slate-800 dark:text-slate-200">
                     @forelse($kycs as $kyc)
-                    <tr class="hover:bg-slate-50/80 transition-colors">
-                        <td class="py-4 px-6">
-                            <div class="flex items-center gap-3">
-                                <div class="h-9 w-9 rounded-full bg-slate-800 text-white font-black flex items-center justify-center text-xs">
-                                    {{ strtoupper(substr($kyc->user->profile->full_name ?? $kyc->user->email, 0, 2)) }}
+                        <tr class="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
+                            {{-- User / Entity Name --}}
+                            <td class="py-4 px-6">
+                                <div class="flex items-center gap-3">
+                                    <div class="h-9 w-9 rounded-full bg-slate-900 dark:bg-slate-800 text-white font-black flex items-center justify-center text-xs border border-slate-700 shrink-0">
+                                        {{ strtoupper(substr($kyc->user->profile->full_name ?? $kyc->user->email ?? 'US', 0, 2)) }}
+                                    </div>
+                                    <div>
+                                        <span class="font-bold text-slate-900 dark:text-slate-100 block text-xs">
+                                            {{ $kyc->user->profile->full_name ?? 'Institutional Client' }}
+                                        </span>
+                                        <span class="text-[11px] text-slate-400 dark:text-slate-500 font-normal block">
+                                            {{ $kyc->user->email ?? 'N/A' }}
+                                        </span>
+                                    </div>
                                 </div>
-                                <div>
-                                    <span class="font-bold text-slate-900 block text-xs">
-                                        {{ $kyc->user->profile->full_name ?? 'Institutional Client' }}
+                            </td>
+
+                            {{-- Submission Date --}}
+                            <td class="py-4 px-6 text-slate-600 dark:text-slate-400 font-medium whitespace-nowrap">
+                                {{ $kyc->created_at->format('M d, Y - H:i') }}
+                            </td>
+
+                            {{-- Document Type --}}
+                            <td class="py-4 px-6 font-semibold text-slate-700 dark:text-slate-300">
+                                @php
+                                    $docType = $kyc->documents->first()?->type ?? 'ktp';
+                                    $docLabel = match($docType) {
+                                        'passport' => __('Passport'),
+                                        'sim', 'driver_license' => __('Driver License (SIM)'),
+                                        default => __('National ID (KTP)')
+                                    };
+                                @endphp
+                                {{ $docLabel }}
+                            </td>
+
+                            {{-- Risk Level --}}
+                            <td class="py-4 px-6">
+                                @if($kyc->isRejected())
+                                    <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30 uppercase">
+                                        {{ __('HIGH') }}
                                     </span>
-                                    <span class="text-[11px] text-slate-400 font-medium block">
-                                        APP-{{ substr($kyc->id, 0, 6) }}-{{ strtoupper($kyc->user->roles->first()?->name ?? 'USR') }}
+                                @elseif($kyc->isApproved())
+                                    <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 uppercase">
+                                        {{ __('LOW') }}
                                     </span>
-                                </div>
-                            </div>
-                        </td>
+                                @else
+                                    <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 uppercase">
+                                        {{ __('MEDIUM') }}
+                                    </span>
+                                @endif
+                            </td>
 
-                        <td class="py-4 px-6 font-semibold text-slate-800">
-                            {{ $kyc->created_at->format('M d, Y - H:i') }}
-                        </td>
+                            {{-- Status --}}
+                            <td class="py-4 px-6">
+                                @if($kyc->isPending())
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 dark:text-amber-400">
+                                        <span class="h-2 w-2 rounded-full bg-amber-500"></span>
+                                        {{ __('Pending') }}
+                                    </span>
+                                @elseif($kyc->isApproved())
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                                        <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                                        {{ __('Approved') }}
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-bold text-rose-600 dark:text-rose-400">
+                                        <span class="h-2 w-2 rounded-full bg-rose-500"></span>
+                                        {{ __('Rejected') }}
+                                    </span>
+                                @endif
+                            </td>
 
-                        <td class="py-4 px-6 font-semibold text-slate-600">
-                            {{ __('Identity Card (KTP)') }}
-                        </td>
-
-                        <td class="py-4 px-6">
-                            @if($kyc->isRejected())
-                                <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-rose-100 text-rose-800 border border-rose-200">{{ __('HIGH') }}</span>
-                            @else
-                                <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200">{{ __('LOW') }}</span>
-                            @endif
-                        </td>
-
-                        <td class="py-4 px-6">
-                            @if($kyc->isPending())
-                                <span class="inline-flex items-center gap-1 text-[11px] font-bold text-amber-700">
-                                    <span class="h-2 w-2 rounded-full bg-amber-500"></span> {{ __('Pending') }}
-                                </span>
-                            @elseif($kyc->isApproved())
-                                <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700">
-                                    <span class="h-2 w-2 rounded-full bg-emerald-600"></span> {{ __('Approved') }}
-                                </span>
-                            @else
-                                <span class="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700">
-                                    <span class="h-2 w-2 rounded-full bg-rose-600"></span> {{ __('Rejected') }}
-                                </span>
-                            @endif
-                        </td>
-
-                        <td class="py-4 px-6 text-right">
-                            <a href="{{ route('admin.kyc.show', $kyc->id) }}" 
-                               class="inline-flex items-center gap-1 py-1.5 px-3 rounded-xl bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800 transition-colors shadow-xs">
-                                {{ __('Review') }} &rarr;
-                            </a>
-                        </td>
-                    </tr>
+                            {{-- Actions --}}
+                            <td class="py-4 px-6 text-right whitespace-nowrap">
+                                <a href="{{ route('admin.kyc.show', $kyc->id) }}" 
+                                   class="inline-flex items-center gap-1 rounded-xl bg-emerald-700 dark:bg-emerald-600 hover:bg-emerald-800 dark:hover:bg-emerald-500 text-white px-3 py-1.5 text-xs font-bold transition-colors shadow-xs">
+                                    <span>{{ __('Review') }}</span>
+                                    <span>&rarr;</span>
+                                </a>
+                            </td>
+                        </tr>
                     @empty
-                    <!-- Mock Row matching Stitch screenshot if queue empty -->
-                    <tr class="hover:bg-slate-50/80 transition-colors">
-                        <td class="py-4 px-6">
-                            <div class="flex items-center gap-3">
-                                <div class="h-9 w-9 rounded-full bg-emerald-700 text-white font-black flex items-center justify-center text-xs">AC</div>
-                                <div>
-                                    <span class="font-bold text-slate-900 block text-xs">Apex Capital Partners</span>
-                                    <span class="text-[11px] text-slate-400 font-medium block">APP-8824-CORP</span>
+                        <tr>
+                            <td colspan="6" class="py-12 text-center text-slate-400 dark:text-slate-500 font-medium">
+                                <div class="flex flex-col items-center justify-center gap-3">
+                                    <div class="h-10 w-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-700 dark:text-slate-300">
+                                            {{ __('No KYC applications found matching your filter parameters.') }}
+                                        </p>
+                                        <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">
+                                            {{ __('Try selecting a different Risk Level, Document Type, or Submission Date.') }}
+                                        </p>
+                                    </div>
+                                    @if(request()->hasAny(['risk', 'type', 'date']))
+                                        <a href="{{ route('admin.kyc.index') }}" 
+                                           class="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 text-xs font-bold transition-colors shadow-xs">
+                                            <span>{{ __('Clear All Filters') }}</span>
+                                        </a>
+                                    @endif
                                 </div>
-                            </div>
-                        </td>
-                        <td class="py-4 px-6 font-semibold text-slate-800">Oct 24, 2026 14:32</td>
-                        <td class="py-4 px-6 font-semibold text-slate-600">Corp. Charter, ID</td>
-                        <td class="py-4 px-6"><span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-rose-100 text-rose-800 border border-rose-200">{{ __('HIGH') }}</span></td>
-                        <td class="py-4 px-6"><span class="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700"><span class="h-2 w-2 rounded-full bg-rose-600"></span> {{ __('Flagged') }}</span></td>
-                        <td class="py-4 px-6 text-right"><a href="#" class="inline-flex items-center gap-1 py-1.5 px-3 rounded-xl bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800 shadow-xs">{{ __('Review') }} &rarr;</a></td>
-                    </tr>
-                    <tr class="hover:bg-slate-50/80 transition-colors">
-                        <td class="py-4 px-6">
-                            <div class="flex items-center gap-3">
-                                <div class="h-9 w-9 rounded-full bg-blue-600 text-white font-black flex items-center justify-center text-xs">SJ</div>
-                                <div>
-                                    <span class="font-bold text-slate-900 block text-xs">Sarah Jenkins</span>
-                                    <span class="text-[11px] text-slate-400 font-medium block">APP-8920-RET</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="py-4 px-6 font-semibold text-slate-800">Oct 24, 2026 11:15</td>
-                        <td class="py-4 px-6 font-semibold text-slate-600">Passport, Utility</td>
-                        <td class="py-4 px-6"><span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200">{{ __('MEDIUM') }}</span></td>
-                        <td class="py-4 px-6"><span class="inline-flex items-center gap-1 text-[11px] font-bold text-amber-700"><span class="h-2 w-2 rounded-full bg-amber-500"></span> {{ __('Pending') }}</span></td>
-                        <td class="py-4 px-6 text-right"><a href="#" class="inline-flex items-center gap-1 py-1.5 px-3 rounded-xl bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800 shadow-xs">{{ __('Review') }} &rarr;</a></td>
-                    </tr>
+                            </td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-    </div>
 
-    <!-- Pagination -->
-    @if($kycs->hasPages())
-        <div class="mt-4">
-            {{ $kycs->links() }}
-        </div>
-    @endif
+        @if($kycs->hasPages())
+            <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40">
+                {{ $kycs->links() }}
+            </div>
+        @endif
+    </div>
 
 </div>
 @endsection

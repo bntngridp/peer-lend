@@ -21,14 +21,47 @@ class AdminKYCController extends Controller
     ) {}
 
     /**
-     * List all pending or reviewed KYC applications.
+     * List all pending or reviewed KYC applications with filter parameters.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $kycs = KYC::with(['user.profile'])
-            ->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")
-            ->orderBy('updated_at', 'desc')
-            ->paginate(20);
+        $query = KYC::with(['user.profile', 'documents']);
+
+        // 1. Risk Level Filter
+        if ($risk = $request->input('risk')) {
+            if ($risk === 'high') {
+                $query->where('status', 'rejected');
+            } elseif ($risk === 'medium') {
+                $query->where('status', 'pending');
+            } elseif ($risk === 'low') {
+                $query->where('status', 'approved');
+            }
+        }
+
+        // 2. Document Type Filter
+        if ($type = $request->input('type')) {
+            $query->whereHas('documents', function ($dq) use ($type) {
+                if ($type === 'ktp') {
+                    $dq->whereIn('type', ['ktp', 'identity_card']);
+                } elseif ($type === 'passport') {
+                    $dq->where('type', 'passport');
+                } elseif ($type === 'sim' || $type === 'driver_license') {
+                    $dq->whereIn('type', ['sim', 'driver_license']);
+                }
+            });
+        }
+
+        // 3. Submission Date Filter
+        if ($days = (int) $request->input('date')) {
+            if (in_array($days, [7, 30, 90, 365])) {
+                $query->where('created_at', '>=', now()->subDays($days));
+            }
+        }
+
+        $kycs = $query->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")
+            ->orderBy('created_at', 'desc')
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.kyc.index', compact('kycs'));
     }

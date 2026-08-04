@@ -5,7 +5,7 @@
     
     <!-- Top Header Bar -->
     <div>
-        <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Identity Verification</h1>
+        <h1 class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">Identity Verification</h1>
         <p class="text-xs font-medium text-slate-500 mt-1">To ensure a secure trading environment, we require all institutional users to complete our Know Your Customer (KYC) process.</p>
     </div>
 
@@ -53,7 +53,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
                 <!-- Status Timeline Card -->
-                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-4">
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">STATUS TIMELINE</h3>
                     
                     <div class="space-y-4 text-xs">
@@ -84,7 +84,7 @@
                 </div>
 
                 <!-- Uploaded Documents Card -->
-                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-4">
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">UPLOADED DOCUMENTS</h3>
 
                     <div class="space-y-3">
@@ -111,7 +111,7 @@
         </div>
     @elseif($kyc->isApproved())
         <!-- APPROVED STATE -->
-        <div class="rounded-2xl border border-emerald-200 bg-white p-8 text-center shadow-xs space-y-4">
+        <div class="rounded-2xl border border-emerald-200 dark:border-emerald-800 bg-white dark:bg-slate-900 p-8 text-center shadow-xs space-y-4">
             <div class="mx-auto h-16 w-16 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center text-2xl shadow-xs">
                 
             </div>

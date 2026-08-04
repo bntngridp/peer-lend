@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-slate-50">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-slate-50 dark:bg-slate-950">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -89,8 +89,18 @@
             will-change: transform, opacity;
         }
     </style>
+    <script>
+        (function() {
+            const theme = localStorage.getItem('lendflow_theme') || localStorage.getItem('theme') || 'light';
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
 </head>
-<body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col justify-between relative overflow-x-hidden">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col justify-between relative overflow-x-hidden">
 
     <!-- Dynamic Moving Background Green Ambient Orbs -->
     <div class="green-glow-orb-top"></div>
@@ -103,8 +113,8 @@
     </main>
 
     <!-- Minimalist Footer -->
-    <footer class="bg-white/80 backdrop-blur-md border-t border-slate-200 py-4 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 text-center text-xs font-medium text-slate-400">
+    <footer class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 py-4 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs font-medium text-slate-400 dark:text-slate-500">
             &copy; {{ date('Y') }} LendFlow Inc. Regulated Financial Services Platform. All rights reserved.
         </div>
     </footer>

@@ -5,11 +5,11 @@
     <div class="max-w-7xl mx-auto w-full space-y-8">
         <!-- Header Banner -->
         <div class="text-center max-w-2xl mx-auto space-y-2">
-            <span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200 uppercase tracking-wider">
+            <span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 uppercase tracking-wider">
                 {{ __('Calculator') }}
             </span>
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">{{ __('Calculator') }}</h1>
-            <p class="text-xs text-slate-500 font-medium leading-relaxed">
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">{{ __('Calculator') }}</h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
                 {{ __('Real-time Loan Simulation') }}
             </p>
         </div>
@@ -18,8 +18,8 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             <!-- Left Input Form (Spans 5 Cols) -->
-            <div class="lg:col-span-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-6">
-                <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-3">{{ __('Calculator') }}</h3>
+            <div class="lg:col-span-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-6">
+                <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-3">{{ __('Calculator') }}</h3>
 
                 <form id="calculatorForm" class="space-y-5">
                     @csrf
@@ -27,7 +27,7 @@
                     <!-- Amount Range & Number Input -->
                     <div>
                         <div class="flex justify-between items-center mb-1.5">
-                            <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">{{ __('Loan Amount') }}</label>
+                            <label class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">{{ __('Loan Amount') }}</label>
                             <span id="amountDisplay" class="text-sm font-extrabold text-emerald-700">Rp 10.000.000</span>
                         </div>
                         <input type="range" id="amountRange" min="{{ $minAmount }}" max="{{ $maxAmount }}" step="500000" value="10000000"
@@ -37,17 +37,17 @@
                             <span>Rp {{ number_format($maxAmount, 0, ',', '.') }}</span>
                         </div>
                         <input type="number" id="amountInput" value="10000000" min="{{ $minAmount }}" max="{{ $maxAmount }}"
-                               class="mt-2 w-full rounded-xl border border-slate-200 px-3.5 py-2 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600">
+                               class="mt-2 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-800 dark:text-slate-200 outline-none focus:border-emerald-600">
                     </div>
 
                     <!-- Duration Selection -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">{{ __('Tenor (Months)') }}</label>
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">{{ __('Tenor (Months)') }}</label>
                         <div class="grid grid-cols-4 gap-2">
                             @foreach([3, 6, 12, 24] as $month)
                             <button type="button" data-duration="{{ $month }}"
                                     class="duration-btn rounded-xl border py-2.5 text-xs font-bold transition-all
-                                        {{ $month === 12 ? 'border-emerald-700 bg-emerald-700 text-white shadow-xs' : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50' }}">
+                                        {{ $month === 12 ? 'border-emerald-700 bg-emerald-700 text-white shadow-xs' : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700' }}">
                                 {{ $month }} {{ __('Mo') }}
                             </button>
                             @endforeach
@@ -57,12 +57,12 @@
 
                     <!-- Risk Grade Selection -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">{{ __('Credit Risk Grade') }}</label>
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">{{ __('Credit Risk Grade') }}</label>
                         <div class="grid grid-cols-4 gap-2">
                             @foreach(['A', 'B', 'C', 'D'] as $grade)
                             <button type="button" data-grade="{{ $grade }}"
                                     class="grade-btn rounded-xl border py-2.5 text-xs font-bold transition-all
-                                        {{ $grade === 'A' ? 'border-emerald-700 bg-emerald-700 text-white shadow-xs' : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50' }}">
+                                        {{ $grade === 'A' ? 'border-emerald-700 bg-emerald-700 text-white shadow-xs' : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700' }}">
                                 Grade {{ $grade }}
                             </button>
                             @endforeach
@@ -91,33 +91,33 @@
                             <span id="res_monthly" class="text-lg font-black text-white mt-1 block truncate">Rp {{ __n('916.667') }}</span>
                         </div>
 
-                        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">{{ __('TOTAL REPAYMENT') }}</span>
-                            <span id="res_total" class="text-base font-extrabold text-slate-900 mt-1 block truncate">Rp {{ __n('11.000.000') }}</span>
+                        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-xs">
+                            <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">{{ __('TOTAL REPAYMENT') }}</span>
+                            <span id="res_total" class="text-base font-extrabold text-slate-900 dark:text-slate-100 mt-1 block truncate">Rp {{ __n('11.000.000') }}</span>
                         </div>
 
-                        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">{{ __('TOTAL INTEREST') }}</span>
-                            <span id="res_interest" class="text-base font-extrabold text-emerald-700 mt-1 block truncate">Rp {{ __n('1.000.000') }}</span>
+                        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-xs">
+                            <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">{{ __('TOTAL INTEREST') }}</span>
+                            <span id="res_interest" class="text-base font-extrabold text-emerald-700 dark:text-emerald-400 mt-1 block truncate">Rp {{ __n('1.000.000') }}</span>
                         </div>
 
-                        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">{{ __('PROVISION FEE') }} (1%)</span>
-                            <span id="res_fee" class="text-base font-extrabold text-slate-900 mt-1 block truncate">Rp {{ __n('100.000') }}</span>
+                        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-xs">
+                            <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">{{ __('PROVISION FEE') }} (1%)</span>
+                            <span id="res_fee" class="text-base font-extrabold text-slate-900 dark:text-slate-100 mt-1 block truncate">Rp {{ __n('100.000') }}</span>
                         </div>
                     </div>
 
                     <!-- Amortization Schedule Table Card -->
-                    <div class="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
-                        <div class="p-4 border-b border-slate-100 flex items-center justify-between">
-                            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ __('Amortization Schedule') }}</h3>
-                            <span id="res_duration_badge" class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">{{ __n('12') }} {{ __('Months') }}</span>
+                    <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs overflow-hidden">
+                        <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">{{ __('Amortization Schedule') }}</h3>
+                            <span id="res_duration_badge" class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">{{ __n('12') }} {{ __('Months') }}</span>
                         </div>
 
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-xs border-collapse">
                                 <thead>
-                                    <tr class="bg-slate-50 border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                    <tr class="bg-slate-50 dark:bg-slate-950/60 border-b border-slate-100 dark:border-slate-800 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
                                         <th class="py-3 px-4">{{ __('MO') }}</th>
                                         <th class="py-3 px-4 text-right">{{ __('TOTAL INSTALLMENT') }}</th>
                                         <th class="py-3 px-4 text-right">{{ __('PRINCIPAL') }}</th>
@@ -125,7 +125,7 @@
                                         <th class="py-3 px-4 text-right">{{ __('REMAINING PRINCIPAL') }}</th>
                                     </tr>
                                 </thead>
-                                <tbody id="scheduleBody" class="divide-y divide-slate-100 font-medium text-slate-700">
+                                <tbody id="scheduleBody" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium text-slate-700 dark:text-slate-300">
                                     {{-- Rendered dynamically via JavaScript --}}
                                 </tbody>
                             </table>

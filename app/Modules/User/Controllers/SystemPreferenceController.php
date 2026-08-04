@@ -37,6 +37,14 @@ class SystemPreferenceController extends Controller
             'system_preferences' => $settings,
         ]);
 
+        if ($request->wantsJson() || $request->ajax() || $request->expectsJson()) {
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Preferensi sistem berhasil diperbarui',
+                'settings' => $settings,
+            ]);
+        }
+
         return redirect()->route('profile.edit', ['tab' => 'system'])
             ->with('tab', 'system')
             ->with('success', 'Pengaturan sistem & preferensi tampilan berhasil disimpan!');

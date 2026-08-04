@@ -28,7 +28,7 @@
         <div class="mx-auto h-16 w-16 rounded-full bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-3xl shadow-xs">
             
         </div>
-        <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Investment Confirmed</h2>
+        <h2 class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">Investment Confirmed</h2>
         <p class="text-xs text-slate-600 font-medium">
             You have successfully invested capital in <strong>{{ $loan->purpose }}</strong> (#LN-{{ substr($loan->id, 0, 8) }}).
         </p>
@@ -61,7 +61,7 @@
     @endif
 
     <!-- Header Title & Loan Target Banner -->
-    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
+    <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
                 <div class="flex items-center gap-2">
@@ -102,7 +102,7 @@
             <!-- Key Terms & Security Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <!-- Key Terms Card -->
-                <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-3">
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs space-y-3">
                     <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">Key Terms</h3>
                     <div class="space-y-2 text-xs font-medium">
                         <div class="flex justify-between py-1 border-b border-slate-100">
@@ -125,7 +125,7 @@
                 </div>
 
                 <!-- Security Card -->
-                <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-3">
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs space-y-3">
                     <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">Security</h3>
                     <div class="space-y-2 text-xs">
                         <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
@@ -145,7 +145,7 @@
             </div>
 
             <!-- Use of Funds -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-3">
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-3">
                 <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">Use of Funds</h3>
                 <p class="text-xs text-slate-600 font-medium leading-relaxed">
                     {{ $loan->description ?: 'Capital will be deployed immediately to expand business operations, fund working capital, and optimize supply chain logistics.' }}
@@ -153,7 +153,7 @@
             </div>
 
             <!-- Borrower Overview -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-4">
                 <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">Borrower Overview</h3>
                 <div class="flex items-start gap-4">
                     <div class="h-12 w-12 rounded-2xl bg-slate-900 text-white font-black flex items-center justify-center text-sm shadow-xs">
@@ -192,7 +192,7 @@
 
         <!-- Right Side: Invest Action Card (Spans 4 Cols) -->
         <div class="lg:col-span-4 space-y-4 sticky top-20">
-            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-5">
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-5">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                     <h3 class="text-sm font-bold text-slate-900">Invest</h3>
                     <span class="text-[11px] font-bold text-slate-400">Min. Rp 100.000</span>

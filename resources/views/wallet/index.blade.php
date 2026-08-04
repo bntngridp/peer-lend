@@ -16,7 +16,7 @@
     <!-- Top Header Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ __('Wallet Overview') }}</h1>
+            <h1 class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">{{ __('Wallet Overview') }}</h1>
             <p class="text-xs font-medium text-slate-500 mt-1">{{ __('Manage your funds, track cash flow, and review recent transactions.') }}</p>
         </div>
         <div class="flex items-center gap-3">
@@ -32,13 +32,13 @@
     <!-- 3 Summary Stat Cards Row -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Card 1: TOTAL BALANCE -->
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('TOTAL BALANCE') }}</span>
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">+{{ __n('2.4%') }}</span>
             </div>
             <div class="mt-3">
-                <p class="text-3xl font-black text-slate-900 tracking-tight">
+                <p class="text-3xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
                     Rp {{ __n(number_format($totalBalance, 0, ',', '.')) }}
                 </p>
                 <p class="text-[11px] text-slate-400 font-medium mt-0.5">{{ __('Updated') }} {{ __n('5') }} {{ __('mins ago') }}</p>
@@ -46,13 +46,13 @@
         </div>
 
         <!-- Card 2: AVAILABLE FUNDS -->
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('AVAILABLE FUNDS') }}</span>
                 <span class="text-xs font-bold text-emerald-700">{{ __('Ready to invest') }}</span>
             </div>
             <div class="mt-3">
-                <p class="text-3xl font-black text-slate-900 tracking-tight">
+                <p class="text-3xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
                     Rp {{ __n(number_format($availableBalance, 0, ',', '.')) }}
                 </p>
                 <div class="flex gap-2 mt-2">
@@ -67,10 +67,10 @@
         </div>
 
         <!-- Card 3: FUNDS ON HOLD -->
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('FUNDS ON HOLD') }}</span>
             <div class="mt-3">
-                <p class="text-3xl font-black text-slate-900 tracking-tight">
+                <p class="text-3xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
                     Rp {{ __n(number_format($holdBalance, 0, ',', '.')) }}
                 </p>
                 <p class="text-[11px] text-slate-400 font-medium mt-0.5">{{ __('Pending escrows & reserves') }}</p>
@@ -98,8 +98,8 @@
     <div x-show="activeTab === 'deposit'" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start" x-data="{ depMethod: 'midtrans' }">
         
         <!-- Form Left Side (Spans 8 Cols) -->
-        <div class="lg:col-span-8 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6">
-            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">{{ __('Select Funding Source & Amount') }}</h3>
+        <div class="lg:col-span-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-xs space-y-6">
+            <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-3">{{ __('Select Funding Source & Amount') }}</h3>
 
             <!-- 1. Funding Source Cards -->
             <div class="space-y-2">
@@ -183,7 +183,7 @@
         <!-- Deposit Info Right Side (Spans 4 Cols) -->
         <div class="lg:col-span-4 space-y-4">
             <!-- Deposit Limits Box -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-3">
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs space-y-3">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">{{ __('GATEWAY SPECS') }}</span>
                 
                 <div class="space-y-2 text-xs">
@@ -209,8 +209,8 @@
     <div x-show="activeTab === 'withdraw'" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start" style="display: none;" x-data="{ wdMethod: 'xendit' }">
         
         <!-- Form Left Side (Spans 8 Cols) -->
-        <div class="lg:col-span-8 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6">
-            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">{{ __('Automated Withdrawal & Instant Payout') }}</h3>
+        <div class="lg:col-span-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-xs space-y-6">
+            <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-3">{{ __('Automated Withdrawal & Instant Payout') }}</h3>
 
             <!-- Method Selection Cards -->
             <div class="space-y-2">
@@ -321,15 +321,15 @@
 
         <!-- Withdraw Summary Right Side (Spans 4 Cols) -->
         <div class="lg:col-span-4 space-y-4">
-            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-4">
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs space-y-4">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">{{ __('DISBURSEMENT SUMMARY') }}</span>
 
                 <div class="space-y-2.5 text-xs font-medium">
-                    <div class="flex justify-between py-1 border-b border-slate-100">
+                    <div class="flex justify-between py-1 border-b border-slate-100 dark:border-slate-800">
                         <span class="text-slate-500">{{ __('Current Balance') }}</span>
-                        <span class="font-bold text-slate-900">Rp {{ number_format($availableBalance, 0, ',', '.') }}</span>
+                        <span class="font-bold text-slate-900 dark:text-slate-100">Rp {{ number_format($availableBalance, 0, ',', '.') }}</span>
                     </div>
-                    <div class="flex justify-between py-1 border-b border-slate-100">
+                    <div class="flex justify-between py-1 border-b border-slate-100 dark:border-slate-800">
                         <span class="text-slate-500">{{ __('Fee') }}</span>
                         <span class="font-bold text-emerald-700">Rp 0 ({{ __('Covered by Platform') }})</span>
                     </div>
@@ -337,7 +337,7 @@
 
                 <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px]">
                     <span class="text-slate-400 font-bold uppercase tracking-wider block mb-1">{{ __('ESTIMATED TRANSFER TIME') }}</span>
-                    <span class="font-bold text-slate-900 block">{{ __('Instant (24/7 Real-Time Payout)') }}</span>
+                    <span class="font-bold text-slate-900 dark:text-slate-100 block">{{ __('Instant (24/7 Real-Time Payout)') }}</span>
                 </div>
             </div>
         </div>
@@ -345,9 +345,9 @@
     </div>
 
     <!-- ─── Tab 3: Transaction History ──────────────────────────────────── -->
-    <div x-show="activeTab === 'history'" class="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden" style="display: none;">
+    <div x-show="activeTab === 'history'" class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs overflow-hidden" style="display: none;">
         <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50/50">
-            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ __('Transaction Ledger') }}</h3>
+            <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">{{ __('Transaction Ledger') }}</h3>
             <span class="text-xs font-medium text-slate-500">{{ __('Total') }}: {{ __n($transactions->total()) }}</span>
         </div>
 
@@ -373,7 +373,7 @@
                                     {{ substr($tx->type, 0, 3) }}
                                 </div>
                                 <div>
-                                    <span class="font-bold text-slate-900 block text-xs capitalize">{{ str_replace('_', ' ', $tx->type) }}</span>
+                                    <span class="font-bold text-slate-900 dark:text-slate-100 block text-xs capitalize">{{ str_replace('_', ' ', $tx->type) }}</span>
                                     <span class="text-[11px] text-slate-400 font-medium block truncate max-w-[240px]">{{ $tx->description }}</span>
                                 </div>
                             </div>

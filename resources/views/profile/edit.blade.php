@@ -5,7 +5,7 @@
     
     <!-- Top Header Bar -->
     <div>
-        <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ __('Account Settings') }}</h1>
+        <h1 class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">{{ __('Account Settings') }}</h1>
         <p class="text-xs font-medium text-slate-500 mt-1">{{ __('Manage your personal profile, security methods, active sessions, and system preferences.') }}</p>
     </div>
 
@@ -34,8 +34,8 @@
     </div>
 
     <!-- ─── Tab 1: Personal Information ──────────────────────────────────── -->
-    <div x-show="profileTab === 'personal'" class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6">
-        <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">{{ __('Personal Profile Details') }}</h3>
+    <div x-show="profileTab === 'personal'" class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-xs space-y-6">
+        <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-3">{{ __('Personal Profile Details') }}</h3>
 
         @if(!$user->profile?->phone)
             <div class="rounded-xl border border-amber-200 bg-amber-50 p-4 text-amber-900 flex items-start gap-3">
@@ -43,7 +43,7 @@
                     !
                 </div>
                 <div>
-                    <p class="text-xs font-bold text-slate-900">{{ __('Complete Google Profile') }}</p>
+                    <p class="text-xs font-bold text-slate-900 dark:text-slate-100">{{ __('Complete Google Profile') }}</p>
                     <p class="text-[11px] font-medium text-slate-600 mt-0.5">{{ __('Your account is registered via Google OAuth. Please fill in your phone number and residential address below to enable transaction & borrowing access.') }}</p>
                 </div>
             </div>
@@ -149,8 +149,8 @@
         <div class="lg:col-span-8 space-y-6">
             
             <!-- Password Management Card -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
-                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-3">Password Management</h3>
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-4">
+                <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-3">Password Management</h3>
 
                 <form action="{{ route('profile.password.update') }}" method="POST" class="space-y-4">
                     @csrf
@@ -188,14 +188,14 @@
             </div>
 
             <!-- Two-Factor Authentication Card -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
-                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-3">Two-Factor Authentication (2FA)</h3>
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-4">
+                <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-3">Two-Factor Authentication (2FA)</h3>
 
                 <div class="space-y-3">
                     <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
                         <div>
                             <div class="flex items-center gap-2">
-                                <span class="font-bold text-slate-900 text-xs block">Authenticator Apps</span>
+                                <span class="font-bold text-slate-900 dark:text-slate-100 text-xs block">Authenticator Apps</span>
                                 @if(Auth::user()->google2fa_enabled)
                                     <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">Active</span>
                                 @else
@@ -226,10 +226,10 @@
             </div>
 
             <!-- API Tokens Card -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
                     <div>
-                        <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">API Tokens</h3>
+                        <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">API Tokens</h3>
                         <p class="text-[11px] text-slate-500 font-medium">Akses terautentikasi untuk institusi, bot trading &amp; integrasi API eksternal.</p>
                     </div>
                     <button type="button" @click="generateTokenModalOpen = true" id="btn_open_generate_token_modal"
@@ -274,7 +274,7 @@
                         <tbody>
                             @forelse(Auth::user()->apiTokens as $apiToken)
                                 <tr class="border-b border-slate-100 font-medium text-slate-700">
-                                    <td class="py-3 px-3 font-bold text-slate-900">{{ $apiToken->name }}</td>
+                                    <td class="py-3 px-3 font-bold text-slate-900 dark:text-slate-100">{{ $apiToken->name }}</td>
                                     <td class="py-3 px-3">
                                         <span class="px-2 py-0.5 rounded text-[10px] font-bold {{ $apiToken->permissions === 'Read / Write' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-slate-100 text-slate-700' }}">
                                             {{ $apiToken->permissions }}
@@ -337,13 +337,13 @@
             </div>
 
             <!-- Active Sessions Card -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-3">
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs space-y-3">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Active Sessions</span>
 
                 <div class="space-y-3 text-xs">
                     <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
                         <div>
-                            <span class="font-bold text-slate-900 block text-xs">Mac OS • Safari</span>
+                            <span class="font-bold text-slate-900 dark:text-slate-100 block text-xs">Mac OS • Safari</span>
                             <span class="text-[10px] text-slate-400 font-medium block">Jakarta, ID • 182.1.22.4</span>
                         </div>
                         <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 text-emerald-800">CURRENT</span>
@@ -368,9 +368,9 @@
     </div>
 
     <!-- ─── Tab 3: Notification Preferences ──────────────────────────────── -->
-    <div x-show="profileTab === 'notifications'" class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6" style="display: none;">
+    <div x-show="profileTab === 'notifications'" class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-xs space-y-6" style="display: none;">
         <div>
-            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-2">Notification Preferences</h3>
+            <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-2">Notification Preferences</h3>
             <p class="text-xs text-slate-500 font-medium mt-1">Manage how LendFlow communicates important updates, alerts, and marketing information to you.</p>
         </div>
 
@@ -390,7 +390,7 @@
             @endphp
 
             <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
-                <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-2">Security Alerts</h4>
+                <h4 class="text-xs font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">Security Alerts</h4>
                 <div class="flex items-center justify-between text-xs">
                     <span class="font-bold text-slate-800">Unrecognized Logins &amp; Password Changes</span>
                     <div class="flex gap-4">
@@ -405,7 +405,7 @@
             </div>
 
             <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
-                <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-2">Financial Activity</h4>
+                <h4 class="text-xs font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">Financial Activity</h4>
                 <div class="space-y-3 text-xs">
                     <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
                         <span class="font-bold text-slate-800">Loan Approvals &amp; Updates</span>
@@ -611,7 +611,7 @@
             </div>
 
             <div>
-                <h3 class="text-base font-extrabold text-slate-900">Konfirmasi Nonaktifkan 2FA</h3>
+                <h3 class="text-base font-extrabold text-slate-900 dark:text-slate-100">Konfirmasi Nonaktifkan 2FA</h3>
                 <p class="text-xs text-slate-500 font-medium mt-1.5 leading-relaxed">
                     Apakah Anda yakin ingin menonaktifkan Two-Factor Authentication (2FA)? Akun Anda akan menjadi kurang terlindungi dari risiko akses tanpa izin.
                 </p>
@@ -648,7 +648,7 @@
              class="w-full max-w-md bg-white rounded-2xl p-6 shadow-xl border border-slate-200 space-y-5 transform transition-all text-left">
             
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                <h3 class="text-base font-extrabold text-slate-900">Generate New API Token</h3>
+                <h3 class="text-base font-extrabold text-slate-900 dark:text-slate-100">Generate New API Token</h3>
                 <button type="button" @click="generateTokenModalOpen = false" class="text-slate-400 hover:text-slate-600 p-1">
                     &times;
                 </button>
@@ -669,7 +669,7 @@
                         <label class="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-50">
                             <input type="radio" name="permissions" value="write" checked class="accent-emerald-700 h-4 w-4">
                             <div>
-                                <span class="font-bold text-slate-900 block">Read / Write</span>
+                                <span class="font-bold text-slate-900 dark:text-slate-100 block">Read / Write</span>
                                 <span class="text-[11px] text-slate-500 font-medium">Akses penuh untuk membaca data &amp; mengeksekusi transaksi P2P.</span>
                             </div>
                         </label>
@@ -677,7 +677,7 @@
                         <label class="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-50">
                             <input type="radio" name="permissions" value="read" class="accent-emerald-700 h-4 w-4">
                             <div>
-                                <span class="font-bold text-slate-900 block">Read Only</span>
+                                <span class="font-bold text-slate-900 dark:text-slate-100 block">Read Only</span>
                                 <span class="text-[11px] text-slate-500 font-medium">Akses terbatas hanya untuk membaca saldo, portofolio &amp; marketplace.</span>
                             </div>
                         </label>

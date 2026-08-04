@@ -9,7 +9,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         <!-- Left Sub-navigation Sidebar (Spans 3 Cols) -->
-        <div class="lg:col-span-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-6 sticky top-20">
+        <div class="lg:col-span-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs space-y-6 sticky top-20">
             <div>
                 <h2 class="text-lg font-extrabold text-slate-900 tracking-tight">{{ __('Notification Center') }}</h2>
                 <p class="text-xs font-medium text-slate-500 mt-0.5">{{ __('Manage your alerts & system updates.') }}</p>
@@ -67,7 +67,7 @@
         <div class="lg:col-span-9 space-y-6">
             
             <!-- Top Search & Header Bar -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div class="w-full sm:w-80 relative">
                     <input type="text" x-model="search" placeholder="{{ __('Search notifications...') }}"
                            class="w-full rounded-xl border border-slate-200 px-3.5 py-2 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600">
@@ -81,7 +81,7 @@
 
             <!-- Notifications Stream -->
             @if($notifications->isEmpty())
-                <div class="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-xs">
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-12 text-center shadow-xs">
                     <div class="mx-auto h-12 w-12 rounded-2xl bg-slate-100 border border-slate-200 text-slate-400 font-bold flex items-center justify-center text-sm mb-3">
                         N
                     </div>

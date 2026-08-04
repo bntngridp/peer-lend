@@ -150,13 +150,13 @@
                                 <div class="flex flex-wrap items-center gap-1.5">
                                     @forelse($usr->roles as $r)
                                         @php
-                                            $roleClass = match($r->name) {
-                                                'admin' => 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800/80',
-                                                'borrower' => 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800/80',
-                                                'lender' => 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/80',
-                                                'customer_service' => 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800/80',
-                                                'collection_officer' => 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800/80',
-                                                default => 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700',
+                                            $roleStyle = match($r->name) {
+                                                'admin' => 'background:rgba(168,85,247,0.15);color:#c084fc;border-color:rgba(168,85,247,0.35)',
+                                                'borrower' => 'background:rgba(59,130,246,0.15);color:#60a5fa;border-color:rgba(59,130,246,0.35)',
+                                                'lender' => 'background:rgba(16,185,129,0.15);color:#34d399;border-color:rgba(16,185,129,0.35)',
+                                                'customer_service' => 'background:rgba(245,158,11,0.15);color:#fbbf24;border-color:rgba(245,158,11,0.35)',
+                                                'collection_officer' => 'background:rgba(244,63,94,0.15);color:#fb7185;border-color:rgba(244,63,94,0.35)',
+                                                default => 'background:rgba(100,116,139,0.15);color:#94a3b8;border-color:rgba(100,116,139,0.35)',
                                             };
                                             $roleLabel = match($r->name) {
                                                 'admin' => __('System Admin'),
@@ -167,7 +167,7 @@
                                                 default => ucfirst(str_replace('_', ' ', $r->name)),
                                             };
                                         @endphp
-                                        <span class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-bold {{ $roleClass }}">
+                                        <span class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-bold" style="{{ $roleStyle }}">
                                             {{ $roleLabel }}
                                         </span>
                                     @empty

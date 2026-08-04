@@ -33,14 +33,14 @@
 
     <!-- Header Banner -->
     <div>
-        <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Repayment Schedule &amp; History</h1>
+        <h1 class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">Repayment Schedule &amp; History</h1>
         <p class="text-xs font-medium text-slate-500 mt-1">Loan #LN-{{ substr($loan->id, 0, 8) }} • {{ $loan->purpose }} (Grade {{ $loan->risk_grade }} • {{ $loan->duration }} Months)</p>
     </div>
 
     <!-- 3 Stat Cards Row -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Card 1: Next Payment Due -->
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Next Payment Due</span>
             <div class="mt-3">
                 <p class="text-2xl font-extrabold text-slate-900">
@@ -53,7 +53,7 @@
         </div>
 
         <!-- Card 2: Remaining Balance -->
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Remaining Balance</span>
                 <span class="text-[11px] font-bold text-emerald-700">{{ $percentPaid }}% Paid</span>
@@ -69,7 +69,7 @@
         </div>
 
         <!-- Card 3: Total Interest Paid -->
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Interest Paid</span>
             <div class="mt-3">
                 <p class="text-2xl font-extrabold text-emerald-700">
@@ -86,7 +86,7 @@
         <!-- Left Table: Amortization Schedule (Spans 8 Cols) -->
         <div class="lg:col-span-8 rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
             <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50/50">
-                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Installments Schedule</h3>
+                <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">Installments Schedule</h3>
                 <span class="text-xs font-medium text-slate-500">Showing 1-{{ $installments->count() }} Payments</span>
             </div>
 

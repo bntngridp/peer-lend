@@ -6,7 +6,7 @@
     <!-- Top Header Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ __('Crypto Collateral') }}</h1>
+            <h1 class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">{{ __('Crypto Collateral') }}</h1>
             <p class="text-xs font-medium text-slate-500 mt-1">{{ __('Institutional monitoring of pledged digital assets and liquidation thresholds.') }}</p>
         </div>
         <div class="flex items-center gap-3">
@@ -19,7 +19,7 @@
     <!-- 3 Summary Stat Cards Row -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Card 1: TOTAL PLEDGED VALUE -->
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('TOTAL PLEDGED VALUE') }}</span>
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">+{{ __n('2.4%') }}</span>
@@ -33,7 +33,7 @@
         </div>
 
         <!-- Card 2: WEIGHTED AVG LTV -->
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('WEIGHTED AVG LTV') }}</span>
                 <span class="text-xs font-bold text-emerald-700">{{ __('Target') }} &lt;{{ __n('65%') }}</span>
@@ -47,7 +47,7 @@
         </div>
 
         <!-- Card 3: PORTFOLIO RISK STATUS -->
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('PORTFOLIO RISK STATUS') }}</span>
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">{{ __('Monitor') }}</span>
@@ -72,7 +72,7 @@
         <!-- Left: Collateral Distribution (Spans 6 Cols) -->
         <div class="lg:col-span-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ __('Collateral Distribution') }}</h3>
+                <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">{{ __('Collateral Distribution') }}</h3>
                 <span class="text-xs font-bold text-emerald-700">{{ __n('3') }} {{ __('Currencies') }}</span>
             </div>
 
@@ -102,7 +102,7 @@
         <!-- Right: LTV Monitoring & Stress Test (Spans 6 Cols) -->
         <div class="lg:col-span-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ __('LTV Monitoring & Stress Test') }}</h3>
+                <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">{{ __('LTV Monitoring & Stress Test') }}</h3>
                 <span class="text-[10px] font-bold text-slate-400 uppercase">{{ __('Live Thresholds') }}</span>
             </div>
 
@@ -137,11 +137,11 @@
     </div>
 
     <!-- Liquidation Warnings Table Card -->
-    <div class="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
+    <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs overflow-hidden">
         <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50/50">
             <div class="flex items-center gap-2">
                 <span class="text-rose-600 text-sm"></span>
-                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ __('Liquidation Warnings & Margin Calls') }}</h3>
+                <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">{{ __('Liquidation Warnings & Margin Calls') }}</h3>
             </div>
             <span class="text-xs font-bold text-rose-700">{{ __('Live API Feeds') }}</span>
         </div>

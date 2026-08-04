@@ -20,7 +20,7 @@
     
     <!-- Top Header Bar -->
     <div>
-        <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Calculate &amp; Apply</h1>
+        <h1 class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">Calculate &amp; Apply</h1>
         <p class="text-xs font-medium text-slate-500 mt-1">Configure your loan parameters to see estimated terms before applying.</p>
     </div>
 
@@ -148,7 +148,7 @@
 
         <!-- Right Side: Estimated Summary Box (Spans 5 Cols) -->
         <div class="lg:col-span-5 space-y-4 sticky top-20">
-            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-6">
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-6">
                 
                 <!-- Monthly Payment Banner -->
                 <div class="text-center p-4 rounded-xl bg-slate-50 border border-slate-100">
@@ -160,15 +160,15 @@
 
                 <!-- Financial Breakdown -->
                 <div class="space-y-3 text-xs font-medium">
-                    <div class="flex justify-between py-1.5 border-b border-slate-100">
+                    <div class="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
                         <span class="text-slate-500">Principal Amount</span>
                         <span class="font-bold text-slate-900">Rp <span x-text="parseInt(amount).toLocaleString('id-ID')">250.000.000</span></span>
                     </div>
-                    <div class="flex justify-between py-1.5 border-b border-slate-100">
+                    <div class="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
                         <span class="text-slate-500">Estimated APR Info</span>
                         <span class="font-bold text-emerald-700"><span x-text="rate">8.25</span>%</span>
                     </div>
-                    <div class="flex justify-between py-1.5 border-b border-slate-100">
+                    <div class="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
                         <span class="text-slate-500">Total Interest</span>
                         <span class="font-bold text-slate-900">Rp <span x-text="totalInterest.toLocaleString('id-ID')">22.400.000</span></span>
                     </div>

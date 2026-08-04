@@ -29,8 +29,9 @@
         .hover\:bg-primary-green-dark:hover { background-color: #166534; }
     </style>
     @php
-        $sysTheme = auth()->user()?->profile?->system_preferences['color_theme'] ?? 'light';
-        $sysDensity = auth()->user()?->profile?->system_preferences['data_density'] ?? 'comfortable';
+        $sysPref    = auth()->user()?->profile?->system_preferences ?? [];
+        $sysTheme   = $sysPref['color_theme']  ?? 'light';
+        $sysDensity = $sysPref['data_density'] ?? 'comfortable';
     @endphp
     <script>
         (function() {

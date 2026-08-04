@@ -73,14 +73,14 @@
                                 'D' => 'bg-rose-500/15 text-rose-400 border-rose-500/30',
                                 default => 'bg-slate-500/15 text-slate-400 border-slate-500/30',
                             };
-                            $currencyCode = $loan->collateralCurrency->code ?? '';
-                            $collateralClass = match(strtoupper($currencyCode)) {
-                                'ETH'  => 'bg-violet-500/15 text-violet-400 border-violet-500/30',
-                                'BTC'  => 'bg-amber-500/15 text-amber-400 border-amber-500/30',
-                                'USDT', 'USDC' => 'bg-teal-500/15 text-teal-400 border-teal-500/30',
-                                'BNB'  => 'bg-yellow-500/15 text-yellow-400 border-yellow-500/30',
-                                'SOL'  => 'bg-purple-500/15 text-purple-400 border-purple-500/30',
-                                default => 'bg-indigo-500/15 text-indigo-400 border-indigo-500/30',
+                            $currencyCode = strtoupper($loan->collateralCurrency->code ?? '');
+                            $collateralStyle = match($currencyCode) {
+                                'ETH'  => 'background:rgba(124,58,237,0.15);color:#a78bfa;border-color:rgba(124,58,237,0.35)',
+                                'BTC'  => 'background:rgba(217,119,6,0.15);color:#fbbf24;border-color:rgba(217,119,6,0.35)',
+                                'USDT','USDC' => 'background:rgba(20,184,166,0.15);color:#2dd4bf;border-color:rgba(20,184,166,0.35)',
+                                'BNB'  => 'background:rgba(234,179,8,0.15);color:#fde047;border-color:rgba(234,179,8,0.35)',
+                                'SOL'  => 'background:rgba(168,85,247,0.15);color:#c084fc;border-color:rgba(168,85,247,0.35)',
+                                default => 'background:rgba(99,102,241,0.15);color:#818cf8;border-color:rgba(99,102,241,0.35)',
                             };
                             $fundedPct = min(100, $loan->funded_percentage);
                             $progressColor = $fundedPct >= 100 ? 'bg-emerald-500' : ($fundedPct >= 50 ? 'bg-indigo-500' : 'bg-indigo-400');
@@ -91,7 +91,7 @@
                             {{-- Applicant --}}
                             <td class="whitespace-nowrap py-4 pl-6 pr-3">
                                 <div class="flex items-center gap-3">
-                                    <div class="h-9 w-9 flex-shrink-0 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800 flex items-center justify-center border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-300">
+                                    <div class="h-9 w-9 flex-shrink-0 rounded-xl bg-slate-200 dark:bg-slate-700 flex items-center justify-center border border-slate-300 dark:border-slate-600 text-xs font-bold text-slate-700 dark:text-slate-100">
                                         {{ $initials }}
                                     </div>
                                     <div class="min-w-0">
@@ -121,15 +121,15 @@
                             {{-- Collateral --}}
                             <td class="whitespace-nowrap px-4 py-4">
                                 @if($loan->isCryptoLoan())
-                                    <span class="inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-0.5 text-xs font-bold {{ $collateralClass }}">
-                                        @if(strtoupper($currencyCode) === 'ETH')
-                                            {{-- ETH Icon --}}
+                                    <span class="inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-0.5 text-xs font-bold" style="{{ $collateralStyle }}">
+                                        @if($currencyCode === 'ETH')
+                                            {{-- ETH Diamond Icon --}}
                                             <svg class="w-3 h-3 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 17.97L4.58 13.62 11.943 24l7.37-10.38-7.372 4.35h.003zM12.056 0L4.69 12.223l7.365 4.354 7.365-4.35L12.056 0z"/></svg>
-                                        @elseif(strtoupper($currencyCode) === 'BTC')
-                                            {{-- BTC Icon --}}
+                                        @elseif($currencyCode === 'BTC')
+                                            {{-- BTC ₿ Icon --}}
                                             <svg class="w-3 h-3 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M23.638 14.904c-1.602 6.43-8.113 10.34-14.542 8.736C2.67 22.05-1.244 15.525.362 9.105 1.962 2.67 8.475-1.243 14.9.358c6.43 1.605 10.342 8.115 8.738 14.548v-.002zm-6.35-4.613c.24-1.59-.974-2.45-2.64-3.03l.54-2.153-1.315-.33-.525 2.107c-.345-.087-.705-.167-1.064-.25l.526-2.127-1.32-.33-.54 2.165c-.285-.067-.565-.132-.84-.2l-1.815-.45-.35 1.407s.974.225.955.236c.535.136.63.486.615.766l-1.477 5.92c-.075.166-.24.406-.614.314.015.02-.96-.24-.96-.24l-.66 1.51 1.71.426.93.242-.54 2.19 1.32.327.54-2.17c.36.1.705.19 1.05.273l-.51 2.154 1.32.33.545-2.19c2.24.427 3.93.257 4.64-1.774.57-1.637-.03-2.58-1.217-3.196.854-.193 1.5-.76 1.68-1.93h.01zm-3.01 4.22c-.404 1.64-3.157.75-4.05.53l.72-2.9c.896.23 3.757.67 3.33 2.37zm.41-4.24c-.37 1.49-2.662.735-3.405.55l.654-2.64c.744.18 3.137.524 2.75 2.084v.006z"/></svg>
                                         @else
-                                            {{-- Generic Crypto Icon --}}
+                                            {{-- Generic Crypto Pin Icon --}}
                                             <svg class="w-3 h-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 8.485-7.5 11.625-7.5 11.625S5.25 14.86 5.25 6.375a7.5 7.5 0 0 1 15 0Z"/></svg>
                                         @endif
                                         {{ number_format($loan->collateral_amount, $loan->collateralCurrency->decimal_places) }} {{ $loan->collateralCurrency->code }}

@@ -21,7 +21,7 @@ class AdminLoanController extends Controller
      */
     public function index(): View
     {
-        $loans = LoanRequest::with(['borrower.profile', 'category'])
+        $loans = LoanRequest::with(['borrower.profile', 'category', 'collateralCurrency'])
             ->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")
             ->orderBy('created_at', 'desc')
             ->paginate(20);

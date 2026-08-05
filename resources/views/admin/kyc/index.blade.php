@@ -189,9 +189,15 @@
                             {{-- User / Entity Name --}}
                             <td class="py-4 px-6">
                                 <div class="flex items-center gap-3">
-                                    <div class="h-9 w-9 flex-shrink-0 rounded-xl bg-slate-200 dark:bg-slate-700 flex items-center justify-center border border-slate-300 dark:border-slate-600 text-xs font-bold text-slate-700 dark:text-slate-100 shrink-0">
-                                        {{ strtoupper(substr($kyc->user->profile->full_name ?? $kyc->user->email ?? 'US', 0, 2)) }}
-                                    </div>
+                                    @if($kyc->user && $kyc->user->profile && $kyc->user->profile->avatar_path)
+                                        <img class="h-9 w-9 flex-shrink-0 rounded-xl object-cover border border-slate-300 dark:border-slate-600 shrink-0" 
+                                             src="{{ asset('storage/' . $kyc->user->profile->avatar_path) }}" 
+                                             alt="Avatar">
+                                    @else
+                                        <div class="h-9 w-9 flex-shrink-0 rounded-xl bg-slate-200 dark:bg-slate-700 flex items-center justify-center border border-slate-300 dark:border-slate-600 text-xs font-bold text-slate-700 dark:text-slate-100 shrink-0">
+                                            {{ strtoupper(substr($kyc->user->profile->full_name ?? $kyc->user->email ?? 'US', 0, 2)) }}
+                                        </div>
+                                    @endif
                                     <div>
                                         <span class="font-bold text-slate-900 dark:text-slate-100 block text-xs">
                                             {{ $kyc->user->profile->full_name ?? 'Institutional Client' }}

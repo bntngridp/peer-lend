@@ -131,9 +131,15 @@
                             {{-- User Details --}}
                             <td class="whitespace-nowrap px-4 py-4">
                                 <div class="flex items-center gap-3">
-                                    <div class="h-9 w-9 flex-shrink-0 rounded-xl bg-slate-200 dark:bg-slate-700 flex items-center justify-center border border-slate-300 dark:border-slate-600 text-xs font-bold text-slate-700 dark:text-slate-100">
-                                        {{ $initials }}
-                                    </div>
+                                    @if($usr->profile && $usr->profile->avatar_path)
+                                        <img class="h-9 w-9 flex-shrink-0 rounded-xl object-cover border border-slate-300 dark:border-slate-600 shrink-0" 
+                                             src="{{ asset('storage/' . $usr->profile->avatar_path) }}" 
+                                             alt="Avatar">
+                                    @else
+                                        <div class="h-9 w-9 flex-shrink-0 rounded-xl bg-slate-200 dark:bg-slate-700 flex items-center justify-center border border-slate-300 dark:border-slate-600 text-xs font-bold text-slate-700 dark:text-slate-100 shrink-0">
+                                            {{ $initials }}
+                                        </div>
+                                    @endif
                                     <div class="min-w-0">
                                         <div class="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate max-w-[180px]">
                                             {{ $fullName }}

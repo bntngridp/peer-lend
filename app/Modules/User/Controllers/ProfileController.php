@@ -82,4 +82,30 @@ class ProfileController extends Controller
         return redirect()->route('profile.edit', ['tab' => 'security'])
             ->with('success', 'Password akun Anda telah berhasil diperbarui.');
     }
+
+    /**
+     * Revoke all other active sessions for the authenticated user.
+     */
+    public function revokeOtherSessions(\Illuminate\Http\Request $request): RedirectResponse
+    {
+        $request->validate([
+            'password' => ['required', 'string'],
+        ], [
+            'password.required' => 'Password wajib diisi untuk mengonfirmasi pencabutan sesi.',
+        ]);
+
+        $user = Auth::user();
+
+        if (! \Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
+            return back()
+                ->withInput()
+                ->with('tab', 'security')
+                ->withErrors(['session_password' => 'Password yang Anda masukkan tidak sesuai.']);
+        }
+
+        Auth::logoutOtherDevices($request->password);
+
+        return redirect()->route('profile.edit', ['tab' => 'security'])
+            ->with('success', 'Semua sesi perangkat lain berhasil dikeluarkan!');
+    }
 }

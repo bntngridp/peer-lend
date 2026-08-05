@@ -295,4 +295,32 @@ class SecurityAuthenticationTest extends TestCase
         $this->user->refresh();
         $this->assertTrue(\Illuminate\Support\Facades\Hash::check($newPassword, $this->user->password));
     }
+
+    /**
+     * Test user can revoke other active sessions.
+     */
+    public function test_user_can_revoke_other_sessions(): void
+    {
+        $password = 'Password123!';
+        $this->user->update([
+            'password' => \Illuminate\Support\Facades\Hash::make($password),
+        ]);
+
+        // 1. Submit invalid password -> Rejected
+        $response = $this->actingAs($this->user)
+            ->post(route('profile.sessions.revoke-others'), [
+                'password' => 'WrongPassword!',
+            ]);
+
+        $response->assertSessionHasErrors('session_password');
+
+        // 2. Submit valid password -> Success
+        $response = $this->actingAs($this->user)
+            ->post(route('profile.sessions.revoke-others'), [
+                'password' => $password,
+            ]);
+
+        $response->assertRedirect(route('profile.edit', ['tab' => 'security']));
+        $response->assertSessionHas('success');
+    }
 }

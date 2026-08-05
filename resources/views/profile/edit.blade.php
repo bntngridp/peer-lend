@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-6 max-w-6xl mx-auto" x-data="{ profileTab: (new URLSearchParams(window.location.search)).get('tab') || localStorage.getItem('lendflow_active_tab') || '{{ session('tab') ?? request('tab') ?? 'personal' }}', colorTheme: localStorage.getItem('lendflow_theme') || '{{ $user->profile?->system_preferences['color_theme'] ?? 'light' }}', density: localStorage.getItem('lendflow_density') || '{{ $user->profile?->system_preferences['data_density'] ?? 'comfortable' }}', disable2faModalOpen: false, generateTokenModalOpen: false }" x-init="$watch('profileTab', tab => { localStorage.setItem('lendflow_active_tab', tab); const u = new URL(window.location.href); u.searchParams.set('tab', tab); window.history.replaceState({}, '', u); })">
+<div class="space-y-6 max-w-6xl mx-auto" x-data="{ profileTab: (new URLSearchParams(window.location.search)).get('tab') || localStorage.getItem('lendflow_active_tab') || '{{ session('tab') ?? request('tab') ?? 'personal' }}', colorTheme: localStorage.getItem('lendflow_theme') || '{{ $user->profile?->system_preferences['color_theme'] ?? 'light' }}', density: localStorage.getItem('lendflow_density') || '{{ $user->profile?->system_preferences['data_density'] ?? 'comfortable' }}', disable2faModalOpen: false, generateTokenModalOpen: false, revokeSessionsModalOpen: false }" x-init="$watch('profileTab', tab => { localStorage.setItem('lendflow_active_tab', tab); const u = new URL(window.location.href); u.searchParams.set('tab', tab); window.history.replaceState({}, '', u); })">
     
     <!-- Top Header Bar -->
     <div>
@@ -311,25 +311,25 @@
         <div class="lg:col-span-4 space-y-4">
             
             <!-- Security Score Card -->
-            <div class="rounded-2xl border border-emerald-200 bg-emerald-50/40 p-5 shadow-xs space-y-3">
-                <span class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block">{{ __('SECURITY SCORE') }}</span>
+            <div class="rounded-2xl border border-emerald-200 dark:border-emerald-900/50 bg-emerald-50/40 dark:bg-emerald-950/30 p-5 shadow-xs space-y-3">
+                <span class="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider block">{{ __('SECURITY SCORE') }}</span>
                 
                 <div class="flex items-baseline gap-2">
-                    <span class="text-3xl font-black text-emerald-700">{{ __n(Auth::user()->google2fa_enabled ? '92' : '75') }}</span>
+                    <span class="text-3xl font-black text-emerald-700 dark:text-emerald-400">{{ __n(Auth::user()->google2fa_enabled ? '92' : '75') }}</span>
                     <span class="text-xs font-bold text-slate-400">/ {{ __n('100') }}</span>
                     <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-700 text-white ml-auto">
                         {{ Auth::user()->google2fa_enabled ? __('Strong Protection') : __('Good Protection') }}
                     </span>
                 </div>
 
-                <div class="space-y-2 text-xs border-t border-emerald-200/60 pt-3">
+                <div class="space-y-2 text-xs border-t border-emerald-200/60 dark:border-emerald-900/50 pt-3">
                     <div class="flex justify-between">
-                        <span class="text-slate-600">{{ __('Password Strength') }}</span>
-                        <span class="font-bold text-emerald-800">{{ __('Strong') }}</span>
+                        <span class="text-slate-600 dark:text-slate-400">{{ __('Password Strength') }}</span>
+                        <span class="font-bold text-emerald-800 dark:text-emerald-300">{{ __('Strong') }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-slate-600">{{ __('2FA Setup') }}</span>
-                        <span class="font-bold {{ Auth::user()->google2fa_enabled ? 'text-emerald-800' : 'text-amber-700' }}">
+                        <span class="text-slate-600 dark:text-slate-400">{{ __('2FA Setup') }}</span>
+                        <span class="font-bold {{ Auth::user()->google2fa_enabled ? 'text-emerald-800 dark:text-emerald-300' : 'text-amber-700 dark:text-amber-400' }}">
                             {{ Auth::user()->google2fa_enabled ? __('Enabled') : __('Disabled') }}
                         </span>
                     </div>
@@ -341,24 +341,24 @@
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">{{ __('Active Sessions') }}</span>
 
                 <div class="space-y-3 text-xs">
-                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
                         <div>
                             <span class="font-bold text-slate-900 dark:text-slate-100 block text-xs">Mac OS • Safari</span>
                             <span class="text-[10px] text-slate-400 font-medium block">Jakarta, ID • 182.1.22.4</span>
                         </div>
-                        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 text-emerald-800">{{ __('CURRENT') }}</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900/50">{{ __('CURRENT') }}</span>
                     </div>
 
-                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between opacity-70">
+                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between opacity-70">
                         <div>
-                            <span class="font-bold text-slate-800 block text-xs">iOS • LendFlow App</span>
+                            <span class="font-bold text-slate-800 dark:text-slate-200 block text-xs">iOS • LendFlow App</span>
                             <span class="text-[10px] text-slate-400 font-medium block">{{ __('Active') }} {{ __n('2') }} {{ __('hours ago') }}</span>
                         </div>
-                        <button type="button" @click="alert('Session revoked!')" class="text-[10px] font-bold text-rose-600 hover:underline">{{ __('Revoke') }}</button>
+                        <button type="button" @click="revokeSessionsModalOpen = true" class="text-[10px] font-bold text-rose-600 dark:text-rose-400 hover:underline cursor-pointer">{{ __('Revoke') }}</button>
                     </div>
                 </div>
 
-                <button type="button" @click="alert('All other sessions signed out!')" class="w-full py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50">
+                <button type="button" @click="revokeSessionsModalOpen = true" class="w-full py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors cursor-pointer">
                     {{ __('Sign out all other sessions') }}
                 </button>
             </div>
@@ -692,6 +692,57 @@
                     <button type="submit" id="btn_submit_generate_token" 
                             class="flex-1 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer">
                         Buat Token Baru &rarr;
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Revoke Other Sessions Modal -->
+    <div x-show="revokeSessionsModalOpen" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4" 
+         style="display: none;">
+        
+        <div @click.away="revokeSessionsModalOpen = false" 
+             class="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-xl border border-slate-200 dark:border-slate-800 space-y-5 transform transition-all text-left">
+            
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                <h3 class="text-base font-extrabold text-slate-900 dark:text-slate-100">{{ __('Confirm Session Revocation') }}</h3>
+                <button type="button" @click="revokeSessionsModalOpen = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 cursor-pointer">
+                    &times;
+                </button>
+            </div>
+
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
+                {{ __('Please enter your password to confirm signing out all other browser sessions across your devices.') }}
+            </p>
+
+            <form action="{{ route('profile.sessions.revoke-others') }}" method="POST" class="space-y-4">
+                @csrf
+
+                <div>
+                    <label for="session_password" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('CURRENT PASSWORD') }} <span class="text-rose-500">*</span></label>
+                    <input type="password" name="password" id="session_password" required placeholder="••••••••" 
+                           class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 shadow-xs">
+                    @error('session_password')
+                        <p class="text-[11px] font-bold text-rose-600 mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="flex items-center gap-3 pt-2">
+                    <button type="button" @click="revokeSessionsModalOpen = false" 
+                            class="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-xs cursor-pointer">
+                        {{ __('Cancel') }}
+                    </button>
+                    <button type="submit" id="btn_confirm_revoke_sessions" 
+                            class="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer">
+                        {{ __('Sign Out All Sessions') }}
                     </button>
                 </div>
             </form>

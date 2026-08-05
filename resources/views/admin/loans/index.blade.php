@@ -17,7 +17,7 @@
         <div class="flex items-center gap-2 flex-shrink-0">
             <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-300">
                 <span class="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500"></span>
-                {{ $loans->total() }} {{ __('Total Applications') }}
+                {{ __n($loans->total()) }} {{ __('Total Applications') }}
             </span>
         </div>
     </div>
@@ -108,10 +108,10 @@
                             {{-- Target Amount --}}
                             <td class="whitespace-nowrap px-4 py-4">
                                 <div class="text-sm font-bold text-slate-900 dark:text-slate-100">
-                                    Rp {{ number_format($loan->amount, 0, ',', '.') }}
+                                    Rp {{ __n(number_format($loan->amount, 0, ',', '.')) }}
                                 </div>
                                 <div class="flex items-center gap-1.5 mt-0.5">
-                                    <span class="text-xs text-slate-400 dark:text-slate-500">{{ $loan->interest_rate }}% APR</span>
+                                    <span class="text-xs text-slate-400 dark:text-slate-500">{{ __n($loan->interest_rate) }}% APR</span>
                                     <span class="inline-flex items-center rounded-full border px-1.5 py-0 text-[10px] font-bold {{ $gradeClass }}">
                                         {{ $loan->risk_grade }}
                                     </span>
@@ -132,7 +132,7 @@
                                             {{-- Generic Crypto Pin Icon --}}
                                             <svg class="w-3 h-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 8.485-7.5 11.625-7.5 11.625S5.25 14.86 5.25 6.375a7.5 7.5 0 0 1 15 0Z"/></svg>
                                         @endif
-                                        {{ number_format($loan->collateral_amount, $loan->collateralCurrency->decimal_places) }} {{ $loan->collateralCurrency->code }}
+                                        {{ __n(number_format($loan->collateral_amount, $loan->collateralCurrency->decimal_places)) }} {{ $loan->collateralCurrency->code }}
                                     </span>
                                 @else
                                     <span class="inline-flex items-center gap-1 rounded-lg bg-slate-500/10 border border-slate-500/20 px-2 py-0.5 text-xs font-medium text-slate-400 dark:text-slate-500">
@@ -149,7 +149,7 @@
                                         <div class="{{ $progressColor }} h-1.5 rounded-full transition-all duration-500" style="width: {{ $fundedPct }}%"></div>
                                     </div>
                                     <span class="text-xs font-semibold {{ $fundedPct >= 100 ? 'text-emerald-500' : 'text-slate-600 dark:text-slate-300' }} tabular-nums">
-                                        {{ number_format($fundedPct, 2) }}%
+                                        {{ __n(number_format($fundedPct, 2)) }}%
                                     </span>
                                 </div>
                             </td>

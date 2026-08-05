@@ -76,7 +76,7 @@
             
             <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-300 shrink-0">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                {{ __('5 Configured Roles') }}
+                {{ __n('5') }} {{ __('Configured Roles') }}
             </span>
         </div>
 
@@ -359,12 +359,12 @@
                 </p>
                 <div class="pt-2 border-t border-slate-200 dark:border-slate-700/60 space-y-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
                     <div class="flex justify-between">
-                        <span>Affected Roles:</span>
-                        <span class="font-bold text-emerald-600 dark:text-emerald-400">5 System Tiers</span>
+                        <span>{{ __('Affected Roles') }}:</span>
+                        <span class="font-bold text-emerald-600 dark:text-emerald-400">{{ __n('5') }} {{ __('System Tiers') }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>Permission Audit:</span>
-                        <span class="font-bold text-emerald-600 dark:text-emerald-400">Verified & Signed</span>
+                        <span>{{ __('Permission Audit') }}:</span>
+                        <span class="font-bold text-emerald-600 dark:text-emerald-400">{{ __('Verified & Signed') }}</span>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-6 max-w-6xl mx-auto" x-data="{ profileTab: '{{ session('tab') ?? request('tab') ?? 'personal' }}', colorTheme: localStorage.getItem('lendflow_theme') || '{{ $user->profile?->system_preferences['color_theme'] ?? 'light' }}', density: localStorage.getItem('lendflow_density') || '{{ $user->profile?->system_preferences['data_density'] ?? 'comfortable' }}', disable2faModalOpen: false, generateTokenModalOpen: false }">
+<div class="space-y-6 max-w-6xl mx-auto" x-data="{ profileTab: (new URLSearchParams(window.location.search)).get('tab') || localStorage.getItem('lendflow_active_tab') || '{{ session('tab') ?? request('tab') ?? 'personal' }}', colorTheme: localStorage.getItem('lendflow_theme') || '{{ $user->profile?->system_preferences['color_theme'] ?? 'light' }}', density: localStorage.getItem('lendflow_density') || '{{ $user->profile?->system_preferences['data_density'] ?? 'comfortable' }}', disable2faModalOpen: false, generateTokenModalOpen: false }" x-init="$watch('profileTab', tab => { localStorage.setItem('lendflow_active_tab', tab); const u = new URL(window.location.href); u.searchParams.set('tab', tab); window.history.replaceState({}, '', u); })">
     
     <!-- Top Header Bar -->
     <div>
@@ -84,7 +84,7 @@
                         <label for="avatar" class="cursor-pointer inline-flex items-center py-2 px-4 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors shadow-xs">
                             {{ __('Change Photo') }}
                         </label>
-                        <p class="text-[10px] text-slate-400 font-medium mt-1">JPG or PNG. Max 2MB.</p>
+                        <p class="text-[10px] text-slate-400 font-medium mt-1">JPG {{ __('or') }} PNG. {{ __('Max') }} {{ __n('2') }}MB.</p>
                         @error('avatar')
                             <p class="text-[11px] font-bold text-rose-600 mt-1">{{ $message }}</p>
                         @enderror
@@ -150,14 +150,14 @@
             
             <!-- Password Management Card -->
             <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-4">
-                <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-3">Password Management</h3>
+                <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-3">{{ __('Password Management') }}</h3>
 
                 <form action="{{ route('profile.password.update') }}" method="POST" class="space-y-4">
                     @csrf
                     @method('PUT')
 
                     <div>
-                        <label for="current_password" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">CURRENT PASSWORD</label>
+                        <label for="current_password" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('CURRENT PASSWORD') }}</label>
                         <input type="password" name="current_password" id="current_password" required placeholder="••••••••" 
                                class="w-full rounded-xl border {{ $errors->has('current_password') ? 'border-rose-500 bg-rose-50/50' : 'border-slate-200' }} px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600">
                         @error('current_password')
@@ -167,7 +167,7 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label for="password" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">NEW PASSWORD</label>
+                            <label for="password" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('NEW PASSWORD') }}</label>
                             <input type="password" name="password" id="password" required placeholder="••••••••" 
                                    class="w-full rounded-xl border {{ $errors->has('password') ? 'border-rose-500 bg-rose-50/50' : 'border-slate-200' }} px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600">
                             @error('password')
@@ -175,52 +175,52 @@
                             @enderror
                         </div>
                         <div>
-                            <label for="password_confirmation" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">CONFIRM NEW PASSWORD</label>
+                            <label for="password_confirmation" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('CONFIRM NEW PASSWORD') }}</label>
                             <input type="password" name="password_confirmation" id="password_confirmation" required placeholder="••••••••" 
                                    class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600">
                         </div>
                     </div>
 
                     <button type="submit" id="btn_update_password" class="py-2.5 px-6 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs cursor-pointer">
-                        Update Password &rarr;
+                        {{ __('Update Password') }} &rarr;
                     </button>
                 </form>
             </div>
 
             <!-- Two-Factor Authentication Card -->
             <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-4">
-                <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-3">Two-Factor Authentication (2FA)</h3>
+                <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-3">{{ __('Two-Factor Authentication (2FA)') }}</h3>
 
                 <div class="space-y-3">
                     <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
                         <div>
                             <div class="flex items-center gap-2">
-                                <span class="font-bold text-slate-900 dark:text-slate-100 text-xs block">Authenticator Apps</span>
+                                <span class="font-bold text-slate-900 dark:text-slate-100 text-xs block">{{ __('Authenticator Apps') }}</span>
                                 @if(Auth::user()->google2fa_enabled)
-                                    <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">Active</span>
+                                    <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">{{ __('Active') }}</span>
                                 @else
-                                    <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-200 text-slate-700">Disabled</span>
+                                    <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-200 text-slate-700">{{ __('Disabled') }}</span>
                                 @endif
                             </div>
-                            <span class="text-[10px] text-slate-500 font-medium mt-0.5 block">Google Authenticator, Authy, Microsoft Authenticator</span>
+                            <span class="text-[10px] text-slate-500 font-medium mt-0.5 block">{{ __('Google Authenticator, Authy, Microsoft Authenticator') }}</span>
                         </div>
                         @if(Auth::user()->google2fa_enabled)
                             <button type="button" @click="disable2faModalOpen = true" id="btn_disable_2fa" class="py-1.5 px-3.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer">
-                                Nonaktifkan 2FA
+                                {{ __('Disable 2FA') }}
                             </button>
                         @else
                             <a href="{{ route('2fa.setup') }}" id="btn_setup_2fa" class="py-1.5 px-3.5 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 shadow-xs transition-colors">
-                                Setup 2FA &rarr;
+                                {{ __('Setup 2FA') }} &rarr;
                             </a>
                         @endif
                     </div>
 
                     <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between opacity-60">
                         <div>
-                            <span class="font-bold text-slate-700 text-xs block">SMS Authentication</span>
-                            <span class="text-[10px] text-slate-400 font-medium">Text messages sent to +62 **** **492</span>
+                            <span class="font-bold text-slate-700 text-xs block">{{ __('SMS Authentication') }}</span>
+                            <span class="text-[10px] text-slate-400 font-medium">{{ __('Text messages sent to') }} {{ __n('+62 **** **492') }}</span>
                         </div>
-                        <span class="text-xs font-bold text-slate-400">Setup</span>
+                        <span class="text-xs font-bold text-slate-400">{{ __('Setup') }}</span>
                     </div>
                 </div>
             </div>
@@ -229,12 +229,12 @@
             <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
                     <div>
-                        <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">API Tokens</h3>
-                        <p class="text-[11px] text-slate-500 font-medium">Akses terautentikasi untuk institusi, bot trading &amp; integrasi API eksternal.</p>
+                        <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">{{ __('API Tokens') }}</h3>
+                        <p class="text-[11px] text-slate-500 font-medium">{{ __('Authenticated access for institutions, trading bots & external API integrations.') }}</p>
                     </div>
                     <button type="button" @click="generateTokenModalOpen = true" id="btn_open_generate_token_modal"
                             class="py-1.5 px-3.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer self-start sm:self-auto">
-                        + Generate Token
+                        {{ __('+ Generate Token') }}
                     </button>
                 </div>
 
@@ -265,10 +265,10 @@
                     <table class="w-full text-left text-xs border-collapse">
                         <thead>
                             <tr class="bg-slate-50 border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase">
-                                <th class="py-2.5 px-3">TOKEN NAME</th>
-                                <th class="py-2.5 px-3">PERMISSIONS</th>
-                                <th class="py-2.5 px-3">LAST USED</th>
-                                <th class="py-2.5 px-3 text-right">ACTIONS</th>
+                                <th class="py-2.5 px-3">{{ __('TOKEN NAME') }}</th>
+                                <th class="py-2.5 px-3">{{ __('PERMISSIONS') }}</th>
+                                <th class="py-2.5 px-3">{{ __('LAST USED') }}</th>
+                                <th class="py-2.5 px-3 text-right">{{ __('ACTIONS') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -277,18 +277,18 @@
                                     <td class="py-3 px-3 font-bold text-slate-900 dark:text-slate-100">{{ $apiToken->name }}</td>
                                     <td class="py-3 px-3">
                                         <span class="px-2 py-0.5 rounded text-[10px] font-bold {{ $apiToken->permissions === 'Read / Write' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-slate-100 text-slate-700' }}">
-                                            {{ $apiToken->permissions }}
+                                            {{ __($apiToken->permissions) }}
                                         </span>
                                     </td>
                                     <td class="py-3 px-3 text-slate-500">
-                                        {{ $apiToken->last_used_at ? $apiToken->last_used_at->diffForHumans() : 'Belum pernah digunakan' }}
+                                        {{ $apiToken->last_used_at ? $apiToken->last_used_at->diffForHumans() : __('Never used') }}
                                     </td>
                                     <td class="py-3 px-3 text-right">
-                                        <form action="{{ route('profile.tokens.destroy', $apiToken) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mencabut akses API Token {{ $apiToken->name }}?');">
+                                        <form action="{{ route('profile.tokens.destroy', $apiToken) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure you want to revoke this API Token?') }}');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-rose-600 hover:text-rose-800 font-bold hover:underline cursor-pointer">
-                                                Revoke
+                                                {{ __('Revoke') }}
                                             </button>
                                         </form>
                                     </td>
@@ -296,7 +296,7 @@
                             @empty
                                 <tr>
                                     <td colspan="4" class="py-6 text-center text-slate-400 font-medium">
-                                        Belum ada API Token institusi yang dibuat. Klik tombol <strong>+ Generate Token</strong> untuk membuat token baru.
+                                        {{ __('No institutional API Tokens created yet. Click the + Generate Token button to create a new token.') }}
                                     </td>
                                 </tr>
                             @endforelse
@@ -312,25 +312,25 @@
             
             <!-- Security Score Card -->
             <div class="rounded-2xl border border-emerald-200 bg-emerald-50/40 p-5 shadow-xs space-y-3">
-                <span class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block">SECURITY SCORE</span>
+                <span class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block">{{ __('SECURITY SCORE') }}</span>
                 
                 <div class="flex items-baseline gap-2">
-                    <span class="text-3xl font-black text-emerald-700">{{ Auth::user()->google2fa_enabled ? '92' : '75' }}</span>
-                    <span class="text-xs font-bold text-slate-400">/ 100</span>
+                    <span class="text-3xl font-black text-emerald-700">{{ __n(Auth::user()->google2fa_enabled ? '92' : '75') }}</span>
+                    <span class="text-xs font-bold text-slate-400">/ {{ __n('100') }}</span>
                     <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-700 text-white ml-auto">
-                        {{ Auth::user()->google2fa_enabled ? 'Strong Protection' : 'Good Protection' }}
+                        {{ Auth::user()->google2fa_enabled ? __('Strong Protection') : __('Good Protection') }}
                     </span>
                 </div>
 
                 <div class="space-y-2 text-xs border-t border-emerald-200/60 pt-3">
                     <div class="flex justify-between">
-                        <span class="text-slate-600">Password Strength</span>
-                        <span class="font-bold text-emerald-800">Strong</span>
+                        <span class="text-slate-600">{{ __('Password Strength') }}</span>
+                        <span class="font-bold text-emerald-800">{{ __('Strong') }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-slate-600">2FA Setup</span>
+                        <span class="text-slate-600">{{ __('2FA Setup') }}</span>
                         <span class="font-bold {{ Auth::user()->google2fa_enabled ? 'text-emerald-800' : 'text-amber-700' }}">
-                            {{ Auth::user()->google2fa_enabled ? 'Enabled' : 'Disabled' }}
+                            {{ Auth::user()->google2fa_enabled ? __('Enabled') : __('Disabled') }}
                         </span>
                     </div>
                 </div>
@@ -338,7 +338,7 @@
 
             <!-- Active Sessions Card -->
             <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs space-y-3">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Active Sessions</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">{{ __('Active Sessions') }}</span>
 
                 <div class="space-y-3 text-xs">
                     <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
@@ -346,20 +346,20 @@
                             <span class="font-bold text-slate-900 dark:text-slate-100 block text-xs">Mac OS • Safari</span>
                             <span class="text-[10px] text-slate-400 font-medium block">Jakarta, ID • 182.1.22.4</span>
                         </div>
-                        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 text-emerald-800">CURRENT</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 text-emerald-800">{{ __('CURRENT') }}</span>
                     </div>
 
                     <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between opacity-70">
                         <div>
                             <span class="font-bold text-slate-800 block text-xs">iOS • LendFlow App</span>
-                            <span class="text-[10px] text-slate-400 font-medium block">Active 2 hours ago</span>
+                            <span class="text-[10px] text-slate-400 font-medium block">{{ __('Active') }} {{ __n('2') }} {{ __('hours ago') }}</span>
                         </div>
-                        <button type="button" @click="alert('Session revoked!')" class="text-[10px] font-bold text-rose-600 hover:underline">Revoke</button>
+                        <button type="button" @click="alert('Session revoked!')" class="text-[10px] font-bold text-rose-600 hover:underline">{{ __('Revoke') }}</button>
                     </div>
                 </div>
 
                 <button type="button" @click="alert('All other sessions signed out!')" class="w-full py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50">
-                    Sign out all other sessions
+                    {{ __('Sign out all other sessions') }}
                 </button>
             </div>
 
@@ -370,8 +370,8 @@
     <!-- ─── Tab 3: Notification Preferences ──────────────────────────────── -->
     <div x-show="profileTab === 'notifications'" class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-xs space-y-6" style="display: none;">
         <div>
-            <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-2">Notification Preferences</h3>
-            <p class="text-xs text-slate-500 font-medium mt-1">Manage how LendFlow communicates important updates, alerts, and marketing information to you.</p>
+            <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-2">{{ __('Notification Preferences') }}</h3>
+            <p class="text-xs text-slate-500 font-medium mt-1">{{ __('Manage how LendFlow communicates important updates, alerts, and marketing information to you.') }}</p>
         </div>
 
         <form action="{{ route('profile.notifications.update') }}" method="POST" class="space-y-6">
@@ -390,42 +390,42 @@
             @endphp
 
             <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
-                <h4 class="text-xs font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">Security Alerts</h4>
+                <h4 class="text-xs font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">{{ __('Security Alerts') }}</h4>
                 <div class="flex items-center justify-between text-xs">
-                    <span class="font-bold text-slate-800">Unrecognized Logins &amp; Password Changes</span>
+                    <span class="font-bold text-slate-800">{{ __('Unrecognized Logins & Password Changes') }}</span>
                     <div class="flex gap-4">
                         <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                            <input type="checkbox" name="security_email" value="1" {{ !empty($settings['security_email']) ? 'checked' : '' }} class="accent-emerald-700"> Email
+                            <input type="checkbox" name="security_email" value="1" {{ !empty($settings['security_email']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Email') }}
                         </label>
                         <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                            <input type="checkbox" name="security_push" value="1" {{ !empty($settings['security_push']) ? 'checked' : '' }} class="accent-emerald-700"> Push
+                            <input type="checkbox" name="security_push" value="1" {{ !empty($settings['security_push']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Push') }}
                         </label>
                     </div>
                 </div>
             </div>
 
             <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
-                <h4 class="text-xs font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">Financial Activity</h4>
+                <h4 class="text-xs font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">{{ __('Financial Activity') }}</h4>
                 <div class="space-y-3 text-xs">
                     <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
-                        <span class="font-bold text-slate-800">Loan Approvals &amp; Updates</span>
+                        <span class="font-bold text-slate-800">{{ __('Loan Approvals & Updates') }}</span>
                         <div class="flex gap-4">
                             <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                                <input type="checkbox" name="financial_email" value="1" {{ !empty($settings['financial_email']) ? 'checked' : '' }} class="accent-emerald-700"> Email
+                                <input type="checkbox" name="financial_email" value="1" {{ !empty($settings['financial_email']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Email') }}
                             </label>
                             <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                                <input type="checkbox" name="financial_push" value="1" {{ !empty($settings['financial_push']) ? 'checked' : '' }} class="accent-emerald-700"> Push
+                                <input type="checkbox" name="financial_push" value="1" {{ !empty($settings['financial_push']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Push') }}
                             </label>
                         </div>
                     </div>
                     <div class="flex items-center justify-between py-1">
-                        <span class="font-bold text-slate-800">Investment Milestones &amp; Returns</span>
+                        <span class="font-bold text-slate-800">{{ __('Investment Milestones & Returns') }}</span>
                         <div class="flex gap-4">
                             <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                                <input type="checkbox" name="investment_email" value="1" {{ !empty($settings['investment_email']) ? 'checked' : '' }} class="accent-emerald-700"> Email
+                                <input type="checkbox" name="investment_email" value="1" {{ !empty($settings['investment_email']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Email') }}
                             </label>
                             <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
-                                <input type="checkbox" name="investment_push" value="1" {{ !empty($settings['investment_push']) ? 'checked' : '' }} class="accent-emerald-700"> Push
+                                <input type="checkbox" name="investment_push" value="1" {{ !empty($settings['investment_push']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Push') }}
                             </label>
                         </div>
                     </div>
@@ -433,7 +433,7 @@
             </div>
 
             <button type="submit" id="btn_save_notification_preferences" class="py-2.5 px-6 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs cursor-pointer">
-                Save Preferences &rarr;
+                {{ __('Save Preferences') }} &rarr;
             </button>
         </form>
     </div>
@@ -539,7 +539,7 @@
                     <!-- Language Preference Dropdown -->
                     <div>
                         <label for="language_select" class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">{{ __('Language Preference') }}</label>
-                        <select id="language_select" onchange="window.location.href='/lang/' + this.value + '?redirect=' + encodeURIComponent(window.location.href)" class="w-full sm:w-80 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3.5 py-2.5 text-xs font-semibold outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 shadow-xs cursor-pointer">
+                        <select id="language_select" @change="const u = new URL(window.location.href); u.searchParams.set('tab', profileTab); window.location.href='/lang/' + $event.target.value + '?redirect=' + encodeURIComponent(u.toString())" class="w-full sm:w-80 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3.5 py-2.5 text-xs font-semibold outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 shadow-xs cursor-pointer">
                             <option value="id" class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" {{ app()->getLocale() === 'id' ? 'selected' : '' }}>Bahasa Indonesia (ID)</option>
                             <option value="en" class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" {{ app()->getLocale() === 'en' ? 'selected' : '' }}>English (EN)</option>
                             <option value="es" class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" {{ app()->getLocale() === 'es' ? 'selected' : '' }}>Español (ES)</option>

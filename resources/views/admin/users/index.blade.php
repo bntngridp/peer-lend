@@ -19,7 +19,7 @@
         <div class="flex items-center gap-3 flex-shrink-0">
             <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-300">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                {{ $users->total() }} {{ __('Registered Users') }}
+                {{ __n($users->total()) }} {{ __('Registered Users') }}
             </span>
         </div>
     </div>
@@ -208,7 +208,7 @@
                                         <div class="{{ $isKycApproved ? 'bg-emerald-500' : ($isKycPending ? 'bg-amber-500' : 'bg-slate-400') }} h-1.5 rounded-full transition-all duration-500" style="width: {{ $isKycApproved ? '100%' : ($isKycPending ? '65%' : '35%') }}"></div>
                                     </div>
                                     <span class="text-xs font-semibold {{ $isKycApproved ? 'text-emerald-400' : 'text-slate-500 dark:text-slate-400' }} tabular-nums">
-                                        {{ $isKycApproved ? '100%' : ($isKycPending ? '65%' : '35%') }}
+                                        {{ __n($isKycApproved ? '100%' : ($isKycPending ? '65%' : '35%')) }}
                                     </span>
                                 </div>
                             </td>

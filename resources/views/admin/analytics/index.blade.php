@@ -78,12 +78,12 @@
                     {{ __('Liquidity Pool') }}
                 </span>
                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400">
-                    +14.2%
+                    {{ __n('+14.2%') }}
                 </span>
             </div>
             <div class="mt-3 flex items-baseline justify-between">
                 <span class="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
-                    ${{ $days == 365 ? '2.84B' : ($days == 90 ? '1.42B' : '842.5M') }}
+                    ${{ __n($days == 365 ? '2.84B' : ($days == 90 ? '1.42B' : '842.5M')) }}
                 </span>
                 <span class="text-xs font-semibold text-slate-400 dark:text-slate-500">
                     {{ __('IDR Equiv.') }}
@@ -101,15 +101,15 @@
                     {{ __('Default Rate (NPL)') }}
                 </span>
                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400">
-                    -0.18%
+                    {{ __n('-0.18%') }}
                 </span>
             </div>
             <div class="mt-3 flex items-baseline justify-between">
                 <span class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">
-                    1.24%
+                    {{ __n('1.24%') }}
                 </span>
                 <span class="text-xs font-semibold text-slate-400 dark:text-slate-500">
-                    Target &lt; 2.5%
+                    {{ __('Target') }} &lt; {{ __n('2.5%') }}
                 </span>
             </div>
             <p class="mt-2 text-[11px] text-slate-500 dark:text-slate-400">
@@ -124,15 +124,15 @@
                     {{ __('LCR Ratio') }}
                 </span>
                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400">
-                    Healthy
+                    {{ __('Healthy') }}
                 </span>
             </div>
             <div class="mt-3 flex items-baseline justify-between">
                 <span class="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
-                    145.8%
+                    {{ __n('145.8%') }}
                 </span>
                 <span class="text-xs font-semibold text-slate-400 dark:text-slate-500">
-                    Min 100%
+                    {{ __('Min') }} {{ __n('100%') }}
                 </span>
             </div>
             <p class="mt-2 text-[11px] text-slate-500 dark:text-slate-400">
@@ -147,15 +147,15 @@
                     {{ __('NSFR Ratio') }}
                 </span>
                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400">
-                    Optimal
+                    {{ __('Optimal') }}
                 </span>
             </div>
             <div class="mt-3 flex items-baseline justify-between">
                 <span class="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
-                    118.2%
+                    {{ __n('118.2%') }}
                 </span>
                 <span class="text-xs font-semibold text-slate-400 dark:text-slate-500">
-                    Min 100%
+                    {{ __('Min') }} {{ __n('100%') }}
                 </span>
             </div>
             <p class="mt-2 text-[11px] text-slate-500 dark:text-slate-400">
@@ -182,11 +182,11 @@
                 <div class="flex items-center gap-4 text-xs font-semibold">
                     <span class="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
                         <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                        {{ __('Disbursement') }} (${{ $totalDisbursement }}M)
+                        {{ __('Disbursement') }} (${{ __n($totalDisbursement) }}M)
                     </span>
                     <span class="flex items-center gap-1.5 text-blue-600 dark:text-blue-400">
                         <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-                        {{ __('Repayment') }} (${{ $totalRepayment }}M)
+                        {{ __('Repayment') }} (${{ __n($totalRepayment) }}M)
                     </span>
                 </div>
             </div>
@@ -210,8 +210,8 @@
             <div class="space-y-4 text-xs">
                 <div>
                     <div class="flex justify-between font-bold text-slate-700 dark:text-slate-300 mb-1">
-                        <span>Tier AAA (Low Risk)</span>
-                        <span>54.2%</span>
+                        <span>{{ __('Tier AAA (Low Risk)') }}</span>
+                        <span>{{ __n('54.2%') }}</span>
                     </div>
                     <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
                         <div class="h-full bg-emerald-500 rounded-full" style="width: 54.2%"></div>
@@ -220,8 +220,8 @@
 
                 <div>
                     <div class="flex justify-between font-bold text-slate-700 dark:text-slate-300 mb-1">
-                        <span>Tier AA (Moderate Risk)</span>
-                        <span>28.6%</span>
+                        <span>{{ __('Tier AA (Moderate Risk)') }}</span>
+                        <span>{{ __n('28.6%') }}</span>
                     </div>
                     <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
                         <div class="h-full bg-indigo-500 rounded-full" style="width: 28.6%"></div>
@@ -230,8 +230,8 @@
 
                 <div>
                     <div class="flex justify-between font-bold text-slate-700 dark:text-slate-300 mb-1">
-                        <span>Tier A (Balanced Risk)</span>
-                        <span>12.4%</span>
+                        <span>{{ __('Tier A (Balanced Risk)') }}</span>
+                        <span>{{ __n('12.4%') }}</span>
                     </div>
                     <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
                         <div class="h-full bg-amber-500 rounded-full" style="width: 12.4%"></div>
@@ -240,8 +240,8 @@
 
                 <div>
                     <div class="flex justify-between font-bold text-slate-700 dark:text-slate-300 mb-1">
-                        <span>Tier B (High Yield / Subprime)</span>
-                        <span>4.8%</span>
+                        <span>{{ __('Tier B (High Yield / Subprime)') }}</span>
+                        <span>{{ __n('4.8%') }}</span>
                     </div>
                     <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
                         <div class="h-full bg-rose-500 rounded-full" style="width: 4.8%"></div>
@@ -319,11 +319,11 @@
                     </div>
                     <div class="flex justify-between">
                         <span>{{ __('Disbursement Volume:') }}</span>
-                        <span class="font-bold text-emerald-600 dark:text-emerald-400">${{ $totalDisbursement }}M</span>
+                        <span class="font-bold text-emerald-600 dark:text-emerald-400">${{ __n($totalDisbursement) }}M</span>
                     </div>
                     <div class="flex justify-between">
                         <span>{{ __('Repayment Volume:') }}</span>
-                        <span class="font-bold text-blue-600 dark:text-blue-400">${{ $totalRepayment }}M</span>
+                        <span class="font-bold text-blue-600 dark:text-blue-400">${{ __n($totalRepayment) }}M</span>
                     </div>
                 </div>
             </div>

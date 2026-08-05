@@ -220,7 +220,7 @@ class DashboardController extends Controller
         $growthData = [];
         for ($i = 5; $i >= 0; $i--) {
             $m = now()->subMonths($i);
-            $growthLabels[] = $m->format('M');
+            $growthLabels[] = __n($m->translatedFormat('M Y'));
             // Estimate progressive trajectory leading to current portfolio value
             $factor = (6 - $i) / 6;
             $growthData[] = round($portfolioValue > 0 ? $portfolioValue * (0.6 + (0.4 * $factor)) : (1000000 * (1 + $factor)));
@@ -278,7 +278,7 @@ class DashboardController extends Controller
             $count  = $query->count();
             $volume = $query->sum('amount');
             $data[] = [
-                'label'  => $month->format('M Y'),
+                'label'  => __n($month->translatedFormat('M Y')),
                 'count'  => $count,
                 'volume' => (float) $volume,
             ];

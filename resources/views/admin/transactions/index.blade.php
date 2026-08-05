@@ -161,7 +161,7 @@
                     </div>
                     <div class="flex justify-between">
                         <span>{{ __('Security Status:') }}</span>
-                        <span class="font-bold text-blue-600 dark:text-blue-400">100% Immutable</span>
+                        <span class="font-bold text-blue-600 dark:text-blue-400">{{ __('100% Immutable') }}</span>
                     </div>
                 </div>
             </div>

@@ -20,6 +20,13 @@ class LanguageController extends Controller
             session(['locale' => $targetLocale]);
         }
 
+        if ($request->has('redirect')) {
+            $redirectUrl = $request->query('redirect');
+            if (filter_var($redirectUrl, FILTER_VALIDATE_URL) || str_starts_with($redirectUrl, '/')) {
+                return redirect()->to($redirectUrl);
+            }
+        }
+
         return redirect()->back();
     }
 }

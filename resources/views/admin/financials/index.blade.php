@@ -89,44 +89,44 @@
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 font-medium text-slate-700 dark:text-slate-300">
                         <tr>
-                            <td class="py-3 px-3 font-extrabold text-emerald-600 dark:text-emerald-400">Grade A</td>
+                            <td class="py-3 px-3 font-extrabold text-emerald-600 dark:text-emerald-400">{{ __('Grade A') }}</td>
                             <td class="py-3 px-3">
-                                <input type="number" step="0.1" value="3.50" class="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 text-xs text-center font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
+                                <input type="{{ app()->getLocale() === 'ar' ? 'text' : 'number' }}" step="0.1" value="{{ __n('3.50') }}" class="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 text-xs text-center font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
                             </td>
                             <td class="py-3 px-3">
-                                <input type="number" step="0.1" value="1.00" class="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 text-xs text-center font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
+                                <input type="{{ app()->getLocale() === 'ar' ? 'text' : 'number' }}" step="0.1" value="{{ __n('1.00') }}" class="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 text-xs text-center font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
                             </td>
-                            <td class="py-3 px-3 text-right font-extrabold text-slate-900 dark:text-slate-100">4.50%</td>
+                            <td class="py-3 px-3 text-right font-extrabold text-slate-900 dark:text-slate-100">{{ __n('4.50%') }}</td>
                         </tr>
                         <tr>
-                            <td class="py-3 px-3 font-extrabold text-blue-600 dark:text-blue-400">Grade B</td>
+                            <td class="py-3 px-3 font-extrabold text-blue-600 dark:text-blue-400">{{ __('Grade B') }}</td>
                             <td class="py-3 px-3">
-                                <input type="number" step="0.1" value="4.25" class="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 text-xs text-center font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
+                                <input type="{{ app()->getLocale() === 'ar' ? 'text' : 'number' }}" step="0.1" value="{{ __n('4.25') }}" class="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 text-xs text-center font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
                             </td>
                             <td class="py-3 px-3">
-                                <input type="number" step="0.1" value="2.50" class="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 text-xs text-center font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
+                                <input type="{{ app()->getLocale() === 'ar' ? 'text' : 'number' }}" step="0.1" value="{{ __n('2.50') }}" class="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 text-xs text-center font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
                             </td>
-                            <td class="py-3 px-3 text-right font-extrabold text-slate-900 dark:text-slate-100">6.75%</td>
+                            <td class="py-3 px-3 text-right font-extrabold text-slate-900 dark:text-slate-100">{{ __n('6.75%') }}</td>
                         </tr>
                         <tr>
-                            <td class="py-3 px-3 font-extrabold text-amber-600 dark:text-amber-400">Grade C</td>
+                            <td class="py-3 px-3 font-extrabold text-amber-600 dark:text-amber-400">{{ __('Grade C') }}</td>
                             <td class="py-3 px-3">
-                                <input type="number" step="0.1" value="5.50" class="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 text-xs text-center font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
+                                <input type="{{ app()->getLocale() === 'ar' ? 'text' : 'number' }}" step="0.1" value="{{ __n('5.50') }}" class="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 text-xs text-center font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
                             </td>
                             <td class="py-3 px-3">
-                                <input type="number" step="0.1" value="4.00" class="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 text-xs text-center font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
+                                <input type="{{ app()->getLocale() === 'ar' ? 'text' : 'number' }}" step="0.1" value="{{ __n('4.00') }}" class="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 text-xs text-center font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
                             </td>
-                            <td class="py-3 px-3 text-right font-extrabold text-slate-900 dark:text-slate-100">9.50%</td>
+                            <td class="py-3 px-3 text-right font-extrabold text-slate-900 dark:text-slate-100">{{ __n('9.50%') }}</td>
                         </tr>
                         <tr>
-                            <td class="py-3 px-3 font-extrabold text-rose-600 dark:text-rose-400">Grade D</td>
+                            <td class="py-3 px-3 font-extrabold text-rose-600 dark:text-rose-400">{{ __('Grade D') }}</td>
                             <td class="py-3 px-3">
-                                <input type="number" step="0.1" value="7.00" class="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 text-xs text-center font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
+                                <input type="{{ app()->getLocale() === 'ar' ? 'text' : 'number' }}" step="0.1" value="{{ __n('7.00') }}" class="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 text-xs text-center font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
                             </td>
                             <td class="py-3 px-3">
-                                <input type="number" step="0.1" value="6.50" class="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 text-xs text-center font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
+                                <input type="{{ app()->getLocale() === 'ar' ? 'text' : 'number' }}" step="0.1" value="{{ __n('6.50') }}" class="w-20 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1 text-xs text-center font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
                             </td>
-                            <td class="py-3 px-3 text-right font-extrabold text-slate-900 dark:text-slate-100">13.50%</td>
+                            <td class="py-3 px-3 text-right font-extrabold text-slate-900 dark:text-slate-100">{{ __n('13.50%') }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -158,21 +158,21 @@
                         <label class="block text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">
                             {{ __('Origination Fee (%)') }}
                         </label>
-                        <input type="number" step="0.1" value="2.00" class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
+                        <input type="{{ app()->getLocale() === 'ar' ? 'text' : 'number' }}" step="0.1" value="{{ __n('2.00') }}" class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
                     </div>
 
                     <div>
                         <label class="block text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">
                             {{ __('Monthly Service Fee ($)') }}
                         </label>
-                        <input type="number" value="15.00" class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
+                        <input type="{{ app()->getLocale() === 'ar' ? 'text' : 'number' }}" value="{{ __n('15.00') }}" class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
                     </div>
 
                     <div>
                         <label class="block text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">
                             {{ __('Late Payment Penalty (%)') }}
                         </label>
-                        <input type="number" step="0.1" value="5.00" class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
+                        <input type="{{ app()->getLocale() === 'ar' ? 'text' : 'number' }}" step="0.1" value="{{ __n('5.00') }}" class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500">
                     </div>
                 </div>
             </div>
@@ -266,10 +266,10 @@
                     {{ __('Are you sure you want to update the interest rate brackets for all borrower credit grades?') }}
                 </p>
                 <div class="pt-2 border-t border-slate-200 dark:border-slate-700/60 grid grid-cols-2 gap-2 font-bold text-[11px]">
-                    <div class="text-emerald-600 dark:text-emerald-400">Grade A: 4.50% Total</div>
-                    <div class="text-blue-600 dark:text-blue-400">Grade B: 6.75% Total</div>
-                    <div class="text-amber-600 dark:text-amber-400">Grade C: 9.50% Total</div>
-                    <div class="text-rose-600 dark:text-rose-400">Grade D: 13.50% Total</div>
+                    <div class="text-emerald-600 dark:text-emerald-400">{{ __('Grade A') }}: {{ __n('4.50%') }} {{ __('Total') }}</div>
+                    <div class="text-blue-600 dark:text-blue-400">{{ __('Grade B') }}: {{ __n('6.75%') }} {{ __('Total') }}</div>
+                    <div class="text-amber-600 dark:text-amber-400">{{ __('Grade C') }}: {{ __n('9.50%') }} {{ __('Total') }}</div>
+                    <div class="text-rose-600 dark:text-rose-400">{{ __('Grade D') }}: {{ __n('13.50%') }} {{ __('Total') }}</div>
                 </div>
             </div>
 
@@ -334,16 +334,16 @@
                 </p>
                 <div class="pt-2 border-t border-slate-200 dark:border-slate-700/60 space-y-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
                     <div class="flex justify-between">
-                        <span>Origination Fee:</span>
-                        <span class="font-bold text-emerald-600 dark:text-emerald-400">2.00%</span>
+                        <span>{{ __('Origination Fee') }}:</span>
+                        <span class="font-bold text-emerald-600 dark:text-emerald-400">{{ __n('2.00%') }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>Monthly Service Fee:</span>
-                        <span class="font-bold text-emerald-600 dark:text-emerald-400">$15.00</span>
+                        <span>{{ __('Monthly Service Fee') }}:</span>
+                        <span class="font-bold text-emerald-600 dark:text-emerald-400">${{ __n('15.00') }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>Late Payment Penalty:</span>
-                        <span class="font-bold text-emerald-600 dark:text-emerald-400">5.00%</span>
+                        <span>{{ __('Late Payment Penalty') }}:</span>
+                        <span class="font-bold text-emerald-600 dark:text-emerald-400">{{ __n('5.00%') }}</span>
                     </div>
                 </div>
             </div>

@@ -18,7 +18,7 @@
         <div class="flex items-center gap-3">
             <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                {{ $kycs->total() }} {{ __('Total Applications') }}
+                {{ __n($kycs->total()) }} {{ __('Total Applications') }}
             </span>
         </div>
     </div>
@@ -34,7 +34,7 @@
             <div class="grid grid-cols-2 gap-4 mt-3">
                 <div>
                     <span class="text-3xl font-black text-slate-900 dark:text-slate-100 block leading-tight">
-                        {{ $kycs->total() }}
+                        {{ __n($kycs->total()) }}
                     </span>
                     <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 block mt-0.5">
                         {{ __('Matching Applications') }}
@@ -42,7 +42,7 @@
                 </div>
                 <div>
                     <span class="text-3xl font-black text-rose-600 dark:text-rose-400 block leading-tight">
-                        {{ $kycs->getCollection()->filter(fn($k) => $k->isRejected())->count() }}
+                        {{ __n($kycs->getCollection()->filter(fn($k) => $k->isRejected())->count()) }}
                     </span>
                     <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 block mt-0.5">
                         {{ __('High Risk / Rejected') }}
@@ -126,7 +126,7 @@
                 {{ __('Application Queue') }}
             </h3>
             <span class="text-xs font-medium text-slate-500 dark:text-slate-400">
-                Showing {{ $kycs->firstItem() ?? 0 }}-{{ $kycs->lastItem() ?? 0 }} of {{ $kycs->total() }}
+                {{ __('Showing :from-:to of :total', ['from' => __n($kycs->firstItem() ?? 0), 'to' => __n($kycs->lastItem() ?? 0), 'total' => __n($kycs->total())]) }}
             </span>
         </div>
 
@@ -211,7 +211,7 @@
 
                             {{-- Submission Date --}}
                             <td class="py-4 px-6 text-slate-600 dark:text-slate-400 font-medium whitespace-nowrap">
-                                {{ $kyc->created_at->format('M d, Y - H:i') }}
+                                {{ __n($kyc->created_at->translatedFormat('M d, Y - H:i')) }}
                             </td>
 
                             {{-- Document Type --}}

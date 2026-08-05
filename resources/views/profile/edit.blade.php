@@ -218,9 +218,15 @@
                     <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between opacity-60">
                         <div>
                             <span class="font-bold text-slate-700 text-xs block">{{ __('SMS Authentication') }}</span>
-                            <span class="text-[10px] text-slate-400 font-medium">{{ __('Text messages sent to') }} {{ __n('+62 **** **492') }}</span>
+                            @php
+                                $rawPhone = $user->profile?->phone;
+                                $maskedPhone = $rawPhone ? ((strlen($rawPhone) > 6) ? substr($rawPhone, 0, 4) . ' **** **' . substr($rawPhone, -4) : $rawPhone) : null;
+                            @endphp
+                            <span class="text-[10px] text-slate-400 font-medium">
+                                {{ $maskedPhone ? (__('Text messages sent to') . ' ' . $maskedPhone) : __('Phone number not configured for SMS 2FA') }}
+                            </span>
                         </div>
-                        <span class="text-xs font-bold text-slate-400">{{ __('Setup') }}</span>
+                        <span class="text-xs font-bold text-slate-400">{{ __('Coming Soon') }}</span>
                     </div>
                 </div>
             </div>

@@ -83,7 +83,7 @@
             </div>
             <div class="mt-3 flex items-baseline justify-between">
                 <span class="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
-                    ${{ __n($days == 365 ? '2.84B' : ($days == 90 ? '1.42B' : '842.5M')) }}
+                    ${{ __n($totalLiquidityFormatted) }}
                 </span>
                 <span class="text-xs font-semibold text-slate-400 dark:text-slate-500">
                     {{ __('IDR Equiv.') }}
@@ -106,7 +106,7 @@
             </div>
             <div class="mt-3 flex items-baseline justify-between">
                 <span class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">
-                    {{ __n('1.24%') }}
+                    {{ __n(number_format($nplRate, 2)) }}%
                 </span>
                 <span class="text-xs font-semibold text-slate-400 dark:text-slate-500">
                     {{ __('Target') }} &lt; {{ __n('2.5%') }}
@@ -129,7 +129,7 @@
             </div>
             <div class="mt-3 flex items-baseline justify-between">
                 <span class="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
-                    {{ __n('145.8%') }}
+                    {{ __n(number_format($lcrRatio, 1)) }}%
                 </span>
                 <span class="text-xs font-semibold text-slate-400 dark:text-slate-500">
                     {{ __('Min') }} {{ __n('100%') }}
@@ -152,7 +152,7 @@
             </div>
             <div class="mt-3 flex items-baseline justify-between">
                 <span class="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
-                    {{ __n('118.2%') }}
+                    {{ __n(number_format($nsfrRatio, 1)) }}%
                 </span>
                 <span class="text-xs font-semibold text-slate-400 dark:text-slate-500">
                     {{ __('Min') }} {{ __n('100%') }}
@@ -211,40 +211,40 @@
                 <div>
                     <div class="flex justify-between font-bold text-slate-700 dark:text-slate-300 mb-1">
                         <span>{{ __('Tier AAA (Low Risk)') }}</span>
-                        <span>{{ __n('54.2%') }}</span>
+                        <span>{{ __n(number_format($riskDistribution['AAA'], 1)) }}%</span>
                     </div>
                     <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                        <div class="h-full bg-emerald-500 rounded-full" style="width: 54.2%"></div>
+                        <div class="h-full bg-emerald-500 rounded-full" style="width: {{ $riskDistribution['AAA'] }}%"></div>
                     </div>
                 </div>
 
                 <div>
                     <div class="flex justify-between font-bold text-slate-700 dark:text-slate-300 mb-1">
                         <span>{{ __('Tier AA (Moderate Risk)') }}</span>
-                        <span>{{ __n('28.6%') }}</span>
+                        <span>{{ __n(number_format($riskDistribution['AA'], 1)) }}%</span>
                     </div>
                     <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                        <div class="h-full bg-indigo-500 rounded-full" style="width: 28.6%"></div>
+                        <div class="h-full bg-indigo-500 rounded-full" style="width: {{ $riskDistribution['AA'] }}%"></div>
                     </div>
                 </div>
 
                 <div>
                     <div class="flex justify-between font-bold text-slate-700 dark:text-slate-300 mb-1">
                         <span>{{ __('Tier A (Balanced Risk)') }}</span>
-                        <span>{{ __n('12.4%') }}</span>
+                        <span>{{ __n(number_format($riskDistribution['A'], 1)) }}%</span>
                     </div>
                     <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                        <div class="h-full bg-amber-500 rounded-full" style="width: 12.4%"></div>
+                        <div class="h-full bg-amber-500 rounded-full" style="width: {{ $riskDistribution['A'] }}%"></div>
                     </div>
                 </div>
 
                 <div>
                     <div class="flex justify-between font-bold text-slate-700 dark:text-slate-300 mb-1">
                         <span>{{ __('Tier B (High Yield / Subprime)') }}</span>
-                        <span>{{ __n('4.8%') }}</span>
+                        <span>{{ __n(number_format($riskDistribution['B'], 1)) }}%</span>
                     </div>
                     <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                        <div class="h-full bg-rose-500 rounded-full" style="width: 4.8%"></div>
+                        <div class="h-full bg-rose-500 rounded-full" style="width: {{ $riskDistribution['B'] }}%"></div>
                     </div>
                 </div>
             </div>
@@ -254,7 +254,7 @@
                     {{ __('Asset Quality Summary') }}
                 </span>
                 <p class="text-[11px] text-slate-500 dark:text-slate-400">
-                    {{ __('Over 82.8% of portfolio assets are rated AA or higher. Collateral coverage ratio stands firm at 142.5%.') }}
+                    {{ __('Over :percent% of portfolio assets are rated AA or higher. Collateral coverage ratio stands firm at :lcr%.', ['percent' => __n(number_format($topTierPercent, 1)), 'lcr' => __n(number_format($lcrRatio, 1))]) }}
                 </p>
             </div>
         </div>

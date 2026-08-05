@@ -75,6 +75,22 @@ class Phase4DashboardNotificationLiquidationTest extends TestCase
         $response->assertSee('Platform Overview');
     }
 
+    public function test_admin_can_access_platform_analytics_page_with_dynamic_data(): void
+    {
+        $admin = $this->createVerifiedUser('admin');
+        $this->createWallet($admin, '5000000');
+
+        $response = $this->actingAs($admin)->get(route('admin.analytics.index', ['days' => 30]));
+
+        $response->assertStatus(200);
+        $response->assertViewHas('totalLiquidityFormatted');
+        $response->assertViewHas('nplRate');
+        $response->assertViewHas('lcrRatio');
+        $response->assertViewHas('nsfrRatio');
+        $response->assertViewHas('riskDistribution');
+        $response->assertSee(__('Platform Analytics'));
+    }
+
     public function test_unauthenticated_user_cannot_access_dashboard(): void
     {
         $response = $this->get('/dashboard');

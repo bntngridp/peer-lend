@@ -80,6 +80,7 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
     Route::post('/profile/tokens', [\App\Modules\User\Controllers\ApiTokenController::class, 'store'])->name('profile.tokens.store');
     Route::delete('/profile/tokens/{token}', [\App\Modules\User\Controllers\ApiTokenController::class, 'destroy'])->name('profile.tokens.destroy');
     Route::post('/profile/sessions/revoke-others', [\App\Modules\User\Controllers\ProfileController::class, 'revokeOtherSessions'])->name('profile.sessions.revoke-others');
+    Route::delete('/profile/sessions/{sessionId}', [\App\Modules\User\Controllers\ProfileController::class, 'revokeSession'])->name('profile.sessions.destroy');
 
     // 🔍 KYC Verification Routes
     Route::get('/kyc', [\App\Modules\KYC\Controllers\KYCController::class, 'index'])->name('kyc.index');

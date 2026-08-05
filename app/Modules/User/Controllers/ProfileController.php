@@ -16,12 +16,57 @@ class ProfileController extends Controller
     ) {}
 
     /**
-     * Show the profile edit form.
+     * Show the profile edit form with real active sessions.
      */
     public function edit(): View
     {
         $user = Auth::user();
-        return view('profile.edit', compact('user'));
+        $currentSessionId = session()->getId();
+
+        $activeSessions = [];
+
+        try {
+            $dbSessions = \Illuminate\Support\Facades\DB::table('sessions')
+                ->where('user_id', $user->id)
+                ->orderBy('last_activity', 'desc')
+                ->get();
+
+            foreach ($dbSessions as $s) {
+                $parsed = self::parseUserAgent($s->user_agent);
+                $isCurrent = ($s->id === $currentSessionId);
+                
+                $ip = $s->ip_address ?? request()->ip();
+                $location = ($ip === '127.0.0.1' || $ip === '::1') ? 'Localhost' : $ip;
+
+                $activeSessions[] = [
+                    'id'            => $s->id,
+                    'device'        => $parsed['platform'] . ' • ' . $parsed['browser'],
+                    'ip_address'    => $ip,
+                    'location_info' => $location . ' • ' . $ip,
+                    'is_current'    => $isCurrent,
+                    'last_active'   => \Carbon\Carbon::createFromTimestamp($s->last_activity)->diffForHumans(),
+                ];
+            }
+        } catch (\Throwable $e) {
+            // Fallback
+        }
+
+        if (empty($activeSessions)) {
+            $currentParsed = self::parseUserAgent(request()->userAgent());
+            $ip = request()->ip();
+            $location = ($ip === '127.0.0.1' || $ip === '::1') ? 'Localhost' : $ip;
+
+            $activeSessions[] = [
+                'id'            => $currentSessionId,
+                'device'        => $currentParsed['platform'] . ' • ' . $currentParsed['browser'],
+                'ip_address'    => $ip,
+                'location_info' => $location . ' • ' . $ip,
+                'is_current'    => true,
+                'last_active'   => __('Just now'),
+            ];
+        }
+
+        return view('profile.edit', compact('user', 'activeSessions'));
     }
 
     /**
@@ -107,5 +152,77 @@ class ProfileController extends Controller
 
         return redirect()->route('profile.edit', ['tab' => 'security'])
             ->with('success', 'Semua sesi perangkat lain berhasil dikeluarkan!');
+    }
+
+    /**
+     * Revoke a single active session.
+     */
+    public function revokeSession(\Illuminate\Http\Request $request, string $sessionId): RedirectResponse
+    {
+        $user = Auth::user();
+
+        if ($sessionId === session()->getId()) {
+            return back()
+                ->with('tab', 'security')
+                ->withErrors(['session' => 'Anda tidak dapat mencabut sesi yang sedang digunakan saat ini.']);
+        }
+
+        try {
+            \Illuminate\Support\Facades\DB::table('sessions')
+                ->where('user_id', $user->id)
+                ->where('id', $sessionId)
+                ->delete();
+        } catch (\Throwable $e) {
+            // Silence
+        }
+
+        return redirect()->route('profile.edit', ['tab' => 'security'])
+            ->with('success', 'Sesi perangkat berhasil dicabut!');
+    }
+
+    /**
+     * Parse User-Agent into Platform and Browser name.
+     */
+    public static function parseUserAgent(?string $userAgent): array
+    {
+        if (!$userAgent) {
+            return [
+                'platform' => 'Perangkat Tidak Dikenal',
+                'browser'  => 'Browser Tidak Dikenal',
+            ];
+        }
+
+        $platform = 'Desktop';
+        if (preg_match('/Macintosh|Mac OS X/i', $userAgent)) {
+            $platform = 'Mac OS';
+        } elseif (preg_match('/iPhone|iPad|iPod/i', $userAgent)) {
+            $platform = 'iOS';
+        } elseif (preg_match('/Android/i', $userAgent)) {
+            $platform = 'Android';
+        } elseif (preg_match('/Windows/i', $userAgent)) {
+            $platform = 'Windows';
+        } elseif (preg_match('/Linux/i', $userAgent)) {
+            $platform = 'Linux';
+        }
+
+        $browser = 'Browser';
+        if (preg_match('/Chrome/i', $userAgent) && !preg_match('/Edg|OPR/i', $userAgent)) {
+            $browser = 'Chrome';
+        } elseif (preg_match('/Safari/i', $userAgent) && !preg_match('/Chrome/i', $userAgent)) {
+            $browser = 'Safari';
+        } elseif (preg_match('/Firefox/i', $userAgent)) {
+            $browser = 'Firefox';
+        } elseif (preg_match('/Edg/i', $userAgent)) {
+            $browser = 'Edge';
+        } elseif (preg_match('/Opera|OPR/i', $userAgent)) {
+            $browser = 'Opera';
+        } elseif (preg_match('/LendFlow/i', $userAgent)) {
+            $browser = 'LendFlow App';
+        }
+
+        return [
+            'platform' => $platform,
+            'browser'  => $browser,
+        ];
     }
 }

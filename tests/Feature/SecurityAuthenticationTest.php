@@ -323,4 +323,49 @@ class SecurityAuthenticationTest extends TestCase
         $response->assertRedirect(route('profile.edit', ['tab' => 'security']));
         $response->assertSessionHas('success');
     }
+
+    /**
+     * Test User-Agent parser helper.
+     */
+    public function test_user_agent_parser_resolves_os_and_browser(): void
+    {
+        $macSafari = \App\Modules\User\Controllers\ProfileController::parseUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15');
+        $this->assertSame('Mac OS', $macSafari['platform']);
+        $this->assertSame('Safari', $macSafari['browser']);
+
+        $winChrome = \App\Modules\User\Controllers\ProfileController::parseUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+        $this->assertSame('Windows', $winChrome['platform']);
+        $this->assertSame('Chrome', $winChrome['browser']);
+
+        $androidApp = \App\Modules\User\Controllers\ProfileController::parseUserAgent('Mozilla/5.0 (Linux; Android 13; SM-G998B) LendFlow/1.0.0');
+        $this->assertSame('Android', $androidApp['platform']);
+        $this->assertSame('LendFlow App', $androidApp['browser']);
+    }
+
+    /**
+     * Test revoking a single session by session ID.
+     */
+    public function test_user_can_revoke_single_session(): void
+    {
+        $sessionId = 'dummy_session_12345';
+        
+        \Illuminate\Support\Facades\DB::table('sessions')->insert([
+            'id'            => $sessionId,
+            'user_id'       => $this->user->id,
+            'ip_address'    => '192.168.1.100',
+            'user_agent'    => 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) LendFlow/1.0',
+            'payload'       => 'test_payload',
+            'last_activity' => time() - 3600,
+        ]);
+
+        $response = $this->actingAs($this->user)
+            ->delete(route('profile.sessions.destroy', $sessionId));
+
+        $response->assertRedirect(route('profile.edit', ['tab' => 'security']));
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseMissing('sessions', [
+            'id' => $sessionId,
+        ]);
+    }
 }

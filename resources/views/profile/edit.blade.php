@@ -341,26 +341,34 @@
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">{{ __('Active Sessions') }}</span>
 
                 <div class="space-y-3 text-xs">
-                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                        <div>
-                            <span class="font-bold text-slate-900 dark:text-slate-100 block text-xs">Mac OS • Safari</span>
-                            <span class="text-[10px] text-slate-400 font-medium block">Jakarta, ID • 182.1.22.4</span>
+                    @forelse(($activeSessions ?? []) as $session)
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between {{ $session['is_current'] ? '' : 'opacity-80' }}">
+                            <div>
+                                <span class="font-bold text-slate-900 dark:text-slate-100 block text-xs">{{ $session['device'] }}</span>
+                                <span class="text-[10px] text-slate-400 font-medium block">
+                                    {{ $session['is_current'] ? ($session['location_info'] ?? $session['ip_address']) : ($session['last_active'] . ' • ' . $session['ip_address']) }}
+                                </span>
+                            </div>
+                            @if($session['is_current'])
+                                <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900/50">{{ __('CURRENT') }}</span>
+                            @else
+                                <form action="{{ route('profile.sessions.destroy', $session['id']) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure you want to revoke this session?') }}');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-[10px] font-bold text-rose-600 dark:text-rose-400 hover:underline cursor-pointer">{{ __('Revoke') }}</button>
+                                </form>
+                            @endif
                         </div>
-                        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900/50">{{ __('CURRENT') }}</span>
-                    </div>
-
-                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between opacity-70">
-                        <div>
-                            <span class="font-bold text-slate-800 dark:text-slate-200 block text-xs">iOS • LendFlow App</span>
-                            <span class="text-[10px] text-slate-400 font-medium block">{{ __('Active') }} {{ __n('2') }} {{ __('hours ago') }}</span>
-                        </div>
-                        <button type="button" @click="revokeSessionsModalOpen = true" class="text-[10px] font-bold text-rose-600 dark:text-rose-400 hover:underline cursor-pointer">{{ __('Revoke') }}</button>
-                    </div>
+                    @empty
+                        <p class="text-xs text-slate-400 font-medium text-center py-2">{{ __('No other active sessions.') }}</p>
+                    @endforelse
                 </div>
 
-                <button type="button" @click="revokeSessionsModalOpen = true" class="w-full py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors cursor-pointer">
-                    {{ __('Sign out all other sessions') }}
-                </button>
+                @if(count($activeSessions ?? []) > 1)
+                    <button type="button" @click="revokeSessionsModalOpen = true" class="w-full py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors cursor-pointer">
+                        {{ __('Sign out all other sessions') }}
+                    </button>
+                @endif
             </div>
 
         </div>

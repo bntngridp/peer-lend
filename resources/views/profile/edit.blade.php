@@ -389,42 +389,42 @@
                 ];
             @endphp
 
-            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+            <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-4">
                 <h4 class="text-xs font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">{{ __('Security Alerts') }}</h4>
                 <div class="flex items-center justify-between text-xs">
-                    <span class="font-bold text-slate-800">{{ __('Unrecognized Logins & Password Changes') }}</span>
+                    <span class="font-bold text-slate-800 dark:text-slate-200">{{ __('Unrecognized Logins & Password Changes') }}</span>
                     <div class="flex gap-4">
-                        <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
+                        <label class="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 font-semibold cursor-pointer">
                             <input type="checkbox" name="security_email" value="1" {{ !empty($settings['security_email']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Email') }}
                         </label>
-                        <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
+                        <label class="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 font-semibold cursor-pointer">
                             <input type="checkbox" name="security_push" value="1" {{ !empty($settings['security_push']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Push') }}
                         </label>
                     </div>
                 </div>
             </div>
 
-            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+            <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-4">
                 <h4 class="text-xs font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">{{ __('Financial Activity') }}</h4>
                 <div class="space-y-3 text-xs">
-                    <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
-                        <span class="font-bold text-slate-800">{{ __('Loan Approvals & Updates') }}</span>
+                    <div class="flex items-center justify-between py-1 border-b border-slate-200/60 dark:border-slate-800">
+                        <span class="font-bold text-slate-800 dark:text-slate-200">{{ __('Loan Approvals & Updates') }}</span>
                         <div class="flex gap-4">
-                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
+                            <label class="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 font-semibold cursor-pointer">
                                 <input type="checkbox" name="financial_email" value="1" {{ !empty($settings['financial_email']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Email') }}
                             </label>
-                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
+                            <label class="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 font-semibold cursor-pointer">
                                 <input type="checkbox" name="financial_push" value="1" {{ !empty($settings['financial_push']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Push') }}
                             </label>
                         </div>
                     </div>
                     <div class="flex items-center justify-between py-1">
-                        <span class="font-bold text-slate-800">{{ __('Investment Milestones & Returns') }}</span>
+                        <span class="font-bold text-slate-800 dark:text-slate-200">{{ __('Investment Milestones & Returns') }}</span>
                         <div class="flex gap-4">
-                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
+                            <label class="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 font-semibold cursor-pointer">
                                 <input type="checkbox" name="investment_email" value="1" {{ !empty($settings['investment_email']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Email') }}
                             </label>
-                            <label class="flex items-center gap-1.5 text-slate-600 font-semibold cursor-pointer">
+                            <label class="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 font-semibold cursor-pointer">
                                 <input type="checkbox" name="investment_push" value="1" {{ !empty($settings['investment_push']) ? 'checked' : '' }} class="accent-emerald-700"> {{ __('Push') }}
                             </label>
                         </div>

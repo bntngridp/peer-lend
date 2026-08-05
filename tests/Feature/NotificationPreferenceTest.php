@@ -23,6 +23,14 @@ class NotificationPreferenceTest extends TestCase
         $this->user->profile()->create([
             'full_name' => 'Notification User',
             'phone'     => '081299998888',
+            'notification_settings' => [
+                'security_email'   => true,
+                'security_push'    => true,
+                'financial_email'  => true,
+                'financial_push'   => true,
+                'investment_email' => true,
+                'investment_push'  => false,
+            ]
         ]);
     }
 
@@ -53,5 +61,57 @@ class NotificationPreferenceTest extends TestCase
         $this->assertFalse($settings['financial_push']);
         $this->assertTrue($settings['investment_email']);
         $this->assertTrue($settings['investment_push']);
+    }
+
+    /**
+     * Test a user can uncheck all notification preferences.
+     */
+    public function test_user_can_uncheck_all_notification_preferences(): void
+    {
+        $response = $this->actingAs($this->user)
+            ->put(route('profile.notifications.update'), []);
+
+        $response->assertRedirect(route('profile.edit', ['tab' => 'notifications']));
+
+        $this->user->refresh();
+        $settings = $this->user->profile->notification_settings;
+
+        $this->assertFalse($settings['security_email']);
+        $this->assertFalse($settings['security_push']);
+        $this->assertFalse($settings['financial_email']);
+        $this->assertFalse($settings['financial_push']);
+        $this->assertFalse($settings['investment_email']);
+        $this->assertFalse($settings['investment_push']);
+    }
+
+    /**
+     * Test notification preferences render correctly on profile page.
+     */
+    public function test_notification_preferences_render_correctly_on_profile_page(): void
+    {
+        $response = $this->actingAs($this->user)
+            ->get(route('profile.edit', ['tab' => 'notifications']));
+
+        $response->assertOk();
+        $response->assertSee(__('Security Alerts'));
+        $response->assertSee(__('Financial Activity'));
+        $response->assertSee(__('Unrecognized Logins & Password Changes'));
+        $response->assertSee(__('Loan Approvals & Updates'));
+        $response->assertSee(__('Investment Milestones & Returns'));
+    }
+
+    /**
+     * Test Arabic translations for Notification Preferences.
+     */
+    public function test_notification_preferences_arabic_translations(): void
+    {
+        app()->setLocale('ar');
+
+        $this->assertSame('تفضيلات الإشعارات', __('Notification Preferences'));
+        $this->assertSame('تنبيهات الأمان', __('Security Alerts'));
+        $this->assertSame('النشاط المالي', __('Financial Activity'));
+        $this->assertSame('تسجيلات الدخول غير المعترف بها وتغييرات كلمة المرور', __('Unrecognized Logins & Password Changes'));
+        $this->assertSame('الموافقة على القروض والتحديثات', __('Loan Approvals & Updates'));
+        $this->assertSame('محطات الاستثمار والعوائد', __('Investment Milestones & Returns'));
     }
 }

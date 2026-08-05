@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-6 max-w-6xl mx-auto" x-data="{ profileTab: (new URLSearchParams(window.location.search)).get('tab') || localStorage.getItem('lendflow_active_tab') || '{{ session('tab') ?? request('tab') ?? 'personal' }}', colorTheme: localStorage.getItem('lendflow_theme') || '{{ $user->profile?->system_preferences['color_theme'] ?? 'light' }}', density: localStorage.getItem('lendflow_density') || '{{ $user->profile?->system_preferences['data_density'] ?? 'comfortable' }}', disable2faModalOpen: false, generateTokenModalOpen: false, revokeSessionsModalOpen: false }" x-init="$watch('profileTab', tab => { localStorage.setItem('lendflow_active_tab', tab); const u = new URL(window.location.href); u.searchParams.set('tab', tab); window.history.replaceState({}, '', u); })">
+<div class="space-y-6 max-w-6xl mx-auto" x-data="{ profileTab: (new URLSearchParams(window.location.search)).get('tab') || localStorage.getItem('lendflow_active_tab') || '{{ session('tab') ?? request('tab') ?? 'personal' }}', colorTheme: localStorage.getItem('lendflow_theme') || '{{ $user->profile?->system_preferences['color_theme'] ?? 'light' }}', density: localStorage.getItem('lendflow_density') || '{{ $user->profile?->system_preferences['data_density'] ?? 'comfortable' }}', disable2faModalOpen: false, generateTokenModalOpen: false, revokeSessionsModalOpen: false, tokenSuccessModalOpen: {{ session('generated_api_token') ? 'true' : 'false' }} }" x-init="$watch('profileTab', tab => { localStorage.setItem('lendflow_active_tab', tab); const u = new URL(window.location.href); u.searchParams.set('tab', tab); window.history.replaceState({}, '', u); })">
     
     <!-- Top Header Bar -->
     <div>
@@ -237,29 +237,6 @@
                         {{ __('+ Generate Token') }}
                     </button>
                 </div>
-
-                @if(session('generated_api_token'))
-                    <div class="p-4 rounded-xl border border-emerald-200 bg-emerald-50 text-slate-900 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-emerald-900">Token Baru Berhasil Dibuat: {{ session('generated_api_token')['name'] }}</span>
-                            <span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">Simpan Sekarang!</span>
-                        </div>
-                        <p class="text-[11px] text-slate-600 font-medium">Salin dan simpan token ini di tempat aman. Demi alasan keamanan, token ini <strong>tidak akan ditampilkan lagi</strong> setelah halaman ditutup.</p>
-                        <div class="flex items-center gap-2 pt-1" x-data="{ tokenCopied: false }">
-                            <input type="text" readonly value="{{ session('generated_api_token')['token'] }}" 
-                                   class="flex-1 font-mono text-xs font-bold bg-white border border-emerald-300 rounded-xl px-3 py-2 text-emerald-800 select-all outline-none">
-                            <button type="button" 
-                                    @click="
-                                        navigator.clipboard.writeText('{{ session('generated_api_token')['token'] }}');
-                                        tokenCopied = true;
-                                        setTimeout(() => tokenCopied = false, 2500);
-                                    "
-                                    class="px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition-colors shadow-xs shrink-0 cursor-pointer">
-                                <span x-text="tokenCopied ? 'Tercopy!' : 'Salin Token'">Salin Token</span>
-                            </button>
-                        </div>
-                    </div>
-                @endif
 
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs border-collapse">
@@ -756,6 +733,72 @@
             </form>
         </div>
     </div>
+
+    <!-- API Token Created Success Pop-up Modal -->
+    @if(session('generated_api_token'))
+        <div x-show="tokenSuccessModalOpen" 
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4" 
+             style="display: none;">
+            
+            <div @click.away="tokenSuccessModalOpen = false" 
+                 class="w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-xl border border-slate-200 dark:border-slate-800 space-y-5 transform transition-all text-left">
+                
+                <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="h-8 w-8 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-extrabold text-sm border border-emerald-200 dark:border-emerald-900">
+                            ✓
+                        </div>
+                        <div>
+                            <h3 class="text-base font-extrabold text-slate-900 dark:text-slate-100">{{ __('API Token Berhasil Dibuat!') }}</h3>
+                            <span class="text-xs font-bold text-emerald-700 dark:text-emerald-400">{{ session('generated_api_token')['name'] }}</span>
+                        </div>
+                    </div>
+                    <button type="button" @click="tokenSuccessModalOpen = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 cursor-pointer">
+                        &times;
+                    </button>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50 text-amber-900 dark:text-amber-300 text-xs space-y-1">
+                    <span class="font-bold block flex items-center gap-1.5 text-amber-800 dark:text-amber-400">
+                        ⚠️ {{ __('Simpan Token Ini Sekarang!') }}
+                    </span>
+                    <p class="text-[11px] text-amber-700 dark:text-amber-300/80 leading-relaxed font-medium">
+                        {{ __('Demi alasan keamanan, token ini hanya ditampilkan 1 kali saja di pop-up ini. Setelah pop-up ini ditutup, token tidak dapat disalin atau dilihat lagi!') }}
+                    </p>
+                </div>
+
+                <div class="space-y-2" x-data="{ tokenCopied: false }">
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('TOKEN API') }}</label>
+                    <div class="flex items-center gap-2">
+                        <input type="text" readonly value="{{ session('generated_api_token')['token'] }}" 
+                               class="flex-1 font-mono text-xs font-bold bg-slate-50 dark:bg-slate-950 border border-emerald-300 dark:border-emerald-800 rounded-xl px-3.5 py-2.5 text-emerald-800 dark:text-emerald-300 select-all outline-none">
+                        <button type="button" id="btn_copy_generated_api_token"
+                                @click="
+                                    navigator.clipboard.writeText('{{ session('generated_api_token')['token'] }}');
+                                    tokenCopied = true;
+                                    setTimeout(() => tokenCopied = false, 2500);
+                                "
+                                class="px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition-colors shadow-xs shrink-0 cursor-pointer flex items-center gap-1.5">
+                            <span x-text="tokenCopied ? '{{ __('Tercopy!') }}' : '{{ __('Salin Token') }}'">{{ __('Salin Token') }}</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button type="button" @click="tokenSuccessModalOpen = false" id="btn_close_token_success_modal"
+                            class="w-full py-2.5 rounded-xl bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer">
+                        {{ __('Saya Sudah Menyimpan Token (Tutup Pop-up)') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
 
 </div>
 @endsection

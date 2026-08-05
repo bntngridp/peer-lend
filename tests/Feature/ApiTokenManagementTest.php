@@ -47,6 +47,20 @@ class ApiTokenManagementTest extends TestCase
             'name'        => 'Production Node 1',
             'permissions' => 'Read / Write',
         ]);
+
+        $generatedData = session('generated_api_token');
+        $this->assertSame('Production Node 1', $generatedData['name']);
+        $this->assertStringStartsWith('lf_live_', $generatedData['token']);
+
+        // Assert profile page renders pop-up modal with generated token
+        $followUp = $this->actingAs($this->user)
+            ->withSession(['generated_api_token' => $generatedData])
+            ->get(route('profile.edit', ['tab' => 'security']));
+
+        $followUp->assertOk();
+        $followUp->assertSee(__('API Token Berhasil Dibuat!'));
+        $followUp->assertSee(__('Simpan Token Ini Sekarang!'));
+        $followUp->assertSee($generatedData['token']);
     }
 
     /**

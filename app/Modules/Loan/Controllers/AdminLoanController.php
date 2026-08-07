@@ -67,4 +67,23 @@ class AdminLoanController extends Controller
         return redirect()->route('admin.loans.index')
             ->with('success', "Loan #{$loan->id} has been successfully active and disbursed to the borrower.");
     }
+
+    /**
+     * Reject a pending loan request.
+     */
+    public function reject(\Illuminate\Http\Request $request, LoanRequest $loan): RedirectResponse
+    {
+        $request->validate([
+            'rejection_reason' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        try {
+            $this->loanRequestService->rejectLoanRequest($loan, Auth::user(), $request->input('rejection_reason'));
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors());
+        }
+
+        return redirect()->route('admin.loans.index')
+            ->with('success', "Loan request #{$loan->id} has been rejected.");
+    }
 }

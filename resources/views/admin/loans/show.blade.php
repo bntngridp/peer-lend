@@ -87,16 +87,49 @@
 
     <!-- Action Decision Card -->
     @if($loan->status === 'pending')
-        <div class="shadow-xs dark:shadow-none rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
-            <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100 mb-3 uppercase tracking-wider">{{ __('Approve to marketplace') }}</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">{{ __('By approving, this loan listing will immediately display on the public marketplace and accept funding from lenders.') }}</p>
-            <form action="{{ route('admin.loans.approve', $loan->id) }}" method="POST">
-                @csrf
-                <button type="submit"
-                        class="inline-flex justify-center rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-700 transition-all">
-                    {{ __('Approve Application') }}
+        <div class="shadow-xs dark:shadow-none rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6" x-data="{ showRejectModal: false }">
+            <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100 mb-3 uppercase tracking-wider">{{ __('Review & Decision') }}</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">{{ __('Approve to display this loan listing on the public marketplace, or reject to decline the borrower\'s application.') }}</p>
+            
+            <div class="flex flex-wrap gap-3">
+                <form action="{{ route('admin.loans.approve', $loan->id) }}" method="POST">
+                    @csrf
+                    <button type="submit"
+                            class="inline-flex justify-center items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-700 transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        {{ __('Approve Application') }}
+                    </button>
+                </form>
+
+                <button type="button" @click="showRejectModal = true"
+                        class="inline-flex justify-center items-center gap-2 rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-rose-700 transition-all">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    {{ __('Reject Application') }}
                 </button>
-            </form>
+            </div>
+
+            <!-- Reject Reason Modal -->
+            <div x-show="showRejectModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 max-w-md w-full border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">{{ __('Reject Loan Request') }}</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">{{ __('Please enter an optional reason for declining this loan application. The borrower will receive a notification.') }}</p>
+                    <form action="{{ route('admin.loans.reject', $loan->id) }}" method="POST" class="space-y-4">
+                        @csrf
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">{{ __('Rejection Reason (Optional)') }}</label>
+                            <textarea name="rejection_reason" rows="3" class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-3 text-xs text-slate-900 dark:text-slate-100 outline-none focus:ring-2 focus:ring-rose-500" placeholder="{{ __('e.g., Incomplete documentation or high risk profile.') }}"></textarea>
+                        </div>
+                        <div class="flex justify-end gap-2">
+                            <button type="button" @click="showRejectModal = false" class="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl">
+                                {{ __('Cancel') }}
+                            </button>
+                            <button type="submit" class="px-4 py-2 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-xs">
+                                {{ __('Confirm Rejection') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     @elseif($loan->status === 'funded')
         <div class="shadow-xs dark:shadow-none rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">

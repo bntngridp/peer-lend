@@ -134,6 +134,42 @@ class LoanRequestService
     }
 
     /**
+     * Reject a pending loan request application by an admin.
+     */
+    public function rejectLoanRequest(LoanRequest $loan, User $admin, ?string $reason = null): LoanRequest
+    {
+        if ($loan->status !== LoanRequest::STATUS_PENDING) {
+            throw ValidationException::withMessages([
+                'status' => ['Only pending loan requests can be rejected.'],
+            ]);
+        }
+
+        $loan->update([
+            'status' => 'rejected',
+        ]);
+
+        app(AuditLogService::class)->log(
+            'loan_reject',
+            LoanRequest::class,
+            $loan->id,
+            $admin,
+            ['status' => $loan->status, 'reason' => $reason]
+        );
+
+        $this->notificationService->send(
+            $loan->borrower,
+            'loan_rejected',
+            __('Loan Application Declined'),
+            __('Your loan application #:id for Rp :amount has been declined.', [
+                'id'     => strtoupper(substr($loan->id, 0, 8)),
+                'amount' => number_format($loan->amount, 0, ',', '.'),
+            ]) . ($reason ? ' ' . __('Reason: :reason', ['reason' => $reason]) : '')
+        );
+
+        return $loan;
+    }
+
+    /**
      * Mock oracle price feed for collateral crypto assets.
      */
     private function getMockCryptoPrice(string $code): string

@@ -161,6 +161,7 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
             Route::get('/loans', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'index'])->name('loans.index');
             Route::get('/loans/{loan}', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'show'])->name('loans.show');
             Route::post('/loans/{loan}/approve', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'approve'])->name('loans.approve');
+            Route::post('/loans/{loan}/reject', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'reject'])->name('loans.reject');
             Route::post('/loans/{loan}/disburse', [\App\Modules\Loan\Controllers\AdminLoanController::class, 'disburse'])->name('loans.disburse');
         });
 

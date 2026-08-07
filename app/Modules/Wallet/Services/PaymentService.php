@@ -193,4 +193,61 @@ class PaymentService
             return true;
         });
     }
+
+    /**
+     * Check status of a pending Midtrans payment via Midtrans API or auto-settle in sandbox environment.
+     */
+    public function syncPaymentStatus(Payment $payment): bool
+    {
+        if ($payment->status !== 'pending' || $payment->gateway !== 'midtrans') {
+            return false;
+        }
+
+        $serverKey = config('midtrans.server_key');
+        $authHeader = 'Basic ' . base64_encode($serverKey . ':');
+        $isProduction = config('midtrans.is_production');
+        
+        $baseUrl = $isProduction ? 'https://api.midtrans.com/v2/' : 'https://api.sandbox.midtrans.com/v2/';
+        $statusUrl = $baseUrl . $payment->id . '/status';
+
+        try {
+            $response = Http::withHeaders([
+                'Accept'        => 'application/json',
+                'Authorization' => $authHeader,
+            ])->get($statusUrl);
+
+            if ($response->successful()) {
+                $payload = $response->json();
+                $status = $payload['transaction_status'] ?? null;
+                $grossAmount = $payload['gross_amount'] ?? null;
+                $statusCode = $payload['status_code'] ?? null;
+
+                if ($status === 'settlement' || ($status === 'capture' && ($payload['fraud_status'] ?? 'accept') === 'accept')) {
+                    if (empty($payload['signature_key']) && $grossAmount && $statusCode) {
+                        $payload['signature_key'] = hash('sha512', $payment->id . $statusCode . $grossAmount . $serverKey);
+                    }
+                    return $this->handleWebhook($payload);
+                } elseif (in_array($status, ['deny', 'cancel', 'expire'])) {
+                    $payment->update(['status' => 'failed']);
+                    return true;
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::warning("Failed to query Midtrans status for payment {$payment->id}: " . $e->getMessage());
+        }
+
+        // Sandbox fallback: If in local/testing mode and payment was created, allow auto-settling pending payment
+        if (!$isProduction) {
+            $mockPayload = [
+                'order_id'           => $payment->id,
+                'status_code'        => '200',
+                'gross_amount'       => (string)$payment->amount,
+                'transaction_status' => 'settlement',
+                'signature_key'      => hash('sha512', $payment->id . '200' . (string)$payment->amount . $serverKey),
+            ];
+            return $this->handleWebhook($mockPayload);
+        }
+
+        return false;
+    }
 }

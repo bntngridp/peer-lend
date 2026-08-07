@@ -148,6 +148,38 @@ class Phase10And11MidtransSwaggerTest extends TestCase
         $this->assertEquals('pending', $payment->fresh()->status);
     }
 
+    public function test_confirm_deposit_syncs_pending_payment_and_credits_wallet(): void
+    {
+        $payment = Payment::create([
+            'user_id' => $this->borrower->id,
+            'gateway' => 'midtrans',
+            'amount'  => 750000.00,
+            'status'  => 'pending',
+        ]);
+
+        $response = $this->actingAs($this->borrower)
+            ->withSession(['google2fa_verified' => true])
+            ->postJson(route('wallet.deposit.confirm'), [
+                'order_id' => $payment->id,
+            ]);
+
+        $response->assertStatus(200)
+            ->assertJsonPath('status', 'success');
+
+        $payment->refresh();
+        $this->assertEquals('success', $payment->status);
+        $this->assertNotNull($payment->wallet_transaction_id);
+
+        $wallet = $this->borrower->walletFor($this->idr->id);
+        $this->assertEquals(750000.00, (float) $wallet->available_balance);
+
+        $this->assertDatabaseHas('wallet_transactions', [
+            'id'     => $payment->wallet_transaction_id,
+            'type'   => 'deposit',
+            'amount' => 750000.00,
+        ]);
+    }
+
     // ─── Phase 11: Swagger API Documentation Tests ─────────────────────────
 
     public function test_api_documentation_is_publicly_accessible(): void

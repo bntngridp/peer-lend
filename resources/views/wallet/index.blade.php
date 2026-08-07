@@ -354,7 +354,7 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                    <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
                         <th class="py-3.5 px-6">{{ __('Transaction') }}</th>
                         <th class="py-3.5 px-6">{{ __('TYPE & METHOD') }}</th>
                         <th class="py-3.5 px-6">{{ __('AMOUNT') }}</th>
@@ -362,9 +362,9 @@
                         <th class="py-3.5 px-6 text-right">{{ __('DATE & TIME') }}</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300">
                     @forelse($transactions as $tx)
-                    <tr class="hover:bg-slate-50/80 transition-colors">
+                    <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
                         <td class="py-4 px-6">
                             <div class="flex items-center gap-3">
                                 <div class="h-8 w-8 rounded-lg font-bold flex items-center justify-center text-xs uppercase
@@ -373,29 +373,47 @@
                                     {{ substr($tx->type, 0, 3) }}
                                 </div>
                                 <div>
-                                    <span class="font-bold text-slate-900 dark:text-slate-100 block text-xs capitalize">{{ str_replace('_', ' ', $tx->type) }}</span>
-                                    <span class="text-[11px] text-slate-400 font-medium block truncate max-w-[240px]">{{ $tx->description }}</span>
+                                    <span class="font-bold text-slate-900 dark:text-slate-100 block text-xs capitalize">{{ __(str_replace('_', ' ', $tx->type)) }}</span>
+                                    <span class="text-[11px] text-slate-400 font-medium block truncate max-w-[220px]">{{ $tx->description }}</span>
                                 </div>
                             </div>
                         </td>
-                        <td class="py-4 px-6 font-extrabold text-sm">
-                            <span class="{{ in_array($tx->type, ['deposit', 'repayment', 'interest', 'refund']) ? 'text-emerald-700' : 'text-rose-600' }}">
+                        <td class="py-4 px-6 whitespace-nowrap">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                                @if(str_contains(strtolower($tx->description), 'midtrans'))
+                                    💳 Midtrans (Fiat)
+                                @elseif(str_contains(strtolower($tx->description), 'xendit'))
+                                    🏦 Xendit Payout
+                                @elseif(str_contains(strtolower($tx->description), 'nowpayments'))
+                                    🪙 NOWPayments (Crypto)
+                                @else
+                                    ⚖️ {{ __(ucfirst($tx->type)) }}
+                                @endif
+                            </span>
+                        </td>
+                        <td class="py-4 px-6 whitespace-nowrap">
+                            <span class="font-extrabold text-sm block {{ in_array($tx->type, ['deposit', 'repayment', 'interest', 'refund']) ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400' }}">
                                 {{ in_array($tx->type, ['deposit', 'repayment', 'interest', 'refund']) ? '+' : '-' }}
                                 Rp {{ number_format($tx->amount, 0, ',', '.') }}
                             </span>
+                            <span class="text-[11px] text-slate-400 font-medium block mt-0.5">
+                                {{ __('Before') }}: Rp {{ number_format($tx->balance_before, 0, ',', '.') }} • <strong class="text-slate-700 dark:text-slate-300">{{ __('After') }}: Rp {{ number_format($tx->balance_after, 0, ',', '.') }}</strong>
+                            </span>
                         </td>
-                        <td class="py-4 px-6 text-[11px] text-slate-500">
-                            <div>Before: Rp {{ number_format($tx->balance_before, 0, ',', '.') }}</div>
-                            <div class="font-bold text-slate-800 mt-0.5">After: Rp {{ number_format($tx->balance_after, 0, ',', '.') }}</div>
+                        <td class="py-4 px-6 whitespace-nowrap">
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                {{ __('Completed') }}
+                            </span>
                         </td>
-                        <td class="py-4 px-6 text-right font-semibold text-slate-500">
-                            {{ $tx->created_at->format('M d, Y H:i') }}
+                        <td class="py-4 px-6 text-right font-semibold text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                            {{ \Carbon\Carbon::parse($tx->getRawOriginal('created_at') ?? $tx->created_at, 'UTC')->setTimezone('Asia/Jakarta')->format('M d, Y H:i') }}
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4" class="py-10 text-center text-slate-400 text-xs font-medium">
-                            No transaction ledger records found.
+                        <td colspan="5" class="py-10 text-center text-slate-400 text-xs font-medium">
+                            {{ __('No transaction ledger records found.') }}
                         </td>
                     </tr>
                     @endforelse
@@ -448,10 +466,37 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (resData.status === 'success') {
                         const snapToken = resData.data.snap_token;
                         window.snap.pay(snapToken, {
-                            onSuccess: function(result) {
+                            onSuccess: async function(result) {
+                                submitDepositBtn.innerText = 'Verifying payment...';
+                                try {
+                                    await fetch('{{ route("wallet.deposit.confirm") }}', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                            'Accept': 'application/json'
+                                        },
+                                        body: JSON.stringify({ order_id: result.order_id || resData.data.payment_id })
+                                    });
+                                } catch (err) {
+                                    console.error(err);
+                                }
                                 window.location.href = '{{ route("wallet.index") }}?status=success&msg=Payment settled!';
                             },
-                            onPending: function(result) {
+                            onPending: async function(result) {
+                                try {
+                                    await fetch('{{ route("wallet.deposit.confirm") }}', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                            'Accept': 'application/json'
+                                        },
+                                        body: JSON.stringify({ order_id: result.order_id || resData.data.payment_id })
+                                    });
+                                } catch (err) {
+                                    console.error(err);
+                                }
                                 window.location.href = '{{ route("wallet.index") }}?status=pending&msg=Payment pending.';
                             },
                             onError: function(result) {

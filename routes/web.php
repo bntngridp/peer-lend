@@ -92,6 +92,7 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
     Route::middleware('kyc')->group(function () {
         Route::post('/wallet/deposit', [\App\Modules\Wallet\Controllers\WalletController::class, 'deposit'])->name('wallet.deposit');
         Route::post('/wallet/deposit/initiate', [\App\Modules\Wallet\Controllers\PaymentController::class, 'initiateDeposit'])->name('wallet.deposit.initiate');
+        Route::post('/wallet/deposit/confirm', [\App\Modules\Wallet\Controllers\PaymentController::class, 'confirmDeposit'])->name('wallet.deposit.confirm');
         Route::post('/wallet/withdraw', [\App\Modules\Wallet\Controllers\WalletController::class, 'withdraw'])->name('wallet.withdraw');
         Route::post('/wallet/withdraw/initiate', [\App\Modules\Wallet\Controllers\PaymentController::class, 'initiateWithdrawal'])->name('wallet.withdraw.initiate');
         Route::post('/wallet/crypto/deposit/initiate', [\App\Modules\Wallet\Controllers\PaymentController::class, 'initiateCryptoDeposit'])->name('wallet.crypto.deposit.initiate');

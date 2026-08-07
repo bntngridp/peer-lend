@@ -26,6 +26,15 @@ class WalletController extends Controller
     {
         $user = Auth::user();
         
+        // Auto-sync any pending payments for user
+        $pendingPayments = \App\Models\Payment::where('user_id', $user->id)
+            ->where('status', 'pending')
+            ->get();
+
+        foreach ($pendingPayments as $p) {
+            app(\App\Modules\Wallet\Services\PaymentService::class)->syncPaymentStatus($p);
+        }
+
         // Fetch all user wallets with loaded currency info
         $wallets = Wallet::with('currency')
             ->where('user_id', $user->id)

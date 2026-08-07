@@ -230,4 +230,43 @@ class PaymentController extends Controller
             'message' => 'NOWPayments IPN processed successfully.',
         ]);
     }
+
+    /**
+     * Confirm/Sync deposit status from frontend onSuccess JS callback or manual check.
+     * 
+     * POST /wallet/deposit/confirm
+     */
+    public function confirmDeposit(Request $request): JsonResponse
+    {
+        $request->validate([
+            'payment_id' => ['nullable', 'string'],
+            'order_id'   => ['nullable', 'string'],
+        ]);
+
+        $paymentId = $request->payment_id ?? $request->order_id;
+        $user = Auth::user();
+
+        if ($paymentId) {
+            $payment = \App\Models\Payment::where('id', $paymentId)
+                ->where('user_id', $user->id)
+                ->first();
+
+            if ($payment) {
+                $this->paymentService->syncPaymentStatus($payment);
+            }
+        } else {
+            $pendingPayments = \App\Models\Payment::where('user_id', $user->id)
+                ->where('status', 'pending')
+                ->get();
+
+            foreach ($pendingPayments as $p) {
+                $this->paymentService->syncPaymentStatus($p);
+            }
+        }
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Deposit status checked and synced.',
+        ]);
+    }
 }

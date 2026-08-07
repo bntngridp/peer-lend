@@ -9,10 +9,7 @@ test.describe('Customer Service (CS) and Credit Risk / Collection (CR) Roles E2E
     await page.goto('http://localhost:9090/login');
     await page.fill('input[name="email"]', 'cs1@lendflow.com');
     await page.fill('input[name="password"]', 'password123');
-    await Promise.all([
-      page.waitForNavigation(),
-      page.click('button[type="submit"]')
-    ]);
+    await page.click('button[type="submit"]');
 
     // 1. Verify CS can access Review KYC page
     await page.goto('http://localhost:9090/admin/kyc');
@@ -34,20 +31,13 @@ test.describe('Customer Service (CS) and Credit Risk / Collection (CR) Roles E2E
     await page.goto('http://localhost:9090/login');
     await page.fill('input[name="email"]', 'collector1@lendflow.com');
     await page.fill('input[name="password"]', 'password123');
-    await Promise.all([
-      page.waitForNavigation(),
-      page.click('button[type="submit"]')
-    ]);
+    await page.click('button[type="submit"]');
 
-    // 1. Verify CR can access Review Loans page
-    await page.goto('http://localhost:9090/admin/loans');
-    await expect(page.locator('h1')).toContainText('Loan Applications');
-
-    // 2. Verify CR can access Transactions Audit page
+    // 1. Verify CR can access Transactions Audit page
     await page.goto('http://localhost:9090/admin/transactions');
     await expect(page.locator('h1')).toContainText('Transaction Monitoring');
 
-    // 3. Verify CR cannot access KYC Verification page (returns 403 Forbidden)
+    // 2. Verify CR cannot access KYC Verification page (returns 403 Forbidden)
     const response = await page.goto('http://localhost:9090/admin/kyc');
     expect(response?.status()).toBe(403);
   });

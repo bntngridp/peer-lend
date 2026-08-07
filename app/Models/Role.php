@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Role extends Model
 {
-    protected $fillable = ['name', 'guard_name'];
+    protected $fillable = ['name', 'description', 'guard_name'];
 
     public function users(): BelongsToMany
     {

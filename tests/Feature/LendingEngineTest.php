@@ -33,6 +33,11 @@ class LendingEngineTest extends TestCase
         // 1. Seed Roles, Currencies and Configurations
         $this->artisan('db:seed');
 
+        \App\Models\FeeConfiguration::updateOrCreate(
+            ['type' => 'origination_fee'],
+            ['value' => 1.50, 'value_type' => 'percentage', 'is_active' => true]
+        );
+
         $this->idr = Currency::where('code', 'IDR')->firstOrFail();
         
         // Create custom category for loans

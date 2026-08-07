@@ -171,8 +171,17 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         // Superadmin Governance & Financial Suite (Admin Only)
         Route::middleware('role:admin')->group(function () {
             Route::get('/financials', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'financials'])->name('financials.index');
+            Route::post('/financials/rates', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'updateRates'])->name('financials.updateRates');
+            Route::post('/financials/fees', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'updateFees'])->name('financials.updateFees');
+            Route::post('/financials/currencies', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'updateCurrencies'])->name('financials.updateCurrencies');
+
             Route::get('/roles', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'roles'])->name('roles.index');
+            Route::post('/roles', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'storeRole'])->name('roles.store');
+            Route::post('/roles/{role}/permissions', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'updatePermissions'])->name('roles.updatePermissions');
+            Route::delete('/roles/{role}', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'destroyRole'])->name('roles.destroy');
+
             Route::get('/analytics', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'analytics'])->name('analytics.index');
         });
+
     });
 });

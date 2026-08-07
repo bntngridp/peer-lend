@@ -34,3 +34,6 @@ lang_*.png
 wallet_initial_view.png
 wallet_after_*.png
 scratch/
+/test-results
+/playwright-report
+

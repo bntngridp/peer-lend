@@ -24,7 +24,7 @@ test.describe('Customer Service (CS) and Credit Risk / Collection (CR) Roles E2E
     expect(response?.status()).toBe(403);
   });
 
-  test('CR / Collection Officer role can access Loans Review and Transactions Audit, but is denied KYC review', async ({ page }) => {
+  test('CR / Collection Officer role can access Transactions Audit, but is denied KYC review', async ({ page }) => {
     await page.context().clearCookies();
 
     // Login as Collection Officer (CR) User
@@ -32,6 +32,9 @@ test.describe('Customer Service (CS) and Credit Risk / Collection (CR) Roles E2E
     await page.fill('input[name="email"]', 'collector1@lendflow.com');
     await page.fill('input[name="password"]', 'password123');
     await page.click('button[type="submit"]');
+
+    // Wait for login redirect
+    await page.waitForURL('**/dashboard');
 
     // 1. Verify CR can access Transactions Audit page
     await page.goto('http://localhost:9090/admin/transactions');

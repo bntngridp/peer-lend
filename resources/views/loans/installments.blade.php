@@ -124,7 +124,7 @@
                             <th class="py-3.5 px-4 whitespace-nowrap">{{ __('Principal') }}</th>
                             <th class="py-3.5 px-4 whitespace-nowrap">{{ __('Interest') }}</th>
                             <th class="py-3.5 px-4 whitespace-nowrap">{{ __('Status') }}</th>
-                            <th class="py-3.5 px-4 whitespace-nowrap text-right">{{ __('Action') }}</th>
+                            <th class="py-3.5 px-5 whitespace-nowrap text-right min-w-[140px]">{{ __('Action') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300">
@@ -153,21 +153,21 @@
                                     {{ __(ucwords(str_replace('_', ' ', $inst->status))) }}
                                 </span>
                             </td>
-                            <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                            <td class="py-3.5 px-5 text-right whitespace-nowrap min-w-[140px]">
                                 @if(!$inst->isPaid() && $loan->borrower_id === Auth::id())
                                     <form action="{{ route('repayments.pay', $inst->id) }}" method="POST" class="inline">
                                         @csrf
-                                        <button type="submit" class="py-1.5 px-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs cursor-pointer">
+                                        <button type="submit" class="py-1.5 px-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs cursor-pointer whitespace-nowrap">
                                             {{ __('Pay Now') }} &rarr;
                                         </button>
                                     </form>
                                 @elseif($inst->isPaid())
                                     <a href="{{ route('repayments.receipt', $inst->id) }}" target="_blank" 
-                                       class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-emerald-800 dark:text-emerald-300 font-bold text-xs hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-xs">
+                                       class="inline-flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-emerald-800 dark:text-emerald-300 font-bold text-xs hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-xs whitespace-nowrap">
                                         🧾 {{ __('Receipt') }}
                                     </a>
                                 @else
-                                    <span class="text-slate-400 font-semibold text-[11px]">{{ __('Pending') }}</span>
+                                    <span class="text-slate-400 font-semibold text-[11px] whitespace-nowrap">{{ __('Pending') }}</span>
                                 @endif
                             </td>
                         </tr>

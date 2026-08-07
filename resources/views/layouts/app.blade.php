@@ -458,7 +458,7 @@
                             <svg class="h-5 w-5 text-emerald-700 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-wider text-emerald-800">{{ __('Success') }}</p>
-                                <p class="text-sm font-medium mt-0.5">{{ session('success') }}</p>
+                                <p class="text-sm font-medium mt-0.5">{{ __(session('success')) }}</p>
                             </div>
                         </div>
                         <button @click="show = false" class="text-emerald-600 hover:text-emerald-800 font-bold text-lg">&times;</button>
@@ -471,7 +471,7 @@
                             <svg class="h-5 w-5 text-rose-600 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-wider text-rose-800">{{ __('Error') }}</p>
-                                <p class="text-sm font-medium mt-0.5">{{ session('error') }}</p>
+                                <p class="text-sm font-medium mt-0.5">{{ __(session('error')) }}</p>
                             </div>
                         </div>
                         <button @click="show = false" class="text-rose-600 hover:text-rose-800 font-bold text-lg">&times;</button>

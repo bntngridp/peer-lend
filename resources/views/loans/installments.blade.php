@@ -42,7 +42,7 @@
         <div class="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-xs font-bold text-emerald-900 dark:text-emerald-300 flex items-center justify-between shadow-xs">
             <div class="flex items-center gap-2">
                 <span>✅</span>
-                <span>{{ session('success') }}</span>
+                <span>{{ __(session('success')) }}</span>
             </div>
         </div>
     @endif
@@ -52,7 +52,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2 font-bold">
                     <span>🚨</span>
-                    <span>{{ session('error') ?? $errors->first() }}</span>
+                    <span>{{ __(session('error') ?? $errors->first()) }}</span>
                 </div>
                 <a href="{{ route('wallet.index') }}" class="px-3 py-1.5 rounded-lg bg-emerald-700 text-white font-bold text-[11px] hover:bg-emerald-800 transition-colors shadow-xs">
                     {{ __('Deposit Funds') }} &rarr;

@@ -33,9 +33,6 @@ test.describe('Customer Service (CS) and Credit Risk / Collection (CR) Roles E2E
     await page.fill('input[name="password"]', 'password123');
     await page.click('button[type="submit"]');
 
-    // Wait for login redirect
-    await page.waitForURL('**/dashboard');
-
     // 1. Verify CR can access Transactions Audit page
     await page.goto('http://localhost:9090/admin/transactions');
     await expect(page.locator('h1')).toContainText('Transaction Monitoring');

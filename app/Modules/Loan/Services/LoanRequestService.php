@@ -15,6 +15,7 @@ class LoanRequestService
     public function __construct(
         private readonly NotificationService  $notificationService,
         private readonly CreditScoringService $creditScoringService,
+        private readonly LiquidationService   $liquidationService,
     ) {}
 
     /**
@@ -35,8 +36,8 @@ class LoanRequestService
             if ($collateralCurrencyId) {
                 $collateralCurrency = Currency::findOrFail($collateralCurrencyId);
                 
-                // Get mock oracle price in IDR
-                $priceInIdr = $this->getMockCryptoPrice($collateralCurrency->code);
+                // Get live oracle price from CoinGecko (with fallback to mock feed)
+                $priceInIdr = $this->liquidationService->getCryptoPrice($collateralCurrency->code);
                 
                 // Formula: LTV = (Loan Amount / Collateral Value) * 100
                 // For a 50% initial LTV target:

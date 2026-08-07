@@ -69,8 +69,8 @@ class AdminGovernanceController extends Controller
 
     public function transactions()
     {
-        $transactions = WalletTransaction::with('wallet.user')->latest('created_at')->paginate(15);
-        $exportTransactions = WalletTransaction::with('wallet.user')->latest('created_at')->take(100)->get();
+        $transactions = WalletTransaction::with(['wallet.user', 'payment'])->latest('created_at')->paginate(15);
+        $exportTransactions = WalletTransaction::with(['wallet.user', 'payment'])->latest('created_at')->take(100)->get();
         return view('admin.transactions.index', compact('transactions', 'exportTransactions'));
     }
 
@@ -273,14 +273,6 @@ class AdminGovernanceController extends Controller
         $activeLoansAmount  = (float) (LoanRequest::whereIn('status', ['funded', 'active'])->sum('amount') ?? 0);
         $totalLiquidityRaw  = $walletBalance + $activeLoansAmount;
 
-        if ($totalLiquidityRaw == 0) {
-            $totalLiquidityRaw = match($days) {
-                365 => 2840000000,
-                90  => 1420000000,
-                default => 842500000,
-            };
-        }
-
         $totalLiquidityFormatted = $totalLiquidityRaw >= 1_000_000_000
             ? number_format($totalLiquidityRaw / 1_000_000_000, 2) . 'B'
             : ($totalLiquidityRaw >= 1_000_000
@@ -291,14 +283,19 @@ class AdminGovernanceController extends Controller
         $defaultedLoansCount = LoanRequest::whereIn('status', ['defaulted', 'overdue'])->count();
         $nplRate = ($totalLoansCount > 0)
             ? round(($defaultedLoansCount / $totalLoansCount) * 100, 2)
-            : 1.24;
+            : 0.0;
 
         $nextMonthOutflow = (float) (LoanInstallment::where('status', 'pending')
             ->where('due_date', '<=', now()->addDays(30))
             ->sum('total_amount') ?? 0);
 
-        $lcrRatio = ($nextMonthOutflow > 0) ? round(($walletBalance / $nextMonthOutflow) * 100, 1) : 145.8;
-        $nsfrRatio = ($activeLoansAmount > 0) ? round((($walletBalance + $activeLoansAmount) / $activeLoansAmount) * 100, 1) : 118.2;
+        $lcrRatio = ($nextMonthOutflow > 0)
+            ? round(($walletBalance / $nextMonthOutflow) * 100, 1)
+            : ($walletBalance > 0 ? 100.0 : 0.0);
+
+        $nsfrRatio = ($activeLoansAmount > 0)
+            ? round((($walletBalance + $activeLoansAmount) / $activeLoansAmount) * 100, 1)
+            : ($walletBalance > 0 ? 100.0 : 0.0);
 
         $labels = $disbursements = $repayments = [];
 
@@ -319,13 +316,6 @@ class AdminGovernanceController extends Controller
             $repayments[]   = round((float)(LoanInstallment::where('status', 'paid')->whereBetween('paid_at', [$start, $end])->sum('total_amount') ?? 0) / 1_000_000, 1);
         }
 
-        if (array_sum($disbursements) == 0) {
-            $disbursements = match($days) { 90 => [48.2, 56.4, 62.8], 365 => [142.5, 185.2, 210.8, 245.0], default => [12.4, 18.2, 15.6, 22.4] };
-        }
-        if (array_sum($repayments) == 0) {
-            $repayments = match($days) { 90 => [42.1, 50.8, 58.3], 365 => [128.0, 164.5, 192.3, 228.4], default => [10.1, 14.5, 13.8, 19.1] };
-        }
-
         $disbursementData  = ['labels' => $labels, 'disbursements' => $disbursements, 'repayments' => $repayments];
         $totalDisbursement = number_format(array_sum($disbursementData['disbursements']), 1);
         $totalRepayment    = number_format(array_sum($disbursementData['repayments']), 1);
@@ -334,16 +324,16 @@ class AdminGovernanceController extends Controller
             ->whereNotNull('risk_grade')
             ->groupBy('risk_grade')->pluck('total', 'risk_grade')->toArray();
 
-        $allLoansCount = max(array_sum($gradeCounts), 1);
-        $riskDistribution = [
-            'AAA' => round((($gradeCounts['AAA'] ?? 0) / $allLoansCount) * 100, 1),
-            'AA'  => round((($gradeCounts['AA']  ?? 0) / $allLoansCount) * 100, 1),
-            'A'   => round((($gradeCounts['A']   ?? 0) / $allLoansCount) * 100, 1),
-            'B'   => round((($gradeCounts['B'] ?? 0 + ($gradeCounts['C'] ?? 0) + ($gradeCounts['D'] ?? 0)) / $allLoansCount) * 100, 1),
-        ];
-
-        if (array_sum($riskDistribution) == 0) {
-            $riskDistribution = ['AAA' => 54.2, 'AA' => 28.6, 'A' => 12.4, 'B' => 4.8];
+        $totalGradeLoans = array_sum($gradeCounts);
+        if ($totalGradeLoans > 0) {
+            $riskDistribution = [
+                'AAA' => round((($gradeCounts['AAA'] ?? 0) / $totalGradeLoans) * 100, 1),
+                'AA'  => round((($gradeCounts['AA']  ?? 0) / $totalGradeLoans) * 100, 1),
+                'A'   => round((($gradeCounts['A']   ?? 0) / $totalGradeLoans) * 100, 1),
+                'B'   => round((($gradeCounts['B'] ?? 0 + ($gradeCounts['C'] ?? 0) + ($gradeCounts['D'] ?? 0)) / $totalGradeLoans) * 100, 1),
+            ];
+        } else {
+            $riskDistribution = ['AAA' => 0.0, 'AA' => 0.0, 'A' => 0.0, 'B' => 0.0];
         }
 
         $topTierPercent = round($riskDistribution['AAA'] + $riskDistribution['AA'], 1);

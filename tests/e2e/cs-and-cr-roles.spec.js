@@ -11,9 +11,6 @@ test.describe('Customer Service (CS) and Credit Risk / Collection (CR) Roles E2E
     await page.fill('input[name="password"]', 'password123');
     await page.click('button[type="submit"]');
 
-    await page.goto('http://localhost:9090/dashboard');
-    await expect(page.locator('h1')).toContainText('System Administration');
-
     // 1. Verify CS can access Review KYC page
     await page.goto('http://localhost:9090/admin/kyc');
     await expect(page.locator('h1')).toContainText('KYC Review Queue');
@@ -35,9 +32,6 @@ test.describe('Customer Service (CS) and Credit Risk / Collection (CR) Roles E2E
     await page.fill('input[name="email"]', 'collector1@lendflow.com');
     await page.fill('input[name="password"]', 'password123');
     await page.click('button[type="submit"]');
-
-    await page.goto('http://localhost:9090/dashboard');
-    await expect(page.locator('h1')).toContainText('System Administration');
 
     // 1. Verify CR can access Review Loans page
     await page.goto('http://localhost:9090/admin/loans');

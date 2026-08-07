@@ -159,11 +159,24 @@
                         </td>
 
                         <!-- Action -->
-                        <td class="py-4 px-6 text-right">
-                            <a href="{{ route('marketplace.show', $loan->id) }}" 
-                               class="inline-flex items-center gap-1 py-1.5 px-3 rounded-xl bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800 transition-colors shadow-xs">
-                                {{ __('Invest') }} &rarr;
-                            </a>
+                        <td class="py-4 px-6 text-right whitespace-nowrap">
+                            @if(Auth::check() && $loan->fundings()->where('lender_id', Auth::id())->exists())
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ route('loans.installments', $loan->id) }}" 
+                                       class="inline-flex items-center gap-1 py-1.5 px-3 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold hover:bg-emerald-200 transition-colors shadow-xs border border-emerald-300 dark:border-emerald-800">
+                                        💬 {{ __('Chat & Schedule') }}
+                                    </a>
+                                    <a href="{{ route('marketplace.show', $loan->id) }}" 
+                                       class="inline-flex items-center gap-1 py-1.5 px-3 rounded-xl bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800 transition-colors shadow-xs">
+                                        {{ __('View') }} &rarr;
+                                    </a>
+                                </div>
+                            @else
+                                <a href="{{ route('marketplace.show', $loan->id) }}" 
+                                   class="inline-flex items-center gap-1 py-1.5 px-3 rounded-xl bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800 transition-colors shadow-xs">
+                                    {{ __('Invest') }} &rarr;
+                                </a>
+                            @endif
                         </td>
                     </tr>
                     @empty

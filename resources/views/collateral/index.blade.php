@@ -186,10 +186,17 @@
                                 </span>
                             @endif
                         </td>
-                        <td class="py-4 px-6 text-right">
-                            <a href="{{ route('loans.installments', $loan->id) }}" 
+                        <td class="py-4 px-6 text-right whitespace-nowrap">
+                            @php
+                                $canManage = Auth::check() && (
+                                    Auth::id() === $loan->borrower_id ||
+                                    $loan->fundings()->where('lender_id', Auth::id())->exists() ||
+                                    Auth::user()->isInternalStaff()
+                                );
+                            @endphp
+                            <a href="{{ $canManage ? route('loans.installments', $loan->id) : route('marketplace.show', $loan->id) }}" 
                                class="inline-flex items-center gap-1 py-1.5 px-3 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition-colors shadow-xs">
-                                {{ __('Manage') }} &rarr;
+                                {{ $canManage ? __('Manage') : __('View Loan') }} &rarr;
                             </a>
                         </td>
                     </tr>

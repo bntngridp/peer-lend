@@ -74,7 +74,7 @@ class LoanRequestController extends Controller
         $isAdmin    = $user->hasAnyRole(['admin', 'customer_service', 'collection_officer']);
 
         if (!$isBorrower && !$isLender && !$isAdmin) {
-            abort(403, 'You do not have permission to view this loan schedule.');
+            return redirect()->route('marketplace.show', $loan->id);
         }
 
         $installments = $loan->installments;

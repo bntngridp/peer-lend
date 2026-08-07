@@ -130,15 +130,17 @@
                                 </span>
                             </td>
                             <td class="py-4 px-6 text-right">
-                                @if(!$inst->isPaid())
+                                @if(!$inst->isPaid() && $loan->borrower_id === Auth::id())
                                     <form action="{{ route('repayments.pay', $inst->id) }}" method="POST" class="inline">
                                         @csrf
                                         <button type="submit" class="py-1.5 px-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
                                             Pay Now &rarr;
                                         </button>
                                     </form>
-                                @else
+                                @elseif($inst->isPaid())
                                     <span class="text-slate-400 font-semibold text-[11px]">Paid</span>
+                                @else
+                                    <span class="text-slate-400 font-semibold text-[11px]">Pending</span>
                                 @endif
                             </td>
                         </tr>

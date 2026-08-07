@@ -67,8 +67,13 @@ class LoanRequestController extends Controller
      */
     public function installments(LoanRequest $loan): View
     {
-        // Security check: Only the borrower can view their own loan's installments
-        if ($loan->borrower_id !== Auth::id()) {
+        // Security check: Only borrower, funding lender, or admin/staff can view installments
+        $user = Auth::user();
+        $isBorrower = $loan->borrower_id === $user->id;
+        $isLender   = $loan->fundings()->where('lender_id', $user->id)->exists();
+        $isAdmin    = $user->hasAnyRole(['admin', 'customer_service', 'collection_officer']);
+
+        if (!$isBorrower && !$isLender && !$isAdmin) {
             abort(403, 'You do not have permission to view this loan schedule.');
         }
 

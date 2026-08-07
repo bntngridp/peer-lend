@@ -271,6 +271,30 @@ class RepaymentService
             if (! $hasUnpaid) {
                 $loan->update(['status' => LoanRequest::STATUS_COMPLETED]);
 
+                // Release held crypto collateral back to borrower upon full repayment
+                if ($loan->collateral_currency_id && bccomp((string)$loan->collateral_amount, '0', 8) > 0) {
+                    $borrowerWallet = Wallet::lockForUpdate()->where([
+                        'user_id'     => $loan->borrower_id,
+                        'currency_id' => $loan->collateral_currency_id,
+                    ])->first();
+
+                    if ($borrowerWallet && bccomp($borrowerWallet->hold_balance, (string)$loan->collateral_amount, 8) >= 0) {
+                        $borrowerWallet->update([
+                            'hold_balance'      => bcsub($borrowerWallet->hold_balance, (string)$loan->collateral_amount, 8),
+                            'available_balance' => bcadd($borrowerWallet->available_balance, (string)$loan->collateral_amount, 8),
+                        ]);
+
+                        \App\Models\WalletTransaction::create([
+                            'wallet_id'      => $borrowerWallet->id,
+                            'type'           => 'release_hold',
+                            'amount'         => $loan->collateral_amount,
+                            'balance_before' => bcsub($borrowerWallet->available_balance, (string)$loan->collateral_amount, 8),
+                            'balance_after'  => $borrowerWallet->available_balance,
+                            'description'    => "Collateral released upon full loan repayment #{$loan->id}",
+                        ]);
+                    }
+                }
+
                 app(AuditLogService::class)->log(
                     'loan_completed',
                     LoanRequest::class,

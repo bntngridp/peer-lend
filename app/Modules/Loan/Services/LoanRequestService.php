@@ -47,6 +47,36 @@ class LoanRequestService
                 $requiredCollateralValue = bcmul($loanAmount, '2', 2);
                 $collateralAmount = bcdiv($requiredCollateralValue, $priceInIdr, 8);
 
+                // Lock collateral on Borrower's Wallet
+                $borrowerWallet = \App\Models\Wallet::lockForUpdate()->where([
+                    'user_id'     => $borrower->id,
+                    'currency_id' => $collateralCurrencyId,
+                ])->first();
+
+                if (!$borrowerWallet || bccomp($borrowerWallet->available_balance, $collateralAmount, 8) < 0) {
+                    throw ValidationException::withMessages([
+                        'collateral_currency_id' => [__('Insufficient :code balance in your wallet to lock required collateral (:req :code).', [
+                            'code' => $collateralCurrency->code,
+                            'req'  => number_format($collateralAmount, $collateralCurrency->decimal_places),
+                        ])],
+                    ]);
+                }
+
+                // Move from available_balance to hold_balance
+                $borrowerWallet->update([
+                    'available_balance' => bcsub($borrowerWallet->available_balance, $collateralAmount, 8),
+                    'hold_balance'      => bcadd($borrowerWallet->hold_balance, $collateralAmount, 8),
+                ]);
+
+                \App\Models\WalletTransaction::create([
+                    'wallet_id'      => $borrowerWallet->id,
+                    'type'           => 'hold',
+                    'amount'         => $collateralAmount,
+                    'balance_before' => bcadd($borrowerWallet->available_balance, $collateralAmount, 8),
+                    'balance_after'  => $borrowerWallet->available_balance,
+                    'description'    => "Locked collateral for loan request",
+                ]);
+
                 $initialLtv = 50.00;
                 $liquidationLtv = 80.00; // Liquidate if current LTV reaches 80%
                 
@@ -142,6 +172,30 @@ class LoanRequestService
             throw ValidationException::withMessages([
                 'status' => ['Only pending loan requests can be rejected.'],
             ]);
+        }
+
+        // Release held collateral back to borrower's available balance if crypto collateral was locked
+        if ($loan->collateral_currency_id && bccomp((string)$loan->collateral_amount, '0', 8) > 0) {
+            $borrowerWallet = \App\Models\Wallet::lockForUpdate()->where([
+                'user_id'     => $loan->borrower_id,
+                'currency_id' => $loan->collateral_currency_id,
+            ])->first();
+
+            if ($borrowerWallet && bccomp($borrowerWallet->hold_balance, (string)$loan->collateral_amount, 8) >= 0) {
+                $borrowerWallet->update([
+                    'hold_balance'      => bcsub($borrowerWallet->hold_balance, (string)$loan->collateral_amount, 8),
+                    'available_balance' => bcadd($borrowerWallet->available_balance, (string)$loan->collateral_amount, 8),
+                ]);
+
+                \App\Models\WalletTransaction::create([
+                    'wallet_id'      => $borrowerWallet->id,
+                    'type'           => 'release_hold',
+                    'amount'         => $loan->collateral_amount,
+                    'balance_before' => bcsub($borrowerWallet->available_balance, (string)$loan->collateral_amount, 8),
+                    'balance_after'  => $borrowerWallet->available_balance,
+                    'description'    => "Unlocked collateral for rejected loan request #{$loan->id}",
+                ]);
+            }
         }
 
         $loan->update([

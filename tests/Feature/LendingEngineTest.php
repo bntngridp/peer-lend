@@ -263,4 +263,41 @@ class LendingEngineTest extends TestCase
             'available_balance' => 582499.99,
         ]);
     }
+
+    /**
+     * Test Borrower clicking Pay Now with insufficient wallet balance returns clear error flash message.
+     */
+    public function test_borrower_pay_now_insufficient_balance_returns_error_session(): void
+    {
+        $loan = LoanRequest::create([
+            'borrower_id'        => $this->borrower->id,
+            'category_id'        => $this->businessCategory->id,
+            'currency_id'        => $this->idr->id,
+            'amount'             => 5000000,
+            'duration'           => 6,
+            'interest_rate'      => 12.00,
+            'purpose'            => 'Test pay now',
+            'funded_amount'      => 5000000,
+            'funded_percentage'  => 100,
+            'risk_grade'         => 'B',
+            'status'             => LoanRequest::STATUS_ACTIVE,
+        ]);
+
+        $inst = LoanInstallment::create([
+            'loan_id'            => $loan->id,
+            'installment_number' => 1,
+            'due_date'           => now()->addDays(5)->toDateString(),
+            'principal_amount'   => 500000.00,
+            'interest_amount'    => 50000.00,
+            'penalty_amount'     => 0.00,
+            'total_amount'       => 550000.00,
+            'status'             => LoanInstallment::STATUS_PENDING,
+        ]);
+
+        // Borrower wallet has 0 available balance
+        $response = $this->actingAs($this->borrower)->post(route('repayments.pay', $inst->id));
+        $response->assertRedirect();
+        $response->assertSessionHas('error');
+        $this->assertEquals('pending', $inst->fresh()->status);
+    }
 }

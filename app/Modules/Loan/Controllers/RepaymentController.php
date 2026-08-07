@@ -31,7 +31,10 @@ class RepaymentController extends Controller
         try {
             $this->repaymentService->payInstallment(Auth::user(), $installment);
         } catch (ValidationException $e) {
-            return back()->withErrors($e->errors());
+            $firstError = collect($e->errors())->flatten()->first() ?? $e->getMessage();
+            return back()->with('error', $firstError)->withErrors($e->errors());
+        } catch (\Throwable $e) {
+            return back()->with('error', $e->getMessage());
         }
 
         return back()->with('success', "Installment #{$installment->installment_number} paid successfully!");

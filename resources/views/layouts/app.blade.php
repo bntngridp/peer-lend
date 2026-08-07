@@ -465,16 +465,23 @@
                     </div>
                 @endif
 
-                @if(session('error'))
-                    <div x-data="{ show: true }" x-show="show" class="rounded-xl border border-rose-200 bg-rose-50 p-4 text-rose-900 shadow-xs flex justify-between items-start">
-                        <div class="flex gap-3">
-                            <svg class="h-5 w-5 text-rose-600 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                @if(session('error') || $errors->any())
+                    <div x-data="{ show: true }" x-show="show" class="rounded-xl border border-rose-200 bg-rose-50 p-4 text-rose-900 shadow-xs flex justify-between items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <svg class="h-5 w-5 text-rose-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-wider text-rose-800">{{ __('Error') }}</p>
-                                <p class="text-sm font-medium mt-0.5">{{ __(session('error')) }}</p>
+                                <p class="text-sm font-medium mt-0.5">{{ __(session('error') ?? $errors->first()) }}</p>
                             </div>
                         </div>
-                        <button @click="show = false" class="text-rose-600 hover:text-rose-800 font-bold text-lg">&times;</button>
+                        <div class="flex items-center gap-2 shrink-0">
+                            @if(str_contains(strtolower(session('error') ?? $errors->first() ?? ''), 'balance') || str_contains(strtolower(session('error') ?? $errors->first() ?? ''), 'saldo'))
+                                <a href="{{ route('wallet.index') }}" class="px-3 py-1.5 rounded-lg bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-all shadow-xs">
+                                    {{ __('Deposit Funds') }} &rarr;
+                                </a>
+                            @endif
+                            <button @click="show = false" class="text-rose-600 hover:text-rose-800 font-bold text-lg cursor-pointer">&times;</button>
+                        </div>
                     </div>
                 @endif
             </div>

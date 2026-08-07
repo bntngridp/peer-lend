@@ -168,14 +168,13 @@ class DashboardController extends Controller
             ->latest()
             ->get();
 
-        // Calculate total interest earned from repayments to this lender
-        $totalInterestEarned = WalletTransaction::where('wallet_id', $wallet?->id)
-            ->where('type', 'repayment_interest')
+        // Calculate total repayments received by this lender from DB
+        $totalRepaymentPertaining = WalletTransaction::where('wallet_id', $wallet?->id)
+            ->where('type', 'repayment')
             ->sum('amount');
 
-        $totalPrincipalReturned = WalletTransaction::where('wallet_id', $wallet?->id)
-            ->where('type', 'repayment_principal')
-            ->sum('amount');
+        $totalInterestEarned = (float) $totalRepaymentPertaining;
+        $totalPrincipalReturned = (float) $totalRepaymentPertaining;
 
         // Fetch or create Lender Auto-Invest Rule config
         $autoInvestRule = \App\Models\AutoInvestRule::firstOrCreate(
@@ -200,9 +199,9 @@ class DashboardController extends Controller
             }
         }
 
-        // Calculate portfolio value & average yield
+        // Calculate real portfolio value & average yield from DB
         $totalInvested = (float) $fundings->sum('amount');
-        $portfolioValue = (float) ($wallet?->available_balance ?? 0) + $totalInvested + (float) $totalInterestEarned;
+        $portfolioValue = (float) ($wallet?->available_balance ?? 0) + (float) ($wallet?->hold_balance ?? 0) + $totalInvested;
 
         // Weighted interest rate yield calculation
         $totalInterestRateSum = 0;
@@ -213,17 +212,20 @@ class DashboardController extends Controller
                 $totalWeightedCount++;
             }
         }
-        $avgYield = $totalWeightedCount > 0 ? round($totalInterestRateSum / $totalWeightedCount, 1) : 12.4;
+        $avgYield = $totalWeightedCount > 0 ? round($totalInterestRateSum / $totalWeightedCount, 1) : 0.0;
 
-        // 6-month growth trajectory data
+        // 6-month growth trajectory data based on real monthly investments
         $growthLabels = [];
         $growthData = [];
         for ($i = 5; $i >= 0; $i--) {
             $m = now()->subMonths($i);
             $growthLabels[] = __n($m->translatedFormat('M Y'));
-            // Estimate progressive trajectory leading to current portfolio value
-            $factor = (6 - $i) / 6;
-            $growthData[] = round($portfolioValue > 0 ? $portfolioValue * (0.6 + (0.4 * $factor)) : (1000000 * (1 + $factor)));
+            
+            $cumulativeInvested = LoanFunding::where('lender_id', $user->id)
+                ->where('created_at', '<=', $m->endOfMonth())
+                ->sum('amount');
+
+            $growthData[] = (float) $cumulativeInvested;
         }
 
         // Recent repayments received
@@ -237,7 +239,7 @@ class DashboardController extends Controller
             'wallet_balance'           => $wallet?->available_balance ?? '0.00',
             'kyc_status'               => $user->kyc?->status ?? 'not_submitted',
             'total_invested'           => $totalInvested,
-            'portfolio_value'          => $portfolioValue > 0 ? $portfolioValue : 48250000,
+            'portfolio_value'          => $portfolioValue,
             'expected_return_pct'      => $avgYield,
             'active_investments'       => $fundings->filter(fn ($f) => in_array(
                 $f->loan?->status,

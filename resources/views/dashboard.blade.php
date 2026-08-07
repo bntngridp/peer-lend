@@ -592,35 +592,13 @@
                                 </td>
                             </tr>
                             @empty
-                            <!-- Mock Data Row matching design screenshot -->
-                            <tr class="hover:bg-slate-50/80 transition-colors">
-                                <td class="py-3.5 px-6 font-semibold text-slate-900">Oct 24, 2026</td>
-                                <td class="py-3.5 px-6 font-bold text-emerald-700">#LN-0842-A</td>
-                                <td class="py-3.5 px-6 font-bold text-slate-900">Rp 345.500</td>
-                                <td class="py-3.5 px-6 text-slate-600">Rp 290.000</td>
-                                <td class="py-3.5 px-6 text-emerald-700 font-semibold">+Rp 55.500</td>
-                                <td class="py-3.5 px-6 text-right">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">{{ __('COMPLETED') }}</span>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/80 transition-colors">
-                                <td class="py-3.5 px-6 font-semibold text-slate-900">Oct 22, 2026</td>
-                                <td class="py-3.5 px-6 font-bold text-emerald-700">#LN-7109-B</td>
-                                <td class="py-3.5 px-6 font-bold text-slate-900">Rp 182.200</td>
-                                <td class="py-3.5 px-6 text-slate-600">Rp 150.000</td>
-                                <td class="py-3.5 px-6 text-emerald-700 font-semibold">+Rp 32.200</td>
-                                <td class="py-3.5 px-6 text-right">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">{{ __('COMPLETED') }}</span>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/80 transition-colors">
-                                <td class="py-3.5 px-6 font-semibold text-slate-900">Oct 19, 2026</td>
-                                <td class="py-3.5 px-6 font-bold text-emerald-700">#LN-5521-C</td>
-                                <td class="py-3.5 px-6 font-bold text-slate-900">Rp 420.000</td>
-                                <td class="py-3.5 px-6 text-slate-600">Rp 380.000</td>
-                                <td class="py-3.5 px-6 text-emerald-700 font-semibold">+Rp 40.000</td>
-                                <td class="py-3.5 px-6 text-right">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">{{ __('PROCESSING') }}</span>
+                            <tr>
+                                <td colspan="6" class="py-8 text-center text-slate-400">
+                                    <div class="flex flex-col items-center justify-center">
+                                        <svg class="h-8 w-8 text-slate-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <p class="text-xs font-bold text-slate-600 dark:text-slate-400">{{ __('No Recent Repayments') }}</p>
+                                        <p class="text-[11px] text-slate-400 mt-0.5">{{ __('Repayments from borrowers will appear here once distributed.') }}</p>
+                                    </div>
                                 </td>
                             </tr>
                             @endforelse

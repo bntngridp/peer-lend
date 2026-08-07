@@ -13,9 +13,20 @@
 <div class="space-y-6 max-w-7xl mx-auto">
     
     <!-- Top Back Navigation & Action Bar -->
+    @php
+        $backUrl = route('loans.index');
+        $backText = __('Back to Applications');
+        if (Auth::user()?->isLender()) {
+            $backUrl = route('marketplace.index');
+            $backText = __('Back to Marketplace');
+        } elseif (Auth::user()?->isAdmin() || Auth::user()?->isStaff()) {
+            $backUrl = route('admin.loans.index');
+            $backText = __('Back to Loan Review');
+        }
+    @endphp
     <div class="flex items-center justify-between">
-        <a href="{{ route('loans.index') }}" class="inline-flex items-center gap-2 text-xs font-bold text-emerald-700 hover:text-emerald-800 transition-colors">
-            &larr; {{ __('Back to Applications') }}
+        <a href="{{ $backUrl }}" class="inline-flex items-center gap-2 text-xs font-bold text-emerald-700 hover:text-emerald-800 transition-colors">
+            &larr; {{ $backText }}
         </a>
 
         <div class="flex items-center gap-3">

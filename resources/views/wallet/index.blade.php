@@ -140,7 +140,7 @@
 
                 <div>
                     <label for="dep_amount" class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('Deposit Amount (IDR)') }}</label>
-                    <input type="number" name="amount" id="dep_amount" required min="10000" step="50000"
+                    <input type="number" name="amount" id="dep_amount" required min="10000" step="any"
                            class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                            placeholder="500000">
                 </div>
@@ -168,7 +168,7 @@
 
                 <div>
                     <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('Amount (USD equivalent)') }}</label>
-                    <input type="number" id="crypto_dep_amount" required min="5" step="10" value="100"
+                    <input type="number" id="crypto_dep_amount" required min="5" step="any" value="100"
                            class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
                            placeholder="100">
                 </div>
@@ -275,7 +275,7 @@
                             Max: Rp {{ number_format($availableBalance, 0, ',', '.') }}
                         </span>
                     </div>
-                    <input type="number" id="wd_xendit_amount" required min="50000" step="50000" value="100000"
+                    <input type="number" id="wd_xendit_amount" required min="50000" step="any" value="100000"
                            class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none"
                            placeholder="{{ __('Min. Rp 50.000') }}">
                 </div>

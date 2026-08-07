@@ -91,7 +91,7 @@
                         <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">LOAN AMOUNT (IDR)</label>
                         <div class="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1">
                             <span class="text-xs font-bold text-slate-500">Rp</span>
-                            <input type="number" name="amount" x-model="amount" required min="1000000" max="1000000000" step="5000000"
+                            <input type="number" name="amount" x-model="amount" required min="1000000" max="1000000000" step="any"
                                    class="text-xs font-extrabold text-slate-900 bg-transparent outline-none text-right w-28">
                         </div>
                     </div>

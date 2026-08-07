@@ -207,7 +207,7 @@
                         @csrf
                         <div>
                             <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">AMOUNT TO INVEST (IDR)</label>
-                            <input type="number" name="amount" x-model="investAmount" required min="100000" step="50000"
+                            <input type="number" name="amount" x-model="investAmount" required min="100000" step="any"
                                    class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600">
                             
                             <!-- Presets -->

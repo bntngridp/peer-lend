@@ -453,11 +453,11 @@
                 @endif
             </div>
 
-            <!-- Card: Automate Repayments Banner (Dark Neutral #111827) -->
-            <div class="rounded-2xl bg-slate-900 text-white p-6 shadow-md relative overflow-hidden">
+            <!-- Card: Automate Repayments Banner -->
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs relative overflow-hidden">
                 <div class="relative z-10 space-y-3">
-                    <h4 class="text-sm font-bold text-white tracking-tight">{{ __('Automate Repayments') }}</h4>
-                    <p class="text-xs text-slate-300 leading-relaxed">{{ __('Set up auto-pay and get a 0.25% rate reduction on your next eligible loan.') }}</p>
+                    <h4 class="text-sm font-bold text-slate-900 dark:text-slate-100 tracking-tight">{{ __('Automate Repayments') }}</h4>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{{ __('Set up auto-pay and get a 0.25% rate reduction on your next eligible loan.') }}</p>
                     <a href="{{ route('loans.index') }}" class="inline-block rounded-xl bg-emerald-700 px-4 py-2.5 text-xs font-bold text-white hover:bg-emerald-800 transition-all shadow-xs">
                         {{ __('Configure Auto-Pay') }}
                     </a>

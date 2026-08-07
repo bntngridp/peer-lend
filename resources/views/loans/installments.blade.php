@@ -118,34 +118,34 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                            <th class="py-3.5 px-4 whitespace-nowrap">{{ __('Installment') }}</th>
-                            <th class="py-3.5 px-4 whitespace-nowrap">{{ __('Due Date') }}</th>
-                            <th class="py-3.5 px-4 whitespace-nowrap">{{ __('Amount') }}</th>
-                            <th class="py-3.5 px-4 whitespace-nowrap">{{ __('Principal') }}</th>
-                            <th class="py-3.5 px-4 whitespace-nowrap">{{ __('Interest') }}</th>
-                            <th class="py-3.5 px-4 whitespace-nowrap">{{ __('Status') }}</th>
-                            <th class="py-3.5 px-5 whitespace-nowrap text-right min-w-[140px]">{{ __('Action') }}</th>
+                            <th class="py-3.5 px-3 whitespace-nowrap">{{ __('Installment') }}</th>
+                            <th class="py-3.5 px-3 whitespace-nowrap">{{ __('Due Date') }}</th>
+                            <th class="py-3.5 px-3 whitespace-nowrap">{{ __('Amount') }}</th>
+                            <th class="py-3.5 px-3 whitespace-nowrap">{{ __('Principal') }}</th>
+                            <th class="py-3.5 px-3 whitespace-nowrap">{{ __('Interest') }}</th>
+                            <th class="py-3.5 px-3 whitespace-nowrap">{{ __('Status') }}</th>
+                            <th class="py-3.5 pl-3 pr-6 whitespace-nowrap text-right min-w-[165px]">{{ __('Action') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300">
                         @foreach($installments as $inst)
                         <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
-                            <td class="py-3.5 px-4 font-extrabold text-slate-900 dark:text-slate-100 whitespace-nowrap">
+                            <td class="py-3.5 px-3 font-extrabold text-slate-900 dark:text-slate-100 whitespace-nowrap">
                                 #{{ $inst->installment_number }}
                             </td>
-                            <td class="py-3.5 px-4 font-semibold text-slate-600 dark:text-slate-400 whitespace-nowrap">
+                            <td class="py-3.5 px-3 font-semibold text-slate-600 dark:text-slate-400 whitespace-nowrap">
                                 {{ $inst->due_date->format('M d, Y') }}
                             </td>
-                            <td class="py-3.5 px-4 font-extrabold text-slate-900 dark:text-slate-100 whitespace-nowrap">
+                            <td class="py-3.5 px-3 font-extrabold text-slate-900 dark:text-slate-100 whitespace-nowrap">
                                 Rp {{ __n(number_format($inst->total_due, 0, ',', '.')) }}
                             </td>
-                            <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400 whitespace-nowrap">
+                            <td class="py-3.5 px-3 text-slate-600 dark:text-slate-400 whitespace-nowrap">
                                 Rp {{ __n(number_format($inst->principal_amount, 0, ',', '.')) }}
                             </td>
-                            <td class="py-3.5 px-4 text-emerald-700 dark:text-emerald-400 font-semibold whitespace-nowrap">
+                            <td class="py-3.5 px-3 text-emerald-700 dark:text-emerald-400 font-semibold whitespace-nowrap">
                                 Rp {{ __n(number_format($inst->interest_amount, 0, ',', '.')) }}
                             </td>
-                            <td class="py-3.5 px-4 whitespace-nowrap">
+                            <td class="py-3.5 px-3 whitespace-nowrap">
                                 <span class="px-2.5 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider
                                     @if($inst->isPaid()) bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800
                                     @elseif($inst->isOverdue()) bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800
@@ -153,17 +153,17 @@
                                     {{ __(ucwords(str_replace('_', ' ', $inst->status))) }}
                                 </span>
                             </td>
-                            <td class="py-3.5 px-5 text-right whitespace-nowrap min-w-[140px]">
+                            <td class="py-3.5 pl-3 pr-6 text-right whitespace-nowrap min-w-[165px]">
                                 @if(!$inst->isPaid() && $loan->borrower_id === Auth::id())
                                     <form action="{{ route('repayments.pay', $inst->id) }}" method="POST" class="inline">
                                         @csrf
-                                        <button type="submit" class="py-1.5 px-3 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs cursor-pointer whitespace-nowrap">
+                                        <button type="submit" class="py-1.5 px-3.5 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs cursor-pointer whitespace-nowrap">
                                             {{ __('Pay Now') }} &rarr;
                                         </button>
                                     </form>
                                 @elseif($inst->isPaid())
                                     <a href="{{ route('repayments.receipt', $inst->id) }}" target="_blank" 
-                                       class="inline-flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-emerald-800 dark:text-emerald-300 font-bold text-xs hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-xs whitespace-nowrap">
+                                       class="inline-flex items-center justify-center gap-1.5 py-1.5 px-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-emerald-800 dark:text-emerald-300 font-bold text-xs hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-xs whitespace-nowrap">
                                         🧾 {{ __('Receipt') }}
                                     </a>
                                 @else

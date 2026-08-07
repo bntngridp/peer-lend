@@ -9,7 +9,10 @@ test.describe('Customer Service (CS) and Credit Risk / Collection (CR) Roles E2E
     await page.goto('http://localhost:9090/login');
     await page.fill('input[name="email"]', 'cs1@lendflow.com');
     await page.fill('input[name="password"]', 'password123');
-    await page.click('button[type="submit"]');
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'networkidle' }),
+      page.click('button[type="submit"]')
+    ]);
 
     // 1. Verify CS can access Review KYC page
     await page.goto('http://localhost:9090/admin/kyc');
@@ -31,7 +34,10 @@ test.describe('Customer Service (CS) and Credit Risk / Collection (CR) Roles E2E
     await page.goto('http://localhost:9090/login');
     await page.fill('input[name="email"]', 'collector1@lendflow.com');
     await page.fill('input[name="password"]', 'password123');
-    await page.click('button[type="submit"]');
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'networkidle' }),
+      page.click('button[type="submit"]')
+    ]);
 
     // 1. Verify CR can access Transactions Audit page
     await page.goto('http://localhost:9090/admin/transactions');

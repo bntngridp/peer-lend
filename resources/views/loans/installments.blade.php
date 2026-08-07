@@ -37,6 +37,30 @@
         <p class="text-xs font-medium text-slate-500 mt-1">Loan #LN-{{ substr($loan->id, 0, 8) }} • {{ $loan->purpose }} (Grade {{ $loan->risk_grade }} • {{ $loan->duration }} Months)</p>
     </div>
 
+    <!-- Alert Messages (Success & Error) -->
+    @if(session('success'))
+        <div class="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-xs font-bold text-emerald-900 dark:text-emerald-300 flex items-center justify-between shadow-xs">
+            <div class="flex items-center gap-2">
+                <span>✅</span>
+                <span>{{ session('success') }}</span>
+            </div>
+        </div>
+    @endif
+
+    @if($errors->any() || session('error'))
+        <div class="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-xs text-rose-900 dark:text-rose-300 space-y-2 shadow-xs">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2 font-bold">
+                    <span>🚨</span>
+                    <span>{{ session('error') ?? $errors->first() }}</span>
+                </div>
+                <a href="{{ route('wallet.index') }}" class="px-3 py-1.5 rounded-lg bg-emerald-700 text-white font-bold text-[11px] hover:bg-emerald-800 transition-colors shadow-xs">
+                    Deposit Funds &rarr;
+                </a>
+            </div>
+        </div>
+    @endif
+
     <!-- 3 Stat Cards Row -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Card 1: Next Payment Due -->

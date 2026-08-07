@@ -309,10 +309,12 @@
                                 </td>
                                 <td class="py-4 px-6 text-right">
                                     @if($inst->status !== 'paid')
-                                        <a href="{{ route('loans.installments', $inst->loan_id) }}" 
-                                           class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-700 text-white hover:bg-emerald-800 transition-colors shadow-xs">
-                                            {{ __('Pay Now') }}
-                                        </a>
+                                        <form action="{{ route('repayments.pay', $inst->id) }}" method="POST" class="inline">
+                                            @csrf
+                                            <button type="submit" class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-700 text-white hover:bg-emerald-800 transition-colors shadow-xs">
+                                                {{ __('Pay Now') }}
+                                            </button>
+                                        </form>
                                     @else
                                         <a href="{{ route('loans.installments', $inst->loan_id) }}" 
                                            class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">

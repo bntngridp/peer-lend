@@ -150,12 +150,13 @@ class PaymentService
             if ($newStatus === 'success') {
                 // Deposit real cash to User wallet
                 $idr = Currency::where('code', 'IDR')->firstOrFail();
+                $methodLabel = self::resolveMidtransMethodLabel($payload);
                 
                 $walletTx = $this->walletService->deposit(
                     $payment->user,
                     $idr->id,
                     (string)$payment->amount,
-                    "Midtrans deposit: Order {$payment->id}"
+                    "Midtrans ({$methodLabel}) deposit: Order {$payment->id}"
                 );
 
                 $payment->update([
@@ -249,5 +250,51 @@ class PaymentService
         }
 
         return false;
+    }
+
+    /**
+     * Resolve human-readable detailed payment method name from Midtrans payload.
+     */
+    public static function resolveMidtransMethodLabel(array $payload): string
+    {
+        $webhook = $payload['webhook_received'] ?? $payload;
+        $paymentType = strtolower($webhook['payment_type'] ?? '');
+        
+        if ($paymentType === 'bank_transfer') {
+            $bank = strtolower($webhook['va_numbers'][0]['bank'] ?? $webhook['bank'] ?? '');
+            if ($bank === 'bca') return 'BCA VA';
+            if ($bank === 'bni') return 'BNI VA';
+            if ($bank === 'bri') return 'BRI VA';
+            if ($bank === 'permata') return 'Permata VA';
+            if ($bank === 'cimb') return 'CIMB VA';
+            return $bank ? strtoupper($bank) . ' VA' : 'Virtual Account';
+        }
+
+        if ($paymentType === 'echannel') {
+            return 'Mandiri VA';
+        }
+
+        if ($paymentType === 'qris') {
+            return 'QRIS';
+        }
+
+        if ($paymentType === 'gopay') {
+            return 'GoPay';
+        }
+
+        if ($paymentType === 'shopeepay') {
+            return 'ShopeePay';
+        }
+
+        if ($paymentType === 'cstore') {
+            $store = ucfirst(strtolower($webhook['store'] ?? 'Retail'));
+            return "Mini Market ($store)";
+        }
+
+        if ($paymentType === 'credit_card') {
+            return 'Kartu Kredit';
+        }
+
+        return 'Virtual Account';
     }
 }

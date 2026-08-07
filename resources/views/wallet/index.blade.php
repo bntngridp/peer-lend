@@ -381,7 +381,15 @@
                         <td class="py-4 px-6 whitespace-nowrap">
                             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                                 @if(str_contains(strtolower($tx->description), 'midtrans'))
-                                    💳 Midtrans (Fiat)
+                                    @php
+                                        preg_match('/midtrans \(([^)]+)\)/i', $tx->description, $matches);
+                                        $midMethod = $matches[1] ?? 'Fiat';
+                                    @endphp
+                                    @if(str_contains(strtolower($midMethod), 'qris') || str_contains(strtolower($midMethod), 'gopay') || str_contains(strtolower($midMethod), 'shopee'))
+                                        📲 Midtrans ({{ $midMethod }})
+                                    @else
+                                        💳 Midtrans ({{ $midMethod }})
+                                    @endif
                                 @elseif(str_contains(strtolower($tx->description), 'xendit'))
                                     🏦 Xendit Payout
                                 @elseif(str_contains(strtolower($tx->description), 'nowpayments'))

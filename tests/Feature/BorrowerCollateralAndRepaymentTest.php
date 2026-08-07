@@ -165,4 +165,37 @@ class BorrowerCollateralAndRepaymentTest extends TestCase
         $response->assertOk();
         $response->assertSee('Installments Schedule');
     }
+
+    public function test_user_can_view_official_payment_receipt_for_paid_installment(): void
+    {
+        $loan = LoanRequest::create([
+            'borrower_id'   => $this->borrower->id,
+            'category_id'   => $this->category->id,
+            'amount'        => 5000000,
+            'interest_rate' => 12.00,
+            'duration'      => 6,
+            'tenor_type'    => 'monthly',
+            'purpose'       => 'Receipt Test',
+            'currency_id'   => $this->fiat->id,
+            'status'        => 'active',
+        ]);
+
+        $installment = LoanInstallment::create([
+            'loan_id'            => $loan->id,
+            'installment_number' => 1,
+            'due_date'           => now()->toDateString(),
+            'principal_amount'   => 833333,
+            'interest_amount'    => 50000,
+            'penalty_amount'     => 0,
+            'total_amount'       => 883333,
+            'status'             => 'paid',
+            'paid_at'            => now(),
+        ]);
+
+        $response = $this->actingAs($this->borrower)
+            ->get(route('repayments.receipt', $installment->id));
+
+        $response->assertOk();
+        $response->assertSee('Official Payment Receipt');
+    }
 }

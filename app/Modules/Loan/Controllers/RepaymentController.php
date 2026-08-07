@@ -5,6 +5,7 @@ namespace App\Modules\Loan\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\LoanInstallment;
 use App\Modules\Loan\Services\RepaymentService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -34,5 +35,31 @@ class RepaymentController extends Controller
         }
 
         return back()->with('success', "Installment #{$installment->installment_number} paid successfully!");
+    }
+
+    /**
+     * View official payment receipt / nota pembayaran for a paid installment.
+     */
+    public function receipt(LoanInstallment $installment): View
+    {
+        $loan = $installment->loan;
+        $user = Auth::user();
+
+        // Security check: Borrower, Lender, or Staff can view receipt
+        $isBorrower = $loan->borrower_id === $user->id;
+        $isLender   = $loan->fundings()->where('lender_id', $user->id)->exists();
+        $isAdmin    = $user->hasAnyRole(['admin', 'customer_service', 'collection_officer']);
+
+        if (!$isBorrower && !$isLender && !$isAdmin) {
+            abort(403, 'You do not have permission to view this payment receipt.');
+        }
+
+        if (!$installment->isPaid()) {
+            abort(404, 'Payment receipt is only available for paid installments.');
+        }
+
+        $repayment = \App\Models\LoanRepayment::where('installment_id', $installment->id)->latest()->first();
+
+        return view('loans.receipt', compact('installment', 'loan', 'repayment'));
     }
 }

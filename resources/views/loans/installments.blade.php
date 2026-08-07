@@ -162,7 +162,10 @@
                                         </button>
                                     </form>
                                 @elseif($inst->isPaid())
-                                    <span class="text-slate-400 font-semibold text-[11px]">Paid</span>
+                                    <a href="{{ route('repayments.receipt', $inst->id) }}" target="_blank" 
+                                       class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-emerald-800 dark:text-emerald-300 font-bold text-xs hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-xs">
+                                        🧾 {{ __('Receipt') }}
+                                    </a>
                                 @else
                                     <span class="text-slate-400 font-semibold text-[11px]">Pending</span>
                                 @endif

@@ -125,6 +125,7 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         
         // Repayments
         Route::post('/repayments/{installment}/pay', [\App\Modules\Loan\Controllers\RepaymentController::class, 'pay'])->name('repayments.pay');
+        Route::get('/repayments/{installment}/receipt', [\App\Modules\Loan\Controllers\RepaymentController::class, 'receipt'])->name('repayments.receipt');
 
         // 💬 Internal Loan Chat System
         Route::get('/loans/{loan}/messages', [\App\Modules\Loan\Controllers\LoanMessageController::class, 'fetchMessages'])->name('loans.messages.fetch');

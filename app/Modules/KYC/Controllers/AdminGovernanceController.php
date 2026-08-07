@@ -65,6 +65,47 @@ class AdminGovernanceController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
+    public function showUser(User $user)
+    {
+        $user->load([
+            'profile',
+            'roles',
+            'kyc',
+            'wallets.currency',
+            'loanRequests' => fn($q) => $q->latest()->take(10),
+            'fundings.loanRequest' => fn($q) => $q->latest()->take(10),
+            'auditLogs' => fn($q) => $q->latest()->take(20),
+        ]);
+
+        return view('admin.users.show', compact('user'));
+    }
+
+    public function toggleUserStatus(User $user): RedirectResponse
+    {
+        if ($user->id === auth()->id()) {
+            return back()->with('error', __('You cannot suspend your own admin account.'));
+        }
+
+        $user->is_active = !$user->is_active;
+        $user->save();
+
+        $actionName = $user->is_active ? 'user_reactivated' : 'user_suspended';
+        $statusText = $user->is_active ? __('activated') : __('suspended');
+
+        app(\App\Modules\Shared\Services\AuditLogService::class)->log(
+            $actionName,
+            User::class,
+            $user->id,
+            auth()->user(),
+            ['is_active' => $user->is_active]
+        );
+
+        return back()->with('success', __('User account :email has been :status successfully.', [
+            'email'  => $user->email,
+            'status' => $statusText,
+        ]));
+    }
+
     // ─── Transactions ─────────────────────────────────────────────────────────
 
     public function transactions()

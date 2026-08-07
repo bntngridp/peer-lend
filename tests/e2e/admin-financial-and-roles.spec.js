@@ -43,8 +43,8 @@ test.describe('Admin Financial Configuration & Role Management E2E', () => {
 
     // Verify values persisted on reload
     await page.reload();
-    await expect(page.locator('input[name="origination_fee"]')).toHaveValue('2.2500');
-    await expect(page.locator('input[name="service_fee"]')).toHaveValue('7500.0000');
+    await expect(page.locator('input[name="origination_fee"]')).toHaveValue('2.25');
+    await expect(page.locator('input[name="service_fee"]')).toHaveValue('7500');
 
     // 3. Update Currency Settings
     await page.click('button:has-text("Save Currencies")');

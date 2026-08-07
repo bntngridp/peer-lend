@@ -153,6 +153,7 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
             Route::post('/kyc/{kyc}/reject', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'reject'])->name('kyc.reject');
             Route::get('/kyc/document/{document}', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'streamDocument'])->name('kyc.document');
             Route::get('/users', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'users'])->name('users.index');
+            Route::get('/users/{user}', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'showUser'])->name('users.show');
         });
 
         // Admin Loan Review (Admin, CS & Collection Officer)
@@ -179,6 +180,8 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
             Route::post('/roles', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'storeRole'])->name('roles.store');
             Route::post('/roles/{role}/permissions', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'updatePermissions'])->name('roles.updatePermissions');
             Route::delete('/roles/{role}', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'destroyRole'])->name('roles.destroy');
+
+            Route::post('/users/{user}/toggle-status', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'toggleUserStatus'])->name('users.toggleStatus');
 
             Route::get('/analytics', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'analytics'])->name('analytics.index');
         });

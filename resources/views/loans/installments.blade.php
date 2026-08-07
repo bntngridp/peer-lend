@@ -47,7 +47,7 @@
                     Rp {{ $nextInstallment ? number_format($nextInstallment->total_due, 0, ',', '.') : '0' }}
                 </p>
                 <p class="text-[11px] text-emerald-700 font-bold mt-0.5">
-                    {{ $nextInstallment ? 'Due: ' . $nextInstallment->due_date->format('Oct d, Y') : 'All Payments Completed' }}
+                    {{ $nextInstallment ? 'Due: ' . $nextInstallment->due_date->format('M d, Y') : 'All Payments Completed' }}
                 </p>
             </div>
         </div>
@@ -94,34 +94,34 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                            <th class="py-3.5 px-6">Installment</th>
-                            <th class="py-3.5 px-6">Due Date</th>
-                            <th class="py-3.5 px-6">Amount</th>
-                            <th class="py-3.5 px-6">Principal</th>
-                            <th class="py-3.5 px-6">Interest</th>
-                            <th class="py-3.5 px-6">Status</th>
-                            <th class="py-3.5 px-6 text-right">Action</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Installment</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Due Date</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Amount</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Principal</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Interest</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Status</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
                         @foreach($installments as $inst)
                         <tr class="hover:bg-slate-50/80 transition-colors">
-                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                            <td class="py-3.5 px-4 font-extrabold text-slate-900 whitespace-nowrap">
                                 #{{ $inst->installment_number }}
                             </td>
-                            <td class="py-4 px-6 font-semibold text-slate-600">
+                            <td class="py-3.5 px-4 font-semibold text-slate-600 whitespace-nowrap">
                                 {{ $inst->due_date->format('M d, Y') }}
                             </td>
-                            <td class="py-4 px-6 font-extrabold text-slate-900">
+                            <td class="py-3.5 px-4 font-extrabold text-slate-900 whitespace-nowrap">
                                 Rp {{ number_format($inst->total_due, 0, ',', '.') }}
                             </td>
-                            <td class="py-4 px-6 text-slate-600">
+                            <td class="py-3.5 px-4 text-slate-600 whitespace-nowrap">
                                 Rp {{ number_format($inst->principal_amount, 0, ',', '.') }}
                             </td>
-                            <td class="py-4 px-6 text-emerald-700 font-semibold">
+                            <td class="py-3.5 px-4 text-emerald-700 font-semibold whitespace-nowrap">
                                 Rp {{ number_format($inst->interest_amount, 0, ',', '.') }}
                             </td>
-                            <td class="py-4 px-6">
+                            <td class="py-3.5 px-4 whitespace-nowrap">
                                 <span class="px-2.5 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider
                                     @if($inst->isPaid()) bg-emerald-100 text-emerald-800 border border-emerald-200
                                     @elseif($inst->isOverdue()) bg-rose-100 text-rose-800 border border-rose-200
@@ -129,7 +129,7 @@
                                     {{ $inst->status }}
                                 </span>
                             </td>
-                            <td class="py-4 px-6 text-right">
+                            <td class="py-3.5 px-4 text-right whitespace-nowrap">
                                 @if(!$inst->isPaid() && $loan->borrower_id === Auth::id())
                                     <form action="{{ route('repayments.pay', $inst->id) }}" method="POST" class="inline">
                                         @csrf

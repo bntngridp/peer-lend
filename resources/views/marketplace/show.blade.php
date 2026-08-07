@@ -241,6 +241,12 @@
                     </form>
                 @endif
 
+                @if($loan->fundings()->where('lender_id', Auth::id())->exists())
+                    <a href="{{ route('loans.installments', $loan->id) }}" class="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
+                        <span>💬</span> {{ __('Open Live Chat & Schedule') }}
+                    </a>
+                @endif
+
                 <button onclick="window.print()" class="w-full py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-bold text-xs hover:bg-slate-50 transition-colors">
                     DOWNLOAD TERM SHEET
                 </button>

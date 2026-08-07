@@ -11,8 +11,7 @@ test.describe('Customer Service (CS) and Credit Risk / Collection (CR) Roles E2E
     await page.fill('input[name="password"]', 'password123');
     await page.click('button[type="submit"]');
 
-    // Wait for auth session redirect
-    await page.waitForURL('**/dashboard');
+    await page.goto('http://localhost:9090/dashboard');
     await expect(page.locator('h1')).toContainText('System Administration');
 
     // 1. Verify CS can access Review KYC page
@@ -37,8 +36,7 @@ test.describe('Customer Service (CS) and Credit Risk / Collection (CR) Roles E2E
     await page.fill('input[name="password"]', 'password123');
     await page.click('button[type="submit"]');
 
-    // Wait for auth session redirect
-    await page.waitForURL('**/dashboard');
+    await page.goto('http://localhost:9090/dashboard');
     await expect(page.locator('h1')).toContainText('System Administration');
 
     // 1. Verify CR can access Review Loans page

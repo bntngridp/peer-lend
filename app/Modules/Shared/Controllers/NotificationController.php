@@ -40,27 +40,31 @@ class NotificationController extends Controller
     /**
      * Mark a specific notification as read and redirect to the relevant route if available.
      */
-    public function markAsRead(Notification $notification): RedirectResponse
+    public function markAsRead(Request $request, Notification $notification): RedirectResponse
     {
         abort_unless($notification->user_id === Auth::id(), 403);
 
         $notification->markAsRead();
 
-        // Redirect to the relevant page if a route is stored in notification data
-        $routeName = $notification->data['route'] ?? null;
-        $routeParams = $notification->data['loan_id']
-            ?? $notification->data['installment_id']
-            ?? null;
+        // If request asks to navigate to target route
+        if ($request->boolean('redirect_target')) {
+            $routeName = $notification->data['route'] ?? null;
+            $loanId    = $notification->data['loan_id'] ?? null;
 
-        if ($routeName && \Route::has($routeName)) {
-            try {
-                return redirect()->route($routeName, $routeParams ? [$routeParams] : []);
-            } catch (\Throwable) {
-                // Fall through to notifications page if route params are invalid
+            if ($routeName && \Route::has($routeName)) {
+                try {
+                    if ($loanId && \App\Models\LoanRequest::where('id', $loanId)->exists()) {
+                        return redirect()->route($routeName, ['loan' => $loanId]);
+                    } elseif (!$loanId) {
+                        return redirect()->route($routeName);
+                    }
+                } catch (\Throwable) {
+                    // Fallthrough to notifications page
+                }
             }
         }
 
-        return redirect()->route('notifications.index');
+        return redirect()->back()->with('success', 'Notifikasi berhasil ditandai sebagai sudah dibaca.');
     }
 
     /**

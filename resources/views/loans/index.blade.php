@@ -83,29 +83,28 @@
 
                         <!-- Action -->
                         <td class="py-4 px-6 text-right whitespace-nowrap">
-                            @if($loan->status === 'active' || $loan->status === 'completed' || $loan->installments()->exists())
-                                <a href="{{ route('loans.installments', $loan->id) }}" 
-                                   class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800 transition-colors shadow-xs">
-                                    <span>{{ __('View Schedule') }}</span>
-                                    <span>&rarr;</span>
-                                </a>
-                            @elseif($loan->status === 'open_funding')
-                                <div class="inline-flex items-center gap-2">
+                            <div class="flex items-center justify-end gap-2">
+                                @if($loan->status === 'open_funding')
                                     <a href="{{ route('marketplace.show', $loan->id) }}" 
-                                       class="inline-flex items-center gap-1 py-1.5 px-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-xs">
-                                        {{ __('Marketplace') }}
+                                       class="inline-flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-xs">
+                                        <span>{{ __('Marketplace') }}</span>
                                     </a>
+                                @endif
+
+                                @if($loan->status === 'active' || $loan->status === 'completed' || $loan->installments()->exists() || $loan->status === 'open_funding')
                                     <a href="{{ route('loans.installments', $loan->id) }}" 
-                                       class="inline-flex items-center gap-1 py-1.5 px-2.5 rounded-xl bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800 transition-colors shadow-xs">
-                                        {{ __('View Schedule') }} &rarr;
+                                       class="inline-flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800 transition-colors shadow-xs">
+                                        <span>{{ __('View Schedule') }}</span>
+                                        <span>&rarr;</span>
                                     </a>
-                                </div>
-                            @else
-                                <a href="{{ route('loans.installments', $loan->id) }}" 
-                                   class="inline-flex items-center gap-1 py-1.5 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-xs">
-                                    {{ __('View Details') }} &rarr;
-                                </a>
-                            @endif
+                                @else
+                                    <a href="{{ route('loans.installments', $loan->id) }}" 
+                                       class="inline-flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-xs">
+                                        <span>{{ __('View Details') }}</span>
+                                        <span>&rarr;</span>
+                                    </a>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                     @empty

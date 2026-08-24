@@ -58,7 +58,7 @@ test.describe('Admin Financial Configuration & Role Management E2E', () => {
     await expect(page.locator('h1')).toContainText('Role Management');
 
     // Create a new custom role
-    await page.click('button:has-text("+ New Role")');
+    await page.click('button:has-text("New Role"), button:has-text("Peran Baru")');
 
     const timestamp = Date.now();
     const roleKey = `test_role_${timestamp}`;

@@ -31,7 +31,7 @@
     "You do not have permission to pay this installment.": "ليس لديك إذن لدفع هذا القسط.",
     "+ Add New User": "+ إضافة مستخدم جديد",
     "+ Generate Token": "+ إنشاء رمز",
-    "+ New Role": "+ دور جديد",
+    "New Role": "دور جديد",
     "15 mins ago": "منذ 15 دقيقة",
     "2 mins ago": "منذ دقيقتين",
     "2FA Setup": "إعداد 2FA",

@@ -61,7 +61,7 @@ class MarketplaceController extends Controller
      */
     public function show(LoanRequest $loan): View
     {
-        $loan->load(['borrower.profile', 'category', 'currency', 'collateralCurrency']);
+        $loan->load(['borrower.profile', 'category', 'currency', 'collateralCurrency', 'fundings.lender.profile']);
         return view('marketplace.show', compact('loan'));
     }
 

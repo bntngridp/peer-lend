@@ -99,10 +99,11 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         Route::post('/wallet/crypto/withdraw/initiate', [\App\Modules\Wallet\Controllers\PaymentController::class, 'initiateCryptoWithdrawal'])->name('wallet.crypto.withdraw.initiate');
     });
 
-    // 🤝 P2P Loan Marketplace Routes (Lender & Admin)
+    // 🤝 P2P Loan Marketplace Routes (Viewable by All, Funding by Lender & Admin)
+    Route::get('/marketplace', [\App\Modules\Loan\Controllers\MarketplaceController::class, 'index'])->name('marketplace.index');
+    Route::get('/marketplace/{loan}', [\App\Modules\Loan\Controllers\MarketplaceController::class, 'show'])->name('marketplace.show');
+
     Route::middleware('role:lender,admin')->group(function () {
-        Route::get('/marketplace', [\App\Modules\Loan\Controllers\MarketplaceController::class, 'index'])->name('marketplace.index');
-        Route::get('/marketplace/{loan}', [\App\Modules\Loan\Controllers\MarketplaceController::class, 'show'])->name('marketplace.show');
         Route::post('/marketplace/{loan}/fund', [\App\Modules\Loan\Controllers\MarketplaceController::class, 'fund'])
             ->middleware('kyc')
             ->name('marketplace.fund');

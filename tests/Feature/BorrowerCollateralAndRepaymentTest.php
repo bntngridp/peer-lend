@@ -198,4 +198,48 @@ class BorrowerCollateralAndRepaymentTest extends TestCase
         $response->assertOk();
         $response->assertSee('Official Payment Receipt');
     }
+
+    public function test_borrower_can_view_my_loans_list_page_with_schedule_links(): void
+    {
+        LoanRequest::create([
+            'borrower_id'   => $this->borrower->id,
+            'category_id'   => $this->category->id,
+            'amount'        => 5000000,
+            'interest_rate' => 12.00,
+            'duration'      => 6,
+            'tenor_type'    => 'monthly',
+            'purpose'       => 'Inventory Stocking',
+            'currency_id'   => $this->fiat->id,
+            'status'        => 'active',
+        ]);
+
+        $response = $this->actingAs($this->borrower)
+            ->get(route('loans.index'));
+
+        $response->assertOk();
+        $response->assertSee('My Loans');
+        $response->assertSee('View Schedule');
+    }
+
+    public function test_borrower_can_view_schedule_for_pending_or_open_funding_loan(): void
+    {
+        $openLoan = LoanRequest::create([
+            'borrower_id'   => $this->borrower->id,
+            'category_id'   => $this->category->id,
+            'amount'        => 7500000,
+            'interest_rate' => 10.50,
+            'duration'      => 12,
+            'tenor_type'    => 'monthly',
+            'purpose'       => 'Store Renovation',
+            'currency_id'   => $this->fiat->id,
+            'status'        => 'open_funding',
+        ]);
+
+        $response = $this->actingAs($this->borrower)
+            ->get(route('loans.installments', $openLoan->id));
+
+        $response->assertOk();
+        $response->assertSee('Repayment Schedule & History');
+        $response->assertSee('Installments Schedule');
+    }
 }

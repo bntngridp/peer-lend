@@ -30,7 +30,7 @@
         if (Auth::user()?->isLender()) {
             $backUrl = route('marketplace.index');
             $backText = __('Back to Marketplace');
-        } elseif (Auth::user()?->isAdmin() || Auth::user()?->isStaff()) {
+        } elseif (Auth::user()?->isAdmin() || Auth::user()?->isInternalStaff()) {
             $backUrl = route('admin.loans.index');
             $backText = __('Back to Loan Review');
         }
@@ -93,7 +93,13 @@
                     Rp {{ $nextInstallment ? __n(number_format($nextInstallment->total_due, 0, ',', '.')) : '0' }}
                 </p>
                 <p class="text-[11px] text-emerald-700 dark:text-emerald-400 font-bold mt-0.5">
-                    {{ $nextInstallment ? __('Due') . ': ' . $nextInstallment->due_date->format('M d, Y') : __('All Payments Completed') }}
+                    @if($nextInstallment)
+                        {{ __('Due') . ': ' . $nextInstallment->due_date->format('M d, Y') }}
+                    @elseif($loan->status === 'completed')
+                        {{ __('All Payments Completed') }}
+                    @else
+                        {{ __('Awaiting Loan Activation') }}
+                    @endif
                 </p>
             </div>
         </div>
@@ -133,7 +139,13 @@
         <div class="lg:col-span-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs overflow-hidden">
             <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 px-6 py-4 bg-slate-50/50 dark:bg-slate-900/50">
                 <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">{{ __('Installments Schedule') }}</h3>
-                <span class="text-xs font-medium text-slate-500">{{ __('Showing 1-:count Payments', ['count' => $installments->count()]) }}</span>
+                <span class="text-xs font-medium text-slate-500 dark:text-slate-400">
+                    @if($installments->count() > 0)
+                        {{ __('Showing 1-:count Payments', ['count' => $installments->count()]) }}
+                    @else
+                        {{ __('0 Payments') }}
+                    @endif
+                </span>
             </div>
 
             <div class="overflow-x-auto">
@@ -150,7 +162,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300">
-                        @foreach($installments as $inst)
+                        @forelse($installments as $inst)
                         <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
                             <td class="py-3.5 px-3 font-extrabold text-slate-900 dark:text-slate-100 whitespace-nowrap">
                                 #{{ $inst->installment_number }}
@@ -201,7 +213,21 @@
                                 @endif
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="7" class="py-12 text-center text-slate-400 dark:text-slate-500">
+                                <div class="flex flex-col items-center justify-center space-y-2">
+                                    <div class="h-12 w-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xl">
+                                        📅
+                                    </div>
+                                    <p class="text-xs font-bold text-slate-700 dark:text-slate-300">{{ __('No Installments Scheduled Yet') }}</p>
+                                    <p class="text-[11px] text-slate-400 dark:text-slate-500 max-w-sm">
+                                        {{ __('Installments schedule will be automatically generated once the loan reaches 100% funding and is disbursed.') }}
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

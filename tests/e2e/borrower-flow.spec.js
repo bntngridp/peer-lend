@@ -23,6 +23,21 @@ test.describe('Borrower Application & Collateral E2E', () => {
 
     // Verify Apply Loan page
     await page.waitForURL('http://localhost:9090/loans/create');
-    await expect(page.locator('h1')).toContainText('Calculate & Apply');
+    await expect(page.locator('h1')).toContainText(/Calculate & Apply|Hitung & Ajukan Pinjaman/i);
+  });
+
+  test('Borrower can click View Schedule / Lihat Jadwal and navigate to installments schedule view', async ({ page }) => {
+    // Navigate to My Loans
+    await page.goto('http://localhost:9090/loans');
+    await expect(page.locator('h1')).toContainText(/My Loans|Pinjaman Saya/i);
+
+    // Click View Schedule button
+    const viewScheduleBtn = page.locator('a:has-text("View Schedule"), a:has-text("Lihat Jadwal"), a:has-text("View Details"), a:has-text("Lihat Detail")').first();
+    await expect(viewScheduleBtn).toBeVisible();
+    await viewScheduleBtn.click();
+
+    // Verify installments schedule page is loaded
+    await expect(page.locator('h1')).toContainText(/Repayment Schedule|Jadwal Pembayaran/i);
+    await expect(page.locator('body')).toContainText(/Installments Schedule|Jadwal Angsuran/i);
   });
 });

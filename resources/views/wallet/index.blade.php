@@ -19,14 +19,6 @@
             <h1 class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">{{ __('Wallet Overview') }}</h1>
             <p class="text-xs font-medium text-slate-500 mt-1">{{ __('Manage your funds, track cash flow, and review recent transactions.') }}</p>
         </div>
-        <div class="flex items-center gap-3">
-            <button @click="activeTab = 'deposit'" class="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition-all">
-                <span></span> {{ __('Deposit Funds') }}
-            </button>
-            <button @click="activeTab = 'withdraw'" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition-all">
-                <span></span> {{ __('Withdraw Funds') }}
-            </button>
-        </div>
     </div>
 
     <!-- 3 Summary Stat Cards Row -->
@@ -49,20 +41,13 @@
         <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('AVAILABLE FUNDS') }}</span>
-                <span class="text-xs font-bold text-emerald-700">{{ __('Ready to invest') }}</span>
+                <span class="text-xs font-bold text-emerald-700 dark:text-emerald-400">{{ __('Ready to invest') }}</span>
             </div>
             <div class="mt-3">
                 <p class="text-3xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
                     Rp {{ __n(number_format($availableBalance, 0, ',', '.')) }}
                 </p>
-                <div class="flex gap-2 mt-2">
-                    <button @click="activeTab = 'deposit'" class="py-1 px-3 rounded-lg bg-emerald-700 text-white text-[11px] font-bold hover:bg-emerald-800">
-                        {{ __('Deposit') }}
-                    </button>
-                    <button @click="activeTab = 'withdraw'" class="py-1 px-3 rounded-lg border border-slate-200 bg-white text-slate-700 text-[11px] font-bold hover:bg-slate-50">
-                        {{ __('Withdraw') }}
-                    </button>
-                </div>
+                <p class="text-[11px] text-slate-400 font-medium mt-0.5">{{ __('Active capital for allocation') }}</p>
             </div>
         </div>
 

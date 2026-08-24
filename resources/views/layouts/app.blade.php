@@ -453,15 +453,23 @@
             <!-- Alert Toast Banner -->
             <div class="px-4 sm:px-6 lg:px-8 mt-4">
                 @if(session('success'))
-                    <div x-data="{ show: true }" x-show="show" class="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-900 shadow-xs flex justify-between items-start">
-                        <div class="flex gap-3">
-                            <svg class="h-5 w-5 text-emerald-700 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <div x-data="{ show: true }" x-show="show" class="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-900 shadow-xs flex justify-between items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <svg class="h-5 w-5 text-emerald-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-wider text-emerald-800">{{ __('Success') }}</p>
                                 <p class="text-sm font-medium mt-0.5">{{ __(session('success')) }}</p>
                             </div>
                         </div>
-                        <button @click="show = false" class="text-emerald-600 hover:text-emerald-800 font-bold text-lg">&times;</button>
+                        <div class="flex items-center gap-2 shrink-0">
+                            @if(session('paid_installment_id'))
+                                <a href="{{ route('repayments.receipt', session('paid_installment_id')) }}" target="_blank" 
+                                   class="px-3.5 py-1.5 rounded-lg bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-all shadow-xs inline-flex items-center gap-1.5">
+                                    🧾 {{ __('View Official Receipt') }}
+                                </a>
+                            @endif
+                            <button @click="show = false" class="text-emerald-600 hover:text-emerald-800 font-bold text-lg cursor-pointer">&times;</button>
+                        </div>
                     </div>
                 @endif
 

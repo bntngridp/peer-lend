@@ -37,7 +37,8 @@ class RepaymentController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return back()->with('success', "Installment #{$installment->installment_number} paid successfully!");
+        return back()->with('success', "Installment #{$installment->installment_number} paid successfully!")
+            ->with('paid_installment_id', $installment->id);
     }
 
     /**

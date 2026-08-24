@@ -206,6 +206,18 @@
     {{-- BORROWER DASHBOARD --}}
     {{-- ═══════════════════════════════════════════════════════════════════ --}}
     @elseif($role === 'borrower')
+    <div x-data="{
+        showRepayModal: false,
+        repayItem: null,
+        walletBalance: {{ (float)($stats['wallet_balance'] ?? 0) }},
+        openRepaymentModal(item) {
+            this.repayItem = item;
+            this.showRepayModal = true;
+        },
+        formatRupiah(num) {
+            return new Intl.NumberFormat('id-ID').format(num);
+        }
+    }" class="space-y-6">
 
     <!-- Header Section -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -309,12 +321,20 @@
                                 </td>
                                 <td class="py-4 px-6 text-right">
                                     @if($inst->status !== 'paid')
-                                        <form action="{{ route('repayments.pay', $inst->id) }}" method="POST" class="inline">
-                                            @csrf
-                                            <button type="submit" class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-700 text-white hover:bg-emerald-800 transition-colors shadow-xs">
-                                                {{ __('Pay Now') }}
-                                            </button>
-                                        </form>
+                                        <button type="button" 
+                                                @click="openRepaymentModal({
+                                                    id: '{{ $inst->id }}',
+                                                    number: '{{ $inst->installment_number }}',
+                                                    due_date: '{{ \Carbon\Carbon::parse($inst->due_date)->format('M d, Y') }}',
+                                                    principal: {{ (float)$inst->principal_amount }},
+                                                    interest: {{ (float)$inst->interest_amount }},
+                                                    penalty: {{ (float)($inst->penalty_amount ?? 0) }},
+                                                    total: {{ (float)($inst->total_due ?? $inst->total_amount) }},
+                                                    pay_url: '{{ route('repayments.pay', $inst->id) }}'
+                                                })"
+                                                class="inline-flex items-center px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-700 text-white hover:bg-emerald-800 transition-all shadow-xs cursor-pointer">
+                                            {{ __('Pay Now') }}
+                                        </button>
                                     @else
                                         <a href="{{ route('loans.installments', $inst->loan_id) }}" 
                                            class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
@@ -468,6 +488,91 @@
 
         </div>
 
+    </div>
+
+    <!-- Repayment Confirmation Modal -->
+    <div x-show="showRepayModal" 
+         x-cloak 
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs transition-opacity duration-200">
+        <div @click.away="showRepayModal = false" 
+             class="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-5 animate-in fade-in zoom-in duration-150">
+            
+            <!-- Header -->
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="h-9 w-9 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 flex items-center justify-center font-bold text-base border border-emerald-200 dark:border-emerald-800">
+                        💳
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-extrabold text-slate-900 dark:text-slate-100">{{ __('Payment Confirmation') }}</h3>
+                        <p class="text-[11px] text-slate-400 font-medium" x-text="repayItem ? '{{ __('Installment') }} #' + repayItem.number + ' &bull; {{ __('Due') }}: ' + repayItem.due_date : ''"></p>
+                    </div>
+                </div>
+                <button type="button" @click="showRepayModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-bold text-xl leading-none cursor-pointer">&times;</button>
+            </div>
+
+            <!-- Breakdown Card -->
+            <div class="rounded-2xl bg-slate-50 dark:bg-slate-800/50 p-4 border border-slate-200/60 dark:border-slate-800 space-y-2.5 text-xs">
+                <div class="flex justify-between text-slate-500 dark:text-slate-400">
+                    <span>{{ __('Principal Amount') }}</span>
+                    <span class="font-bold text-slate-800 dark:text-slate-200" x-text="repayItem ? 'Rp ' + formatRupiah(repayItem.principal) : ''"></span>
+                </div>
+                <div class="flex justify-between text-slate-500 dark:text-slate-400">
+                    <span>{{ __('Interest Amount') }}</span>
+                    <span class="font-bold text-slate-800 dark:text-slate-200" x-text="repayItem ? 'Rp ' + formatRupiah(repayItem.interest) : ''"></span>
+                </div>
+                <template x-if="repayItem && repayItem.penalty > 0">
+                    <div class="flex justify-between text-rose-600 dark:text-rose-400">
+                        <span>{{ __('Late Penalty Fee') }}</span>
+                        <span class="font-bold" x-text="'Rp ' + formatRupiah(repayItem.penalty)"></span>
+                    </div>
+                </template>
+                <div class="pt-2 border-t border-slate-200 dark:border-slate-700 flex justify-between items-baseline">
+                    <span class="font-bold text-slate-900 dark:text-slate-100 text-xs">{{ __('Total Payment') }}</span>
+                    <span class="text-lg font-black text-emerald-700 dark:text-emerald-400" x-text="repayItem ? 'Rp ' + formatRupiah(repayItem.total) : ''"></span>
+                </div>
+            </div>
+
+            <!-- Wallet Balance Assessment -->
+            <div class="rounded-2xl p-4 border text-xs space-y-2"
+                 :class="repayItem && walletBalance >= repayItem.total ? 'bg-emerald-50/70 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-300' : 'bg-rose-50/70 dark:bg-rose-950/30 border-rose-200 dark:border-rose-800 text-rose-900 dark:text-rose-300'">
+                <div class="flex justify-between items-center">
+                    <span class="font-medium">{{ __('Current Wallet Balance') }}:</span>
+                    <span class="font-extrabold" x-text="'Rp ' + formatRupiah(walletBalance)"></span>
+                </div>
+                <div class="flex justify-between items-center pt-1 border-t border-current/10">
+                    <span class="font-medium">{{ __('Balance After Payment') }}:</span>
+                    <span class="font-extrabold" x-text="repayItem ? 'Rp ' + formatRupiah(Math.max(0, walletBalance - repayItem.total)) : ''"></span>
+                </div>
+                <template x-if="repayItem && walletBalance < repayItem.total">
+                    <div class="mt-2 pt-2 border-t border-rose-200 dark:border-rose-800/60 flex items-center justify-between gap-2">
+                        <span class="text-[11px] font-bold text-rose-700 dark:text-rose-400">{{ __('Insufficient balance for this payment.') }}</span>
+                        <a href="{{ route('wallet.index') }}" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[11px] hover:bg-rose-700 transition-all shrink-0">
+                            {{ __('Deposit Funds') }} &rarr;
+                        </a>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Form Submit Actions -->
+            <form :action="repayItem ? repayItem.pay_url : ''" method="POST" class="pt-2 flex items-center gap-3">
+                @csrf
+                <button type="button" 
+                        @click="showRepayModal = false" 
+                        class="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer">
+                    {{ __('Cancel') }}
+                </button>
+                <button type="submit" 
+                        :disabled="!repayItem || walletBalance < repayItem.total"
+                        :class="repayItem && walletBalance >= repayItem.total ? 'bg-emerald-700 hover:bg-emerald-800 text-white shadow-xs cursor-pointer' : 'bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-400 cursor-not-allowed'"
+                        class="flex-1 py-2.5 px-4 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5">
+                    <span>{{ __('Confirm & Pay Now') }}</span>
+                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+                </button>
+            </form>
+
+        </div>
+    </div>
     </div>
 
 

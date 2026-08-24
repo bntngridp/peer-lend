@@ -422,7 +422,8 @@
                             <div class="relative w-full h-full flex items-center justify-center">
                                 <img :src="ktpPreview" class="max-h-[180px] w-auto max-w-full object-contain rounded-lg shadow-md transition-transform group-hover:scale-[1.02]">
                                 <div class="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-slate-900/80 text-[9px] font-bold text-slate-200 border border-slate-700 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
-                                    <span>🔍 Zoom HD</span>
+                                    <svg class="w-3 h-3 text-slate-300" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"/></svg>
+                                    <span>Zoom HD</span>
                                 </div>
                             </div>
                         </template>
@@ -470,7 +471,8 @@
                         <!-- Live Scan Banner -->
                         <template x-if="qualityStatus.scanning">
                             <div class="p-2 rounded-xl bg-blue-50 text-blue-800 text-[10px] font-bold animate-pulse flex items-center gap-1.5">
-                                <span>🔍</span> Memindai kualitas piksel &amp; pencahayaan...
+                                <svg class="w-3.5 h-3.5 text-blue-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+                                <span>Memindai kualitas piksel &amp; pencahayaan...</span>
                             </div>
                         </template>
 
@@ -484,7 +486,7 @@
                         <div class="flex items-center justify-between font-medium"
                              :class="qualityStatus.scanned ? (qualityStatus.cornersValid ? 'text-emerald-800 dark:text-emerald-400' : 'text-amber-600') : 'text-slate-600'">
                             <div class="flex items-center gap-1.5">
-                                <span x-text="qualityStatus.scanned ? (qualityStatus.cornersValid ? '✓' : '⚠') : '✓'">✓</span>
+                                <span x-text="qualityStatus.scanned ? (qualityStatus.cornersValid ? '✓' : '!') : '✓'">✓</span>
                                 <span>4 Sudut &amp; Resolusi Dokumen</span>
                             </div>
                             <span class="text-[10px] font-bold opacity-80" x-text="qualityStatus.scanned ? qualityStatus.resolutionText : 'Min 600x400'"></span>
@@ -494,7 +496,7 @@
                         <div class="flex items-center justify-between font-medium"
                              :class="qualityStatus.scanned ? (qualityStatus.lightingValid ? 'text-emerald-800 dark:text-emerald-400' : 'text-amber-600') : 'text-slate-600'">
                             <div class="flex items-center gap-1.5">
-                                <span x-text="qualityStatus.scanned ? (qualityStatus.lightingValid ? '✓' : '⚠') : '✓'">✓</span>
+                                <span x-text="qualityStatus.scanned ? (qualityStatus.lightingValid ? '✓' : '!') : '✓'">✓</span>
                                 <span>Pencahayaan &amp; Tanpa Glare Silau</span>
                             </div>
                             <span class="text-[10px] font-bold opacity-80" x-text="qualityStatus.scanned ? qualityStatus.brightnessPct + '% Brightness' : 'Pencahayaan Baik'"></span>

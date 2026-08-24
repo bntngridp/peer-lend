@@ -36,7 +36,7 @@
 
                             <!-- Greeting -->
                             <h1 style="margin:0 0 12px;font-size:19px;font-weight:800;color:#0f172a;line-height:1.3;">
-                                Halo, {{ $user->profile->full_name ?? 'Pengguna LendFlow' }} 👋
+                                Halo, {{ $user->profile->full_name ?? 'Pengguna LendFlow' }}
                             </h1>
 
                             <p style="margin:0 0 8px;font-size:14px;line-height:1.7;color:#475569;">
@@ -71,7 +71,7 @@
                                 <tr>
                                     <td style="background-color:#f0fdf4;border-left:4px solid #16a34a;border-radius:6px;padding:14px 16px;">
                                         <p style="margin:0;font-size:12px;color:#166534;line-height:1.6;">
-                                            🔒 <strong>Keamanan Akun Anda:</strong> Tautan ini akan kadaluwarsa dalam
+                                            <strong>Keamanan Akun Anda:</strong> Tautan ini akan kadaluwarsa dalam
                                             <strong>{{ $expireMinutes }} menit</strong>. Jika Anda tidak meminta perubahan ini,
                                             abaikan email ini — akun Anda tetap aman dan tidak ada perubahan yang terjadi.
                                         </p>

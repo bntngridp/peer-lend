@@ -39,5 +39,19 @@ test.describe('Borrower Application & Collateral E2E', () => {
     // Verify installments schedule page is loaded
     await expect(page.locator('h1')).toContainText(/Repayment Schedule|Jadwal Pembayaran/i);
     await expect(page.locator('body')).toContainText(/Installments Schedule|Jadwal Angsuran/i);
+
+    // Switch to Calendar View
+    const calendarToggleBtn = page.getByRole('button', { name: /Calendar View|Tampilan Kalender/i });
+    await expect(calendarToggleBtn).toBeVisible();
+    await calendarToggleBtn.click();
+
+    // Verify Calendar View is displayed
+    await expect(page.locator('body')).toContainText(/Installments Due This Month|Tagihan Jatuh Tempo Bulan Ini|Legend|Keterangan/i);
+
+    // Switch back to Table View
+    const tableToggleBtn = page.getByRole('button', { name: /Table View|Tampilan Tabel/i });
+    await expect(tableToggleBtn).toBeVisible();
+    await tableToggleBtn.click();
+    await expect(page.locator('table')).toBeVisible();
   });
 });

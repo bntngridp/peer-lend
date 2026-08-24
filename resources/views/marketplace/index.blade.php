@@ -17,7 +17,9 @@
                 <input type="text" name="search" value="{{ request('search') }}" 
                        placeholder="{{ __('Search marketplace...') }}" 
                        class="w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 py-2 text-xs font-medium text-slate-700 placeholder-slate-400 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 shadow-xs">
-                <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
+                <span class="absolute left-3 top-2.5 text-slate-400 text-xs">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+                </span>
             </div>
 
             <!-- Filter: Risk Grade -->
@@ -163,8 +165,9 @@
                             @if(Auth::check() && $loan->fundings()->where('lender_id', Auth::id())->exists())
                                 <div class="flex items-center justify-end gap-2">
                                     <a href="{{ route('loans.installments', $loan->id) }}" 
-                                       class="inline-flex items-center gap-1 py-1.5 px-3 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold hover:bg-emerald-200 transition-colors shadow-xs border border-emerald-300 dark:border-emerald-800">
-                                        💬 {{ __('Chat & Schedule') }}
+                                       class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold hover:bg-emerald-200 transition-colors shadow-xs border border-emerald-300 dark:border-emerald-800">
+                                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"/></svg>
+                                        <span>{{ __('Chat & Schedule') }}</span>
                                     </a>
                                     <a href="{{ route('marketplace.show', $loan->id) }}" 
                                        class="inline-flex items-center gap-1 py-1.5 px-3 rounded-xl bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800 transition-colors shadow-xs">

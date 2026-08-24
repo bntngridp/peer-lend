@@ -385,17 +385,17 @@
                                         preg_match('/midtrans \(([^)]+)\)/i', $tx->description, $matches);
                                         $midMethod = $matches[1] ?? 'Fiat';
                                     @endphp
-                                    @if(str_contains(strtolower($midMethod), 'qris') || str_contains(strtolower($midMethod), 'gopay') || str_contains(strtolower($midMethod), 'shopee'))
-                                        📲 Midtrans ({{ $midMethod }})
-                                    @else
-                                        💳 Midtrans ({{ $midMethod }})
-                                    @endif
+                                    <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-6 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5z"/></svg>
+                                    <span>Midtrans ({{ $midMethod }})</span>
                                 @elseif(str_contains(strtolower($tx->description), 'xendit'))
-                                    🏦 Xendit Payout
+                                    <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.5M4.5 21V10.5M3 21h18"/></svg>
+                                    <span>Xendit Payout</span>
                                 @elseif(str_contains(strtolower($tx->description), 'nowpayments'))
-                                    🪙 NOWPayments (Crypto)
+                                    <svg class="w-3.5 h-3.5 text-amber-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <span>NOWPayments (Crypto)</span>
                                 @else
-                                    ⚖️ {{ __(ucfirst($tx->type)) }}
+                                    <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
+                                    <span>{{ __(ucfirst($tx->type)) }}</span>
                                 @endif
                             </span>
                         </td>

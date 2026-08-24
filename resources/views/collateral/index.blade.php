@@ -138,12 +138,49 @@
 
     <!-- Liquidation Warnings Table Card -->
     <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs overflow-hidden">
-        <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50/50">
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 px-6 py-4 bg-slate-50/50 dark:bg-slate-800/40">
             <div class="flex items-center gap-2">
-                <span class="text-rose-600 text-sm"></span>
                 <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">{{ __('Liquidation Warnings & Margin Calls') }}</h3>
             </div>
-            <span class="text-xs font-bold text-rose-700">{{ __('Live API Feeds') }}</span>
+            
+            <!-- Real-Time Market Prices Indicator with Interactive Tooltip -->
+            <div class="relative inline-flex items-center" x-data="{ showTooltip: false }">
+                <button type="button" 
+                        @mouseenter="showTooltip = true" 
+                        @mouseleave="showTooltip = false"
+                        @focus="showTooltip = true"
+                        @blur="showTooltip = false"
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-xs font-bold text-emerald-800 dark:text-emerald-300 transition-all cursor-pointer select-none">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600 dark:bg-emerald-400"></span>
+                    </span>
+                    <span>{{ __('Real-Time Market Prices') }}</span>
+                    <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 opacity-80" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                    </svg>
+                </button>
+
+                <!-- Tooltip Popup -->
+                <div x-show="showTooltip" 
+                     x-cloak 
+                     x-transition:enter="transition ease-out duration-150"
+                     x-transition:enter-start="opacity-0 translate-y-1 scale-95"
+                     x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                     x-transition:leave="transition ease-in duration-100"
+                     x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                     x-transition:leave-end="opacity-0 translate-y-1 scale-95"
+                     class="absolute right-0 top-full mt-2 w-72 p-3 rounded-2xl bg-slate-900 text-white text-[11px] font-medium leading-relaxed shadow-xl border border-slate-700 z-30 pointer-events-none">
+                    <div class="flex items-start gap-2">
+                        <svg class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p>
+                            {{ __('Collateral values and LTV ratios are calculated automatically using live market price feeds to ensure safety.') }}
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="overflow-x-auto">

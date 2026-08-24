@@ -199,21 +199,27 @@
                         </div>
 
                         <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                            <div>
-                                <span class="font-bold text-slate-900 dark:text-slate-100 block">Ethereum (ETH)</span>
-                                <span class="text-[10px] {{ $currencySettings['eth'] ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400' }} font-bold">
-                                    {{ $currencySettings['eth'] ? __('Active') : __('Inactive') }}
-                                </span>
+                            <div class="flex items-center gap-2.5">
+                                <img src="{{ asset('images/crypto/eth.png') }}" alt="ETH" class="w-6 h-6 rounded-lg object-cover shadow-2xs border border-indigo-500/20">
+                                <div>
+                                    <span class="font-bold text-slate-900 dark:text-slate-100 block">Ethereum (ETH)</span>
+                                    <span class="text-[10px] {{ $currencySettings['eth'] ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400' }} font-bold">
+                                        {{ $currencySettings['eth'] ? __('Active') : __('Inactive') }}
+                                    </span>
+                                </div>
                             </div>
                             <input type="checkbox" name="currency_eth" value="1" {{ $currencySettings['eth'] ? 'checked' : '' }} class="accent-emerald-600 h-4 w-4 rounded cursor-pointer">
                         </div>
 
                         <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                            <div>
-                                <span class="font-bold text-slate-900 dark:text-slate-100 block">Bitcoin (BTC)</span>
-                                <span class="text-[10px] {{ $currencySettings['btc'] ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400' }} font-bold">
-                                    {{ $currencySettings['btc'] ? __('Active') : __('Inactive') }}
-                                </span>
+                            <div class="flex items-center gap-2.5">
+                                <img src="{{ asset('images/crypto/btc.png') }}" alt="BTC" class="w-6 h-6 rounded-lg object-cover shadow-2xs border border-amber-500/20">
+                                <div>
+                                    <span class="font-bold text-slate-900 dark:text-slate-100 block">Bitcoin (BTC)</span>
+                                    <span class="text-[10px] {{ $currencySettings['btc'] ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400' }} font-bold">
+                                        {{ $currencySettings['btc'] ? __('Active') : __('Inactive') }}
+                                    </span>
+                                </div>
                             </div>
                             <input type="checkbox" name="currency_btc" value="1" {{ $currencySettings['btc'] ? 'checked' : '' }} class="accent-emerald-600 h-4 w-4 rounded cursor-pointer">
                         </div>

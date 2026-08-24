@@ -78,19 +78,25 @@
 
             <div class="space-y-3">
                 @forelse($collateralDistribution as $item)
-                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <div class="h-9 w-9 rounded-full {{ $item['code'] === 'BTC' ? 'bg-amber-500' : ($item['code'] === 'ETH' ? 'bg-indigo-600' : 'bg-emerald-600') }} text-white font-black flex items-center justify-center text-xs shadow-xs">
-                            {{ $item['code'] === 'BTC' ? '₿' : ($item['code'] === 'ETH' ? 'Ξ' : '₮') }}
-                        </div>
+                        @if($item['code'] === 'BTC')
+                            <img src="{{ asset('images/crypto/btc.png') }}" alt="BTC" class="h-9 w-9 rounded-xl object-cover shadow-xs border border-amber-500/20">
+                        @elseif($item['code'] === 'ETH')
+                            <img src="{{ asset('images/crypto/eth.png') }}" alt="ETH" class="h-9 w-9 rounded-xl object-cover shadow-xs border border-indigo-500/20">
+                        @else
+                            <div class="h-9 w-9 rounded-xl bg-emerald-600 text-white font-black flex items-center justify-center text-xs shadow-xs">
+                                ₮
+                            </div>
+                        @endif
                         <div>
-                            <span class="font-bold text-slate-900 text-xs block">{{ $item['name'] }} ({{ $item['code'] }})</span>
+                            <span class="font-bold text-slate-900 dark:text-slate-100 text-xs block">{{ $item['name'] }} ({{ $item['code'] }})</span>
                             <span class="text-[10px] text-slate-400 font-medium block">{{ __n(number_format($item['total_locked'], $item['code'] === 'BTC' ? 4 : 2)) }} {{ $item['code'] }} {{ __('Locked') }}</span>
                         </div>
                     </div>
                     <div class="text-right">
-                        <span class="font-extrabold text-slate-900 text-xs block">Rp {{ __n(number_format($item['total_amount'], 0, ',', '.')) }}</span>
-                        <span class="text-[10px] text-emerald-700 font-bold block">{{ __n($item['percentage']) }}% {{ __('of Pool') }}</span>
+                        <span class="font-extrabold text-slate-900 dark:text-slate-100 text-xs block">Rp {{ __n(number_format($item['total_amount'], 0, ',', '.')) }}</span>
+                        <span class="text-[10px] text-emerald-700 dark:text-emerald-400 font-bold block">{{ __n($item['percentage']) }}% {{ __('of Pool') }}</span>
                     </div>
                 </div>
                 @empty
@@ -203,8 +209,15 @@
                         <td class="py-4 px-6 font-semibold text-slate-800">
                             {{ $loan->borrower?->profile?->full_name ?? __('Borrower') }}
                         </td>
-                        <td class="py-4 px-6 font-bold text-indigo-700">
-                            {{ $loan->collateralCurrency?->code ?? 'CRYPTO' }} ({{ __n(number_format($loan->collateral_amount, 4)) }})
+                        <td class="py-4 px-6 font-bold text-indigo-700 dark:text-indigo-400">
+                            <div class="inline-flex items-center gap-1.5">
+                                @if($loan->collateralCurrency?->code === 'BTC')
+                                    <img src="{{ asset('images/crypto/btc.png') }}" alt="BTC" class="w-4 h-4 rounded-md object-cover shrink-0 shadow-2xs border border-amber-500/20">
+                                @elseif($loan->collateralCurrency?->code === 'ETH')
+                                    <img src="{{ asset('images/crypto/eth.png') }}" alt="ETH" class="w-4 h-4 rounded-md object-cover shrink-0 shadow-2xs border border-indigo-500/20">
+                                @endif
+                                <span>{{ $loan->collateralCurrency?->code ?? 'CRYPTO' }} ({{ __n(number_format($loan->collateral_amount, 4)) }})</span>
+                            </div>
                         </td>
                         <td class="py-4 px-6 font-extrabold {{ $loan->current_ltv >= 80 ? 'text-rose-600' : 'text-amber-600' }}">
                             {{ __n(number_format($loan->current_ltv, 1)) }}%

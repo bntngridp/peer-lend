@@ -88,22 +88,22 @@
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         <div class="rounded-2xl bg-emerald-700 text-white p-4 shadow-xs">
                             <span class="text-[10px] font-bold text-emerald-100 uppercase tracking-wider block">{{ __('MONTHLY INSTALLMENT') }}</span>
-                            <span id="res_monthly" class="text-lg font-black text-white mt-1 block truncate">Rp {{ __n('916.667') }}</span>
+                            <span id="res_monthly" class="text-sm sm:text-base font-black text-white mt-1 block leading-tight">Rp {{ __n('916.667') }}</span>
                         </div>
 
                         <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-xs">
                             <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">{{ __('TOTAL REPAYMENT') }}</span>
-                            <span id="res_total" class="text-base font-extrabold text-slate-900 dark:text-slate-100 mt-1 block truncate">Rp {{ __n('11.000.000') }}</span>
+                            <span id="res_total" class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-slate-100 mt-1 block leading-tight">Rp {{ __n('11.000.000') }}</span>
                         </div>
 
                         <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-xs">
                             <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">{{ __('TOTAL INTEREST') }}</span>
-                            <span id="res_interest" class="text-base font-extrabold text-emerald-700 dark:text-emerald-400 mt-1 block truncate">Rp {{ __n('1.000.000') }}</span>
+                            <span id="res_interest" class="text-sm sm:text-base font-extrabold text-emerald-700 dark:text-emerald-400 mt-1 block leading-tight">Rp {{ __n('1.000.000') }}</span>
                         </div>
 
                         <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-xs">
                             <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">{{ __('PROVISION FEE') }} (1%)</span>
-                            <span id="res_fee" class="text-base font-extrabold text-slate-900 dark:text-slate-100 mt-1 block truncate">Rp {{ __n('100.000') }}</span>
+                            <span id="res_fee" class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-slate-100 mt-1 block leading-tight">Rp {{ __n('100.000') }}</span>
                         </div>
                     </div>
 

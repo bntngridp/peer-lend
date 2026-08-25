@@ -21,12 +21,16 @@
         <!-- Card 1: TOTAL PLEDGED VALUE -->
         <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('TOTAL PLEDGED VALUE') }}</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">+{{ __n('2.4%') }}</span>
+                <span class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{{ __('TOTAL PLEDGED VALUE') }}</span>
+                @if(($totalPledgedValue ?? 0) > 0)
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">{{ __('Active Pledged') }}</span>
+                @else
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">{{ __('No Collateral') }}</span>
+                @endif
             </div>
             <div class="mt-3">
-                <p class="text-3xl font-black text-slate-900 tracking-tight">
-                    Rp {{ __n(number_format($totalPledgedValue ?? 1700000000, 0, ',', '.')) }}
+                <p class="text-3xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
+                    Rp {{ __n(number_format($totalPledgedValue ?? 0, 0, ',', '.')) }}
                 </p>
                 <p class="text-[11px] text-slate-400 font-medium mt-0.5">{{ __('Across') }} {{ __n($cryptoLoans->count()) }} {{ __('active collateral positions') }}</p>
             </div>
@@ -35,12 +39,12 @@
         <!-- Card 2: WEIGHTED AVG LTV -->
         <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('WEIGHTED AVG LTV') }}</span>
-                <span class="text-xs font-bold text-emerald-700">{{ __('Target') }} &lt;{{ __n('65%') }}</span>
+                <span class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{{ __('WEIGHTED AVG LTV') }}</span>
+                <span class="text-xs font-bold text-emerald-700 dark:text-emerald-400">{{ __('Target') }} &lt;{{ __n('65%') }}</span>
             </div>
             <div class="mt-3">
-                <p class="text-3xl font-black text-slate-900 tracking-tight">
-                    {{ __n(number_format($weightedAvgLtv ?? 78.0, 1)) }}%
+                <p class="text-3xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
+                    {{ __n(number_format($weightedAvgLtv ?? 0.0, 1)) }}%
                 </p>
                 <p class="text-[11px] text-slate-400 font-medium mt-0.5">{{ __('Margin Call Threshold:') }} {{ __n('75%') }}</p>
             </div>
@@ -49,8 +53,8 @@
         <!-- Card 3: PORTFOLIO RISK STATUS -->
         <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('PORTFOLIO RISK STATUS') }}</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">{{ __('Monitor') }}</span>
+                <span class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{{ __('PORTFOLIO RISK STATUS') }}</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">{{ __('Monitor') }}</span>
             </div>
             <div class="mt-3 space-y-1 text-xs font-semibold">
                 <div class="flex items-center gap-1.5 text-rose-600">

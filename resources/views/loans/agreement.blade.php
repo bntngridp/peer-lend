@@ -161,24 +161,39 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    @php
-                        // Flat Calculation mid-point simulation for UI if installments not yet fully generated in test
-                        $duration = $loan->duration;
-                        $monthlyPrincipal = bcdiv((string)$loan->amount, (string)$duration, 2);
-                        $monthlyInterest = bcdiv(bcmul((string)$loan->amount, bcdiv((string)$loan->interest_rate, '1200', 6), 4), '1', 2);
-                        $monthlyTotal = bcadd($monthlyPrincipal, $monthlyInterest, 2);
-                    @endphp
-                    @for($i = 1; $i <= $duration; $i++)
-                    <tr>
-                        <td class="py-2 px-3 text-center">{{ $i }}</td>
-                        <td class="py-2 px-3 text-right text-gray-600">Rp {{ number_format((float)$monthlyPrincipal, 0, ',', '.') }}</td>
-                        <td class="py-2 px-3 text-right text-gray-600">Rp {{ number_format((float)$monthlyInterest, 0, ',', '.') }}</td>
-                        <td class="py-2 px-3 text-right font-semibold text-indigo-600">Rp {{ number_format((float)$monthlyTotal, 0, ',', '.') }}</td>
-                        <td class="py-2 px-3 text-center">
-                            <span class="inline-block text-[10px] uppercase font-bold text-gray-400">UNPAID</span>
-                        </td>
-                    </tr>
-                    @endfor
+                    @if($loan->installments && $loan->installments->isNotEmpty())
+                        @foreach($loan->installments as $inst)
+                        <tr>
+                            <td class="py-2 px-3 text-center font-bold text-gray-700">{{ $inst->installment_number }}</td>
+                            <td class="py-2 px-3 text-right text-gray-600">Rp {{ number_format($inst->principal_amount, 0, ',', '.') }}</td>
+                            <td class="py-2 px-3 text-right text-gray-600">Rp {{ number_format($inst->interest_amount, 0, ',', '.') }}</td>
+                            <td class="py-2 px-3 text-right font-bold text-emerald-700">Rp {{ number_format($inst->total_due, 0, ',', '.') }}</td>
+                            <td class="py-2 px-3 text-center">
+                                <span class="inline-block text-[10px] uppercase font-extrabold {{ $inst->isPaid() ? 'text-emerald-700' : ($inst->isOverdue() ? 'text-rose-600' : 'text-amber-600') }}">
+                                    {{ $inst->status }}
+                                </span>
+                            </td>
+                        </tr>
+                        @endforeach
+                    @else
+                        @php
+                            $duration = $loan->duration;
+                            $monthlyPrincipal = bcdiv((string)$loan->amount, (string)$duration, 2);
+                            $monthlyInterest = bcdiv(bcmul((string)$loan->amount, bcdiv((string)$loan->interest_rate, '1200', 6), 4), '1', 2);
+                            $monthlyTotal = bcadd($monthlyPrincipal, $monthlyInterest, 2);
+                        @endphp
+                        @for($i = 1; $i <= $duration; $i++)
+                        <tr>
+                            <td class="py-2 px-3 text-center">{{ $i }}</td>
+                            <td class="py-2 px-3 text-right text-gray-600">Rp {{ number_format((float)$monthlyPrincipal, 0, ',', '.') }}</td>
+                            <td class="py-2 px-3 text-right text-gray-600">Rp {{ number_format((float)$monthlyInterest, 0, ',', '.') }}</td>
+                            <td class="py-2 px-3 text-right font-semibold text-indigo-600">Rp {{ number_format((float)$monthlyTotal, 0, ',', '.') }}</td>
+                            <td class="py-2 px-3 text-center">
+                                <span class="inline-block text-[10px] uppercase font-bold text-gray-400">JADWAL KONTRAK</span>
+                            </td>
+                        </tr>
+                        @endfor
+                    @endif
                 </tbody>
             </table>
         </div>

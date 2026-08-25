@@ -190,14 +190,25 @@ class DashboardController extends Controller
 
         // Calculate distribution of funded loans by risk grade
         $gradeDistribution = [
+            'A' => 0.0, 'B' => 0.0, 'C' => 0.0, 'D' => 0.0
+        ];
+        $gradeCounts = [
             'A' => 0, 'B' => 0, 'C' => 0, 'D' => 0
         ];
         foreach ($fundings as $f) {
             $g = $f->loan?->risk_grade;
             if ($g && isset($gradeDistribution[$g])) {
                 $gradeDistribution[$g] += (float) $f->amount;
+                $gradeCounts[$g]++;
             }
         }
+        $totalGradeFunded = array_sum($gradeDistribution);
+        $gradePercentages = [
+            'A' => $totalGradeFunded > 0 ? round(($gradeDistribution['A'] / $totalGradeFunded) * 100) : 0,
+            'B' => $totalGradeFunded > 0 ? round(($gradeDistribution['B'] / $totalGradeFunded) * 100) : 0,
+            'C' => $totalGradeFunded > 0 ? round(($gradeDistribution['C'] / $totalGradeFunded) * 100) : 0,
+            'D' => $totalGradeFunded > 0 ? round(($gradeDistribution['D'] / $totalGradeFunded) * 100) : 0,
+        ];
 
         // Calculate real portfolio value & average yield from DB
         $totalInvested = (float) $fundings->sum('amount');
@@ -228,6 +239,17 @@ class DashboardController extends Controller
             $growthData[] = (float) $cumulativeInvested;
         }
 
+        $currentMonthInvested = end($growthData) ?: 0;
+        $prevMonthInvested = $growthData[count($growthData) - 2] ?? 0;
+        if ($prevMonthInvested > 0) {
+            $diff = (($currentMonthInvested - $prevMonthInvested) / $prevMonthInvested) * 100;
+            $momGrowthBadge = ($diff >= 0 ? '+' : '') . round($diff, 1) . '% vs bln lalu';
+        } elseif ($currentMonthInvested > 0) {
+            $momGrowthBadge = '+100% Portofolio Baru';
+        } else {
+            $momGrowthBadge = 'Portofolio Siap';
+        }
+
         // Recent repayments received
         $recentRepayments = WalletTransaction::where('wallet_id', $wallet?->id)
             ->whereIn('type', ['repayment_interest', 'repayment_principal', 'interest', 'repayment'])
@@ -241,6 +263,7 @@ class DashboardController extends Controller
             'total_invested'           => $totalInvested,
             'portfolio_value'          => $portfolioValue,
             'expected_return_pct'      => $avgYield,
+            'mom_growth_badge'         => $momGrowthBadge,
             'active_investments'       => $fundings->filter(fn ($f) => in_array(
                 $f->loan?->status,
                 [LoanRequest::STATUS_OPEN_FUNDING, LoanRequest::STATUS_FUNDED, LoanRequest::STATUS_ACTIVE]
@@ -258,6 +281,9 @@ class DashboardController extends Controller
                 ->get(),
             'auto_invest_rule'         => $autoInvestRule,
             'grade_chart_data'         => array_values($gradeDistribution),
+            'grade_percentages'        => $gradePercentages,
+            'grade_counts'             => $gradeCounts,
+            'total_grade_funded'       => $totalGradeFunded,
             'growth_chart_labels'      => $growthLabels,
             'growth_chart_data'        => $growthData,
         ];

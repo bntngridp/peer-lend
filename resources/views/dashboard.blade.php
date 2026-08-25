@@ -600,12 +600,12 @@
     <!-- 4 High-Density Stat Cards Row -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Card 1: PORTFOLIO VALUE -->
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('PORTFOLIO VALUE') }}</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">{{ __('+4.2% vs last mo') }}</span>
+                <span class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{{ __('PORTFOLIO VALUE') }}</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">{{ $stats['mom_growth_badge'] ?? __('Portofolio Aktif') }}</span>
             </div>
-            <p class="text-2xl font-extrabold text-slate-900 mt-3">
+            <p class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mt-3">
                 Rp {{ number_format($stats['portfolio_value'], 0, ',', '.') }}
             </p>
         </div>
@@ -720,9 +720,9 @@
         <div class="space-y-6">
 
             <!-- Card: Risk Allocation Donut Chart -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-sm font-bold text-slate-900">{{ __('Risk Allocation') }}</h3>
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ __('Risk Allocation') }}</h3>
                 </div>
 
                 <!-- Donut Chart & Legend -->
@@ -730,40 +730,40 @@
                     <div class="relative w-44 h-44 flex items-center justify-center my-2">
                         <canvas id="lenderRiskAllocationDonut"></canvas>
                         <div class="absolute text-center">
-                            <span class="text-2xl font-black text-slate-900 block leading-tight">{{ $stats['active_investments'] > 0 ? $stats['active_investments'] : 34 }}</span>
+                            <span class="text-2xl font-black text-slate-900 dark:text-white block leading-tight">{{ $stats['active_investments'] }}</span>
                             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">{{ __('Active Loans') }}</span>
                         </div>
                     </div>
 
                     <!-- 4 Risk Grade Percentages Legend Grid -->
                     <div class="w-full grid grid-cols-2 gap-3 mt-4">
-                        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                        <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <span class="h-2.5 w-2.5 rounded-full bg-emerald-700"></span>
-                                <span class="text-xs font-bold text-slate-700">{{ __('Grade A') }}</span>
+                                <span class="text-xs font-bold text-slate-700 dark:text-slate-300">{{ __('Grade A') }}</span>
                             </div>
-                            <span class="text-xs font-black text-slate-900">45%</span>
+                            <span class="text-xs font-black text-slate-900 dark:text-slate-100">{{ $stats['grade_percentages']['A'] }}%</span>
                         </div>
-                        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                        <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <span class="h-2.5 w-2.5 rounded-full bg-blue-600"></span>
-                                <span class="text-xs font-bold text-slate-700">{{ __('Grade B') }}</span>
+                                <span class="text-xs font-bold text-slate-700 dark:text-slate-300">{{ __('Grade B') }}</span>
                             </div>
-                            <span class="text-xs font-black text-slate-900">30%</span>
+                            <span class="text-xs font-black text-slate-900 dark:text-slate-100">{{ $stats['grade_percentages']['B'] }}%</span>
                         </div>
-                        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                        <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <span class="h-2.5 w-2.5 rounded-full bg-amber-500"></span>
-                                <span class="text-xs font-bold text-slate-700">{{ __('Grade C') }}</span>
+                                <span class="text-xs font-bold text-slate-700 dark:text-slate-300">{{ __('Grade C') }}</span>
                             </div>
-                            <span class="text-xs font-black text-slate-900">15%</span>
+                            <span class="text-xs font-black text-slate-900 dark:text-slate-100">{{ $stats['grade_percentages']['C'] }}%</span>
                         </div>
-                        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                        <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <span class="h-2.5 w-2.5 rounded-full bg-rose-600"></span>
-                                <span class="text-xs font-bold text-slate-700">{{ __('Grade D') }}</span>
+                                <span class="text-xs font-bold text-slate-700 dark:text-slate-300">{{ __('Grade D') }}</span>
                             </div>
-                            <span class="text-xs font-black text-slate-900">10%</span>
+                            <span class="text-xs font-black text-slate-900 dark:text-slate-100">{{ $stats['grade_percentages']['D'] }}%</span>
                         </div>
                     </div>
                 </div>
@@ -1013,13 +1013,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // 2. Risk Allocation Donut Chart
     const ctxDonut = document.getElementById('lenderRiskAllocationDonut')?.getContext('2d');
     if (ctxDonut) {
+        const hasData = {{ $stats['total_grade_funded'] > 0 ? 'true' : 'false' }};
         new Chart(ctxDonut, {
             type: 'doughnut',
             data: {
                 labels: ['Grade A', 'Grade B', 'Grade C', 'Grade D'],
                 datasets: [{
-                    data: [45, 30, 15, 10],
-                    backgroundColor: ['#15803D', '#2563EB', '#D97706', '#DC2626'],
+                    data: hasData ? @json(array_values($stats['grade_percentages'])) : [1],
+                    backgroundColor: hasData ? ['#15803D', '#2563EB', '#D97706', '#DC2626'] : ['#e2e8f0'],
                     borderWidth: 0,
                     cutout: '75%'
                 }]
@@ -1027,7 +1028,12 @@ document.addEventListener('DOMContentLoaded', function () {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: false } }
+                plugins: { 
+                    legend: { display: false },
+                    tooltip: {
+                        enabled: hasData
+                    }
+                }
             }
         });
     }

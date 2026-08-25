@@ -21,8 +21,7 @@
     <!-- Styles & Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <!-- AlpineJS for interactive components -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
 
     <style>
         body {
@@ -32,6 +31,63 @@
         .text-primary-green { color: #15803D; }
         .border-primary-green { border-color: #15803D; }
         .hover\:bg-primary-green-dark:hover { background-color: #166534; }
+
+        /* ─── Animated SVG Checkmark & Failure Cross Keyframes ─── */
+        @keyframes strokeCircleAnim {
+            0% { stroke-dashoffset: 160; }
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes strokeCheckmarkAnim {
+            0% { stroke-dashoffset: 60; }
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes strokeCrossAnim {
+            0% { stroke-dashoffset: 60; }
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes modalScaleInAnim {
+            0% { transform: scale(0.85); opacity: 0; }
+            60% { transform: scale(1.02); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes modalShakeAnim {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        .anim-modal-popup {
+            animation: modalScaleInAnim 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        .anim-modal-shake {
+            animation: modalShakeAnim 0.38s ease-in-out forwards;
+        }
+
+        .svg-circle-success-path {
+            stroke-dasharray: 160;
+            stroke-dashoffset: 160;
+            animation: strokeCircleAnim 0.45s ease-out forwards;
+        }
+        .svg-checkmark-path {
+            stroke-dasharray: 60;
+            stroke-dashoffset: 60;
+            animation: strokeCheckmarkAnim 0.35s ease-out 0.2s forwards;
+        }
+        .svg-circle-failed-path {
+            stroke-dasharray: 160;
+            stroke-dashoffset: 160;
+            animation: strokeCircleAnim 0.45s ease-out forwards;
+        }
+        .svg-cross-path-1 {
+            stroke-dasharray: 60;
+            stroke-dashoffset: 60;
+            animation: strokeCrossAnim 0.25s ease-out 0.15s forwards;
+        }
+        .svg-cross-path-2 {
+            stroke-dasharray: 60;
+            stroke-dashoffset: 60;
+            animation: strokeCrossAnim 0.25s ease-out 0.3s forwards;
+        }
     </style>
     {{-- $sysPref / $sysTheme / $sysDensity already computed at top of file --}}
     <script>
@@ -101,6 +157,72 @@
                 document.documentElement.classList.remove('density-compact');
             }
         };
+
+        /* ─── Auto-trigger from Flash Session & URL Params ─── */
+        document.addEventListener('DOMContentLoaded', () => {
+            @if(session('payment_feedback'))
+                const flashFeedback = @json(session('payment_feedback'));
+                if (flashFeedback) {
+                    setTimeout(() => {
+                        if (flashFeedback.status === 'failed' || flashFeedback.status === 'error') {
+                            if (window.showPaymentFailed) window.showPaymentFailed(flashFeedback);
+                        } else if (flashFeedback.status === 'pending') {
+                            if (window.showPaymentPending) window.showPaymentPending(flashFeedback);
+                        } else {
+                            if (window.showPaymentSuccess) window.showPaymentSuccess(flashFeedback);
+                        }
+                    }, 400);
+                }
+            @endif
+
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('status')) {
+                const status = urlParams.get('status');
+                const msg = urlParams.get('msg') || '';
+                const amount = urlParams.get('amount') || '';
+                const orderId = urlParams.get('order_id') || urlParams.get('orderId') || '';
+                const txType = urlParams.get('tx_type') || urlParams.get('txType') || 'Deposit Pembayaran';
+
+                setTimeout(() => {
+                    if (status === 'success') {
+                        if (window.showPaymentSuccess) {
+                            window.showPaymentSuccess({
+                                title: 'Pembayaran Berhasil!',
+                                message: msg || 'Pembayaran deposit Anda telah berhasil divalidasi dan saldo telah ditambahkan ke dompet.',
+                                amount: amount ? (amount.startsWith('Rp') ? amount : 'Rp ' + Number(amount).toLocaleString('id-ID')) : '',
+                                orderId: orderId,
+                                txType: txType,
+                                actionUrl: '{{ route("wallet.index") }}',
+                                actionText: 'Lihat Mutasi Dompet'
+                            });
+                        }
+                    } else if (status === 'error' || status === 'failed') {
+                        if (window.showPaymentFailed) {
+                            window.showPaymentFailed({
+                                title: 'Pembayaran Gagal',
+                                message: msg || 'Proses transaksi gagal atau dibatalkan.',
+                                reason: msg || 'Pembayaran tidak dapat diselesaikan.',
+                                orderId: orderId,
+                                txType: txType
+                            });
+                        }
+                    } else if (status === 'pending') {
+                        if (window.showPaymentPending) {
+                            window.showPaymentPending({
+                                title: 'Menunggu Pembayaran',
+                                message: msg || 'Tagihan pembayaran telah dibuat dan sedang menunggu transfer dana Anda.',
+                                amount: amount ? (amount.startsWith('Rp') ? amount : 'Rp ' + Number(amount).toLocaleString('id-ID')) : '',
+                                orderId: orderId,
+                                txType: txType
+                            });
+                        }
+                    }
+
+                    const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                    window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
+                }, 400);
+            }
+        });
     </script>
 </head>
 <body class="h-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased" 
@@ -553,6 +675,153 @@
         </div>
     </div>
     @endauth
+
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
+    <!-- GLOBAL ANIMATED PAYMENT & TRANSACTION FEEDBACK MODAL -->
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
+    <div id="modal-payment-feedback" 
+         x-data
+         x-show="$store.paymentFeedback.open" 
+         x-cloak
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 backdrop-blur-none"
+         x-transition:enter-end="opacity-100 backdrop-blur-md"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 backdrop-blur-md"
+         x-transition:leave-end="opacity-0 backdrop-blur-none"
+         class="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-[120] flex items-center justify-center p-4 overflow-y-auto"
+         style="display: none;">
+
+        <div @click.away="$store.paymentFeedback.close()"
+             :class="{
+                 'anim-modal-popup': $store.paymentFeedback.status === 'success' || $store.paymentFeedback.status === 'pending',
+                 'anim-modal-shake': $store.paymentFeedback.status === 'failed'
+             }"
+             class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200/80 dark:border-slate-800 w-full max-w-md p-6 sm:p-8 text-center relative overflow-hidden transform transition-all my-8">
+
+            <!-- Decorative Radial Background Glow -->
+            <div x-show="$store.paymentFeedback.status === 'success'" class="absolute -top-24 left-1/2 -translate-x-1/2 w-64 h-64 bg-emerald-500/15 dark:bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div x-show="$store.paymentFeedback.status === 'failed'" class="absolute -top-24 left-1/2 -translate-x-1/2 w-64 h-64 bg-rose-500/15 dark:bg-rose-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div x-show="$store.paymentFeedback.status === 'pending'" class="absolute -top-24 left-1/2 -translate-x-1/2 w-64 h-64 bg-amber-500/15 dark:bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <!-- 🟢 SUCCESS ANIMATED CHECKMARK STATE -->
+            <div x-show="$store.paymentFeedback.status === 'success'">
+                <!-- Animated Checkmark Circle -->
+                <div class="relative w-20 h-20 mx-auto mb-5 flex items-center justify-center">
+                    <div class="absolute inset-0 rounded-full bg-emerald-100 dark:bg-emerald-950/80 animate-ping opacity-25"></div>
+                    <div class="relative w-20 h-20 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border-2 border-emerald-500/30 flex items-center justify-center shadow-lg shadow-emerald-500/10">
+                        <svg class="w-12 h-12 text-emerald-600 dark:text-emerald-400" viewBox="0 0 52 52" fill="none">
+                            <circle class="svg-circle-success-path" cx="26" cy="26" r="23" stroke="currentColor" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                            <path class="svg-checkmark-path" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M15 27l7 7 15-15"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 mb-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    {{ __('Pembayaran Berhasil') }}
+                </span>
+
+                <h3 class="text-xl font-black text-slate-900 dark:text-white tracking-tight" x-text="$store.paymentFeedback.title || 'Transaksi Sukses!'"></h3>
+                <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-2 leading-relaxed" x-text="$store.paymentFeedback.message"></p>
+            </div>
+
+            <!-- 🔴 FAILED ANIMATED CROSS STATE -->
+            <div x-show="$store.paymentFeedback.status === 'failed'">
+                <!-- Animated Cross Circle -->
+                <div class="relative w-20 h-20 mx-auto mb-5 flex items-center justify-center">
+                    <div class="absolute inset-0 rounded-full bg-rose-100 dark:bg-rose-950/80 animate-ping opacity-25"></div>
+                    <div class="relative w-20 h-20 rounded-full bg-rose-50 dark:bg-rose-950/60 border-2 border-rose-500/30 flex items-center justify-center shadow-lg shadow-rose-500/10">
+                        <svg class="w-12 h-12 text-rose-600 dark:text-rose-400" viewBox="0 0 52 52" fill="none">
+                            <circle class="svg-circle-failed-path" cx="26" cy="26" r="23" stroke="currentColor" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                            <path class="svg-cross-path-1" stroke="currentColor" stroke-width="4" stroke-linecap="round" d="M17 17l18 18"/>
+                            <path class="svg-cross-path-2" stroke="currentColor" stroke-width="4" stroke-linecap="round" d="M35 17l-18 18"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800 mb-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                    {{ __('Pembayaran Gagal') }}
+                </span>
+
+                <h3 class="text-xl font-black text-slate-900 dark:text-white tracking-tight" x-text="$store.paymentFeedback.title || 'Transaksi Tidak Berhasil'"></h3>
+                <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-2 leading-relaxed" x-text="$store.paymentFeedback.message"></p>
+
+                <!-- Reason Box -->
+                <div x-show="$store.paymentFeedback.reason" class="mt-3 p-3 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 text-left">
+                    <span class="text-[10px] font-bold text-rose-700 dark:text-rose-300 uppercase tracking-wider block">{{ __('Alasan / Catatan:') }}</span>
+                    <span class="text-xs font-semibold text-rose-900 dark:text-rose-200 mt-0.5 block" x-text="$store.paymentFeedback.reason"></span>
+                </div>
+            </div>
+
+            <!-- 🟡 PENDING STATE -->
+            <div x-show="$store.paymentFeedback.status === 'pending'">
+                <div class="relative w-20 h-20 mx-auto mb-5 flex items-center justify-center">
+                    <div class="absolute inset-0 rounded-full bg-amber-100 dark:bg-amber-950/80 animate-ping opacity-25"></div>
+                    <div class="relative w-20 h-20 rounded-full bg-amber-50 dark:bg-amber-950/60 border-2 border-amber-500/30 flex items-center justify-center shadow-lg shadow-amber-500/10">
+                        <svg class="w-10 h-10 text-amber-600 dark:text-amber-400 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 mb-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                    {{ __('Menunggu Pembayaran') }}
+                </span>
+
+                <h3 class="text-xl font-black text-slate-900 dark:text-white tracking-tight" x-text="$store.paymentFeedback.title || 'Menunggu Konfirmasi'"></h3>
+                <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-2 leading-relaxed" x-text="$store.paymentFeedback.message || 'Pembayaran Anda sedang diproses atau menunggu transfer ke Virtual Account.'"></p>
+            </div>
+
+            <!-- 📋 TRANSACTION DETAILS SUMMARY CARD -->
+            <div class="mt-6 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 p-4 text-left space-y-2.5">
+                
+                <!-- Nominal / Amount Highlight -->
+                <div x-show="$store.paymentFeedback.amount" class="flex items-center justify-between pb-2.5 border-b border-slate-200/60 dark:border-slate-700/60">
+                    <span class="text-xs font-bold text-slate-500 dark:text-slate-400">{{ __('Nominal Transaksi') }}</span>
+                    <span class="text-base font-black text-slate-900 dark:text-white" x-text="$store.paymentFeedback.amount"></span>
+                </div>
+
+                <!-- Order ID / Reference -->
+                <div x-show="$store.paymentFeedback.orderId" class="flex items-center justify-between text-xs">
+                    <span class="font-medium text-slate-500 dark:text-slate-400">{{ __('Order ID / Ref') }}</span>
+                    <span class="font-mono font-bold text-slate-800 dark:text-slate-200 text-[11px]" x-text="$store.paymentFeedback.orderId"></span>
+                </div>
+
+                <!-- Transaction Type -->
+                <div x-show="$store.paymentFeedback.txType" class="flex items-center justify-between text-xs">
+                    <span class="font-medium text-slate-500 dark:text-slate-400">{{ __('Tipe Transaksi') }}</span>
+                    <span class="font-semibold text-slate-700 dark:text-slate-300" x-text="$store.paymentFeedback.txType"></span>
+                </div>
+
+                <!-- Timestamp -->
+                <div class="flex items-center justify-between text-xs">
+                    <span class="font-medium text-slate-500 dark:text-slate-400">{{ __('Waktu') }}</span>
+                    <span class="font-medium text-slate-600 dark:text-slate-400 text-[11px]" x-text="$store.paymentFeedback.timestamp"></span>
+                </div>
+            </div>
+
+            <!-- 🔘 ACTION BUTTONS -->
+            <div class="mt-6 space-y-2">
+                <a x-show="$store.paymentFeedback.actionUrl && $store.paymentFeedback.actionText"
+                   :href="$store.paymentFeedback.actionUrl" 
+                   :target="$store.paymentFeedback.actionUrl && $store.paymentFeedback.actionUrl.startsWith('http') ? '_blank' : '_self'"
+                   class="w-full py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition-all shadow-xs hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2">
+                    <span x-text="$store.paymentFeedback.actionText"></span>
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+                </a>
+
+                <button type="button" @click="$store.paymentFeedback.close()" 
+                        class="w-full py-2.5 px-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-300 font-bold text-xs transition-colors shadow-2xs cursor-pointer">
+                    {{ __('Tutup & Selesai') }}
+                </button>
+            </div>
+
+        </div>
+    </div>
 
 </body>
 </html>

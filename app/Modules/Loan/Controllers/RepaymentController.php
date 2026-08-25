@@ -38,7 +38,17 @@ class RepaymentController extends Controller
         }
 
         return back()->with('success', "Installment #{$installment->installment_number} paid successfully!")
-            ->with('paid_installment_id', $installment->id);
+            ->with('paid_installment_id', $installment->id)
+            ->with('payment_feedback', [
+                'status'     => 'success',
+                'title'      => 'Pembayaran Angsuran Berhasil!',
+                'message'    => "Angsuran ke-{$installment->installment_number} untuk pinjaman {$loan->purpose} telah berhasil dibayarkan.",
+                'amount'     => 'Rp ' . number_format($installment->total_amount, 0, ',', '.'),
+                'orderId'    => '#INST-' . $installment->id,
+                'txType'     => 'Pembayaran Angsuran Pinjaman',
+                'actionUrl'  => route('repayments.receipt', $installment->id),
+                'actionText' => 'Lihat Bukti Pembayaran Resmi'
+            ]);
     }
 
     /**

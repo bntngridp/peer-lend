@@ -600,7 +600,15 @@
 <script>
 window.payPendingSnap = function(snapToken, paymentId) {
     if (!window.snap) {
-        alert('Payment gateway script not loaded yet.');
+        if (window.showPaymentFailed) {
+            window.showPaymentFailed({
+                title: 'Gateway Belum Siap',
+                message: 'Script gateway pembayaran Midtrans sedang dimuat, silakan coba sesaat lagi.',
+                reason: 'Midtrans Snap library not initialized'
+            });
+        } else {
+            alert('Payment gateway script not loaded yet.');
+        }
         return;
     }
     window.snap.pay(snapToken, {
@@ -618,13 +626,13 @@ window.payPendingSnap = function(snapToken, paymentId) {
             } catch (err) {
                 console.error(err);
             }
-            window.location.href = '{{ route("wallet.index") }}?status=success&msg=Payment settled!';
+            window.location.href = '{{ route("wallet.index") }}?status=success&order_id=' + encodeURIComponent(result.order_id || paymentId) + '&msg=' + encodeURIComponent('Pembayaran tagihan deposit berhasil tervalidasi.');
         },
         onPending: function(result) {
-            window.location.href = '{{ route("wallet.index") }}?status=pending&msg=Payment pending.';
+            window.location.href = '{{ route("wallet.index") }}?status=pending&order_id=' + encodeURIComponent(result.order_id || paymentId) + '&msg=' + encodeURIComponent('Transaksi sedang menunggu transfer pembayaran Anda.');
         },
         onError: function(result) {
-            window.location.href = '{{ route("wallet.index") }}?status=error&msg=Payment failed.';
+            window.location.href = '{{ route("wallet.index") }}?status=error&order_id=' + encodeURIComponent(result.order_id || paymentId) + '&msg=' + encodeURIComponent(result.status_message || 'Pembayaran dibatalkan atau gagal diproses.');
         },
         onClose: function() {
             console.log('Snap popup closed by user.');
@@ -648,10 +656,19 @@ window.checkPaymentStatus = async function(paymentId, btnElement) {
             body: JSON.stringify({ order_id: paymentId })
         });
         const resData = await response.json();
-        window.location.reload();
+        window.location.href = '{{ route("wallet.index") }}?status=success&order_id=' + encodeURIComponent(paymentId) + '&msg=' + encodeURIComponent('Status pembayaran telah berhasil disinkronkan.');
     } catch (err) {
         console.error(err);
-        alert('Gagal menyinkronkan status pembayaran.');
+        if (window.showPaymentFailed) {
+            window.showPaymentFailed({
+                title: 'Sinkronisasi Gagal',
+                message: 'Tidak dapat menghubungi server gateway pembayaran saat ini.',
+                reason: 'Network or gateway response error',
+                orderId: paymentId
+            });
+        } else {
+            alert('Gagal menyinkronkan status pembayaran.');
+        }
         if (btnElement) {
             btnElement.disabled = false;
             btnElement.innerText = 'Cek Status';
@@ -692,6 +709,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (resData.status === 'success') {
                         const snapToken = resData.data.snap_token;
+                        const paymentId = resData.data.payment_id;
                         window.snap.pay(snapToken, {
                             onSuccess: async function(result) {
                                 submitDepositBtn.innerText = 'Verifying payment...';
@@ -703,12 +721,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
                                             'Accept': 'application/json'
                                         },
-                                        body: JSON.stringify({ order_id: result.order_id || resData.data.payment_id })
+                                        body: JSON.stringify({ order_id: result.order_id || paymentId })
                                     });
                                 } catch (err) {
                                     console.error(err);
                                 }
-                                window.location.href = '{{ route("wallet.index") }}?status=success&msg=Payment settled!';
+                                window.location.href = '{{ route("wallet.index") }}?status=success&amount=' + encodeURIComponent(amount) + '&order_id=' + encodeURIComponent(result.order_id || paymentId) + '&msg=' + encodeURIComponent('Deposit saldo sebesar Rp ' + Number(amount).toLocaleString('id-ID') + ' berhasil diselesaikan!');
                             },
                             onPending: async function(result) {
                                 try {
@@ -719,29 +737,46 @@ document.addEventListener('DOMContentLoaded', () => {
                                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
                                             'Accept': 'application/json'
                                         },
-                                        body: JSON.stringify({ order_id: result.order_id || resData.data.payment_id })
+                                        body: JSON.stringify({ order_id: result.order_id || paymentId })
                                     });
                                 } catch (err) {
                                     console.error(err);
                                 }
-                                window.location.href = '{{ route("wallet.index") }}?status=pending&msg=Payment pending.';
+                                window.location.href = '{{ route("wallet.index") }}?status=pending&amount=' + encodeURIComponent(amount) + '&order_id=' + encodeURIComponent(result.order_id || paymentId) + '&msg=' + encodeURIComponent('Tagihan Virtual Account / QRIS telah dibuat. Silakan selesaikan pembayaran sebelum batas waktu.');
                             },
                             onError: function(result) {
-                                window.location.href = '{{ route("wallet.index") }}?status=error&msg=Payment failed.';
+                                window.location.href = '{{ route("wallet.index") }}?status=error&order_id=' + encodeURIComponent(result.order_id || paymentId) + '&msg=' + encodeURIComponent(result.status_message || 'Pembayaran deposit Midtrans gagal atau dibatalkan.');
                             },
                             onClose: function() {
                                 submitDepositBtn.disabled = false;
                                 submitDepositBtn.innerText = 'Pay via Midtrans Snap →';
+                                window.location.reload();
                             }
                         });
                     } else {
-                        alert('Error: ' + resData.message);
+                        if (window.showPaymentFailed) {
+                            window.showPaymentFailed({
+                                title: 'Inisiasi Deposit Gagal',
+                                message: resData.message || 'Tidak dapat membuat tagihan Midtrans.',
+                                reason: resData.message
+                            });
+                        } else {
+                            alert('Error: ' + resData.message);
+                        }
                         submitDepositBtn.disabled = false;
                         submitDepositBtn.innerText = 'Pay via Midtrans Snap →';
                     }
                 } catch (err) {
                     console.error(err);
-                    alert('An unexpected error occurred. Please try again.');
+                    if (window.showPaymentFailed) {
+                        window.showPaymentFailed({
+                            title: 'Terjadi Kesalahan',
+                            message: 'Terjadi kendala jaringan saat menghubungkan ke gateway Midtrans.',
+                            reason: 'Network Connection Error'
+                        });
+                    } else {
+                        alert('An unexpected error occurred. Please try again.');
+                    }
                     submitDepositBtn.disabled = false;
                     submitDepositBtn.innerText = 'Pay via Midtrans Snap →';
                 }
@@ -779,14 +814,42 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (resData.data.invoice_url) {
                         window.open(resData.data.invoice_url, '_blank');
                     }
-                    alert('NOWPayments Invoice Created Successfully! Payment Link: ' + resData.data.invoice_url);
-                    window.location.reload();
+                    if (window.showPaymentSuccess) {
+                        window.showPaymentSuccess({
+                            title: 'Tagihan Kripto Berhasil Dibuat!',
+                            message: 'Invoice deposit NOWPayments berhasil digenerate. Silakan kirimkan aset kripto ke alamat yang tertera.',
+                            amount: amount + ' ' + payCurrency.toUpperCase(),
+                            orderId: resData.data.payment_id || '#NP-' + Date.now(),
+                            txType: 'Deposit Kripto (NOWPayments)',
+                            actionUrl: resData.data.invoice_url,
+                            actionText: 'Buka Halaman Invoice Kripto ↗'
+                        });
+                    } else {
+                        alert('NOWPayments Invoice Created Successfully! Payment Link: ' + resData.data.invoice_url);
+                        window.location.reload();
+                    }
                 } else {
-                    alert('Error: ' + resData.message);
+                    if (window.showPaymentFailed) {
+                        window.showPaymentFailed({
+                            title: 'Pembuatan Invoice Gagal',
+                            message: resData.message || 'Gagal membuat tagihan invoice kripto.',
+                            reason: resData.message
+                        });
+                    } else {
+                        alert('Error: ' + resData.message);
+                    }
                 }
             } catch (err) {
                 console.error(err);
-                alert('Failed to connect to NOWPayments.');
+                if (window.showPaymentFailed) {
+                    window.showPaymentFailed({
+                        title: 'Koneksi Gateway Gagal',
+                        message: 'Gagal terhubung ke server NOWPayments API.',
+                        reason: 'Network Timeout'
+                    });
+                } else {
+                    alert('Failed to connect to NOWPayments.');
+                }
             } finally {
                 submitCryptoDepBtn.disabled = false;
                 submitCryptoDepBtn.innerText = 'Generate NOWPayments Invoice →';
@@ -828,14 +891,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 const resData = await response.json();
 
                 if (resData.status === 'success') {
-                    alert('Penarikan dana via Xendit sebesar Rp ' + Number(amount).toLocaleString('id-ID') + ' sukses diajukan!');
-                    window.location.reload();
+                    if (window.showPaymentSuccess) {
+                        window.showPaymentSuccess({
+                            title: 'Penarikan Bank Berhasil Diajukan!',
+                            message: 'Permintaan transfer dana via Xendit sebesar Rp ' + Number(amount).toLocaleString('id-ID') + ' ke rekening ' + bankCode.toUpperCase() + ' ' + accountNumber + ' (' + accountHolderName + ') berhasil dikirim.',
+                            amount: 'Rp ' + Number(amount).toLocaleString('id-ID'),
+                            orderId: resData.data?.payout_id || '#WD-XEN-' + Date.now(),
+                            txType: 'Penarikan Bank Instan (Xendit)',
+                            actionUrl: '{{ route("wallet.index") }}',
+                            actionText: 'Muat Ulang Saldo Dompet'
+                        });
+                    } else {
+                        alert('Penarikan dana via Xendit sebesar Rp ' + Number(amount).toLocaleString('id-ID') + ' sukses diajukan!');
+                        window.location.reload();
+                    }
                 } else {
-                    alert('Error: ' + resData.message);
+                    if (window.showPaymentFailed) {
+                        window.showPaymentFailed({
+                            title: 'Penarikan Dana Gagal',
+                            message: resData.message || 'Gagal memproses transfer dana ke rekening tujuan.',
+                            reason: resData.message
+                        });
+                    } else {
+                        alert('Error: ' + resData.message);
+                    }
                 }
             } catch (err) {
                 console.error(err);
-                alert('Terjadi kesalahan saat memproses penarikan Xendit.');
+                if (window.showPaymentFailed) {
+                    window.showPaymentFailed({
+                        title: 'Penarikan Dana Gagal',
+                        message: 'Terjadi kesalahan sistem saat memproses penarikan Xendit.',
+                        reason: 'Server or Network Exception'
+                    });
+                } else {
+                    alert('Terjadi kesalahan saat memproses penarikan Xendit.');
+                }
             } finally {
                 submitXenditWdBtn.disabled = false;
                 submitXenditWdBtn.innerText = 'Process Xendit Instant Transfer →';
@@ -875,14 +966,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 const resData = await response.json();
 
                 if (resData.status === 'success') {
-                    alert('Penarikan Kripto via NOWPayments sebesar ' + amount + ' ' + currency.toUpperCase() + ' berhasil diajukan!');
-                    window.location.reload();
+                    if (window.showPaymentSuccess) {
+                        window.showPaymentSuccess({
+                            title: 'Penarikan Kripto Berhasil Diajukan!',
+                            message: 'Permintaan payout kripto sebesar ' + amount + ' ' + currency.toUpperCase() + ' ke address ' + address + ' telah diproses.',
+                            amount: amount + ' ' + currency.toUpperCase(),
+                            orderId: resData.data?.payout_id || '#WD-CRYPTO-' + Date.now(),
+                            txType: 'Penarikan Kripto (NOWPayments)',
+                            actionUrl: '{{ route("wallet.index") }}',
+                            actionText: 'Muat Ulang Saldo Dompet'
+                        });
+                    } else {
+                        alert('Penarikan Kripto via NOWPayments sebesar ' + amount + ' ' + currency.toUpperCase() + ' berhasil diajukan!');
+                        window.location.reload();
+                    }
                 } else {
-                    alert('Error: ' + resData.message);
+                    if (window.showPaymentFailed) {
+                        window.showPaymentFailed({
+                            title: 'Penarikan Kripto Gagal',
+                            message: resData.message || 'Gagal memproses payout kripto.',
+                            reason: resData.message
+                        });
+                    } else {
+                        alert('Error: ' + resData.message);
+                    }
                 }
             } catch (err) {
                 console.error(err);
-                alert('Terjadi kesalahan saat memproses penarikan kripto.');
+                if (window.showPaymentFailed) {
+                    window.showPaymentFailed({
+                        title: 'Penarikan Kripto Gagal',
+                        message: 'Terjadi kendala saat memproses penarikan kripto.',
+                        reason: 'NOWPayments Payout API Exception'
+                    });
+                } else {
+                    alert('Terjadi kesalahan saat memproses penarikan kripto.');
+                }
             } finally {
                 submitCryptoWdBtn.disabled = false;
                 submitCryptoWdBtn.innerText = 'Process NOWPayments Instant Payout →';

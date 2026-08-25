@@ -90,6 +90,16 @@ class MarketplaceController extends Controller
         }
 
         return redirect()->route('marketplace.show', $loan->id)
-            ->with('success', 'Thank you for your investment! The funds are successfully held for this loan.');
+            ->with('success', 'Thank you for your investment! The funds are successfully held for this loan.')
+            ->with('payment_feedback', [
+                'status'     => 'success',
+                'title'      => 'Investasi Pendanaan Berhasil!',
+                'message'    => "Dana investasi sebesar Rp " . number_format($request->amount, 0, ',', '.') . " berhasil disalurkan untuk mendanai pinjaman {$loan->purpose}.",
+                'amount'     => 'Rp ' . number_format($request->amount, 0, ',', '.'),
+                'orderId'    => '#INV-' . $loan->id . '-' . Auth::id(),
+                'txType'     => 'Investasi Pendanaan Pinjaman',
+                'actionUrl'  => route('marketplace.show', $loan->id),
+                'actionText' => 'Lihat Detail Proyek Investasi'
+            ]);
     }
 }

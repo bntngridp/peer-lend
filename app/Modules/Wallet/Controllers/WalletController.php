@@ -74,7 +74,16 @@ class WalletController extends Controller
         );
 
         return redirect()->route('wallet.index')
-            ->with('success', 'Funds deposited successfully to available balance.');
+            ->with('success', 'Funds deposited successfully to available balance.')
+            ->with('payment_feedback', [
+                'status'     => 'success',
+                'title'      => 'Deposit Saldo Berhasil!',
+                'message'    => 'Penambahan saldo sebesar Rp ' . number_format($request->amount, 0, ',', '.') . ' telah berhasil dikreditkan ke dompet Anda.',
+                'amount'     => 'Rp ' . number_format($request->amount, 0, ',', '.'),
+                'txType'     => 'Deposit Saldo Dompet',
+                'actionUrl'  => route('wallet.index'),
+                'actionText' => 'Lihat Rincian Saldo'
+            ]);
     }
 
     /**
@@ -99,6 +108,15 @@ class WalletController extends Controller
         }
 
         return redirect()->route('wallet.index')
-            ->with('success', 'Funds withdrawn successfully.');
+            ->with('success', 'Funds withdrawn successfully.')
+            ->with('payment_feedback', [
+                'status'     => 'success',
+                'title'      => 'Penarikan Saldo Berhasil!',
+                'message'    => 'Penarikan dana sebesar Rp ' . number_format($request->amount, 0, ',', '.') . ' telah berhasil diproses dari saldo dompet Anda.',
+                'amount'     => 'Rp ' . number_format($request->amount, 0, ',', '.'),
+                'txType'     => 'Penarikan Saldo Dompet',
+                'actionUrl'  => route('wallet.index'),
+                'actionText' => 'Lihat Rincian Saldo'
+            ]);
     }
 }

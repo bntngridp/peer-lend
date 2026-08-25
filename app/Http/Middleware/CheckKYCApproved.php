@@ -18,8 +18,8 @@ class CheckKYCApproved
     {
         $user = $request->user();
 
-        // Admins are exempt from KYC checks
-        if ($user->isAdmin()) {
+        // Internal staff (Admin, CS, Collection Officer) are exempt from KYC checks
+        if ($user->isInternalStaff()) {
             return $next($request);
         }
 

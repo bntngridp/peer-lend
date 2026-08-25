@@ -121,8 +121,8 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         Route::post('/loans', [\App\Modules\Loan\Controllers\LoanRequestController::class, 'store'])->name('loans.store');
     });
 
-    // 🤝 Shared Loan Detail, Installments, Repayments, Chat & Contract Routes (Lender, Borrower & Admin)
-    Route::middleware(['role:borrower,lender,admin', 'kyc'])->group(function () {
+    // 🤝 Shared Loan Detail, Installments, Repayments, Chat & Contract Routes (Lender, Borrower & Staff)
+    Route::middleware(['role:borrower,lender,admin,customer_service,collection_officer', 'kyc'])->group(function () {
         Route::get('/loans/{loan}/installments', [\App\Modules\Loan\Controllers\LoanRequestController::class, 'installments'])->name('loans.installments');
         
         // Repayments

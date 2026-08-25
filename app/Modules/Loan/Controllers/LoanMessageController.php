@@ -18,8 +18,8 @@ class LoanMessageController extends Controller
     {
         $user = Auth::user();
 
-        // Admin can access all chats
-        if ($user->isAdmin()) {
+        // Internal staff (Admin, Customer Service, Collection Officer) can access all chats for mediation & compliance
+        if ($user->isInternalStaff()) {
             return;
         }
 

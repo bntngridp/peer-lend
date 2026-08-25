@@ -648,6 +648,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `).join('');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         } catch (err) {
             console.error('Failed to fetch messages:', err);
         }

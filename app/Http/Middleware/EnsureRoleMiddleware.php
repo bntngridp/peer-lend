@@ -21,7 +21,17 @@ class EnsureRoleMiddleware
             abort(401);
         }
 
-        if (! $request->user()->hasAnyRole($roles)) {
+        $allRoles = [];
+        foreach ($roles as $role) {
+            foreach (explode(',', $role) as $r) {
+                $trimmed = trim($r);
+                if ($trimmed !== '') {
+                    $allRoles[] = $trimmed;
+                }
+            }
+        }
+
+        if (! $request->user()->hasAnyRole($allRoles)) {
             abort(403, 'You do not have permission to access this page.');
         }
 

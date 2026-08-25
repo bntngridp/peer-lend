@@ -11,7 +11,7 @@
 <!-- Midtrans Snap.js Sandbox -->
 <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
 
-<div class="space-y-6 max-w-7xl mx-auto" x-data="{ activeTab: 'deposit' }">
+<div class="space-y-6 max-w-7xl mx-auto" x-data="{ activeTab: 'deposit', historySubTab: 'ledger' }">
     
     <!-- Top Header Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -62,6 +62,82 @@
             </div>
         </div>
     </div>
+
+    <!-- Pending Payments Alert Banner -->
+    @if(isset($pendingPayments) && $pendingPayments->isNotEmpty())
+        <div class="rounded-2xl border border-amber-300 dark:border-amber-700/60 bg-amber-50/70 dark:bg-amber-950/30 p-5 shadow-xs space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-amber-200/80 dark:border-amber-800/50 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <span class="relative flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                    </span>
+                    <div>
+                        <h3 class="text-sm font-extrabold text-amber-950 dark:text-amber-200">{{ __('Pending Deposit Payments') }}</h3>
+                        <p class="text-xs font-medium text-amber-800/80 dark:text-amber-300/80">{{ __('You have deposit requests awaiting payment completion.') }}</p>
+                    </div>
+                </div>
+                <span class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-amber-200/80 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700">
+                    {{ $pendingPayments->count() }} {{ __('Pending') }}
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                @foreach($pendingPayments as $pendingPay)
+                    <div class="rounded-xl border border-amber-200 dark:border-amber-800/60 bg-white dark:bg-slate-900 p-4 flex flex-col justify-between gap-3 shadow-2xs">
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-black text-slate-900 dark:text-slate-100">
+                                        Rp {{ number_format($pendingPay->amount, 0, ',', '.') }}
+                                    </span>
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700">
+                                        {{ __(ucfirst($pendingPay->gateway)) }}
+                                    </span>
+                                </div>
+                                <span class="text-[11px] font-mono text-slate-400 block mt-0.5">
+                                    #{{ substr($pendingPay->id, 0, 13) }}...
+                                </span>
+                            </div>
+                            <div class="text-right">
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                    {{ __('Menunggu Pembayaran') }}
+                                </span>
+                                <span class="text-[10px] text-slate-400 block mt-1 font-medium">
+                                    {{ \Carbon\Carbon::parse($pendingPay->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                            <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                {{ __('Sisa waktu') }}: ~24 Jam
+                            </span>
+                            <div class="flex items-center gap-2">
+                                <button type="button" onclick="checkPaymentStatus('{{ $pendingPay->id }}', this)"
+                                        class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold transition-colors cursor-pointer">
+                                    {{ __('Cek Status') }}
+                                </button>
+                                @if($pendingPay->gateway === 'midtrans' && $pendingPay->gateway_ref_id)
+                                    <button type="button" onclick="payPendingSnap('{{ $pendingPay->gateway_ref_id }}', '{{ $pendingPay->id }}')"
+                                            class="px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition-colors shadow-2xs cursor-pointer">
+                                        {{ __('Lanjutkan Bayar') }} &rarr;
+                                    </button>
+                                @elseif($pendingPay->gateway === 'nowpayments' && isset($pendingPay->payload['invoice_url']))
+                                    <a href="{{ $pendingPay->payload['invoice_url'] }}" target="_blank"
+                                       class="px-3 py-1.5 rounded-lg bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-bold transition-colors shadow-2xs">
+                                        {{ __('Buka Tagihan') }} &rarr;
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
 
     <!-- Operation Tabs Header -->
     <div class="border-b border-slate-200 flex gap-6 text-xs font-bold text-slate-500 select-none">
@@ -329,14 +405,28 @@
 
     </div>
 
-    <!-- ─── Tab 3: Transaction History ──────────────────────────────────── -->
+    <!-- ─── Tab 3: Transaction History & Payment Invoices ──────────────── -->
     <div x-show="activeTab === 'history'" class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs overflow-hidden" style="display: none;">
-        <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50/50">
-            <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">{{ __('Transaction Ledger') }}</h3>
-            <span class="text-xs font-medium text-slate-500">{{ __('Total') }}: {{ __n($transactions->total()) }}</span>
+        
+        <!-- Sub-Tabs Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 dark:border-slate-800 px-6 py-3 bg-slate-50/50 dark:bg-slate-800/40 gap-3">
+            <div class="flex items-center gap-2">
+                <button type="button" @click="historySubTab = 'ledger'"
+                        :class="historySubTab === 'ledger' ? 'bg-emerald-700 text-white font-bold' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-200 dark:hover:bg-slate-700'"
+                        class="px-3 py-1.5 rounded-xl text-xs transition-colors cursor-pointer">
+                    {{ __('Buku Mutasi Saldo') }} ({{ __n($transactions->total()) }})
+                </button>
+                <button type="button" @click="historySubTab = 'invoices'"
+                        :class="historySubTab === 'invoices' ? 'bg-emerald-700 text-white font-bold' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-200 dark:hover:bg-slate-700'"
+                        class="px-3 py-1.5 rounded-xl text-xs transition-colors cursor-pointer">
+                    {{ __('Riwayat Tagihan & Deposit') }} ({{ isset($recentPayments) ? $recentPayments->count() : 0 }})
+                </button>
+            </div>
+            <span class="text-xs font-medium text-slate-400">{{ __('Real-time Ledger Audit') }}</span>
         </div>
 
-        <div class="overflow-x-auto">
+        <!-- 1. Mutasi Saldo Sub-Table -->
+        <div x-show="historySubTab === 'ledger'" class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
@@ -412,19 +502,163 @@
                     @endforelse
                 </tbody>
             </table>
+
+            @if($transactions->hasPages())
+                <div class="p-4 border-t border-slate-100 dark:border-slate-800">
+                    {{ $transactions->links() }}
+                </div>
+            @endif
         </div>
 
-        @if($transactions->hasPages())
-            <div class="p-4 border-t border-slate-100">
-                {{ $transactions->links() }}
-            </div>
-        @endif
+        <!-- 2. Riwayat Tagihan & Status Gateway Sub-Table -->
+        <div x-show="historySubTab === 'invoices'" class="overflow-x-auto" style="display: none;">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                        <th class="py-3.5 px-6">{{ __('Order ID & Gateway') }}</th>
+                        <th class="py-3.5 px-6">{{ __('Nominal Tagihan') }}</th>
+                        <th class="py-3.5 px-6">{{ __('Status Tagihan') }}</th>
+                        <th class="py-3.5 px-6">{{ __('Waktu Inisiasi') }}</th>
+                        <th class="py-3.5 px-6 text-right">{{ __('Aksi') }}</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300">
+                    @forelse($recentPayments ?? [] as $pay)
+                    <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2.5">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider
+                                    {{ $pay->gateway === 'midtrans' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-indigo-100 text-indigo-800 border border-indigo-200' }}">
+                                    {{ __(ucfirst($pay->gateway)) }}
+                                </span>
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-slate-900 dark:text-slate-100 block">#{{ substr($pay->id, 0, 14) }}...</span>
+                                    <span class="text-[10px] text-slate-400">{{ $pay->gateway === 'midtrans' ? 'Snap Virtual Account / QRIS' : 'NOWPayments Invoice' }}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-4 px-6 font-extrabold text-sm text-slate-900 dark:text-slate-100 whitespace-nowrap">
+                            Rp {{ number_format($pay->amount, 0, ',', '.') }}
+                        </td>
+                        <td class="py-4 px-6 whitespace-nowrap">
+                            @if($pay->status === 'success')
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    {{ __('Berhasil (Settled)') }}
+                                </span>
+                            @elseif($pay->status === 'pending')
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                    {{ __('Menunggu Pembayaran') }}
+                                </span>
+                            @else
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                                    {{ __('Gagal / Expired') }}
+                                </span>
+                            @endif
+                        </td>
+                        <td class="py-4 px-6 text-slate-500 dark:text-slate-400 font-medium whitespace-nowrap">
+                            {{ \Carbon\Carbon::parse($pay->created_at)->setTimezone('Asia/Jakarta')->format('M d, Y H:i') }} WIB
+                        </td>
+                        <td class="py-4 px-6 text-right whitespace-nowrap">
+                            @if($pay->status === 'pending')
+                                <div class="flex items-center justify-end gap-2">
+                                    <button type="button" onclick="checkPaymentStatus('{{ $pay->id }}', this)"
+                                            class="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-colors cursor-pointer">
+                                        {{ __('Cek Status') }}
+                                    </button>
+                                    @if($pay->gateway === 'midtrans' && $pay->gateway_ref_id)
+                                        <button type="button" onclick="payPendingSnap('{{ $pay->gateway_ref_id }}', '{{ $pay->id }}')"
+                                                class="px-2.5 py-1 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] font-bold transition-colors cursor-pointer shadow-2xs">
+                                            {{ __('Bayar') }} &rarr;
+                                        </button>
+                                    @endif
+                                </div>
+                            @elseif($pay->status === 'success')
+                                <span class="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">{{ __('Tervalidasi') }}</span>
+                            @else
+                                <span class="text-[11px] font-semibold text-slate-400">{{ __('Kadaluarsa') }}</span>
+                            @endif
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="py-10 text-center text-slate-400 text-xs font-medium">
+                            {{ __('Belum ada riwayat tagihan gateway.') }}
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 
 </div>
 
 <!-- Midtrans, Xendit & NOWPayments Integration JS -->
 <script>
+window.payPendingSnap = function(snapToken, paymentId) {
+    if (!window.snap) {
+        alert('Payment gateway script not loaded yet.');
+        return;
+    }
+    window.snap.pay(snapToken, {
+        onSuccess: async function(result) {
+            try {
+                await fetch('{{ route("wallet.deposit.confirm") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ order_id: result.order_id || paymentId })
+                });
+            } catch (err) {
+                console.error(err);
+            }
+            window.location.href = '{{ route("wallet.index") }}?status=success&msg=Payment settled!';
+        },
+        onPending: function(result) {
+            window.location.href = '{{ route("wallet.index") }}?status=pending&msg=Payment pending.';
+        },
+        onError: function(result) {
+            window.location.href = '{{ route("wallet.index") }}?status=error&msg=Payment failed.';
+        },
+        onClose: function() {
+            console.log('Snap popup closed by user.');
+        }
+    });
+};
+
+window.checkPaymentStatus = async function(paymentId, btnElement) {
+    if (btnElement) {
+        btnElement.disabled = true;
+        btnElement.innerText = 'Checking...';
+    }
+    try {
+        const response = await fetch('{{ route("wallet.deposit.confirm") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ order_id: paymentId })
+        });
+        const resData = await response.json();
+        window.location.reload();
+    } catch (err) {
+        console.error(err);
+        alert('Gagal menyinkronkan status pembayaran.');
+        if (btnElement) {
+            btnElement.disabled = false;
+            btnElement.innerText = 'Cek Status';
+        }
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Midtrans Deposit Form
     const depositForm = document.getElementById('deposit-form');

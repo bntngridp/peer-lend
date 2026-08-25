@@ -26,14 +26,17 @@ class WalletController extends Controller
     {
         $user = Auth::user();
         
-        // Auto-sync any pending payments for user
+        // Fetch pending payments for user
         $pendingPayments = \App\Models\Payment::where('user_id', $user->id)
             ->where('status', 'pending')
+            ->orderBy('created_at', 'desc')
             ->get();
 
-        foreach ($pendingPayments as $p) {
-            app(\App\Modules\Wallet\Services\PaymentService::class)->syncPaymentStatus($p);
-        }
+        // Fetch recent payments (pending, success, failed)
+        $recentPayments = \App\Models\Payment::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->take(10)
+            ->get();
 
         // Fetch all user wallets with loaded currency info
         $wallets = Wallet::with('currency')
@@ -50,7 +53,7 @@ class WalletController extends Controller
         ->orderBy('created_at', 'desc')
         ->paginate(15);
 
-        return view('wallet.index', compact('wallets', 'currencies', 'transactions'));
+        return view('wallet.index', compact('wallets', 'currencies', 'transactions', 'pendingPayments', 'recentPayments'));
     }
 
     /**

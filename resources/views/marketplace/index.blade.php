@@ -23,35 +23,50 @@
             </div>
 
             <!-- Filter: Risk Grade -->
-            <select name="risk_grade" onchange="this.form.submit()" 
-                    class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 outline-none focus:border-emerald-600 shadow-xs">
-                <option value="">{{ __('Risk Grade (All)') }}</option>
-                @foreach(['A', 'B', 'C', 'D'] as $g)
-                    <option value="{{ $g }}" {{ request('risk_grade') === $g ? 'selected' : '' }}>{{ __('Grade') }} {{ $g }}</option>
-                @endforeach
-            </select>
+            <div class="relative">
+                <select name="risk_grade" onchange="this.form.submit()" 
+                        class="appearance-none rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pl-3.5 pr-8 py-2 text-xs font-bold text-slate-700 dark:text-slate-200 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 shadow-xs cursor-pointer">
+                    <option value="">{{ __('Risk Grade (All)') }}</option>
+                    @foreach(['A', 'B', 'C', 'D'] as $g)
+                        <option value="{{ $g }}" {{ request('risk_grade') === $g ? 'selected' : '' }}>{{ __('Grade') }} {{ $g }}</option>
+                    @endforeach
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5 text-slate-400">
+                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                </div>
+            </div>
 
             <!-- Filter: Term -->
-            <select name="term" onchange="this.form.submit()" 
-                    class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 outline-none focus:border-emerald-600 shadow-xs">
-                <option value="">{{ __('Term (All)') }}</option>
-                <option value="6" {{ request('term') == '6' ? 'selected' : '' }}>{{ __n(6) }} {{ __('Months') }}</option>
-                <option value="12" {{ request('term') == '12' ? 'selected' : '' }}>{{ __n(12) }} {{ __('Months') }}</option>
-                <option value="18" {{ request('term') == '18' ? 'selected' : '' }}>{{ __n(18) }} {{ __('Months') }}</option>
-                <option value="24" {{ request('term') == '24' ? 'selected' : '' }}>{{ __n(24) }} {{ __('Months') }}</option>
-                <option value="36" {{ request('term') == '36' ? 'selected' : '' }}>{{ __n(36) }} {{ __('Months') }}</option>
-            </select>
+            <div class="relative">
+                <select name="term" onchange="this.form.submit()" 
+                        class="appearance-none rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pl-3.5 pr-8 py-2 text-xs font-bold text-slate-700 dark:text-slate-200 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 shadow-xs cursor-pointer">
+                    <option value="">{{ __('Term (All)') }}</option>
+                    <option value="6" {{ request('term') == '6' ? 'selected' : '' }}>{{ __n(6) }} {{ __('Months') }}</option>
+                    <option value="12" {{ request('term') == '12' ? 'selected' : '' }}>{{ __n(12) }} {{ __('Months') }}</option>
+                    <option value="18" {{ request('term') == '18' ? 'selected' : '' }}>{{ __n(18) }} {{ __('Months') }}</option>
+                    <option value="24" {{ request('term') == '24' ? 'selected' : '' }}>{{ __n(24) }} {{ __('Months') }}</option>
+                    <option value="36" {{ request('term') == '36' ? 'selected' : '' }}>{{ __n(36) }} {{ __('Months') }}</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5 text-slate-400">
+                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                </div>
+            </div>
 
             <!-- Sort By -->
-            <select name="sort" onchange="this.form.submit()" 
-                    class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 outline-none focus:border-emerald-600 shadow-xs">
-                <option value="">{{ __('Sort: Latest') }}</option>
-                <option value="interest_desc" {{ request('sort') === 'interest_desc' ? 'selected' : '' }}>{{ __('Interest Rate (High to Low)') }}</option>
-                <option value="amount_desc" {{ request('sort') === 'amount_desc' ? 'selected' : '' }}>{{ __('Amount (High to Low)') }}</option>
-            </select>
+            <div class="relative">
+                <select name="sort" onchange="this.form.submit()" 
+                        class="appearance-none rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pl-3.5 pr-8 py-2 text-xs font-bold text-slate-700 dark:text-slate-200 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 shadow-xs cursor-pointer">
+                    <option value="">{{ __('Sort: Latest') }}</option>
+                    <option value="interest_desc" {{ request('sort') === 'interest_desc' ? 'selected' : '' }}>{{ __('Interest Rate (High to Low)') }}</option>
+                    <option value="amount_desc" {{ request('sort') === 'amount_desc' ? 'selected' : '' }}>{{ __('Amount (High to Low)') }}</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5 text-slate-400">
+                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                </div>
+            </div>
 
             @if(request()->anyFilled(['search', 'risk_grade', 'term', 'sort']))
-                <a href="{{ route('marketplace.index') }}" class="rounded-xl border border-slate-200 bg-slate-100 px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-200">
+                <a href="{{ route('marketplace.index') }}" class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 px-3.5 py-2 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors shadow-xs">
                     {{ __('Reset') }}
                 </a>
             @endif

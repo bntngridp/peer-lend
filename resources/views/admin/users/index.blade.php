@@ -133,7 +133,7 @@
                         @php
                             $fullName = $usr->profile?->full_name ?? __('Unnamed User');
                             $initials = strtoupper(substr($fullName, 0, 2));
-                            $shortId = strtoupper(substr(str_replace('-', '', $usr->id), 0, 8));
+                            $shortId = strtoupper(substr(str_replace('-', '', $usr->id), -6));
                             $isKycApproved = $usr->kyc && $usr->kyc->status === 'approved';
                             $isKycPending = $usr->kyc && $usr->kyc->status === 'pending';
                         @endphp

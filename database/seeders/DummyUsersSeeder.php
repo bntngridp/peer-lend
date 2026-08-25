@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Currency;
 use App\Models\KYC;
-use App\Models\KycDocument;
+use App\Models\KYCDocument;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
@@ -28,102 +28,112 @@ class DummyUsersSeeder extends Seeder
         $dummyAccounts = [
             // 1. ADMIN ROLES
             [
-                'email'     => 'admin1@lendflow.com',
-                'password'  => 'password123',
-                'role'      => 'admin',
-                'full_name' => 'Primary System Admin',
-                'phone'     => '081100000001',
-                'balance'   => 100000000,
-                'kyc'       => 'approved',
+                'email'          => 'admin1@lendflow.com',
+                'password'       => 'password123',
+                'role'           => 'admin',
+                'full_name'      => 'Primary System Admin',
+                'phone'          => '081100000001',
+                'balance'        => 100000000,
+                'monthly_income' => 30000000,
+                'kyc'            => 'approved',
             ],
             [
-                'email'     => 'admin2@lendflow.com',
-                'password'  => 'password123',
-                'role'      => 'admin',
-                'full_name' => 'Compliance Officer Admin',
-                'phone'     => '081100000002',
-                'balance'   => 50000000,
-                'kyc'       => 'approved',
+                'email'          => 'admin2@lendflow.com',
+                'password'       => 'password123',
+                'role'           => 'admin',
+                'full_name'      => 'Compliance Officer Admin',
+                'phone'          => '081100000002',
+                'balance'        => 50000000,
+                'monthly_income' => 25000000,
+                'kyc'            => 'approved',
             ],
 
             // 2. BORROWER ROLES
             [
-                'email'     => 'borrower1@lendflow.com',
-                'password'  => 'password123',
-                'role'      => 'borrower',
-                'full_name' => 'Budi Santoso',
-                'phone'     => '081200000001',
-                'balance'   => 15000000,
-                'kyc'       => 'approved',
+                'email'          => 'borrower1@lendflow.com',
+                'password'       => 'password123',
+                'role'           => 'borrower',
+                'full_name'      => 'Budi Santoso',
+                'phone'          => '081200000001',
+                'balance'        => 15000000,
+                'monthly_income' => 28000000,
+                'kyc'            => 'approved',
             ],
             [
-                'email'     => 'borrower2@lendflow.com',
-                'password'  => 'password123',
-                'role'      => 'borrower',
-                'full_name' => 'Siti Aminah',
-                'phone'     => '081200000002',
-                'balance'   => 8000000,
-                'kyc'       => 'approved',
+                'email'          => 'borrower2@lendflow.com',
+                'password'       => 'password123',
+                'role'           => 'borrower',
+                'full_name'      => 'Siti Aminah',
+                'phone'          => '081200000002',
+                'balance'        => 8000000,
+                'monthly_income' => 35000000,
+                'kyc'            => 'approved',
             ],
 
             // 3. LENDER ROLES
             [
-                'email'     => 'lender1@lendflow.com',
-                'password'  => 'password123',
-                'role'      => 'lender',
-                'full_name' => 'Rizky Pratama',
-                'phone'     => '081300000001',
-                'balance'   => 250000000,
-                'kyc'       => 'approved',
+                'email'          => 'lender1@lendflow.com',
+                'password'       => 'password123',
+                'role'           => 'lender',
+                'full_name'      => 'Rizky Pratama',
+                'phone'          => '081300000001',
+                'balance'        => 250000000,
+                'monthly_income' => 75000000,
+                'kyc'            => 'approved',
             ],
             [
-                'email'     => 'lender2@lendflow.com',
-                'password'  => 'password123',
-                'role'      => 'lender',
-                'full_name' => 'Dewi Lestari',
-                'phone'     => '081300000002',
-                'balance'   => 500000000,
-                'kyc'       => 'approved',
+                'email'          => 'lender2@lendflow.com',
+                'password'       => 'password123',
+                'role'           => 'lender',
+                'full_name'      => 'Dewi Lestari',
+                'phone'          => '081300000002',
+                'balance'        => 500000000,
+                'monthly_income' => 120000000,
+                'kyc'            => 'approved',
             ],
 
             // 4. CUSTOMER SERVICE ROLES
             [
-                'email'     => 'cs1@lendflow.com',
-                'password'  => 'password123',
-                'role'      => 'customer_service',
-                'full_name' => 'Andi CS Support 1',
-                'phone'     => '081400000001',
-                'balance'   => 0,
-                'kyc'       => 'approved',
+                'email'          => 'cs1@lendflow.com',
+                'password'       => 'password123',
+                'role'           => 'customer_service',
+                'full_name'      => 'Andi CS Support 1',
+                'phone'          => '081400000001',
+                'balance'        => 0,
+                'monthly_income' => 15000000,
+                'kyc'            => 'approved',
             ],
             [
-                'email'     => 'cs2@lendflow.com',
-                'password'  => 'password123',
-                'role'      => 'customer_service',
-                'full_name' => 'Maya CS Support 2',
-                'phone'     => '081400000002',
-                'balance'   => 0,
-                'kyc'       => 'approved',
+                'email'          => 'cs2@lendflow.com',
+                'password'       => 'password123',
+                'role'           => 'customer_service',
+                'full_name'      => 'Maya CS Support 2',
+                'phone'          => '081400000002',
+                'balance'        => 0,
+                'monthly_income' => 15000000,
+                'kyc'            => 'approved',
             ],
 
             // 5. COLLECTION OFFICER ROLES
             [
-                'email'     => 'collector1@lendflow.com',
-                'password'  => 'password123',
-                'role'      => 'collection_officer',
-                'full_name' => 'Eko Collection Officer 1',
-                'phone'     => '081500000001',
-                'balance'   => 0,
-                'kyc'       => 'approved',
+                'email'          => 'collector1@lendflow.com',
+                'password'       => 'password123',
+                'role'           => 'collection_officer',
+                'full_name'      => 'Eko Collection Officer 1',
+                'phone'          => '081500000001',
+                'balance'        => 0,
+                'monthly_income' => 18000000,
+                'kyc'            => 'approved',
             ],
             [
-                'email'     => 'collector2@lendflow.com',
-                'password'  => 'password123',
-                'role'      => 'collection_officer',
-                'full_name' => 'Fajar Collection Officer 2',
-                'phone'     => '081500000002',
-                'balance'   => 0,
-                'kyc'       => 'approved',
+                'email'          => 'collector2@lendflow.com',
+                'password'       => 'password123',
+                'role'           => 'collection_officer',
+                'full_name'      => 'Fajar Collection Officer 2',
+                'phone'          => '081500000002',
+                'balance'        => 0,
+                'monthly_income' => 18000000,
+                'kyc'            => 'approved',
             ],
         ];
 
@@ -148,12 +158,13 @@ class DummyUsersSeeder extends Seeder
             Profile::updateOrCreate(
                 ['user_id' => $user->id],
                 [
-                    'full_name'  => $acc['full_name'],
-                    'phone'      => $acc['phone'],
-                    'address'    => 'Jl. Jendral Sudirman No. 45, Jakarta Pusat',
-                    'city'       => 'Jakarta',
-                    'province'   => 'DKI Jakarta',
-                    'occupation' => ucfirst(str_replace('_', ' ', $acc['role'])),
+                    'full_name'      => $acc['full_name'],
+                    'phone'          => $acc['phone'],
+                    'address'        => 'Jl. Jendral Sudirman No. 45, Jakarta Pusat',
+                    'city'           => 'Jakarta',
+                    'province'       => 'DKI Jakarta',
+                    'occupation'     => ucfirst(str_replace('_', ' ', $acc['role'])),
+                    'monthly_income' => $acc['monthly_income'] ?? null,
                 ]
             );
 
@@ -180,17 +191,15 @@ class DummyUsersSeeder extends Seeder
                 ]
             );
 
-            // Attach KYC documents if needed
-            if (class_exists(KycDocument::class)) {
-                KycDocument::updateOrCreate(
-                    ['kyc_id' => $kyc->id, 'type' => 'ktp'],
-                    ['file_path' => 'kyc/dummy_ktp.jpg', 'storage_driver' => 'local', 'verified_at' => now()]
-                );
-                KycDocument::updateOrCreate(
-                    ['kyc_id' => $kyc->id, 'type' => 'selfie'],
-                    ['file_path' => 'kyc/dummy_selfie.jpg', 'storage_driver' => 'local', 'verified_at' => now()]
-                );
-            }
+            // Attach KYC documents
+            KYCDocument::updateOrCreate(
+                ['kyc_id' => $kyc->id, 'type' => 'ktp'],
+                ['file_path' => 'kyc/dummy_ktp.jpg', 'storage_driver' => 'local', 'verified_at' => now()]
+            );
+            KYCDocument::updateOrCreate(
+                ['kyc_id' => $kyc->id, 'type' => 'selfie'],
+                ['file_path' => 'kyc/dummy_selfie.jpg', 'storage_driver' => 'local', 'verified_at' => now()]
+            );
         }
     }
 }

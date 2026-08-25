@@ -18,7 +18,7 @@
         <div class="flex items-center gap-3">
             <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                {{ __n($kycs->total()) }} {{ __('Total Applications') }}
+                {{ __n($totalApplications ?? $kycs->total()) }} {{ __('Total Applications') }}
             </span>
         </div>
     </div>
@@ -42,7 +42,7 @@
                 </div>
                 <div>
                     <span class="text-3xl font-black text-rose-600 dark:text-rose-400 block leading-tight">
-                        {{ __n($kycs->getCollection()->filter(fn($k) => $k->isRejected())->count()) }}
+                        {{ __n($rejectedCount ?? $kycs->getCollection()->filter(fn($k) => $k->isRejected())->count()) }}
                     </span>
                     <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 block mt-0.5">
                         {{ __('High Risk / Rejected') }}

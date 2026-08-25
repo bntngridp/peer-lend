@@ -45,6 +45,11 @@ class LoanFunding extends Model
         return $this->belongsTo(LoanRequest::class, 'loan_id');
     }
 
+    public function loanRequest(): BelongsTo
+    {
+        return $this->loan();
+    }
+
     public function lender(): BelongsTo
     {
         return $this->belongsTo(User::class, 'lender_id');

@@ -73,7 +73,7 @@ class AdminGovernanceController extends Controller
             'kyc',
             'wallets.currency',
             'loanRequests' => fn($q) => $q->latest()->take(10),
-            'fundings.loanRequest' => fn($q) => $q->latest()->take(10),
+            'fundings.loan' => fn($q) => $q->latest()->take(10),
             'auditLogs' => fn($q) => $q->latest()->take(20),
         ]);
 

@@ -151,10 +151,10 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         // KYC Verification & User Directory (Admin & CS)
         Route::middleware('role:admin,customer_service')->group(function () {
             Route::get('/kyc', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'index'])->name('kyc.index');
+            Route::get('/kyc/document/{document}', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'streamDocument'])->name('kyc.document');
             Route::get('/kyc/{kyc}', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'show'])->name('kyc.show');
             Route::post('/kyc/{kyc}/approve', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'approve'])->name('kyc.approve');
             Route::post('/kyc/{kyc}/reject', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'reject'])->name('kyc.reject');
-            Route::get('/kyc/document/{document}', [\App\Modules\KYC\Controllers\AdminKYCController::class, 'streamDocument'])->name('kyc.document');
             Route::get('/users', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'users'])->name('users.index');
             Route::get('/users/{user}', [\App\Modules\KYC\Controllers\AdminGovernanceController::class, 'showUser'])->name('users.show');
         });

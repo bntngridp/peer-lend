@@ -241,4 +241,74 @@ class Phase8And9AutoInvestApiTest extends TestCase
                 ],
             ]);
     }
+
+    public function test_lender_can_toggle_auto_invest_switch_without_providing_min_grade(): void
+    {
+        // Initial state: AutoInvestRule exists or created
+        AutoInvestRule::updateOrCreate(
+            ['lender_id' => $this->lender->id],
+            [
+                'is_active'               => false,
+                'min_grade'               => 'D',
+                'max_grade'               => 'A',
+                'max_allocation_per_loan' => 1000000.00,
+                'max_ltv'                 => 80.00,
+            ]
+        );
+
+        // Submit toggle with only is_active=1 (the bug scenario)
+        $response = $this->actingAs($this->lender)
+            ->withSession(['google2fa_verified' => true])
+            ->post(route('loans.auto-invest.update'), [
+                'is_active' => '1',
+            ]);
+
+        $response->assertRedirect(route('dashboard'))
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('auto_invest_rules', [
+            'lender_id' => $this->lender->id,
+            'is_active' => true,
+            'min_grade' => 'D',
+            'max_grade' => 'A',
+        ]);
+
+        // Submit toggle to deactivate with no is_active param
+        $responseDeactivate = $this->actingAs($this->lender)
+            ->withSession(['google2fa_verified' => true])
+            ->post(route('loans.auto-invest.update'), []);
+
+        $responseDeactivate->assertRedirect(route('dashboard'))
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('auto_invest_rules', [
+            'lender_id' => $this->lender->id,
+            'is_active' => false,
+        ]);
+    }
+
+    public function test_lender_can_update_full_auto_invest_rules(): void
+    {
+        $response = $this->actingAs($this->lender)
+            ->withSession(['google2fa_verified' => true])
+            ->post(route('loans.auto-invest.update'), [
+                'is_active'               => '1',
+                'min_grade'               => 'B',
+                'max_grade'               => 'A',
+                'max_allocation_per_loan' => '3000000',
+                'max_ltv'                 => '75',
+            ]);
+
+        $response->assertRedirect(route('dashboard'))
+            ->assertSessionHas('success', 'Aturan Investasi Otomatis berhasil diperbarui!');
+
+        $this->assertDatabaseHas('auto_invest_rules', [
+            'lender_id'               => $this->lender->id,
+            'is_active'               => true,
+            'min_grade'               => 'B',
+            'max_grade'               => 'A',
+            'max_allocation_per_loan' => 3000000.00,
+            'max_ltv'                 => 75.00,
+        ]);
+    }
 }

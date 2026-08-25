@@ -770,86 +770,131 @@
             </div>
 
             <!-- Card: Auto-Invest Engine Config Panel -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs" x-data="{ editing: false }">
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs" x-data="{ editing: false }">
                 <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
-                        <h3 class="text-sm font-bold text-slate-900">{{ __('Auto-Invest') }}</h3>
+                        <div class="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/60 flex items-center justify-center text-emerald-700 dark:text-emerald-400">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-black text-slate-900 dark:text-white">{{ __('Auto-Invest') }}</h3>
+                            <span class="text-[10px] text-slate-400 font-medium">{{ __('Robot Pendanaan Otomatis') }}</span>
+                        </div>
                     </div>
                     <!-- Active Toggle Switch -->
                     <form action="{{ route('loans.auto-invest.update') }}" method="POST" id="autoInvestToggleForm">
                         @csrf
+                        <input type="hidden" name="min_grade" value="{{ $stats['auto_invest_rule']->min_grade }}">
+                        <input type="hidden" name="max_grade" value="{{ $stats['auto_invest_rule']->max_grade }}">
+                        <input type="hidden" name="max_allocation_per_loan" value="{{ (int)$stats['auto_invest_rule']->max_allocation_per_loan }}">
+                        <input type="hidden" name="max_ltv" value="{{ (int)$stats['auto_invest_rule']->max_ltv }}">
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" name="is_active" value="1" class="sr-only peer" 
                                    onchange="document.getElementById('autoInvestToggleForm').submit()"
                                    {{ $stats['auto_invest_rule']->is_active ? 'checked' : '' }}>
-                            <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-700"></div>
+                            <div class="w-10 h-5 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-700 dark:peer-checked:bg-emerald-600"></div>
                         </label>
                     </form>
                 </div>
 
                 <!-- Status Banner -->
-                <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 mb-4">
-                    <p class="text-xs font-bold text-emerald-900">
-                        {{ $stats['auto_invest_rule']->is_active ? __('Status: Active') : __('Status: Inactive') }}
-                    </p>
-                    <p class="text-[11px] text-emerald-700 mt-0.5 leading-relaxed">
-                        {{ __('Your funds are automatically being deployed based on the rules below.') }}
-                    </p>
-                </div>
+                @if($stats['auto_invest_rule']->is_active)
+                    <div class="p-3.5 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 mb-4 transition-all">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <p class="text-xs font-black text-emerald-900 dark:text-emerald-200">
+                                {{ __('Status: Aktif') }}
+                            </p>
+                        </div>
+                        <p class="text-[11px] text-emerald-700 dark:text-emerald-300 mt-1 leading-relaxed">
+                            {{ __('Dana Anda secara otomatis dialokasikan ke pinjaman yang memenuhi kriteria di bawah.') }}
+                        </p>
+                    </div>
+                @else
+                    <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 mb-4 transition-all">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                            <p class="text-xs font-black text-slate-700 dark:text-slate-300">
+                                {{ __('Status: Nonaktif') }}
+                            </p>
+                        </div>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                            {{ __('Aktifkan switch di atas agar sistem mendanai pinjaman secara otomatis.') }}
+                        </p>
+                    </div>
+                @endif
 
                 <!-- Summary parameters -->
-                <div class="space-y-2 text-xs font-medium text-slate-600 mb-4">
-                    <div class="flex justify-between py-1 border-b border-slate-100">
-                        <span class="text-slate-400 font-semibold">{{ __('Max LTV') }}</span>
-                        <span class="font-bold text-slate-900">{{ (int)$stats['auto_invest_rule']->max_ltv }}%</span>
+                <div class="space-y-2 text-xs font-medium text-slate-600 dark:text-slate-300 mb-4">
+                    <div class="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
+                        <span class="text-slate-400 dark:text-slate-500 font-semibold">{{ __('Max LTV') }}</span>
+                        <span class="font-bold text-slate-900 dark:text-slate-100">{{ (int)$stats['auto_invest_rule']->max_ltv }}%</span>
                     </div>
-                    <div class="flex justify-between py-1 border-b border-slate-100">
-                        <span class="text-slate-400 font-semibold">{{ __('Min Expected Return') }}</span>
-                        <span class="font-bold text-slate-900">10.0%</span>
+                    <div class="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
+                        <span class="text-slate-400 dark:text-slate-500 font-semibold">{{ __('Min Expected Return') }}</span>
+                        <span class="font-bold text-slate-900 dark:text-slate-100">10.0%</span>
                     </div>
-                    <div class="flex justify-between py-1 border-b border-slate-100">
-                        <span class="text-slate-400 font-semibold">{{ __('Target Grades') }}</span>
-                        <span class="font-bold text-slate-900">{{ __('Grade') }} {{ $stats['auto_invest_rule']->min_grade }} - {{ $stats['auto_invest_rule']->max_grade }}</span>
+                    <div class="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
+                        <span class="text-slate-400 dark:text-slate-500 font-semibold">{{ __('Target Grades') }}</span>
+                        <span class="font-bold text-slate-900 dark:text-slate-100">{{ __('Grade') }} {{ $stats['auto_invest_rule']->min_grade }} - {{ $stats['auto_invest_rule']->max_grade }}</span>
+                    </div>
+                    <div class="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
+                        <span class="text-slate-400 dark:text-slate-500 font-semibold">{{ __('Maks. Alokasi / Pinjaman') }}</span>
+                        <span class="font-bold text-slate-900 dark:text-slate-100">Rp {{ number_format($stats['auto_invest_rule']->max_allocation_per_loan, 0, ',', '.') }}</span>
                     </div>
                 </div>
 
                 <!-- Edit Rules Toggle Button -->
-                <button @click="editing = !editing" class="w-full py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors">
-                    <span x-text="editing ? '{{ __('Close Form') }}' : '{{ __('Edit Rules') }}'">{{ __('Edit Rules') }}</span>
+                <button @click="editing = !editing" class="w-full py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-750 transition-colors shadow-2xs cursor-pointer flex items-center justify-center gap-1.5">
+                    <span x-text="editing ? '{{ __('Tutup Pengaturan') }}' : '{{ __('Ubah Aturan') }}'">{{ __('Ubah Aturan') }}</span>
+                    <svg class="w-3.5 h-3.5 transition-transform" :class="editing ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
                 </button>
 
                 <!-- Collapsible Form -->
-                <form x-show="editing" action="{{ route('loans.auto-invest.update') }}" method="POST" class="mt-4 space-y-3 pt-3 border-t border-slate-100" style="display: none;">
+                <form id="autoInvestEditForm" x-show="editing" x-cloak action="{{ route('loans.auto-invest.update') }}" method="POST" class="mt-4 space-y-3 pt-3 border-t border-slate-100 dark:border-slate-800">
                     @csrf
                     <input type="hidden" name="is_active" value="1">
                     
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">{{ __('Min Risk Grade') }}</label>
-                        <select name="min_grade" class="w-full rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700">
-                            @foreach(['A', 'B', 'C', 'D'] as $g)
-                                <option value="{{ $g }}" {{ $stats['auto_invest_rule']->min_grade === $g ? 'selected' : '' }}>{{ __('Grade') }} {{ $g }}</option>
-                            @endforeach
-                        </select>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">{{ __('Min Risk Grade') }}</label>
+                            <select name="min_grade" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                                @foreach(['A', 'B', 'C', 'D'] as $g)
+                                    <option value="{{ $g }}" {{ $stats['auto_invest_rule']->min_grade === $g ? 'selected' : '' }}>{{ __('Grade') }} {{ $g }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">{{ __('Max Risk Grade') }}</label>
+                            <select name="max_grade" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                                @foreach(['A', 'B', 'C', 'D'] as $g)
+                                    <option value="{{ $g }}" {{ $stats['auto_invest_rule']->max_grade === $g ? 'selected' : '' }}>{{ __('Grade') }} {{ $g }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">{{ __('Max Risk Grade') }}</label>
-                        <select name="max_grade" class="w-full rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700">
-                            @foreach(['A', 'B', 'C', 'D'] as $g)
-                                <option value="{{ $g }}" {{ $stats['auto_invest_rule']->max_grade === $g ? 'selected' : '' }}>{{ __('Grade') }} {{ $g }}</option>
-                            @endforeach
-                        </select>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">{{ __('Maksimal LTV (%)') }}</label>
+                        <input type="number" name="max_ltv" min="10" max="100" step="1"
+                            value="{{ (int)$stats['auto_invest_rule']->max_ltv }}"
+                            class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500">
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">{{ __('Max Allocation / Loan (IDR)') }}</label>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">{{ __('Maks. Alokasi / Pinjaman (Rp)') }}</label>
                         <input type="number" name="max_allocation_per_loan" min="100000" step="50000"
                             value="{{ (int)$stats['auto_invest_rule']->max_allocation_per_loan }}"
-                            class="w-full rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700">
+                            class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500">
                     </div>
 
-                    <button type="submit" class="w-full py-2 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-800 transition-colors shadow-xs">
-                        {{ __('Save Rules') }}
+                    <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition-colors shadow-xs cursor-pointer">
+                        {{ __('Simpan & Terapkan Aturan') }}
                     </button>
                 </form>
             </div>

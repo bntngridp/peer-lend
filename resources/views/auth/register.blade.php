@@ -111,16 +111,16 @@
                     <!-- Country Code Selector -->
                     <select id="country_code" name="country_code"
                             class="rounded-l-xl border-r border-slate-200 bg-slate-50/80 px-2.5 py-2.5 text-xs font-bold text-slate-700 outline-none hover:bg-slate-100 transition-colors cursor-pointer shrink-0">
-                        <option value="+62" {{ old('country_code', '+62') === '+62' ? 'selected' : '' }}>🇮🇩 +62</option>
-                        <option value="+60" {{ old('country_code') === '+60' ? 'selected' : '' }}>🇲🇾 +60</option>
-                        <option value="+65" {{ old('country_code') === '+65' ? 'selected' : '' }}>🇸🇬 +65</option>
-                        <option value="+1"  {{ old('country_code') === '+1'  ? 'selected' : '' }}>🇺🇸 +1</option>
-                        <option value="+44" {{ old('country_code') === '+44' ? 'selected' : '' }}>🇬🇧 +44</option>
-                        <option value="+61" {{ old('country_code') === '+61' ? 'selected' : '' }}>🇦🇺 +61</option>
-                        <option value="+81" {{ old('country_code') === '+81' ? 'selected' : '' }}>🇯🇵 +81</option>
-                        <option value="+66" {{ old('country_code') === '+66' ? 'selected' : '' }}>🇹🇭 +66</option>
-                        <option value="+84" {{ old('country_code') === '+84' ? 'selected' : '' }}>🇻🇳 +84</option>
-                        <option value="+63" {{ old('country_code') === '+63' ? 'selected' : '' }}>🇵🇭 +63</option>
+                        <option value="+62" {{ old('country_code', '+62') === '+62' ? 'selected' : '' }}>ID (+62)</option>
+                        <option value="+60" {{ old('country_code') === '+60' ? 'selected' : '' }}>MY (+60)</option>
+                        <option value="+65" {{ old('country_code') === '+65' ? 'selected' : '' }}>SG (+65)</option>
+                        <option value="+1"  {{ old('country_code') === '+1'  ? 'selected' : '' }}>US (+1)</option>
+                        <option value="+44" {{ old('country_code') === '+44' ? 'selected' : '' }}>GB (+44)</option>
+                        <option value="+61" {{ old('country_code') === '+61' ? 'selected' : '' }}>AU (+61)</option>
+                        <option value="+81" {{ old('country_code') === '+81' ? 'selected' : '' }}>JP (+81)</option>
+                        <option value="+66" {{ old('country_code') === '+66' ? 'selected' : '' }}>TH (+66)</option>
+                        <option value="+84" {{ old('country_code') === '+84' ? 'selected' : '' }}>VN (+84)</option>
+                        <option value="+63" {{ old('country_code') === '+63' ? 'selected' : '' }}>PH (+63)</option>
                     </select>
                     
                     <!-- Phone Input -->

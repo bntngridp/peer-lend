@@ -178,7 +178,7 @@ class PaymentService
                 $this->notificationService->send(
                     $payment->user,
                     'wallet_deposit',
-                    'Deposit Berhasil! 💰',
+                    'Deposit Berhasil',
                     "Dana sebesar Rp " . number_format((float)$payment->amount, 0, ',', '.') . " telah berhasil ditambahkan ke wallet kamu.",
                     ['route' => 'wallet.index']
                 );

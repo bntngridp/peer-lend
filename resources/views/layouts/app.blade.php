@@ -534,7 +534,7 @@
                             @endif
                         </a>
 
-                        <!-- ☀️ / 🌙 Quick Theme Switcher Button -->
+                        <!-- Quick Theme Switcher Button -->
                         <button type="button" 
                                 @click="toggleHeaderTheme()" 
                                 class="flex items-center justify-center rounded-xl p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
@@ -547,7 +547,7 @@
                             </svg>
                         </button>
 
-                        <!-- 🌐 Multi-Language Selector Dropdown (Clean Text) -->
+                        <!-- Multi-Language Selector Dropdown -->
                         <div class="relative" x-data="{ langOpen: false }">
                             <button @click="langOpen = !langOpen" type="button" class="flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer">
                                 <span class="font-bold uppercase">{{ strtoupper(app()->getLocale()) }}</span>
@@ -704,7 +704,7 @@
             <div x-show="$store.paymentFeedback.status === 'failed'" class="absolute -top-24 left-1/2 -translate-x-1/2 w-64 h-64 bg-rose-500/15 dark:bg-rose-500/20 rounded-full blur-3xl pointer-events-none"></div>
             <div x-show="$store.paymentFeedback.status === 'pending'" class="absolute -top-24 left-1/2 -translate-x-1/2 w-64 h-64 bg-amber-500/15 dark:bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
-            <!-- 🟢 SUCCESS ANIMATED CHECKMARK STATE -->
+            <!-- SUCCESS ANIMATED CHECKMARK STATE -->
             <div x-show="$store.paymentFeedback.status === 'success'">
                 <!-- Animated Checkmark Circle -->
                 <div class="relative w-20 h-20 mx-auto mb-5 flex items-center justify-center">
@@ -726,7 +726,7 @@
                 <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-2 leading-relaxed" x-text="$store.paymentFeedback.message"></p>
             </div>
 
-            <!-- 🔴 FAILED ANIMATED CROSS STATE -->
+            <!-- FAILED ANIMATED CROSS STATE -->
             <div x-show="$store.paymentFeedback.status === 'failed'">
                 <!-- Animated Cross Circle -->
                 <div class="relative w-20 h-20 mx-auto mb-5 flex items-center justify-center">
@@ -755,7 +755,7 @@
                 </div>
             </div>
 
-            <!-- 🟡 PENDING STATE -->
+            <!-- PENDING STATE -->
             <div x-show="$store.paymentFeedback.status === 'pending'">
                 <div class="relative w-20 h-20 mx-auto mb-5 flex items-center justify-center">
                     <div class="absolute inset-0 rounded-full bg-amber-100 dark:bg-amber-950/80 animate-ping opacity-25"></div>
@@ -776,7 +776,7 @@
                 <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-2 leading-relaxed" x-text="$store.paymentFeedback.message || 'Pembayaran Anda sedang diproses atau menunggu transfer ke Virtual Account.'"></p>
             </div>
 
-            <!-- 📋 TRANSACTION DETAILS SUMMARY CARD -->
+            <!-- TRANSACTION DETAILS SUMMARY CARD -->
             <div class="mt-6 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 p-4 text-left space-y-2.5">
                 
                 <!-- Nominal / Amount Highlight -->
@@ -804,7 +804,7 @@
                 </div>
             </div>
 
-            <!-- 🔘 ACTION BUTTONS -->
+            <!-- ACTION BUTTONS -->
             <div class="mt-6 space-y-2">
                 <a x-show="$store.paymentFeedback.actionUrl && $store.paymentFeedback.actionText"
                    :href="$store.paymentFeedback.actionUrl" 

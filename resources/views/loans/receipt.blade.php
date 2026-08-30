@@ -41,8 +41,11 @@
             </div>
 
             <div class="sm:text-right">
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                    ✓ Official Payment Receipt
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                    <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>
+                    <span>{{ __('Official Payment Receipt') }}</span>
                 </span>
                 <p class="text-xs font-mono font-bold text-slate-500 mt-2">Ref: RCP-{{ date('Ymd', strtotime($installment->paid_at ?? now())) }}-{{ strtoupper(substr($installment->id, 0, 8)) }}</p>
             </div>

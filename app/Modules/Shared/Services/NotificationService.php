@@ -54,7 +54,7 @@ class NotificationService
         $this->send(
             $user,
             self::TYPE_KYC_APPROVED,
-            'KYC Verification Approved 🎉',
+            'KYC Verification Approved',
             'Selamat! Identitas kamu telah berhasil diverifikasi. Kamu kini dapat mengajukan pinjaman dan mendanai peminjam di marketplace.',
             ['route' => 'dashboard']
         );
@@ -82,7 +82,7 @@ class NotificationService
         $this->send(
             $borrower,
             self::TYPE_LOAN_OPEN_FUNDING,
-            'Pinjaman Kamu Disetujui! ✅',
+            'Pinjaman Kamu Disetujui',
             "Pengajuan pinjaman sebesar Rp " . number_format((float)$amount, 0, ',', '.') . " telah disetujui admin dan kini terbuka untuk pendanaan di marketplace.",
             ['loan_id' => $loanId, 'route' => 'loans.index']
         );
@@ -93,7 +93,7 @@ class NotificationService
         $this->send(
             $borrower,
             self::TYPE_LOAN_FULLY_FUNDED,
-            'Pinjaman Kamu 100% Terdanai! 🎊',
+            'Pinjaman Kamu 100% Terdanai',
             'Selamat! Pinjaman kamu telah sepenuhnya didanai oleh investor. Dana akan segera dicairkan oleh tim kami.',
             ['loan_id' => $loanId, 'route' => 'loans.installments']
         );
@@ -104,7 +104,7 @@ class NotificationService
         $this->send(
             $borrower,
             self::TYPE_LOAN_DISBURSED,
-            'Dana Pinjaman Telah Dicairkan! 💰',
+            'Dana Pinjaman Telah Dicairkan',
             "Dana sebesar Rp " . number_format((float)$amount, 0, ',', '.') . " telah masuk ke wallet kamu. Pastikan membayar cicilan tepat waktu.",
             ['loan_id' => $loanId, 'route' => 'wallet.index']
         );
@@ -115,7 +115,7 @@ class NotificationService
         $this->send(
             $lender,
             self::TYPE_LOAN_DISBURSED,
-            'Pinjaman yang Kamu Danai Telah Cair! 📊',
+            'Pinjaman yang Kamu Danai Telah Cair',
             "Pinjaman yang kamu danai sebesar Rp " . number_format((float)$amount, 0, ',', '.') . " telah dicairkan ke peminjam. Cicilan pertama akan segera ditagihkan.",
             ['loan_id' => $loanId, 'route' => 'marketplace.show']
         );
@@ -128,7 +128,7 @@ class NotificationService
         $this->send(
             $borrower,
             self::TYPE_INSTALLMENT_DUE,
-            'Cicilan Jatuh Tempo dalam 3 Hari ⏰',
+            'Cicilan Jatuh Tempo dalam 3 Hari',
             "Cicilan sebesar Rp " . number_format((float)$amount, 0, ',', '.') . " akan jatuh tempo pada {$dueDate}. Pastikan saldo wallet kamu mencukupi.",
             ['installment_id' => $installmentId, 'route' => 'loans.installments']
         );
@@ -139,7 +139,7 @@ class NotificationService
         $this->send(
             $borrower,
             self::TYPE_INSTALLMENT_OVERDUE,
-            'Cicilan Telah Menunggak! 🚨',
+            'Cicilan Telah Menunggak',
             "Cicilan kamu telah terlambat selama {$daysOverdue} hari. Total yang harus dibayar saat ini (termasuk denda harian): Rp " . number_format((float)$totalDue, 0, ',', '.') . ". Harap segera lakukan pembayaran.",
             ['installment_id' => $installmentId, 'route' => 'loans.installments']
         );
@@ -151,7 +151,7 @@ class NotificationService
         $this->send(
             $lender,
             self::TYPE_INSTALLMENT_PAID,
-            'Cicilan Diterima! 💸',
+            'Cicilan Diterima',
             "Peminjam telah membayar cicilan. Kamu menerima Rp " . number_format((float)$total, 0, ',', '.') . " (pokok + bunga) yang sudah masuk ke wallet kamu.",
             ['loan_id' => $loanId, 'route' => 'wallet.index']
         );
@@ -162,7 +162,7 @@ class NotificationService
         $this->send(
             $user,
             self::TYPE_LOAN_COMPLETED,
-            'Pinjaman Selesai Lunas! 🏆',
+            'Pinjaman Selesai Lunas',
             'Semua cicilan telah dibayar. Terima kasih telah menggunakan Peer-Lend!',
             ['loan_id' => $loanId]
         );
@@ -175,7 +175,7 @@ class NotificationService
         $this->send(
             $borrower,
             self::TYPE_LTV_WARNING,
-            'Peringatan: LTV Mendekati Batas Likuidasi! ⚠️',
+            'Peringatan: LTV Mendekati Batas Likuidasi',
             "Nilai jaminan kamu sedang turun. LTV saat ini: {$currentLtv}% (batas likuidasi: 80%). Segera tambah jaminan atau lunasi pinjaman untuk menghindari likuidasi otomatis.",
             ['loan_id' => $loanId, 'route' => 'loans.index']
         );
@@ -186,7 +186,7 @@ class NotificationService
         $this->send(
             $borrower,
             self::TYPE_LOAN_LIQUIDATED,
-            'Jaminan Kamu Telah Dilikuidasi 🔴',
+            'Jaminan Kamu Telah Dilikuidasi',
             'LTV pinjaman kamu telah melampaui batas 80%. Jaminan crypto kamu telah dilikuidasi secara otomatis untuk melunasi sebagian utang kepada investor.',
             ['loan_id' => $loanId, 'route' => 'loans.index']
         );
@@ -197,7 +197,7 @@ class NotificationService
         $this->send(
             $lender,
             self::TYPE_LOAN_LIQUIDATED,
-            'Pinjaman yang Kamu Danai Dilikuidasi 🔴',
+            'Pinjaman yang Kamu Danai Dilikuidasi',
             "Pinjaman telah dilikuidasi karena LTV melampaui batas. Kamu menerima Rp " . number_format((float)$recovered, 0, ',', '.') . " dari likuidasi jaminan.",
             ['loan_id' => $loanId, 'route' => 'wallet.index']
         );

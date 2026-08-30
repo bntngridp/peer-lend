@@ -31,10 +31,10 @@ class UpdateCryptoLtvCommand extends Command
         $isDryRun = $this->option('dry-run');
 
         if ($isDryRun) {
-            $this->warn('⚠️  DRY RUN mode — no liquidations will be executed.');
+            $this->warn('DRY RUN mode — no liquidations will be executed.');
         }
 
-        $this->info('🔄 Fetching active loans with crypto collateral...');
+        $this->info('Fetching active loans with crypto collateral...');
 
         $loans = LoanRequest::where('status', LoanRequest::STATUS_ACTIVE)
             ->whereNotNull('collateral_currency_id')
@@ -42,7 +42,7 @@ class UpdateCryptoLtvCommand extends Command
             ->get();
 
         if ($loans->isEmpty()) {
-            $this->info('✅ No active crypto-collateral loans found. Nothing to update.');
+            $this->info('No active crypto-collateral loans found. Nothing to update.');
             return self::SUCCESS;
         }
 
@@ -76,7 +76,7 @@ class UpdateCryptoLtvCommand extends Command
         $this->newLine(2);
 
         if (!$isDryRun) {
-            $this->info("✅ LTV update complete — {$updatedCount} loan(s) processed, {$liquidatedCount} liquidated.");
+            $this->info("LTV update complete — {$updatedCount} loan(s) processed, {$liquidatedCount} liquidated.");
         }
 
         return self::SUCCESS;

@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // ⏱️ Countdown Timer for Resend Button
+    // Countdown Timer for Resend Button
     let secondsLeft = 60;
     const timerSpan = document.getElementById('countdown-timer');
     const countdownWrapper = document.getElementById('countdown-wrapper');

@@ -12,7 +12,7 @@ class SystemPreferenceController extends Controller
 {
     /**
      * Quick theme toggle via AJAX — only updates color_theme.
-     * Called by the navbar ☀️/🌙 button and profile page theme cards.
+     * Called by the navbar theme toggle button and profile page theme cards.
      */
     public function toggleTheme(Request $request): JsonResponse
     {

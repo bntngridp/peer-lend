@@ -17,7 +17,7 @@ Route::post('/api/payment/nowpayments/ipn', [\App\Modules\Wallet\Controllers\Pay
 Route::get('/api/docs', fn () => view('docs.swagger'))->name('api.docs');
 Route::get('/lang/{locale}', [\App\Modules\Shared\Controllers\LanguageController::class, 'switch'])->name('lang.switch');
 
-// ─── 🧮 Loan Calculator (Public — No Auth Required) ──────────────────────────
+// ─── Loan Calculator (Public — No Auth Required) ──────────────────────────
 Route::get('/calculator', [\App\Modules\Loan\Controllers\LoanCalculatorController::class, 'index'])->name('calculator.index');
 Route::post('/calculator/calculate', [\App\Modules\Loan\Controllers\LoanCalculatorController::class, 'calculate'])->name('calculator.calculate');
 
@@ -58,19 +58,19 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
     // Dashboard — role-based (admin / borrower / lender)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // 🔔 Notification Routes
+    // Notification Routes
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
 
-    // 🔐 2-Factor Authentication (2FA) Routes
+    // 2-Factor Authentication (2FA) Routes
     Route::get('/2fa/setup', [\App\Modules\Auth\Controllers\TwoFactorController::class, 'showSetup'])->name('2fa.setup');
     Route::post('/2fa/enable', [\App\Modules\Auth\Controllers\TwoFactorController::class, 'enable'])->name('2fa.enable');
     Route::post('/2fa/disable', [\App\Modules\Auth\Controllers\TwoFactorController::class, 'disable'])->name('2fa.disable');
     Route::get('/2fa/verify', [\App\Modules\Auth\Controllers\TwoFactorController::class, 'showVerifyForm'])->name('2fa.verify');
     Route::post('/2fa/verify', [\App\Modules\Auth\Controllers\TwoFactorController::class, 'verify'])->name('2fa.verify.post');
 
-    // 👤 User Profile Routes
+    // User Profile Routes
     Route::get('/profile', [\App\Modules\User\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [\App\Modules\User\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [\App\Modules\User\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
@@ -82,11 +82,11 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
     Route::post('/profile/sessions/revoke-others', [\App\Modules\User\Controllers\ProfileController::class, 'revokeOtherSessions'])->name('profile.sessions.revoke-others');
     Route::delete('/profile/sessions/{sessionId}', [\App\Modules\User\Controllers\ProfileController::class, 'revokeSession'])->name('profile.sessions.destroy');
 
-    // 🔍 KYC Verification Routes
+    // KYC Verification Routes
     Route::get('/kyc', [\App\Modules\KYC\Controllers\KYCController::class, 'index'])->name('kyc.index');
     Route::post('/kyc', [\App\Modules\KYC\Controllers\KYCController::class, 'submit'])->name('kyc.submit');
 
-    // 💳 Virtual Wallet Routes
+    // Virtual Wallet Routes
     Route::get('/wallet', [\App\Modules\Wallet\Controllers\WalletController::class, 'index'])->name('wallet.index');
     Route::get('/collateral', [\App\Modules\Loan\Controllers\CollateralDashboardController::class, 'index'])->name('collateral.index');
     Route::middleware('kyc')->group(function () {
@@ -99,7 +99,7 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         Route::post('/wallet/crypto/withdraw/initiate', [\App\Modules\Wallet\Controllers\PaymentController::class, 'initiateCryptoWithdrawal'])->name('wallet.crypto.withdraw.initiate');
     });
 
-    // 🤝 P2P Loan Marketplace Routes (Viewable by All, Funding by Lender & Admin)
+    // P2P Loan Marketplace Routes (Viewable by All, Funding by Lender & Admin)
     Route::get('/marketplace', [\App\Modules\Loan\Controllers\MarketplaceController::class, 'index'])->name('marketplace.index');
     Route::get('/marketplace/{loan}', [\App\Modules\Loan\Controllers\MarketplaceController::class, 'show'])->name('marketplace.show');
 
@@ -108,20 +108,20 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
             ->middleware('kyc')
             ->name('marketplace.fund');
 
-        // 🤖 Auto-Invest settings update
+        // Auto-Invest settings update
         Route::post('/loans/auto-invest', [\App\Modules\Loan\Controllers\AutoInvestRuleController::class, 'update'])
             ->middleware('kyc')
             ->name('loans.auto-invest.update');
     });
 
-    // 📝 Borrower Loan Applications & Installment Routes
+    // Borrower Loan Applications & Installment Routes
     Route::middleware(['role:borrower,admin', 'kyc'])->group(function () {
         Route::get('/loans', [\App\Modules\Loan\Controllers\LoanRequestController::class, 'index'])->name('loans.index');
         Route::get('/loans/create', [\App\Modules\Loan\Controllers\LoanRequestController::class, 'create'])->name('loans.create');
         Route::post('/loans', [\App\Modules\Loan\Controllers\LoanRequestController::class, 'store'])->name('loans.store');
     });
 
-    // 🤝 Shared Loan Detail, Installments, Repayments, Chat & Contract Routes (Lender, Borrower & Staff)
+    // Shared Loan Detail, Installments, Repayments, Chat & Contract Routes (Lender, Borrower & Staff)
     Route::middleware(['role:borrower,lender,admin,customer_service,collection_officer', 'kyc'])->group(function () {
         Route::get('/loans/{loan}/installments', [\App\Modules\Loan\Controllers\LoanRequestController::class, 'installments'])->name('loans.installments');
         
@@ -129,14 +129,14 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         Route::post('/repayments/{installment}/pay', [\App\Modules\Loan\Controllers\RepaymentController::class, 'pay'])->name('repayments.pay');
         Route::get('/repayments/{installment}/receipt', [\App\Modules\Loan\Controllers\RepaymentController::class, 'receipt'])->name('repayments.receipt');
 
-        // 💬 Internal Loan Chat System
+        // Internal Loan Chat System
         Route::get('/loans/{loan}/messages', [\App\Modules\Loan\Controllers\LoanMessageController::class, 'fetchMessages'])->name('loans.messages.fetch');
         Route::post('/loans/{loan}/messages', [\App\Modules\Loan\Controllers\LoanMessageController::class, 'sendMessage'])->name('loans.messages.send');
 
-        // 📄 Contract Agreement PDF/Print Page
+        // Contract Agreement PDF/Print Page
         Route::get('/loans/{loan}/agreement', [\App\Modules\Loan\Controllers\AgreementDownloadController::class, 'download'])->name('loans.agreement');
 
-        // 🔌 REST API Endpoints (Prefix /api/v1)
+        // REST API Endpoints (Prefix /api/v1)
         Route::prefix('api/v1')->name('api.v1.')->group(function () {
             Route::get('/marketplace', [\App\Modules\Loan\Controllers\LoanApiController::class, 'index'])->name('marketplace.index');
             Route::get('/marketplace/{loan}', [\App\Modules\Loan\Controllers\LoanApiController::class, 'show'])->name('marketplace.show');
@@ -146,7 +146,7 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         });
     });
 
-    // 👑 Internal Staff Panel Routes (Admin, Customer Service, Collection Officer)
+    // Internal Staff Panel Routes (Admin, Customer Service, Collection Officer)
     Route::prefix('admin')->name('admin.')->group(function () {
         // KYC Verification & User Directory (Admin & CS)
         Route::middleware('role:admin,customer_service')->group(function () {

@@ -31,7 +31,7 @@ Schedule::command(\App\Console\Commands\SendRepaymentRemindersCommand::class)
     ->withoutOverlapping()
     ->appendOutputTo(storage_path('logs/repayment-reminders.log'));
 
-// 🤖 Auto-Invest Engine (Every Hour matching & auto-funding)
+// Auto-Invest Engine (Every Hour matching & auto-funding)
 Schedule::command('peer-lend:run-auto-invest')
     ->hourly()
     ->withoutOverlapping()

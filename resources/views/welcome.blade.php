@@ -73,9 +73,9 @@
                 
                 <!-- Left Content (Spans 6 Cols) -->
                 <div class="lg:col-span-6 space-y-6">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">
-                        <span class="h-2 w-2 rounded-full bg-emerald-700 animate-pulse"></span>
-                        Institutional Credit Access
+                    <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700">
+                        <span class="h-2 w-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                        <span>Institutional Credit Access</span>
                     </div>
 
                     <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
@@ -121,7 +121,10 @@
                     <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-md space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                             <span class="text-xs font-extrabold text-slate-900">Borrower Dashboard Preview</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">Verified Borrower</span>
+                            <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700">
+                                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                <span>Verified Borrower</span>
+                            </span>
                         </div>
                         <div class="grid grid-cols-2 gap-3 text-xs">
                             <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
@@ -183,7 +186,7 @@
                     <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-md space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                             <span class="text-xs font-extrabold text-slate-900">Lender Portfolio Preview</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">+12.4% APY</span>
+                            <span class="text-xs font-bold text-emerald-600">+12.4% APY</span>
                         </div>
                         <div class="grid grid-cols-2 gap-3 text-xs">
                             <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">

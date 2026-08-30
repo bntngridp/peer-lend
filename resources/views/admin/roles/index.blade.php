@@ -71,20 +71,9 @@
             <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
                     <div>
-                        <div class="flex items-center gap-2">
-                            <h3 class="text-base font-extrabold text-slate-900 dark:text-slate-100">
-                                {{ ucfirst(str_replace('_', ' ', $role->name)) }}
-                            </h3>
-                            @if($isSystemRole)
-                                <span class="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">
-                                    {{ __('System Role') }}
-                                </span>
-                            @else
-                                <span class="text-[10px] font-bold text-purple-600 dark:text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-full border border-purple-500/20">
-                                    {{ __('Custom Role') }}
-                                </span>
-                            @endif
-                        </div>
+                        <h3 class="text-base font-extrabold text-slate-900 dark:text-slate-100">
+                            {{ ucfirst(str_replace('_', ' ', $role->name)) }}
+                        </h3>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                             {{ $role->description ?? __('Manage permission grants for :role tier.', ['role' => $role->name]) }}
                         </p>

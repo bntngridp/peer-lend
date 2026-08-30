@@ -13,7 +13,7 @@ class CustomerServiceAndCreditRiskRoleTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed();
+        (new \Database\Seeders\DatabaseSeeder())->run();
     }
 
     public function test_customer_service_user_is_directed_to_staff_dashboard_and_can_access_kyc_and_user_directory()

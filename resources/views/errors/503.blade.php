@@ -36,9 +36,10 @@
         <!-- Main Card -->
         <div class="rounded-3xl border border-slate-200 bg-white p-8 sm:p-10 shadow-xs space-y-6">
             
-            <span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-amber-50 text-amber-800 border border-amber-200 tracking-wider uppercase">
-                SYSTEM MAINTENANCE
-            </span>
+            <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700">
+                <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                <span>System Maintenance</span>
+            </div>
 
             <div class="space-y-3">
                 <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">

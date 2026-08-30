@@ -21,7 +21,7 @@ class AdminFinancialAndRoleManagementTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed();
+        (new \Database\Seeders\DatabaseSeeder())->run();
 
         $this->adminUser = User::whereHas('roles', fn($q) => $q->where('name', 'admin'))->first();
         $this->regularUser = User::whereHas('roles', fn($q) => $q->where('name', 'borrower'))->first();

@@ -174,14 +174,6 @@
                                 <div class="flex flex-wrap items-center gap-1.5">
                                     @forelse($usr->roles as $r)
                                         @php
-                                            $roleStyle = match($r->name) {
-                                                'admin' => 'background:rgba(168,85,247,0.15);color:#c084fc;border-color:rgba(168,85,247,0.35)',
-                                                'borrower' => 'background:rgba(59,130,246,0.15);color:#60a5fa;border-color:rgba(59,130,246,0.35)',
-                                                'lender' => 'background:rgba(16,185,129,0.15);color:#34d399;border-color:rgba(16,185,129,0.35)',
-                                                'customer_service' => 'background:rgba(245,158,11,0.15);color:#fbbf24;border-color:rgba(245,158,11,0.35)',
-                                                'collection_officer' => 'background:rgba(244,63,94,0.15);color:#fb7185;border-color:rgba(244,63,94,0.35)',
-                                                default => 'background:rgba(100,116,139,0.15);color:#94a3b8;border-color:rgba(100,116,139,0.35)',
-                                            };
                                             $roleLabel = match($r->name) {
                                                 'admin' => __('System Admin'),
                                                 'borrower' => __('Borrower'),
@@ -191,11 +183,11 @@
                                                 default => ucfirst(str_replace('_', ' ', $r->name)),
                                             };
                                         @endphp
-                                        <span class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-bold" style="{{ $roleStyle }}">
+                                        <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">
                                             {{ $roleLabel }}
                                         </span>
                                     @empty
-                                        <span class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800">
+                                        <span class="text-xs font-medium text-slate-400 dark:text-slate-500">
                                             {{ __('No Role') }}
                                         </span>
                                     @endforelse
@@ -205,16 +197,19 @@
                             {{-- Status Column --}}
                             <td class="whitespace-nowrap px-4 py-4">
                                 @if($isKycApproved)
-                                    <span class="inline-flex items-center justify-center text-center rounded-full border border-green-500/30 bg-green-500/15 px-3 py-0.5 text-xs font-bold text-green-400 min-w-[84px]">
-                                        {{ __('Active') }}
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+                                        <span>{{ __('Active') }}</span>
                                     </span>
                                 @elseif($isKycPending)
-                                    <span class="inline-flex items-center justify-center text-center rounded-full border border-amber-500/30 bg-amber-500/15 px-3 py-0.5 text-xs font-bold text-amber-400 min-w-[84px]">
-                                        {{ __('Pending KYC') }}
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0"></span>
+                                        <span>{{ __('Pending KYC') }}</span>
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center justify-center text-center rounded-full border border-slate-500/30 bg-slate-500/15 px-3 py-0.5 text-xs font-medium text-slate-400 min-w-[84px]">
-                                        {{ __('Unverified') }}
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-slate-400 shrink-0"></span>
+                                        <span>{{ __('Unverified') }}</span>
                                     </span>
                                 @endif
                             </td>

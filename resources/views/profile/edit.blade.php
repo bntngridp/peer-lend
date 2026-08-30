@@ -197,9 +197,15 @@
                             <div class="flex items-center gap-2">
                                 <span class="font-bold text-slate-900 dark:text-slate-100 text-xs block">{{ __('Authenticator Apps') }}</span>
                                 @if(Auth::user()->google2fa_enabled)
-                                    <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">{{ __('Active') }}</span>
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                        {{ __('Active') }}
+                                    </span>
                                 @else
-                                    <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-200 text-slate-700">{{ __('Disabled') }}</span>
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span>
+                                        {{ __('Disabled') }}
+                                    </span>
                                 @endif
                             </div>
                             <span class="text-[10px] text-slate-500 font-medium mt-0.5 block">{{ __('Google Authenticator, Authy, Microsoft Authenticator') }}</span>
@@ -259,7 +265,7 @@
                                 <tr class="border-b border-slate-100 font-medium text-slate-700">
                                     <td class="py-3 px-3 font-bold text-slate-900 dark:text-slate-100">{{ $apiToken->name }}</td>
                                     <td class="py-3 px-3">
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-bold {{ $apiToken->permissions === 'Read / Write' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-slate-100 text-slate-700' }}">
+                                        <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">
                                             {{ __($apiToken->permissions) }}
                                         </span>
                                     </td>
@@ -300,7 +306,7 @@
                 <div class="flex items-baseline gap-2">
                     <span class="text-3xl font-black text-emerald-700 dark:text-emerald-400">{{ __n(Auth::user()->google2fa_enabled ? '92' : '75') }}</span>
                     <span class="text-xs font-bold text-slate-400">/ {{ __n('100') }}</span>
-                    <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-700 text-white ml-auto">
+                    <span class="text-xs font-bold text-emerald-700 dark:text-emerald-400 ml-auto">
                         {{ Auth::user()->google2fa_enabled ? __('Strong Protection') : __('Good Protection') }}
                     </span>
                 </div>
@@ -333,7 +339,10 @@
                                 </span>
                             </div>
                             @if($session['is_current'])
-                                <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900/50">{{ __('CURRENT') }}</span>
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                    {{ __('Current') }}
+                                </span>
                             @else
                                 <form action="{{ route('profile.sessions.destroy', $session['id']) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure you want to revoke this session?') }}');">
                                     @csrf

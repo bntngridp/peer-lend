@@ -58,7 +58,8 @@
                     <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
                         {{ __('Interest Rate Brackets') }}
                     </h3>
-                    <span class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                    <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
                         {{ __('Active Rule Set') }}
                     </span>
                 </div>

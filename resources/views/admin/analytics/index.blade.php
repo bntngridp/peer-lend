@@ -77,7 +77,7 @@
                 <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                     {{ __('Liquidity Pool') }}
                 </span>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400">
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">
                     {{ __n('+14.2%') }}
                 </span>
             </div>
@@ -100,7 +100,7 @@
                 <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                     {{ __('Default Rate (NPL)') }}
                 </span>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400">
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">
                     {{ __n('-0.18%') }}
                 </span>
             </div>
@@ -123,7 +123,7 @@
                 <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                     {{ __('LCR Ratio') }}
                 </span>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400">
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">
                     {{ __('Healthy') }}
                 </span>
             </div>
@@ -146,7 +146,7 @@
                 <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                     {{ __('NSFR Ratio') }}
                 </span>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400">
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">
                     {{ __('Optimal') }}
                 </span>
             </div>

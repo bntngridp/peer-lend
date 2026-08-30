@@ -21,7 +21,7 @@
             <h2 class="text-lg font-bold text-slate-900">Verifikasi Nomor HP</h2>
             <p class="text-xs font-medium text-slate-500 mt-1 max-w-xs mx-auto">
                 Masukkan 6 digit kode OTP yang telah kami kirimkan ke nomor 
-                <span class="font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded-md inline-block mt-1">{{ $phone }}</span>
+                <span class="font-bold text-slate-800">{{ $phone }}</span>
             </p>
         </div>
 

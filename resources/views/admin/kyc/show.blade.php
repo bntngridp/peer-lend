@@ -17,12 +17,13 @@
                 <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">
                     {{ __('KYC Review') }}: {{ $kyc->user->profile->full_name ?? 'Institutional Client' }}
                 </h1>
-                <span class="px-2.5 py-0.5 rounded text-[11px] font-extrabold 
-                    @if($kyc->isPending()) bg-amber-100 text-amber-800 border border-amber-200
-                    @elseif($kyc->isApproved()) bg-emerald-100 text-emerald-800 border border-emerald-200
-                    @else bg-rose-100 text-rose-800 border border-rose-200 @endif">
-                    {{ __('Status') }}: {{ __( ucfirst($kyc->status) ) }}
-                </span>
+                <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    <span class="h-2 w-2 rounded-full shrink-0
+                        @if($kyc->isPending()) bg-amber-500
+                        @elseif($kyc->isApproved()) bg-emerald-500
+                        @else bg-rose-500 @endif"></span>
+                    <span>{{ __(ucfirst($kyc->status)) }}</span>
+                </div>
             </div>
             <p class="text-xs font-medium text-slate-500 mt-1">
                 {{ __('Application ID') }}: APP-{{ substr($kyc->id, 0, 6) }}-X9 • {{ __('Submitted') }}: {{ $kyc->created_at->format('M d, Y H:i') }}
@@ -40,8 +41,9 @@
             <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                     <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ __('System Assessment') }}</h3>
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                        {{ __('Low Risk') }}
+                    <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                        <span>{{ __('Low Risk') }}</span>
                     </span>
                 </div>
 

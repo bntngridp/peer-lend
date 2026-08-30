@@ -273,11 +273,12 @@
                                 Rp {{ __n(number_format($inst->interest_amount, 0, ',', '.')) }}
                             </td>
                             <td class="py-3.5 px-3 whitespace-nowrap">
-                                <span class="px-2.5 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider
-                                    @if($inst->isPaid()) bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800
-                                    @elseif($inst->isOverdue()) bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800
-                                    @else bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 @endif">
-                                    {{ __(ucwords(str_replace('_', ' ', $inst->status))) }}
+                                <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                    <span class="h-1.5 w-1.5 rounded-full shrink-0
+                                        @if($inst->isPaid()) bg-emerald-500
+                                        @elseif($inst->isOverdue()) bg-rose-500
+                                        @else bg-amber-500 @endif"></span>
+                                    <span>{{ __(ucwords(str_replace('_', ' ', $inst->status))) }}</span>
                                 </span>
                             </td>
                             <td class="py-3.5 pl-3 pr-6 text-right whitespace-nowrap min-w-[165px]">

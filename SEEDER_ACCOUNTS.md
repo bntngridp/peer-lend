@@ -25,7 +25,7 @@ docker compose exec app php artisan migrate:fresh --seed --force
 
 | # | Email | Password | Nama Lengkap | Role | Saldo IDR | KYC | Akses |
 |:---:|:---|:---|:---|:---:|---:|:---:|:---:|
-| 1 | `admin@peerlend.com` | `password123` | System Administrator | `admin` | Rp 0 | ✅ | Admin Panel |
+| 1 | admin@pee`rlend.com` | `password123` | System Administrator | `admin` | Rp 0 | ✅ | Admin Panel |
 | 2 | `admin1@lendflow.com` | `password123` | Primary System Admin | `admin` | Rp 100.000.000 | ✅ | Admin Panel |
 | 3 | `admin2@lendflow.com` | `password123` | Compliance Officer Admin | `admin` | Rp 50.000.000 | ✅ | Admin Panel |
 

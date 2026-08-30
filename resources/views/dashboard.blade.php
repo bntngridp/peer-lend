@@ -20,10 +20,10 @@
             <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">{{ __('Global platform oversight and operational health. — Platform Overview') }}</p>
         </div>
         <div class="flex items-center gap-3">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+            <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
                 <span class="h-2 w-2 rounded-full bg-emerald-600 dark:bg-emerald-400 animate-pulse"></span>
                 {{ __('System Status: Operational') }}
-            </span>
+            </div>
         </div>
     </div>
 
@@ -33,7 +33,7 @@
         <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{{ __('Total Users') }}</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">{{ __n('+2.4%') }}</span>
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">{{ __n('+2.4%') }}</span>
             </div>
             <p class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mt-3">{{ __n(number_format($stats['total_users'])) }}</p>
         </div>
@@ -42,7 +42,7 @@
         <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{{ __('Pending KYC') }}</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800">{{ __('Action Req.') }}</span>
+                <span class="text-xs font-bold text-rose-600 dark:text-rose-400">{{ __('Action Req.') }}</span>
             </div>
             <p class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mt-3">{{ __n(number_format($stats['kyc_pending'])) }}</p>
         </div>
@@ -51,7 +51,7 @@
         <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{{ __('Total Volume') }}</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">{{ __('30 Days') }}</span>
+                <span class="text-xs font-medium text-slate-400 dark:text-slate-500">{{ __('30 Days') }}</span>
             </div>
             <p class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mt-3">Rp {{ __n(number_format($stats['total_disbursed'], 0, ',', '.')) }}</p>
         </div>
@@ -60,7 +60,7 @@
         <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{{ __('System Health') }}</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">{{ __('Stable') }}</span>
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">{{ __('Stable') }}</span>
             </div>
             <p class="text-2xl font-extrabold text-emerald-700 dark:text-emerald-400 mt-3">{{ __n('99.9%') }}</p>
         </div>
@@ -105,18 +105,13 @@
                                 <td class="py-3.5 px-6 font-bold text-slate-900 dark:text-slate-100">{{ $loan->borrower?->profile?->full_name ?? 'N/A' }}</td>
                                 <td class="py-3.5 px-6 font-semibold text-slate-900 dark:text-slate-100">Rp {{ __n(number_format($loan->amount, 0, ',', '.')) }}</td>
                                 <td class="py-3.5 px-6">
-                                    @php
-                                        $statusBadge = match($loan->status) {
-                                            'pending'      => 'bg-amber-500/15 text-amber-400 border border-amber-500/30',
-                                            'open_funding' => 'bg-indigo-500/15 text-indigo-400 border border-indigo-500/30',
-                                            'funded'       => 'bg-purple-500/15 text-purple-400 border border-purple-500/30',
-                                            'active'       => 'bg-green-500/450 text-green-400 border border-green-500/30',
-                                            'completed'    => 'bg-slate-500/15 text-slate-300 border border-slate-500/30',
-                                            'default'      => 'bg-slate-500/15 text-slate-400 border border-slate-500/30',
-                                        };
-                                    @endphp
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-bold border {{ $statusBadge }}">
-                                        {{ __(ucfirst(str_replace('_', ' ', $loan->status))) }}
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                        <span class="h-1.5 w-1.5 rounded-full shrink-0
+                                            @if($loan->status === 'active' || $loan->status === 'funded') bg-emerald-500
+                                            @elseif($loan->status === 'pending' || $loan->status === 'open_funding') bg-amber-500
+                                            @elseif($loan->status === 'completed') bg-slate-400
+                                            @else bg-rose-500 @endif"></span>
+                                        <span>{{ __(ucfirst(str_replace('_', ' ', $loan->status))) }}</span>
                                     </span>
                                 </td>
                                 <td class="py-3.5 px-6 text-slate-400 dark:text-slate-400">{{ $loan->created_at->diffForHumans() }}</td>
@@ -143,7 +138,7 @@
                         </svg>
                         <span>{{ __('System Alerts') }}</span>
                     </h3>
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800">{{ __('3 New') }}</span>
+                    <span class="text-xs font-bold text-rose-600 dark:text-rose-400">{{ __('3 New') }}</span>
                 </div>
 
                 <div class="space-y-3">
@@ -184,7 +179,7 @@
                             <span class="text-sm"></span>
                             <span class="text-xs font-bold text-slate-900 dark:text-slate-100 group-hover:text-emerald-800 dark:group-hover:text-emerald-400">{{ __('Review Pending KYC') }}</span>
                         </div>
-                        <span class="text-xs font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded-md border border-amber-200 dark:border-amber-800/80">{{ $stats['kyc_pending'] }}</span>
+                        <span class="text-xs font-bold text-amber-700 dark:text-amber-300">{{ $stats['kyc_pending'] }}</span>
                     </a>
 
                     <a href="{{ route('admin.loans.index') }}" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-600 dark:hover:border-emerald-500 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-all group">
@@ -192,7 +187,7 @@
                             <span class="text-sm"></span>
                             <span class="text-xs font-bold text-slate-900 dark:text-slate-100 group-hover:text-emerald-800 dark:group-hover:text-emerald-400">{{ __('Review Loan Applications') }}</span>
                         </div>
-                        <span class="text-xs font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md border border-blue-200 dark:border-blue-800/80">{{ $stats['loans_pending'] }}</span>
+                        <span class="text-xs font-bold text-emerald-700 dark:text-emerald-400">{{ $stats['loans_pending'] }}</span>
                     </a>
                 </div>
             </div>
@@ -264,7 +259,7 @@
             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('CREDIT SCORE') }}</span>
             <div class="flex items-baseline gap-2 mt-3">
                 <span class="text-2xl font-extrabold text-emerald-700">{{ __n($stats['credit_score']) }}</span>
-                <span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">{{ __('Grade') }} {{ $stats['credit_grade'] }}</span>
+                <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">({{ __('Grade') }} {{ $stats['credit_grade'] }})</span>
             </div>
         </div>
     </div>
@@ -306,16 +301,19 @@
                                 </td>
                                 <td class="py-4 px-6">
                                     @if($inst->status === 'paid')
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">
-                                            {{ __('Paid') }}
+                                        <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+                                            <span>{{ __('Paid') }}</span>
                                         </span>
                                     @elseif($isOverdue)
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-700 border border-rose-200">
-                                            {{ __('Due Soon / Overdue') }}
+                                        <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                            <span class="h-1.5 w-1.5 rounded-full bg-rose-500 shrink-0"></span>
+                                            <span>{{ __('Due Soon / Overdue') }}</span>
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-blue-700 border border-blue-200">
-                                            {{ __('Scheduled') }}
+                                        <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                            <span class="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0"></span>
+                                            <span>{{ __('Scheduled') }}</span>
                                         </span>
                                     @endif
                                 </td>
@@ -603,7 +601,7 @@
         <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{{ __('PORTFOLIO VALUE') }}</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">{{ $stats['mom_growth_badge'] ?? __('Portofolio Aktif') }}</span>
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">{{ $stats['mom_growth_badge'] ?? __('Portofolio Aktif') }}</span>
             </div>
             <p class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mt-3">
                 Rp {{ number_format($stats['portfolio_value'], 0, ',', '.') }}
@@ -614,7 +612,7 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('EXPECTED RETURN') }}</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">{{ __('On Track Ann. Yield') }}</span>
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">{{ __('On Track Ann. Yield') }}</span>
             </div>
             <p class="text-2xl font-extrabold text-emerald-700 mt-3">
                 {{ $stats['expected_return_pct'] }}%
@@ -651,7 +649,7 @@
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-3">
                         <h3 class="text-sm font-bold text-slate-900">{{ __('Portfolio Growth (6 Months)') }}</h3>
-                        <span class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400">
                             {{ __('Current Value:') }} Rp {{ number_format($stats['portfolio_value'], 0, ',', '.') }}
                         </span>
                     </div>
@@ -693,8 +691,9 @@
                                 <td class="py-3.5 px-6 text-slate-600">Rp {{ number_format($tx->amount * 0.8, 0, ',', '.') }}</td>
                                 <td class="py-3.5 px-6 text-emerald-700 font-semibold">+Rp {{ number_format($tx->amount * 0.2, 0, ',', '.') }}</td>
                                 <td class="py-3.5 px-6 text-right">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
-                                        {{ __('COMPLETED') }}
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 justify-end">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+                                        <span>{{ __('Completed') }}</span>
                                     </span>
                                 </td>
                             </tr>

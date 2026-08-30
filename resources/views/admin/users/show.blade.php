@@ -92,10 +92,10 @@
 
                     <div class="flex justify-between py-1 border-b border-slate-100 dark:border-slate-800">
                         <span class="text-slate-400 font-medium">{{ __('Roles') }}:</span>
-                        <div class="flex flex-wrap gap-1 justify-end">
+                        <div class="flex flex-wrap gap-2 justify-end">
                             @foreach($user->roles as $r)
-                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
-                                    {{ ucfirst($r->name) }}
+                                <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                                    {{ ucfirst(str_replace('_', ' ', $r->name)) }}
                                 </span>
                             @endforeach
                         </div>
@@ -104,11 +104,20 @@
                     <div class="flex justify-between py-1 border-b border-slate-100 dark:border-slate-800">
                         <span class="text-slate-400 font-medium">{{ __('KYC Verification') }}:</span>
                         @if($user->kyc && $user->kyc->status === 'approved')
-                            <span class="font-bold text-emerald-600 dark:text-emerald-400">{{ __('Approved') }}</span>
+                            <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                {{ __('Approved') }}
+                            </span>
                         @elseif($user->kyc && $user->kyc->status === 'pending')
-                            <span class="font-bold text-amber-600 dark:text-amber-400">{{ __('Pending Review') }}</span>
+                            <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                                {{ __('Pending Review') }}
+                            </span>
                         @else
-                            <span class="font-bold text-slate-400">{{ __('Unverified') }}</span>
+                            <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">
+                                <span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span>
+                                {{ __('Unverified') }}
+                            </span>
                         @endif
                     </div>
 
@@ -178,8 +187,15 @@
                                     <td class="py-3 px-3 font-bold">Rp {{ number_format($loan->amount, 0, ',', '.') }}</td>
                                     <td class="py-3 px-3">{{ $loan->interest_rate }}%</td>
                                     <td class="py-3 px-3 font-extrabold text-emerald-600 dark:text-emerald-400">{{ $loan->risk_grade }}</td>
-                                    <td class="py-3 px-3 text-right font-bold uppercase text-[10px]">
-                                        {{ $loan->status }}
+                                    <td class="py-3 px-3 text-right">
+                                        <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 justify-end">
+                                            <span class="h-1.5 w-1.5 rounded-full shrink-0
+                                                @if($loan->status === 'active') bg-emerald-500
+                                                @elseif($loan->status === 'pending' || $loan->status === 'open_funding') bg-amber-500
+                                                @elseif($loan->status === 'completed') bg-slate-400
+                                                @else bg-rose-500 @endif"></span>
+                                            <span>{{ __(ucwords(str_replace('_', ' ', $loan->status))) }}</span>
+                                        </span>
                                     </td>
                                 </tr>
                             @empty

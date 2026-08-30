@@ -78,19 +78,22 @@
     <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-                <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold uppercase bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                <div class="flex items-center gap-3">
+                    <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">
                         {{ $loan->category->name ?? __('Business') }}
                     </span>
-                    <span class="px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold uppercase bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
+                    <span class="text-slate-300 dark:text-slate-700">•</span>
+                    <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">
                         {{ __('Grade') }} {{ $loan->risk_grade }}
                     </span>
-                    <span class="px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold uppercase
-                        @if($loan->status === 'open_funding') bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800
-                        @elseif($loan->status === 'active') bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800
-                        @elseif($loan->status === 'completed') bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700
-                        @else bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 @endif">
-                        {{ __(ucwords(str_replace('_', ' ', $loan->status))) }}
+                    <span class="text-slate-300 dark:text-slate-700">•</span>
+                    <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300">
+                        <span class="h-1.5 w-1.5 rounded-full shrink-0
+                            @if($loan->status === 'open_funding') bg-amber-500
+                            @elseif($loan->status === 'active') bg-emerald-500
+                            @elseif($loan->status === 'completed') bg-slate-400
+                            @else bg-rose-500 @endif"></span>
+                        <span>{{ __(ucwords(str_replace('_', ' ', $loan->status))) }}</span>
                     </span>
                 </div>
                 <h1 class="text-2xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight mt-2">{{ $loan->purpose }}</h1>
@@ -289,7 +292,7 @@
                 <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-5">
                     <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                         <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100">{{ __('Borrower Campaign Hub') }}</h3>
-                        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                        <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">
                             {{ __('Your Loan') }}
                         </span>
                     </div>

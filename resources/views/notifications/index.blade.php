@@ -111,12 +111,11 @@
                             <div class="flex items-start justify-between gap-4">
                                 <div class="space-y-1">
                                     <div class="flex items-center gap-2">
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider
-                                            @if($isUnread) bg-emerald-700 text-white
-                                            @else bg-slate-100 text-slate-700 border border-slate-200 @endif">
-                                            {{ str_replace('_', ' ', $notification->type) }}
+                                        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 capitalize">
+                                            {{ __(ucwords(str_replace('_', ' ', $notification->type))) }}
                                         </span>
-                                        <h4 class="text-xs font-extrabold text-slate-900">{{ $notification->title }}</h4>
+                                        <span class="text-slate-300 dark:text-slate-700">•</span>
+                                        <h4 class="text-xs font-extrabold text-slate-900 dark:text-slate-100">{{ $notification->title }}</h4>
                                     </div>
                                     <p class="text-xs text-slate-600 font-medium leading-relaxed pt-1">{{ $notification->body }}</p>
                                 </div>

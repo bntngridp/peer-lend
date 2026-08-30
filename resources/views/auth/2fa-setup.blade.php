@@ -49,9 +49,10 @@
                     <img src="{{ $qrUrl }}" alt="2FA QR Code" class="h-44 w-44 rounded-xl object-contain bg-white">
                 </div>
                 <div class="space-y-3 text-center sm:text-left">
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-emerald-100 text-emerald-800">
-                        {{ __('Primary Method (Camera Scan)') }}
-                    </span>
+                    <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
+                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                        <span>{{ __('Primary Method (Camera Scan)') }}</span>
+                    </div>
                     <h4 class="text-xs font-bold text-slate-900">{{ __('Scan QR Code Using Your Phone') }}</h4>
                     <p class="text-xs text-slate-500 leading-relaxed font-medium">
                         {{ __('Open your :app app, :authy, or :ms on your phone, then select Add Account / Scan QR Code.', ['app' => 'Google Authenticator', 'authy' => 'Authy', 'ms' => 'Microsoft Authenticator']) }}
@@ -62,9 +63,10 @@
             <!-- Method 2: Manual Secret Key Code -->
             <div x-show="setupMethod === 'key'" class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4" style="display: none;">
                 <div>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-amber-100 text-amber-800">
-                        {{ __('Alternative Method (Manual Key)') }}
-                    </span>
+                    <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700 dark:text-amber-400">
+                        <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                        <span>{{ __('Alternative Method (Manual Key)') }}</span>
+                    </div>
                     <h4 class="text-xs font-bold text-slate-900 mt-1">{{ __('Enter Secret Key Manually') }}</h4>
                 </div>
 

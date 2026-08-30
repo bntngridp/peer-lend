@@ -274,13 +274,13 @@
             <nav class="flex-1 overflow-y-auto px-3 py-6 space-y-1.5" :class="sidebarCollapsed ? 'px-2' : 'px-3'">
                 @auth
                     <!-- Main Menu Section Header -->
-                    <div x-show="!sidebarCollapsed" class="px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">{{ __('Main Navigation') }}</div>
+                    <div x-show="!sidebarCollapsed" class="px-3 pb-2 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider whitespace-nowrap">{{ __('Main Navigation') }}</div>
 
                     <!-- 1. Dashboard -->
                     <a href="{{ route('dashboard') }}" title="{{ __('Dashboard') }}"
                        :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
-                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('dashboard') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100' }}">
-                        <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('dashboard') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                       class="group flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('dashboard') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-slate-800/70 hover:text-emerald-800 dark:hover:text-emerald-300' }}">
+                        <svg class="h-5 w-5 shrink-0 transition-colors {{ request()->routeIs('dashboard') ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-emerald-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>
                         </svg>
                         <span x-show="!sidebarCollapsed" class="whitespace-nowrap">{{ __('Dashboard') }}</span>
@@ -290,8 +290,8 @@
                     @if(Auth::user()->isLender() || (!Auth::user()->isInternalStaff() && !Auth::user()->isBorrower()))
                     <a href="{{ route('marketplace.index') }}" title="{{ __('Marketplace') }}"
                        :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
-                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('marketplace.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100' }}">
-                        <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('marketplace.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                       class="group flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('marketplace.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-slate-800/70 hover:text-emerald-800 dark:hover:text-emerald-300' }}">
+                        <svg class="h-5 w-5 shrink-0 transition-colors {{ request()->routeIs('marketplace.*') ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-emerald-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119.993z"/>
                         </svg>
                         <span x-show="!sidebarCollapsed" class="whitespace-nowrap">{{ __('Marketplace') }}</span>
@@ -302,8 +302,8 @@
                     @if(Auth::user()->isBorrower() || (!Auth::user()->isInternalStaff() && !Auth::user()->isLender()))
                     <a href="{{ route('loans.index') }}" title="{{ __('My Loans') }}"
                        :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
-                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('loans.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100' }}">
-                        <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('loans.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                       class="group flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('loans.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-slate-800/70 hover:text-emerald-800 dark:hover:text-emerald-300' }}">
+                        <svg class="h-5 w-5 shrink-0 transition-colors {{ request()->routeIs('loans.*') ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-emerald-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5h16.5A2.25 2.25 0 0122.5 6.75v10.5a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 17.25V6.75A2.25 2.25 0 013.75 4.5zM12 12a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5zM6 8.25h.008v.008H6V8.25zm12 0h.008v.008H18V8.25z"/>
                         </svg>
                         <span x-show="!sidebarCollapsed" class="whitespace-nowrap">{{ __('My Loans') }}</span>
@@ -315,8 +315,8 @@
                     <!-- Wallet & Saldo -->
                     <a href="{{ route('wallet.index') }}" title="{{ __('Wallet') }}"
                        :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
-                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('wallet.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100' }}">
-                        <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('wallet.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                       class="group flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('wallet.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-slate-800/70 hover:text-emerald-800 dark:hover:text-emerald-300' }}">
+                        <svg class="h-5 w-5 shrink-0 transition-colors {{ request()->routeIs('wallet.*') ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-emerald-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"/>
                         </svg>
                         <span x-show="!sidebarCollapsed" class="whitespace-nowrap">{{ __('Wallet') }}</span>
@@ -325,8 +325,8 @@
                     <!-- Crypto Collateral -->
                     <a href="{{ route('collateral.index') }}" title="{{ __('Collateral') }}"
                        :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
-                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('collateral.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100' }}">
-                        <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('collateral.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                       class="group flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('collateral.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-slate-800/70 hover:text-emerald-800 dark:hover:text-emerald-300' }}">
+                        <svg class="h-5 w-5 shrink-0 transition-colors {{ request()->routeIs('collateral.*') ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-emerald-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"/>
                         </svg>
                         <span x-show="!sidebarCollapsed" class="whitespace-nowrap">{{ __('Collateral') }}</span>
@@ -335,8 +335,8 @@
                     <!-- Simulasi Kalkulator -->
                     <a href="{{ route('calculator.index') }}" title="{{ __('Calculator') }}"
                        :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
-                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('calculator.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100' }}">
-                        <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('calculator.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                       class="group flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('calculator.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-slate-800/70 hover:text-emerald-800 dark:hover:text-emerald-300' }}">
+                        <svg class="h-5 w-5 shrink-0 transition-colors {{ request()->routeIs('calculator.*') ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-emerald-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm3.75-6h.008v.008H12v-.008zm0 3h.008v.008H12v-.008zm0 3h.008v.008H12v-.008zm3.75-6h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zM3.75 6A2.25 2.25 0 016 3.75h12A2.25 2.25 0 0120.25 6v12A2.25 2.25 0 0118 20.25H6A2.25 2.25 0 013.75 18V6z"/>
                         </svg>
                         <span x-show="!sidebarCollapsed" class="whitespace-nowrap">{{ __('Calculator') }}</span>
@@ -347,13 +347,13 @@
                     @if(Auth::user()->isInternalStaff())
                         <!-- Approvals Group -->
                         @if(Auth::user()->isAdmin() || Auth::user()->isCustomerService() || Auth::user()->isCollectionOfficer())
-                        <div x-show="!sidebarCollapsed" class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">{{ __('Approvals & Review') }}</div>
+                        <div x-show="!sidebarCollapsed" class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider whitespace-nowrap">{{ __('Approvals & Review') }}</div>
                         
                         @if(Auth::user()->isAdmin() || Auth::user()->isCustomerService())
                         <a href="{{ route('admin.kyc.index') }}" title="{{ __('Review KYC') }}"
                            :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
-                           class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.kyc.*') ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-l-4 border-amber-600 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100' }}">
-                            <svg class="h-5 w-5 shrink-0 text-amber-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                           class="group flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.kyc.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-slate-800/70 hover:text-emerald-800 dark:hover:text-emerald-300' }}">
+                            <svg class="h-5 w-5 shrink-0 transition-colors {{ request()->routeIs('admin.kyc.*') ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-emerald-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
                             </svg>
                             <span x-show="!sidebarCollapsed" class="whitespace-nowrap">{{ __('Review KYC') }}</span>
@@ -362,8 +362,8 @@
 
                         <a href="{{ route('admin.loans.index') }}" title="{{ __('Review Loans') }}"
                            :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
-                           class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.loans.*') ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-l-4 border-amber-600 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100' }}">
-                            <svg class="h-5 w-5 shrink-0 text-amber-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                           class="group flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.loans.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-slate-800/70 hover:text-emerald-800 dark:hover:text-emerald-300' }}">
+                            <svg class="h-5 w-5 shrink-0 transition-colors {{ request()->routeIs('admin.loans.*') ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-emerald-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
                             </svg>
                             <span x-show="!sidebarCollapsed" class="whitespace-nowrap">{{ Auth::user()->isCollectionOfficer() ? __('Loan Overdue Review') : __('Review Loans') }}</span>
@@ -372,11 +372,11 @@
 
                         <!-- Governance Group (Admin & CS) -->
                         @if(Auth::user()->isAdmin() || Auth::user()->isCustomerService())
-                        <div x-show="!sidebarCollapsed" class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">{{ __('Governance') }}</div>
+                        <div x-show="!sidebarCollapsed" class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider whitespace-nowrap">{{ __('Governance') }}</div>
                         <a href="{{ route('admin.users.index') }}" title="{{ __('User Management') }}"
                            :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
-                           class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.users.*') ? 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-800 dark:text-indigo-300 border-l-4 border-indigo-600 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100' }}">
-                            <svg class="h-5 w-5 shrink-0 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                           class="group flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.users.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-slate-800/70 hover:text-emerald-800 dark:hover:text-emerald-300' }}">
+                            <svg class="h-5 w-5 shrink-0 transition-colors {{ request()->routeIs('admin.users.*') ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-emerald-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6 0 3.375 3.375 0 016 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
                             </svg>
                             <span x-show="!sidebarCollapsed" class="whitespace-nowrap">{{ __('User Management') }}</span>
@@ -386,16 +386,16 @@
                         @if(Auth::user()->isAdmin())
                         <a href="{{ route('admin.financials.index') }}" title="{{ __('Financial Config') }}"
                            :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
-                           class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.financials.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-600 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100' }}">
-                            <svg class="h-5 w-5 shrink-0 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                           class="group flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.financials.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-slate-800/70 hover:text-emerald-800 dark:hover:text-emerald-300' }}">
+                            <svg class="h-5 w-5 shrink-0 transition-colors {{ request()->routeIs('admin.financials.*') ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-emerald-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-6h6m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                             <span x-show="!sidebarCollapsed" class="whitespace-nowrap">{{ __('Financial Config') }}</span>
                         </a>
                         <a href="{{ route('admin.roles.index') }}" title="{{ __('Role Management') }}"
                            :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
-                           class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.roles.*') ? 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-l-4 border-slate-600 dark:border-slate-500 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100' }}">
-                            <svg class="h-5 w-5 shrink-0 text-slate-500" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                           class="group flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.roles.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-slate-800/70 hover:text-emerald-800 dark:hover:text-emerald-300' }}">
+                            <svg class="h-5 w-5 shrink-0 transition-colors {{ request()->routeIs('admin.roles.*') ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-emerald-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296a3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/>
                             </svg>
                             <span x-show="!sidebarCollapsed" class="whitespace-nowrap">{{ __('Role Management') }}</span>
@@ -404,11 +404,11 @@
 
                         <!-- Monitoring Group (Admin & Collection Officer) -->
                         @if(Auth::user()->isAdmin() || Auth::user()->isCollectionOfficer())
-                        <div x-show="!sidebarCollapsed" class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">{{ __('Monitoring') }}</div>
+                        <div x-show="!sidebarCollapsed" class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider whitespace-nowrap">{{ __('Monitoring') }}</div>
                         <a href="{{ route('admin.transactions.index') }}" title="{{ __('Transactions Audit') }}"
                            :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
-                           class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.transactions.*') ? 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-l-4 border-slate-600 dark:border-slate-500 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100' }}">
-                            <svg class="h-5 w-5 shrink-0 text-slate-500" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                           class="group flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.transactions.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-slate-800/70 hover:text-emerald-800 dark:hover:text-emerald-300' }}">
+                            <svg class="h-5 w-5 shrink-0 transition-colors {{ request()->routeIs('admin.transactions.*') ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-emerald-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"/>
                             </svg>
                             <span x-show="!sidebarCollapsed" class="whitespace-nowrap">{{ __('Transactions Audit') }}</span>
@@ -418,8 +418,8 @@
                         @if(Auth::user()->isAdmin())
                         <a href="{{ route('admin.analytics.index') }}" title="{{ __('Platform Analytics') }}"
                            :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
-                           class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.analytics.*') ? 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-l-4 border-slate-600 dark:border-slate-500 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100' }}">
-                            <svg class="h-5 w-5 shrink-0 text-slate-500" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                           class="group flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('admin.analytics.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-slate-800/70 hover:text-emerald-800 dark:hover:text-emerald-300' }}">
+                            <svg class="h-5 w-5 shrink-0 transition-colors {{ request()->routeIs('admin.analytics.*') ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-emerald-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605"/>
                             </svg>
                             <span x-show="!sidebarCollapsed" class="whitespace-nowrap">{{ __('Platform Analytics') }}</span>
@@ -428,11 +428,11 @@
                     @endif
 
                     <!-- Account & Settings -->
-                    <div x-show="!sidebarCollapsed" class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">{{ __('Profile & Security') }}</div>
+                    <div x-show="!sidebarCollapsed" class="pt-4 px-3 pb-2 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider whitespace-nowrap">{{ __('Profile & Security') }}</div>
                     <a href="{{ route('profile.edit') }}" title="{{ __('Profile & Security') }}"
                        :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
-                       class="flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('profile.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100' }}">
-                        <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('profile.*') ? 'text-emerald-700' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                       class="group flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('profile.*') ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-700 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-slate-800/70 hover:text-emerald-800 dark:hover:text-emerald-300' }}">
+                        <svg class="h-5 w-5 shrink-0 transition-colors {{ request()->routeIs('profile.*') ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-emerald-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h3.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.796 3.111a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.798 3.111a1.125 1.125 0 01-1.37.491l-1.216-.456c-.356-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-3.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.797-3.111a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.797-3.111a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
@@ -442,9 +442,9 @@
                     <!-- Desktop Sidebar Collapse Toggle Button (Below Settings) -->
                     <button type="button" @click="sidebarCollapsed = !sidebarCollapsed" id="btn_toggle_sidebar_desktop"
                             :class="sidebarCollapsed ? 'justify-center px-0' : 'px-3.5'"
-                            class="w-full hidden md:flex items-center gap-3 py-2.5 rounded-xl text-xs font-bold text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100 transition-all cursor-pointer select-none mt-2 border-t border-slate-100 dark:border-slate-800 pt-3"
+                            class="group w-full hidden md:flex items-center gap-3 py-2.5 rounded-xl text-xs font-bold text-slate-500 dark:text-slate-400 hover:bg-emerald-50/50 dark:hover:bg-slate-800/70 hover:text-emerald-800 dark:hover:text-emerald-300 transition-all cursor-pointer select-none mt-2 border-t border-slate-100 dark:border-slate-800 pt-3"
                             :title="sidebarCollapsed ? '{{ __('Expand Sidebar') }}' : '{{ __('Collapse Sidebar') }}'">
-                        <svg class="h-5 w-5 shrink-0 text-slate-400 transform transition-transform duration-300" :class="sidebarCollapsed ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                        <svg class="h-5 w-5 shrink-0 text-slate-400 dark:text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transform transition-transform duration-300" :class="sidebarCollapsed ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                         </svg>
                         <span x-show="!sidebarCollapsed" class="whitespace-nowrap">{{ __('Collapse Sidebar') }}</span>

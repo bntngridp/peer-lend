@@ -230,16 +230,19 @@
                             {{-- Risk Level --}}
                             <td class="py-4 px-6">
                                 @if($kyc->isRejected())
-                                    <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30 uppercase">
-                                        {{ __('HIGH') }}
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-rose-500 shrink-0"></span>
+                                        <span>{{ __('High') }}</span>
                                     </span>
                                 @elseif($kyc->isApproved())
-                                    <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 uppercase">
-                                        {{ __('LOW') }}
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+                                        <span>{{ __('Low') }}</span>
                                     </span>
                                 @else
-                                    <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 uppercase">
-                                        {{ __('MEDIUM') }}
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0"></span>
+                                        <span>{{ __('Medium') }}</span>
                                     </span>
                                 @endif
                             </td>
@@ -247,19 +250,19 @@
                             {{-- Status --}}
                             <td class="py-4 px-6">
                                 @if($kyc->isPending())
-                                    <span class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 dark:text-amber-400">
-                                        <span class="h-2 w-2 rounded-full bg-amber-500"></span>
-                                        {{ __('Pending') }}
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0"></span>
+                                        <span>{{ __('Pending') }}</span>
                                     </span>
                                 @elseif($kyc->isApproved())
-                                    <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                                        <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-                                        {{ __('Approved') }}
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+                                        <span>{{ __('Approved') }}</span>
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-1.5 text-xs font-bold text-rose-600 dark:text-rose-400">
-                                        <span class="h-2 w-2 rounded-full bg-rose-500"></span>
-                                        {{ __('Rejected') }}
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-rose-500 shrink-0"></span>
+                                        <span>{{ __('Rejected') }}</span>
                                     </span>
                                 @endif
                             </td>

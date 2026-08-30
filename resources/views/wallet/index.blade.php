@@ -27,7 +27,7 @@
         <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ __('TOTAL BALANCE') }}</span>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">{{ __('Verified Wallet') }}</span>
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">{{ __('Verified Wallet') }}</span>
             </div>
             <div class="mt-3">
                 <p class="text-3xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
@@ -77,7 +77,7 @@
                         <p class="text-xs font-medium text-amber-800/80 dark:text-amber-300/80">{{ __('You have deposit requests awaiting payment completion.') }}</p>
                     </div>
                 </div>
-                <span class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-amber-200/80 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700">
+                <span class="text-xs font-bold text-amber-700 dark:text-amber-300">
                     {{ $pendingPayments->count() }} {{ __('Pending') }}
                 </span>
             </div>
@@ -91,7 +91,7 @@
                                     <span class="text-xs font-black text-slate-900 dark:text-slate-100">
                                         Rp {{ number_format($pendingPay->amount, 0, ',', '.') }}
                                     </span>
-                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700">
+                                    <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                                         {{ __(ucfirst($pendingPay->gateway)) }}
                                     </span>
                                 </div>
@@ -100,9 +100,9 @@
                                 </span>
                             </div>
                             <div class="text-right">
-                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                                    {{ __('Menunggu Pembayaran') }}
+                                <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0 animate-pulse"></span>
+                                    <span>{{ __('Menunggu Pembayaran') }}</span>
                                 </span>
                                 <span class="text-[10px] text-slate-400 block mt-1 font-medium">
                                     {{ \Carbon\Carbon::parse($pendingPay->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
@@ -454,7 +454,7 @@
                             </div>
                         </td>
                         <td class="py-4 px-6 whitespace-nowrap">
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                            <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300">
                                 @if(str_contains(strtolower($tx->description), 'midtrans'))
                                     @php
                                         preg_match('/midtrans \(([^)]+)\)/i', $tx->description, $matches);
@@ -477,16 +477,16 @@
                         <td class="py-4 px-6 whitespace-nowrap">
                             <span class="font-extrabold text-sm block {{ in_array($tx->type, ['deposit', 'repayment', 'interest', 'refund']) ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400' }}">
                                 {{ in_array($tx->type, ['deposit', 'repayment', 'interest', 'refund']) ? '+' : '-' }}
-                                Rp {{ number_format($tx->amount, 0, ',', '.') }}
+                                Rp {{ number_format($tx->amount, 0, ',', '.')) }}
                             </span>
                             <span class="text-[11px] text-slate-400 font-medium block mt-0.5">
-                                {{ __('Before') }}: Rp {{ number_format($tx->balance_before, 0, ',', '.') }} • <strong class="text-slate-700 dark:text-slate-300">{{ __('After') }}: Rp {{ number_format($tx->balance_after, 0, ',', '.') }}</strong>
+                                {{ __('Before') }}: Rp {{ number_format($tx->balance_before, 0, ',', '.')) }} • <strong class="text-slate-700 dark:text-slate-300">{{ __('After') }}: Rp {{ number_format($tx->balance_after, 0, ',', '.') }}</strong>
                             </span>
                         </td>
                         <td class="py-4 px-6 whitespace-nowrap">
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                {{ __('Completed') }}
+                            <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+                                <span>{{ __('Completed') }}</span>
                             </span>
                         </td>
                         <td class="py-4 px-6 text-right font-semibold text-slate-500 dark:text-slate-400 whitespace-nowrap">
@@ -527,8 +527,7 @@
                     <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
                         <td class="py-4 px-6">
                             <div class="flex items-center gap-2.5">
-                                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider
-                                    {{ $pay->gateway === 'midtrans' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-indigo-100 text-indigo-800 border border-indigo-200' }}">
+                                <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                                     {{ __(ucfirst($pay->gateway)) }}
                                 </span>
                                 <div>
@@ -542,19 +541,19 @@
                         </td>
                         <td class="py-4 px-6 whitespace-nowrap">
                             @if($pay->status === 'success')
-                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                    {{ __('Berhasil (Settled)') }}
+                                <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+                                    <span>{{ __('Berhasil (Settled)') }}</span>
                                 </span>
                             @elseif($pay->status === 'pending')
-                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                                    {{ __('Menunggu Pembayaran') }}
+                                <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0 animate-pulse"></span>
+                                    <span>{{ __('Menunggu Pembayaran') }}</span>
                                 </span>
                             @else
-                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
-                                    {{ __('Gagal / Expired') }}
+                                <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-rose-500 shrink-0"></span>
+                                    <span>{{ __('Gagal / Expired') }}</span>
                                 </span>
                             @endif
                         </td>

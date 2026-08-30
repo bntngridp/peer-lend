@@ -143,23 +143,14 @@
 
                         <!-- Risk Grade -->
                         <td class="py-4 px-6">
-                            @if($loan->risk_grade === 'A')
-                                <span class="px-2.5 py-0.5 rounded text-[11px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                                    A
-                                </span>
-                            @elseif($loan->risk_grade === 'B')
-                                <span class="px-2.5 py-0.5 rounded text-[11px] font-extrabold bg-blue-100 text-blue-800 border border-blue-200">
-                                    B
-                                </span>
-                            @elseif($loan->risk_grade === 'C')
-                                <span class="px-2.5 py-0.5 rounded text-[11px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200">
-                                    C
-                                </span>
-                            @else
-                                <span class="px-2.5 py-0.5 rounded text-[11px] font-extrabold bg-rose-100 text-rose-800 border border-rose-200">
-                                    D
-                                </span>
-                            @endif
+                            <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300">
+                                <span class="h-1.5 w-1.5 rounded-full shrink-0
+                                    @if($loan->risk_grade === 'A') bg-emerald-500
+                                    @elseif($loan->risk_grade === 'B') bg-blue-500
+                                    @elseif($loan->risk_grade === 'C') bg-amber-500
+                                    @else bg-rose-500 @endif"></span>
+                                <span>Grade {{ $loan->risk_grade }}</span>
+                            </span>
                         </td>
 
                         <!-- Funding Progress -->

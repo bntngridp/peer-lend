@@ -64,14 +64,8 @@
                     <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
                         <td class="py-4 px-6 text-slate-500 dark:text-slate-400 text-[11px]">{{ $tx->created_at->format('Y-m-d H:i:s') }}</td>
                         <td class="py-4 px-6 font-bold text-emerald-600 dark:text-emerald-400">TXN-{{ strtoupper(substr($tx->reference_id ?? $tx->id, 0, 8)) }}</td>
-                        <td class="py-4 px-6 font-bold uppercase tracking-wider text-[11px]">
-                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold
-                                @if($tx->type === 'deposit') bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20
-                                @elseif($tx->type === 'withdrawal') bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20
-                                @elseif($tx->type === 'disbursement') bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/20
-                                @else bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/20 @endif">
-                                {{ __($tx->type) }}
-                            </span>
+                        <td class="py-4 px-6 font-semibold text-slate-700 dark:text-slate-300 capitalize text-xs">
+                            {{ __($tx->type) }}
                         </td>
                         <td class="py-4 px-6 font-bold text-slate-900 dark:text-slate-100">{{ $tx->wallet?->user?->email ?? __('System Node') }}</td>
                         <td class="py-4 px-6 font-extrabold text-slate-900 dark:text-slate-100">
@@ -87,15 +81,16 @@
                                     'expired' => __('Expired'),
                                     default => ucfirst($txStatus),
                                 };
-                                $statusStyle = match($txStatus) {
-                                    'success', 'completed' => 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-                                    'pending' => 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/20',
-                                    'failed', 'expired' => 'bg-rose-500/15 text-rose-600 dark:text-rose-400 border-rose-500/20',
-                                    default => 'bg-slate-500/15 text-slate-600 dark:text-slate-400 border-slate-500/20',
+                                $dotColor = match($txStatus) {
+                                    'success', 'completed' => 'bg-emerald-500',
+                                    'pending' => 'bg-amber-500',
+                                    'failed', 'expired' => 'bg-rose-500',
+                                    default => 'bg-slate-400',
                                 };
                             @endphp
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold border {{ $statusStyle }}">
-                                {{ $statusLabel }}
+                            <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 justify-end">
+                                <span class="h-1.5 w-1.5 rounded-full {{ $dotColor }} shrink-0"></span>
+                                <span>{{ $statusLabel }}</span>
                             </span>
                         </td>
                     </tr>
